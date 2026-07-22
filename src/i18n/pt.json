@@ -1,8 +1,8 @@
 {
-  "site.title": "CraftClass",
+  "site.title": "Exile Crafter",
   "site.tagline": "Um companheiro visual de crafting para Path of Exile 2. Veja seus espaços de afixos sendo preenchidos em tempo real, navegue por todas as bases e mods, e rode simulações ao vivo sem precisar de planilha.",
   "site.description": "Um companheiro visual amigável para o crafting de Path of Exile 2. Navegue por bases, mods, currencies e rode simulações ao vivo.",
-  "site.footer.disclaimer": "CraftClass · ferramenta de fã não afiliada a Path of Exile 2.",
+  "site.footer.disclaimer": "Exile Crafter · ferramenta de fã não afiliada a Path of Exile 2.",
   "site.footer.data": "Dados: poe2db.tw · Última atualização {date}",
   "site.howworks.title": "Como isso funciona",
   "site.howworks.body1": "Os dados são extraídos de {poe2db} e atualizados a cada patch. O simulador usa um modelo ponderado de mod (com fallback por tier quando pesos da comunidade não estão disponíveis) onde cada clique é um sorteio real do pool.",
@@ -237,5 +237,5 @@
   "site.footer.status": "Status",
   "site.footer.dataUpdated": "Ultima atualizacao dos dados",
   "site.footer.source": "Fonte",
-  "site.footer.copyright": "CraftClass © {year}. Nao afiliado a Grinding Gear Games."
+  "site.footer.copyright": "Exile Crafter © {year}. Nao afiliado a Grinding Gear Games."
 }

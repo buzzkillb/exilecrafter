@@ -1,8 +1,8 @@
-# CraftClass
+# Exile Crafter
 
 A visual crafting companion for **Path of Exile 2**. Browse every base, modifier, currency, and omen, then run live crafting simulations with keyboard shortcuts, in-game style item tooltips, and probability calculations.
 
-Built as a fully static site for [Cloudflare Pages](https://pages.cloudflare.com/). Zero server runtime.
+Hosted at [exilecrafter.com](https://exilecrafter.com). Built as a fully static site for [Cloudflare Pages](https://pages.cloudflare.com/). Zero server runtime.
 
 ## Features
 
@@ -138,7 +138,7 @@ CRAFTCLASS_WEIGHTS_URL=https://example.com/poe2-weights.json npm run weights
 - Live prices: [poe2scout.com](https://poe2scout.com)
 - Crafting patterns inspired by [Craft of Exile](https://www.craftofexile.com/)
 
-CraftClass is an unofficial fan tool and is not affiliated with or endorsed by Grinding Gear Games.
+Exile Crafter is an unofficial fan tool and is not affiliated with or endorsed by Grinding Gear Games.
 
 ## License
 

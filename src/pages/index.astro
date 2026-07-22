@@ -1,208 +1,100 @@
 ---
 import Base from '~/layouts/Base.astro';
-import { bases, manifest, season, SLOTS } from '~/lib/data';
+import { bases, season } from '~/lib/data';
 import { METHODS } from '~/lib/methods';
 import { useT } from '~/lib/i18n';
 
 const locale = (Astro.locals.locale as 'en' | 'pt') ?? 'en';
 const t = useT(locale);
 
-const counts = manifest.counts;
-const updated = new Date(manifest.generatedAt).toLocaleDateString(locale === 'pt' ? 'pt-BR' : 'en-US', {
+const updated = new Date().toLocaleDateString(locale === 'pt' ? 'pt-BR' : 'en-US', {
   year: 'numeric', month: 'short', day: 'numeric',
 });
 
-// Slot icons / emoji mapping for visual appeal
-const slotIcons: Record<string, string> = {
-  helmet: '🪖', body_armour: '🛡️', gloves: '🧤', boots: '👢',
-  belt: '🔗', amulet: '📿', ring: '💍',
-  shield: '🛡️', quiver: '🏹', focus: '🔮',
-  weapon_1h: '⚔️', weapon_2h: '🗡️',
-  flask: '🧪', charm: '🍀', jewel: '💎',
-  waystone: '🗺️', tablet: '📜', relic: '🏺',
-};
+// Curated quick-pick bases — each links directly into the simulator.
+const featured = [
+  { name: 'Sapphire Jewel',  id: bases.find((b) => b.name === 'Sapphire')?.id,        tag: 'Expert',  desc: 'Top-tier jewel using Essences, Liquids, Desecration & Fracturing.' },
+  { name: 'Ancestral Tiara', id: bases.find((b) => b.name === 'Ancestral Tiara')?.id, tag: 'Endgame', desc: 'High-end ES helmet. Roll life, resistances, mana with real tier gates.' },
+  { name: 'Gold Ring',       id: bases.find((b) => b.name === 'Gold Ring')?.id,      tag: 'Starter', desc: 'The classic starter ring. Practice Transmute → Aug → Regal.' },
+  { name: 'Gold Amulet',     id: bases.find((b) => b.name === 'Gold Amulet')?.id,    tag: 'Starter', desc: 'All-purpose amulet slot. Roll life + resists, then Regal → Exalt.' },
+  { name: 'Waystone (Tier 1)', id: bases.find((b) => b.name === 'Waystone (Tier 1)')?.id, tag: 'Mid', desc: 'Lowest-tier mapping base. Practice mod rerolls and mod-count progression.' },
+].filter((b) => !!b.id);
+
+const beginnerMethods = METHODS.filter((m) => m.difficulty === 'beginner').slice(0, 3);
 ---
 
 <Base>
-  <!-- Hero -->
-  <section class="relative overflow-hidden rounded-xl border border-border bg-gradient-to-b from-bg-card/80 to-bg p-8 md:p-12 mb-10 text-center">
-    <!-- subtle decorative glow -->
+  <!-- Hero: tagline + one dominant CTA. Everything else is one scroll away. -->
+  <section class="relative overflow-hidden rounded-xl border border-border bg-gradient-to-b from-bg-card/80 to-bg p-8 md:p-12 mb-8 text-center">
     <div class="absolute -top-24 -left-24 w-64 h-64 bg-gold/5 rounded-full blur-3xl pointer-events-none"></div>
     <div class="absolute -bottom-16 -right-16 w-48 h-48 bg-gold/5 rounded-full blur-3xl pointer-events-none"></div>
 
     <div class="relative">
-      <div class="text-5xl mb-4">⚒️</div>
-      <h1 class="text-4xl md:text-5xl font-display font-bold bg-gradient-to-r from-gold-bright via-gold to-yellow-300 bg-clip-text text-transparent mb-3">
-        {t('site.title')}
+      <div class="text-5xl mb-4" aria-hidden="true">⚒️</div>
+      <h1 class="font-display font-bold bg-gradient-to-r from-gold-bright via-gold to-yellow-300 bg-clip-text text-transparent mb-4 text-3xl md:text-4xl leading-tight max-w-3xl mx-auto">
+        {t('site.tagline')}
       </h1>
-      <p class="text-lg text-dim max-w-2xl mx-auto leading-relaxed">
-        A visual crafting companion for <strong class="text-fg">Path of Exile 2</strong>.
-        Browse every base, mod, and currency, then run live simulations fueled by real data from the game.
-      </p>
-
-      <div class="mt-3 text-xs text-mute">
+      <div class="mt-2 text-xs text-mute">
         <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-border bg-bg-card">
-          <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+          <span class="w-2 h-2 rounded-full bg-emerald-500" aria-hidden="true"></span>
           {season.name} <span class="text-gold">v{season.version}</span>
-          <span class="text-mute">·</span>
-          <span>{locale === 'pt' ? 'Atualizado' : 'Updated'} {updated}</span>
+          <span class="text-mute">·</span> Updated {updated}
         </span>
       </div>
 
       <div class="mt-8 flex flex-wrap gap-3 justify-center">
-        <a href="/simulator" class="btn btn-gold px-6 py-3 text-base font-semibold inline-flex items-center gap-2">
-          <span>⚡</span> {t('home.cta.simulator')}
+        <a href="/simulator" class="btn btn-gold px-6 py-3 text-base font-semibold">
+          {t('home.cta.simulator')}
         </a>
-        <a href="/bases" class="btn px-6 py-3 text-base inline-flex items-center gap-2">
-          <span>📦</span> {t('home.cta.bases')}
-        </a>
-        <a href="/guides" class="btn px-6 py-3 text-base inline-flex items-center gap-2">
-          <span>📖</span> {t('home.cta.guides')}
+        <a href="/bases" class="btn px-6 py-3 text-base">
+          {t('home.cta.bases')}
         </a>
       </div>
     </div>
   </section>
 
-  <!-- Stats row -->
-  <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-10">
-    <div class="parchment p-5 text-center hover:border-gold/30 transition-colors">
-      <div class="text-3xl font-display font-bold text-gold-bright">{counts.bases.toLocaleString()}</div>
-      <div class="text-xs uppercase tracking-wider text-mute mt-1">Craftable Bases</div>
-      <div class="text-[10px] text-mute mt-0.5">Across 18 equipment slots</div>
+  <!-- Featured bases: 5 curated items that load directly into the simulator -->
+  <section class="mb-8">
+    <div class="flex items-baseline justify-between mb-4">
+      <h2 class="text-xl font-display font-semibold">{t('home.featured')}</h2>
+      <a href="/bases" class="text-xs text-gold-bright hover:text-gold">{t('home.cta.bases')} →</a>
     </div>
-    <div class="parchment p-5 text-center hover:border-gold/30 transition-colors">
-      <div class="text-3xl font-display font-bold text-gold-bright">{counts.mods.toLocaleString()}</div>
-      <div class="text-xs uppercase tracking-wider text-mute mt-1">Modifiers</div>
-      <div class="text-[10px] text-mute mt-0.5">Prefixes &amp; suffixes</div>
-    </div>
-    <div class="parchment p-5 text-center hover:border-gold/30 transition-colors">
-      <div class="text-3xl font-display font-bold text-gold-bright">{counts.currency.toLocaleString()}</div>
-      <div class="text-xs uppercase tracking-wider text-mute mt-1">Currency Items</div>
-      <div class="text-[10px] text-mute mt-0.5">Orbs, Essences, Omens &amp; more</div>
-    </div>
-    <div class="parchment p-5 text-center hover:border-gold/30 transition-colors">
-      <div class="text-3xl font-display font-bold text-gold-bright">{counts.omens.toLocaleString()}</div>
-      <div class="text-xs uppercase tracking-wider text-mute mt-1">Omens</div>
-      <div class="text-[10px] text-mute mt-0.5">Crafting catalysts</div>
-    </div>
-  </div>
-
-  <!-- What you can do -->
-  <section class="mb-10">
-    <h2 class="text-2xl font-display font-bold text-center mb-6">What you can do</h2>
-    <div class="grid md:grid-cols-3 gap-4">
-      <a href="/simulator" class="block p-6 rounded-xl border border-border bg-bg-card hover:border-gold/40 transition-all hover:-translate-y-0.5 group">
-        <div class="text-3xl mb-3">🎮</div>
-        <h3 class="font-display font-semibold text-lg mb-2 group-hover:text-gold-bright transition-colors">Live Simulator</h3>
-        <p class="text-sm text-dim leading-relaxed">
-          Pick a base, apply any currency, and see affixes roll in real-time. Use omens to alter outcomes. Track cost in Chaos, Exalted, and Divine.
-        </p>
-        <div class="mt-3 text-xs text-gold-bright font-medium">Try it now →</div>
-      </a>
-
-      <a href="/bases" class="block p-6 rounded-xl border border-border bg-bg-card hover:border-gold/40 transition-all hover:-translate-y-0.5 group">
-        <div class="text-3xl mb-3">📦</div>
-        <h3 class="font-display font-semibold text-lg mb-2 group-hover:text-gold-bright transition-colors">Base Browser</h3>
-        <p class="text-sm text-dim leading-relaxed">
-          Browse 1690 base items across 18 slots. Filter by level, attributes, and affix capacity. See each base's mod pool.
-        </p>
-        <div class="mt-3 text-xs text-gold-bright font-medium">Browse bases →</div>
-      </a>
-
-      <a href="/guides" class="block p-6 rounded-xl border border-border bg-bg-card hover:border-gold/40 transition-all hover:-translate-y-0.5 group">
-        <div class="text-3xl mb-3">📖</div>
-        <h3 class="font-display font-semibold text-lg mb-2 group-hover:text-gold-bright transition-colors">Crafting Guides</h3>
-        <p class="text-sm text-dim leading-relaxed">
-          Step-by-step guides from beginner to expert. Learn how to craft endgame jewels, armour, weapons, and more.
-        </p>
-        <div class="mt-3 text-xs text-gold-bright font-medium">View guides →</div>
-      </a>
-
-      <a href="/calculator" class="block p-6 rounded-xl border border-border bg-bg-card hover:border-gold/40 transition-all hover:-translate-y-0.5 group">
-        <div class="text-3xl mb-3">📊</div>
-        <h3 class="font-display font-semibold text-lg mb-2 group-hover:text-gold-bright transition-colors">Crafting Calculator</h3>
-        <p class="text-sm text-dim leading-relaxed">
-          Estimate the probability of rolling specific mods. Plan your currency spending before you commit.
-        </p>
-        <div class="mt-3 text-xs text-gold-bright font-medium">Calculate odds →</div>
-      </a>
-
-      <a href="/mods" class="block p-6 rounded-xl border border-border bg-bg-card hover:border-gold/40 transition-all hover:-translate-y-0.5 group">
-        <div class="text-3xl mb-3">🔧</div>
-        <h3 class="font-display font-semibold text-lg mb-2 group-hover:text-gold-bright transition-colors">Modifier Explorer</h3>
-        <p class="text-sm text-dim leading-relaxed">
-          Search and filter 2064 mods by tier, type, and tag. See which bases each mod can roll on.
-        </p>
-        <div class="mt-3 text-xs text-gold-bright font-medium">Explore mods →</div>
-      </a>
-
-      <a href="/currency" class="block p-6 rounded-xl border border-border bg-bg-card hover:border-gold/40 transition-all hover:-translate-y-0.5 group">
-        <div class="text-3xl mb-3">💰</div>
-        <h3 class="font-display font-semibold text-lg mb-2 group-hover:text-gold-bright transition-colors">Currency Reference</h3>
-        <p class="text-sm text-dim leading-relaxed">
-          Full catalog of 200 currency items including essences, catalysts, omens, and liquids with real game descriptions.
-        </p>
-        <div class="mt-3 text-xs text-gold-bright font-medium">View currency →</div>
-      </a>
-    </div>
-  </section>
-
-  <!-- Browse by slot -->
-  <section class="mb-10">
-    <h2 class="text-2xl font-display font-bold text-center mb-6">Browse by Equipment Slot</h2>
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-      {SLOTS.map((slot) => {
-        const count = bases.filter((b) => b.slot === slot).length;
-        if (count === 0) return null;
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+      {featured.map((b) => {
+        const baseData = bases.find((x) => x.id === b.id);
         return (
-          <a href={`/bases?slot=${slot}`} class="parchment p-4 hover:border-gold/40 transition-colors block no-underline text-center group">
-            <div class="text-2xl mb-1">{slotIcons[slot] || '📦'}</div>
-            <div class="font-display text-gold-bright group-hover:text-gold transition-colors">{t(`slots.${slot}` as 'slots.helmet')}</div>
-            <div class="text-[10px] text-mute mt-1">{count} base{count !== 1 ? 's' : ''}</div>
+          <a href={`/simulator?base=${b.id}`} class="block parchment p-3 hover:border-gold/50 hover:-translate-y-0.5 transition-all no-underline group">
+            <div class="icon-frame w-12 h-12 mx-auto mb-2">
+              {baseData?.imageUrl && (
+                <img src={baseData.imageUrl} alt="" class="w-full h-full object-contain" loading="lazy" />
+              )}
+            </div>
+            <div class="text-sm font-semibold text-center truncate group-hover:text-gold-bright transition-colors">{b.name}</div>
+            <div class="text-[10px] uppercase tracking-wider text-mute text-center mt-0.5">{b.tag}</div>
+            <div class="text-[11px] text-dim text-center mt-1.5 leading-snug">{b.desc}</div>
           </a>
         );
       })}
     </div>
   </section>
 
-  <!-- How it works -->
-  <section class="parchment p-8 mb-6">
-    <h2 class="text-2xl font-display font-bold mb-6 text-center">How It Works</h2>
-    <div class="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-      <div class="text-center">
-        <div class="text-3xl mb-2">📡</div>
-        <h3 class="font-semibold text-fg mb-1 text-sm">Live Game Data</h3>
-        <p class="text-xs text-dim leading-relaxed">
-          Every base item, modifier, currency, and omen is pulled directly from
-          poe2db.tw. Modifiers carry real tier ranges, stat descriptions, and
-          drop weights from GGG's internal tables.
-        </p>
-      </div>
-      <div class="text-center">
-        <div class="text-3xl mb-2">🎲</div>
-        <h3 class="font-semibold text-fg mb-1 text-sm">True RNG Simulation</h3>
-        <p class="text-xs text-dim leading-relaxed">
-          The simulator draws randomly from the weighted mod pool on each click,
-          just like using an orb in-game. Omens, Desecration, Liquids, Essences,
-          and Fracturing all follow their real PoE2 mechanics.
-        </p>
-      </div>
-      <div class="text-center">
-        <div class="text-3xl mb-2">📊</div>
-        <h3 class="font-semibold text-fg mb-1 text-sm">Cost Tracking</h3>
-        <p class="text-xs text-dim leading-relaxed">
-          Live prices from poe2scout show each step in chaos, exalt, and divine
-          equivalents. No math required to see if a craft is worth pursuing.
-        </p>
-      </div>
+  <!-- Beginner crafting paths: 3 METHODS, link to /guides for the rest -->
+  <section class="mb-8">
+    <div class="flex items-baseline justify-between mb-4">
+      <h2 class="text-xl font-display font-semibold">{t('home.paths')}</h2>
+      <a href="/guides" class="text-xs text-gold-bright hover:text-gold">{t('home.cta.guides')} →</a>
+    </div>
+    <div class="grid md:grid-cols-3 gap-3">
+      {beginnerMethods.map((m) => (
+        <a href={`/guides#${m.id}`} class="block parchment p-4 hover:border-gold/50 hover:-translate-y-0.5 transition-all no-underline group">
+          <div class="flex items-baseline justify-between mb-1.5">
+            <h3 class="font-display font-semibold text-base group-hover:text-gold-bright transition-colors">{m.name}</h3>
+            <span class="text-[10px] uppercase tracking-wider text-mute">Beginner</span>
+          </div>
+          <p class="text-xs text-dim leading-relaxed">{m.description}</p>
+        </a>
+      ))}
     </div>
   </section>
-
-  <!-- Open source badge -->
-  <div class="text-center text-xs text-mute pb-4">
-    <span class="inline-flex items-center gap-1.5">
-      <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-      <span>CraftClass is open source on GitHub</span>
-    </span>
-  </div>
 </Base>
+

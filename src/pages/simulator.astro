@@ -111,38 +111,9 @@ const craftingExamples = [
   },
 ].filter((ex) => ex.id);
 
-// Static UI strings passed to the client-side simulator for runtime use.
-const i18nStrings = JSON.stringify({
-  undo: t('simulator.undo'),
-  seedRare: t('simulator.seedRare'),
-  reset: t('simulator.reset'),
-  emptyTitle: t('simulator.empty.title'),
-  emptySubtitle: t('simulator.empty.subtitle'),
-  pickBase: t('calculator.flash.pickbase'),
-  addOmens: t('simulator.addOmens'),
-  addOmensLabel: t('simulator.addOmensLabel'),
-  apply: t('simulator.apply'),
-  activeOmens: t('simulator.activeOmens'),
-  clearAll: t('simulator.activeOmens.clear'),
-  activeOmensHint: t('simulator.activeOmens.hint'),
-  reference: t('simulator.reference'),
-  expandHint: t('simulator.reference.expand'),
-  poolTitle: t('simulator.modpool'),
-  poolEmpty: t('simulator.modpool.empty'),
-  history: t('simulator.history'),
-  noCurrency: t('simulator.empty.actions'),
-  shortcutHint: t('simulator.shortcuts'),
-  itemLevelLabel: t('simulator.itemlevel.label'),
-  corrupted: t('simulator.corrupted'),
-  emptyItem: t('simulator.empty.pool'),
-  sectionPrefix: t('simulator.section.prefix'),
-  sectionSuffix: t('simulator.section.suffix'),
-  slotLabel: t('simulator.slot.label'),
-  rarityLabel: t('simulator.rarity.label'),
-});
 ---
 
-<Base title={`${t('simulator.title')} - CraftClass`}>
+<Base title={`${t('simulator.title')} - Exile Crafter`}>
   <div class="flex items-baseline justify-between mb-3 flex-wrap gap-2">
     <h1 class="!m-0">Simulator</h1>
     <div class="flex items-center gap-2 min-w-0 flex-1 sm:flex-initial">
@@ -299,7 +270,6 @@ const i18nStrings = JSON.stringify({
           <div class="flex items-center justify-between mb-2">
             <div class="text-xs uppercase tracking-wider text-mute font-semibold">Apply</div>
             <div class="flex items-center gap-2">
-              <button id="import-btn" class="text-xs text-gold hover:text-gold-bright">Import Item</button>
               <button id="open-omens-btn" class="text-xs text-gold hover:text-gold-bright">
                 <span id="omens-btn-label">+ Add Omens</span>
               </button>
@@ -388,42 +358,10 @@ Adds 3 to 6 Physical Damage to Attacks
   </div>
 
   <!-- Custom tooltip -->
-  <div id="tooltip" class="tooltip-pop"></div>
-
-  <!-- Paste modal -->
-  <div id="paste-modal" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center p-4">
-    <div class="parchment w-full max-w-2xl max-h-[85vh] flex flex-col">
-      <div class="sticky top-0 z-10 bg-bg-card border-b border-border p-4 rounded-t">
-        <div class="flex items-center justify-between">
-          <div>
-            <h3 class="!m-0">Paste Item from PoE 2</h3>
-            <p class="text-xs text-mute mt-1">Copy an item in-game (Ctrl+C) and paste it below.</p>
-          </div>
-          <button id="close-paste-modal" class="text-2xl text-mute hover:text-gold-bright leading-none" aria-label="Close paste modal">&times;</button>
-        </div>
-      </div>
-      <div class="p-4 overflow-y-auto flex-1">
-        <textarea id="paste-textarea" rows="12" class="w-full bg-bg border border-border-strong rounded px-3 py-2 text-xs font-mono focus:outline-none focus:border-gold" placeholder="Paste your item text here...&#10;&#10;Example:&#10;Item Class: Rings&#10;Rarity: Rare&#10;Torment Whorl&#10;Gold Ring&#10;..."></textarea>
-        <div id="paste-preview" class="mt-2 hidden">
-          <div id="paste-detected" class="text-sm text-fg"></div>
-          <div id="paste-error" class="text-xs text-corrupted mt-1"></div>
-        </div>
-      </div>
-      <div class="p-4 border-t border-border flex items-center justify-between bg-bg-card rounded-b">
-        <span class="text-xs text-mute">Paste your in-game item copy above, then click Import.</span>
-        <div class="flex gap-2">
-          <button id="cancel-paste-btn" class="btn text-xs">Cancel</button>
-          <button id="import-paste-btn" class="btn btn-gold text-xs hidden">Import Item</button>
-        </div>
-      </div>
-    </div>
-  </div>
+<div id="tooltip" class="tooltip-pop"></div>
 
   <!-- Base options data (small, rendered for dropdown) -->
   <script type="application/json" id="base-data" set:html={JSON.stringify(baseOptions)} />
-
-  <!-- i18n strings -->
-  <script type="application/json" id="i18n-data" set:html={i18nStrings} />
 
   <script>
     import { applyOperation, emptyItem, getCurrencyAvailability, OPERATIONS } from '~/lib/emulator';
@@ -431,20 +369,51 @@ Adds 3 to 6 Physical Damage to Attacks
     import { guidanceFor, eligibleModCount } from '~/lib/expected-cost';
 
     const basesData = JSON.parse(document.getElementById('base-data')!.textContent || '[]');
-    const i18n = JSON.parse(document.getElementById('i18n-data')!.textContent || '{}');
-    
-    // These will be populated by fetch
+
+    // Module-scope lookup tables — built once, reused on every render.
+    const RARITY_COLORS: Record<string, string> = {
+      normal: '#c8c8c8', magic: '#8888ff', rare: '#ffff77', unique: '#af6025',
+    };
+    const SLOT_LABELS: Record<string, string> = {
+      helmet: 'Helmet', body_armour: 'Body Armour', gloves: 'Gloves',
+      boots: 'Boots', belt: 'Belt', amulet: 'Amulet', ring: 'Ring',
+      shield: 'Shield', quiver: 'Quiver', focus: 'Focus',
+      weapon_1h: 'One Handed Weapon', weapon_2h: 'Two Handed Weapon',
+      flask: 'Flask', charm: 'Charm', jewel: 'Jewel',
+      waystone: 'Waystone', tablet: 'Tablet', relic: 'Relic',
+    };
+    // Map from mod tag → display color (checked in priority order).
+    const TAG_COLOR_RULES: Array<[string[], string]> = [
+      [['fire'], '#c44a2a'],
+      [['cold'], '#4a8fc4'],
+      [['lightning'], '#d4c84a'],
+      [['chaos'], '#a04ac4'],
+      [['physical'], '#c9a87a'],
+      [['life'], '#d44a4a'],
+      [['mana'], '#4a6fc4'],
+      [['energy_shield', 'ward'], '#6accc4'],
+      [['elemental', 'damage'], '#c9a14a'],
+      [['attack'], '#c97070'],
+      [['speed', 'critical'], '#d4c84a'],
+      [['caster'], '#8888ff'],
+      [['minion'], '#a08ac4'],
+    ];
+    const TAG_COLOR_DEFAULT = '#a89a7d';
+    function tagColor(tags: string[]): string {
+      for (const [needles, color] of TAG_COLOR_RULES) {
+        if (needles.some((n) => tags.includes(n))) return color;
+      }
+      return TAG_COLOR_DEFAULT;
+    }
+    function capitalize(s: string): string {
+      return s ? s.charAt(0).toUpperCase() + s.slice(1) : '';
+    }
+
+// Populated by fetch
     let currencyData: any[] = [];
     let omensData: any[] = [];
     let modsData: any[] = [];
     let weightsData: any[] = [];
-    let dataLoaded = false;
-    let dataLoadCallbacks: Array<() => void> = [];
-
-    function onDataLoaded(cb: () => void) {
-      if (dataLoaded) { cb(); return; }
-      dataLoadCallbacks.push(cb);
-    }
 
     // Fetch all data files in parallel
     async function loadData() {
@@ -454,11 +423,7 @@ Adds 3 to 6 Physical Damage to Attacks
         omensData = window.__e2eData.omens;
         modsData = window.__e2eData.mods;
         weightsData = window.__e2eData.weights;
-        dataLoaded = true;
-        document.getElementById('loading-state')!.classList.add('hidden');
-        document.getElementById('empty-state')!.classList.remove('hidden');
-        for (const cb of dataLoadCallbacks) cb();
-        dataLoadCallbacks = [];
+        finishLoad();
         return;
       }
       try {
@@ -475,15 +440,7 @@ Adds 3 to 6 Physical Damage to Attacks
         omensData = await omensRes.json();
         modsData = await modsRes.json();
         weightsData = await weightsRes.json();
-        dataLoaded = true;
-        
-        // Hide loading state, show empty state
-        document.getElementById('loading-state')!.classList.add('hidden');
-        document.getElementById('empty-state')!.classList.remove('hidden');
-        
-        // Fire pending callbacks
-        for (const cb of dataLoadCallbacks) cb();
-        dataLoadCallbacks = [];
+        finishLoad();
       } catch (err) {
         console.error('Failed to load data:', err);
         document.getElementById('loading-state')!.innerHTML = `
@@ -670,136 +627,10 @@ Adds 3 to 6 Physical Damage to Attacks
 
     
     const pasteModal = document.getElementById('paste-modal');
-    const pasteTextarea = document.getElementById('paste-textarea');
+const pasteTextarea = document.getElementById('paste-textarea');
     const pastePreview = document.getElementById('paste-preview');
     const pasteDetected = document.getElementById('paste-detected');
     const pasteError = document.getElementById('paste-error');
-    const pasteImportBtn = document.getElementById('import-paste-btn');
-
-    function findBaseForImport(name) {
-      if (!name || !basesData) return null;
-      var n = name.toLowerCase().replace(/[^a-z0-9 ]/g, '').trim();
-      var b = basesData.find(function(x) { return x.name.toLowerCase() === n; });
-      if (b) return b;
-      b = basesData.find(function(x) { return n.endsWith(' ' + x.name.toLowerCase()); });
-      if (b) return b;
-      b = basesData.find(function(x) {
-        return x.name.toLowerCase().split(' ').some(function(w) {
-          return w.length > 2 && new RegExp('\\b' + w + '\\b', 'i').test(n);
-        });
-      });
-      return b || null;
-    }
-
-function parseClipboardText(text) {
-      var out = { itemClass: '', rarity: '', uniqueName: '', baseName: '', itemLevel: 0, implicit: '', affixes: [], warnings: [] };
-      var lines = text.split(/\r?\n/);
-      var dashCount = 0, mod = null;
-      for (var i = 0; i < lines.length; i++) {
-        var ln = lines[i].trim();
-        if (!ln) continue;
-        if (/^-{5,}$/.test(ln)) {
-          dashCount++;
-          if (mod && mod.lines.length > 0) { mod.desc = mod.lines.join(' ').trim(); out.affixes.push(mod); }
-          mod = null;
-          continue;
-        }
-        if (dashCount === 0) {
-          var lc = ln.toLowerCase();
-          if (lc.startsWith('item class:')) out.itemClass = ln.split(':')[1]?.trim() || '';
-          else if (lc.startsWith('rarity:')) out.rarity = ln.split(':')[1]?.trim().toLowerCase() || '';
-          else if (!out.uniqueName) out.uniqueName = ln;
-          else if (!out.baseName) out.baseName = ln;
-          continue;
-        }
-        if (dashCount === 1) {
-          var lc = ln.toLowerCase();
-          if (lc.startsWith('requires:')) { var m = ln.match(/level\s*(\d+)/i); if (m) out.requiredLevel = parseInt(m[1]); }
-          else if (lc.startsWith('item level:')) { var m = ln.match(/(\d+)/); if (m) out.itemLevel = parseInt(m[1]); }
-          continue;
-        }
-        if (dashCount >= 2) {
-          var mh = ln.match(/^\{?\s*(Implicit|Prefix|Suffix|Crafted Prefix|Crafted Suffix|Desecrated Prefix|Desecrated Suffix)\s+Modifier/i);
-          if (mh) {
-            if (mod && mod.lines.length > 0) { mod.desc = mod.lines.join(' ').trim(); out.affixes.push(mod); }
-            mod = { type: mh[1].toLowerCase().replace(/\s+/g, '_'), lines: [], tier: 1, crafted: /crafted/i.test(mh[1]), desecrated: /desecrated/i.test(mh[1]), desc: '' };
-            var tm = ln.match(/Tier\s*[\:\s]*(\d+)/i);
-            if (tm) mod.tier = parseInt(tm[1]);
-            continue;
-          }
-          if (mod) mod.lines.push(ln);
-        }
-      }
-      if (mod && mod.lines.length > 0) { mod.desc = mod.lines.join(' ').trim(); out.affixes.push(mod); }
-      var imIdx = -1;
-      for (var j = 0; j < out.affixes.length; j++) {
-        if (out.affixes[j].type === 'implicit' || out.affixes[j].type === 'implicit_modifier') { imIdx = j; break; }
-      }
-      if (imIdx >= 0) { out.implicit = out.affixes[imIdx].desc; out.affixes.splice(imIdx, 1); }
-      return out;
-    }
-
-    function onPasteInput() {
-      var text = pasteTextarea ? pasteTextarea.value : '';
-      if (!text || text.length < 20) {
-        if (pastePreview) pastePreview.classList.add('hidden');
-        if (pasteError) pasteError.classList.remove('hidden');
-        if (pasteImportBtn) pasteImportBtn.disabled = true;
-        return;
-      }
-      var parsed = parseClipboardText(text);
-      var base = findBaseForImport(parsed.baseName) || findBaseForImport(parsed.itemClass);
-      if (!base) {
-        if (pastePreview) pastePreview.classList.add('hidden');
-        if (pasteError) pasteError.classList.remove('hidden');
-        if (pasteImportBtn) pasteImportBtn.disabled = true;
-        return;
-      }
-      if (pasteError) pasteError.classList.add('hidden');
-      if (pastePreview) pastePreview.classList.remove('hidden');
-      window.__pasteParsed = { parsed: parsed, base: base };
-      var pCount = 0, sCount = 0;
-      for (var k = 0; k < parsed.affixes.length; k++) {
-        if (/prefix/.test(parsed.affixes[k].type)) pCount++;
-        else if (/suffix/.test(parsed.affixes[k].type)) sCount++;
-      }
-      if (pasteDetected) {
-        pasteDetected.innerHTML = '<div class="text-gold font-semibold">' + (parsed.baseName || base.name) + '</div>' +
-          '<div class="text-dim text-xs">' + base.slot.replace(/_/g, ' ') + ' \u00b7 ' + (parsed.rarity || 'rare') + ' \u00b7 Item Level ' + (parsed.itemLevel || '?') + '</div>' +
-          '<div class="text-mute text-xs mt-1">' + pCount + 'P / ' + sCount + 'S \u2014 ' + parsed.affixes.length + ' mods' + (parsed.implicit ? ' +implicit' : '') + '</div>';
-      }
-      if (pasteImportBtn) pasteImportBtn.disabled = false;
-    }
-
-    function onPasteImport() {
-      var data = window.__pasteParsed;
-      if (!data) return;
-      var parsed = data.parsed, base = data.base;
-      if (!parsed || !base) return;
-      currentBase = base;
-      var ilvl = parsed.itemLevel || parseInt(ilvlInput.value || '80');
-      currentItem = emptyItem({ id: base.id, name: base.name, slot: base.slot, rarity: 'rare', level: base.level, attributes: {}, baseStats: {}, imageUrl: base.imageUrl, affixSlots: base.affixSlots, family: base.slot, variant: base.variant, source: 'poe2db' }, ilvl);
-      currentItem.rarity = parsed.rarity === 'magic' ? 'magic' : parsed.rarity === 'normal' ? 'normal' : 'rare';
-      currentItem.affixes = [];
-      for (var m = 0; m < parsed.affixes.length; m++) {
-        currentItem.affixes.push({
-          name: parsed.affixes[m].desc || '',
-          type: /prefix/.test(parsed.affixes[m].type) ? 'prefix' : 'suffix',
-          tier: parsed.affixes[m].tier || 1,
-          tags: [],
-          crafted: !!parsed.affixes[m].crafted,
-          desecrated: !!parsed.affixes[m].desecrated
-        });
-      }
-      currentItem.implicit = parsed.implicit || '';
-      emptyState.classList.add('hidden');
-      mainUi.classList.remove('hidden');
-      basePicker.value = base.id;
-      history = []; costTracker.reset(); activeOmens.clear();
-      renderAll();
-      if (pasteModal) pasteModal.classList.add('hidden');
-      logActivity('Imported ' + (parsed.uniqueName || parsed.baseName) + ' (' + base.name + ') - ' + currentItem.affixes.length + ' affixes loaded', 'ok');
-    }
 
 function openPasteModal() {
       pasteTextarea.value = '';
@@ -824,7 +655,12 @@ function openPasteModal() {
         parsedPaste = null;
         return;
       }
-      // Parse the clipboard text
+      // Parse the clipboard text. Two formats supported:
+      //   Wiki/poe2db format: starts with "Item Class:" then "Rarity:" then mod headers
+      //     like "{ Prefix Modifier "Tempered" (Tier: 2) — Damage, Physical, Attack }"
+      //   In-game format (advanced descriptions ON): starts with "Rarity:" and uses
+      //     simple mod headers like "Prefix Modifier" with tier indicators on
+      //     their own lines ("T1", "T2", etc.) between mods.
       const lines = text.split(/\r?\n/);
       let idx = 0;
       function nextLine() {
@@ -834,9 +670,9 @@ function openPasteModal() {
         }
         return null;
       }
-      // Validate header
+      // Validate header — either "Item Class:" (wiki) or "Rarity:" (in-game) is accepted
       let line = nextLine();
-      if (!line || !line.startsWith('Item Class:')) {
+      if (!line) {
         pasteError.classList.remove('hidden');
         pastePreview.classList.add('hidden');
         pasteImport.disabled = true;
@@ -845,21 +681,38 @@ function openPasteModal() {
       }
       pasteError.classList.add('hidden');
 
-      // Basic parse for preview
-      const itemClass = line.slice('Item Class:'.length).trim();
-      line = nextLine();
-      const rarity = line && line.startsWith('Rarity:') ? line.slice('Rarity:'.length).trim().toLowerCase() : 'rare';
-      line = nextLine();
-      const name = line || 'Unknown';
+      let itemClass = '';
+      if (line.startsWith('Item Class:')) {
+        itemClass = line.slice('Item Class:'.length).trim();
+        line = nextLine();
+      }
+      let rarity = 'rare';
+      if (line && line.startsWith('Rarity:')) {
+        rarity = line.slice('Rarity:'.length).trim().toLowerCase();
+        line = nextLine();
+      } else if (!line) {
+        // No Rarity: header found at all — give up
+        pasteError.classList.remove('hidden');
+        pastePreview.classList.add('hidden');
+        pasteImport.disabled = true;
+        parsedPaste = null;
+        return;
+      }
+      // In in-game format (no Item Class), the unique name and base are on
+      // consecutive lines. The base line is usually a known base name. Read
+      // both candidates and let findBaseByName disambiguate.
+      const candidateName = line || 'Unknown';
+      const nextCandidate = nextLine();
+      const candidates = [candidateName];
+      if (nextCandidate && !/^-{3,}$/.test(nextCandidate.trim()) && !/^Rarity:/i.test(nextCandidate)) {
+        candidates.push(nextCandidate);
+      }
+      let name = candidateName;
       let itemLevel = 80;
-      let ilvlFound = false;
-      let qualityFound = false;
-      // Scan through for Item Level
       for (let i = idx; i < lines.length; i++) {
         const l = lines[i].trim();
         if (/^Item\s*Level:\s*\d+/i.test(l)) {
           itemLevel = parseInt(l.replace(/^Item\s*Level:\s*/i, ''));
-          ilvlFound = true;
           break;
         }
       }
@@ -867,15 +720,23 @@ function openPasteModal() {
       // Find matching base
       const baseNameParts = name.split(' ');
       let foundBase = null;
-      // Try full name
-      foundBase = findBaseByName(name);
-      if (!foundBase) {
-        // Try stripping known prefixes (e.g., "Wrath Eye" from "Prismatic Ring")
-        for (let wordIdx = 1; wordIdx < baseNameParts.length; wordIdx++) {
-          const candidate = baseNameParts.slice(wordIdx).join(' ');
-          foundBase = findBaseByName(candidate);
-          if (foundBase) break;
+      // Explicit base resolution — no guessing. Both formats put the unique
+      // name on one line and the base name on the next line:
+      //   Wiki:  "Torment Whorl\nGold Ring"
+      //   In-game: "Runeforged Whorl\nFocus"
+      // The base is always on a separate line — we don't need fuzzy matching
+      // against the unique name.
+      if (candidates.length >= 2) {
+        // Try the second candidate directly as the base name
+        foundBase = findBaseByName(candidates[1]);
+        if (foundBase) {
+          name = candidates[0];
         }
+      }
+      // Fallback: if we still don't have a base, try the full unique name
+      // (handles edge cases where the unique name itself IS a base, e.g. unique items)
+      if (!foundBase) {
+        foundBase = findBaseByName(name);
       }
       // Try slot-based search
       if (!foundBase) {
@@ -899,52 +760,109 @@ function openPasteModal() {
         }
       }
 
-      // Parse modifier sections from the text
+// Parse modifier sections from the text. Supports two formats:
+//   Wiki: "{ Prefix Modifier "Name" (Tier: N) — Tags }" + mod text on next line
+//   In-game: "Prefix Modifier" header + tier (T1/T2) on its own line + mod text on next line
+//          (in-game format has alternating T#/text lines for each affix)
       const affixes: any[] = [];
       let implicit = '';
       for (let i = 0; i < lines.length; i++) {
         const l = lines[i].trim();
-        const headerMatch = l.match(/^\{\s*(Crafted\s+)?(Desecrated\s+)?(Prefix|Suffix|Implicit)\s+Modifier/i);
-        if (headerMatch) {
-          const isCrafted = !!headerMatch[1];
-          const isDesecrated = !!headerMatch[2];
-          const modType = headerMatch[3].toLowerCase();
-          const tierMatch = l.match(/Tier\s*[\:\s]*(\d+)/i);
-          const tier = tierMatch ? parseInt(tierMatch[1]) : 1;
-          // Collect subsequent lines until blank, separator, or new header
-          const modLines: string[] = [];
-          for (let j = i + 1; j < lines.length; j++) {
-            const nl = lines[j].trim();
-            if (!nl) continue;
-            if (/^-{3,}$/.test(nl)) break;
-            if (/^\{.+Modifier/i.test(nl)) break;
-            modLines.push(nl);
-            if (modLines.length > 20) break;
+        // Match wiki header OR in-game header
+        const headerMatch = l.match(/^(\{\s*)?(Crafted\s+)?(Desecrated\s+)?(Prefix|Suffix|Implicit)\s+Modifier/i);
+        if (!headerMatch) continue;
+        const isCrafted = !!headerMatch[3];
+        const isDesecrated = !!headerMatch[2];
+        const modType = headerMatch[4].toLowerCase();
+        // Get current section type — only emit affixes matching it
+        let currentType = modType;
+
+        // Walk subsequent lines, collecting mod blocks. Each block is either:
+        //   Wiki: tier from header, then mod text, ends at separator/next header
+        //   In-game: "T#" tier line, then mod text, then "T#" resets tier for next mod
+        let j = i + 1;
+        while (j < lines.length) {
+          const nl = lines[j].trim();
+          if (!nl) { j++; continue; }
+          if (/^-{3,}$/.test(nl)) break;
+          if (/^\{?\s*(Crafted\s+)?(Desecrated\s+)?(Prefix|Suffix|Implicit)\s+Modifier/i.test(nl)) break;
+
+          // In-game format: "T1", "T2", etc. starts a new mod block
+          const tierMatch = nl.match(/^T(\d+)$/);
+          if (tierMatch) {
+            const newTier = parseInt(tierMatch[1]);
+            // Find the mod text that follows this tier line
+            let modText = '';
+            for (let k = j + 1; k < lines.length; k++) {
+              const kk = lines[k].trim();
+              if (!kk) continue;
+              if (/^-{3,}$/.test(kk)) break;
+              if (/^T\d+$/.test(kk)) break;
+              if (/^\{?\s*(Crafted\s+)?(Desecrated\s+)?(Prefix|Suffix|Implicit)\s+Modifier/i.test(kk)) break;
+              modText = kk;
+              j = k; // skip past the mod text
+              break;
+            }
+            if (modText && currentType !== 'implicit') {
+              affixes.push({
+                type: currentType,
+                tier: newTier,
+                crafted: isCrafted,
+                desecrated: isDesecrated,
+                name: modText,
+              });
+            }
+            j++;
+            continue;
           }
-          const modText = modLines.join(' ').replace(/\s+/g, ' ').trim();
-          if (modType === 'implicit') {
-            implicit = modText;
-          } else {
+
+          // Wiki format: this is the mod text line (only when currentType is the
+          // section header type, which is set on entry to this for iteration)
+          if (currentType === 'implicit') {
+            // Implicit has no tier — collect all lines until next header
+            let text = nl;
+            let k = j + 1;
+            while (k < lines.length) {
+              const kk = lines[k].trim();
+              if (!kk) { k++; continue; }
+              if (/^-{3,}$/.test(kk)) break;
+              if (/^\{?\s*(Crafted\s+)?(Desecrated\s+)?(Prefix|Suffix|Implicit)\s+Modifier/i.test(kk)) break;
+              if (/^T\d+$/.test(kk)) break;
+              text += ' ' + kk;
+              k++;
+            }
+            implicit = text.trim();
+            j = k;
+            continue;
+          }
+
+          // Wiki prefix/suffix: tier was on the header line (if any), text is here
+          // Get tier from wiki header (for first mod of section)
+          let tier = 1;
+          const headerTier = l.match(/Tier\s*[\:\s]*(\d+)/i);
+          if (headerTier) tier = parseInt(headerTier[1]);
+          if (nl) {
             affixes.push({
-              type: modType,
+              type: currentType,
               tier,
               crafted: isCrafted,
               desecrated: isDesecrated,
-              name: modText,
+              name: nl,
             });
           }
+          j++;
+          break; // wiki format: one mod per section, move to next section
         }
+        i = j - 1; // outer for loop increments i
       }
 
       // Build preview
       parsedPaste = {
-        itemClass, rarity, name, baseName: foundBase?.name || name,
+        rarity, name,
         baseId: foundBase?.id || '',
         itemLevel,
         implicit,
         affixes,
-        lines: lines.filter(l => l.trim()),
-        raw: text,
       };
 
       pastePreview.classList.remove('hidden');
@@ -1027,8 +945,14 @@ function openPasteModal() {
       });
     }
     if (pasteTextarea) {
-      pasteTextarea.addEventListener('input', handlePasteText);
-      pasteTextarea.addEventListener('paste', () => setTimeout(handlePasteText, 50));
+      // Debounce input — pasting fires many key events as the textarea fills.
+      let pasteParseTimer: number | undefined;
+      const scheduleParse = () => {
+        if (pasteParseTimer) clearTimeout(pasteParseTimer);
+        pasteParseTimer = window.setTimeout(handlePasteText, 80);
+      };
+      pasteTextarea.addEventListener('input', scheduleParse);
+      pasteTextarea.addEventListener('paste', scheduleParse);
       pasteTextarea.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' && (e.ctrlKey || e.metaKey) && pasteImport && !pasteImport.disabled) {
           e.preventDefault();
@@ -1117,31 +1041,46 @@ function openPasteModal() {
       v: 'vaal_orb',
     };
 
-    function mapCurrencyToOp(id: string, name: string): string {
-      if (OPERATIONS[id]) return id;
-      const stripped = id.replace(/^(lesser_|greater_|perfect_|corrupted_)/, '');
-      if (OPERATIONS[stripped]) return stripped;
-      const n = name.toLowerCase();
-      if (n.includes('transmutation')) return 'orb_of_transmutation';
-      if (n.includes('augmentation')) return 'orb_of_augmentation';
-      if (n.includes('alchemy')) return 'orb_of_alchemy';
-      if (n.includes('regal')) return 'regal_orb';
-      if (n.includes('exalt')) return 'exalted_orb';
-      if (n.includes('annul')) return 'orb_of_annulment';
-      if (n.includes('chaos')) return 'chaos_orb';
-      if (n.includes('divine')) return 'divine_orb';
-      if (n.includes('chance')) return 'orb_of_chance';
-      if (n.includes('vaal')) return 'vaal_orb';
-      if (n.includes('desecrat') || /collarbone|jawbone|rib|cranium/.test(n)) return 'desecrate';
-      if (n.includes('liquid') || n.includes('potent') || n.includes('auspicious') || n.includes('concentrated') || n.includes('diluted') || n.includes('ancient') || n.includes('distilled')) return 'liquid_emotion';
-      if (n.includes('catalyst')) return 'catalyst';
-      if (n.includes('alloy')) return 'alloy';
-      return stripped || id;
-    }
+    // Map currency id (or name) to the canonical operation id.
+// First tries the id directly, then strips lesser/greater/perfect/corrupted prefix,
+// then falls back to a name keyword lookup.
+const CURRENCY_NAME_TO_OP: Array<[RegExp | string, string]> = [
+  ['transmutation', 'orb_of_transmutation'],
+  ['augmentation', 'orb_of_augmentation'],
+  ['alchemy', 'orb_of_alchemy'],
+  ['regal', 'regal_orb'],
+  ['exalt', 'exalted_orb'],
+  ['annul', 'orb_of_annulment'],
+  ['chaos', 'chaos_orb'],
+  ['divine', 'divine_orb'],
+  ['chance', 'orb_of_chance'],
+  ['vaal', 'vaal_orb'],
+  ['desecrat', 'desecrate'],
+  ['collarbone|jawbone|rib|cranium', 'desecrate'],
+  ['liquid|potent|auspicious|concentrated|diluted|ancient|distilled', 'liquid_emotion'],
+  ['catalyst', 'catalyst'],
+  ['alloy', 'alloy'],
+];
+const OP_KEYBOARD_HINTS: Record<string, string> = {
+  orb_of_transmutation: 'T', orb_of_alchemy: 'A', regal_orb: 'R',
+  exalted_orb: 'E', orb_of_annulment: 'X', chaos_orb: 'C', divine_orb: 'D',
+  orb_of_augmentation: 'U', vaal_orb: 'V',
+};
 
-    function getOpKey(opId: string): string {
-      return ({ 'orb_of_transmutation': 'T', 'orb_of_alchemy': 'A', 'regal_orb': 'R', 'exalted_orb': 'E', 'orb_of_annulment': 'X', 'chaos_orb': 'C', 'divine_orb': 'D', 'orb_of_augmentation': 'U', 'vaal_orb': 'V' } as Record<string, string>)[opId] || '';
-    }
+function mapCurrencyToOp(id: string, name: string): string {
+  if (OPERATIONS[id]) return id;
+  const stripped = id.replace(/^(lesser_|greater_|perfect_|corrupted_)/, '');
+  if (OPERATIONS[stripped]) return stripped;
+  const n = name.toLowerCase();
+  for (const [needle, opId] of CURRENCY_NAME_TO_OP) {
+    if (typeof needle === 'string' ? n.includes(needle) : needle.test(n)) return opId;
+  }
+  return stripped || id;
+}
+
+function getOpKey(opId: string): string {
+  return OP_KEYBOARD_HINTS[opId] || '';
+}
 
     function usedCount(type: string) {
       return currentItem?.affixes.filter((a: any) => a.type === type).length || 0;
@@ -1160,46 +1099,14 @@ function openPasteModal() {
     }
 
     function renderItemCardHTML(base: any, item: any): string {
-      const rarityColor = {
-        normal: '#c8c8c8', magic: '#8888ff', rare: '#ffff77', unique: '#af6025',
-      }[item.rarity] || '#c8c8c8';
-      const rarityLabel = ({ normal: 'Normal', magic: 'Magic', rare: 'Rare', unique: 'Unique' } as any)[item.rarity] || item.rarity;
-
       const prefixes = item.affixes.filter((a: any) => a.type === 'prefix');
       const suffixes = item.affixes.filter((a: any) => a.type === 'suffix');
-
-      const modColor = (tags: string[]) => {
-        if (tags.includes('fire')) return '#c44a2a';
-        if (tags.includes('cold')) return '#4a8fc4';
-        if (tags.includes('lightning')) return '#d4c84a';
-        if (tags.includes('chaos')) return '#a04ac4';
-        if (tags.includes('physical')) return '#c9a87a';
-        if (tags.includes('life')) return '#d44a4a';
-        if (tags.includes('mana')) return '#4a6fc4';
-        if (tags.includes('energy_shield') || tags.includes('ward')) return '#6accc4';
-        if (tags.includes('elemental')) return '#c9a14a';
-        if (tags.includes('damage')) return '#c9a14a';
-        if (tags.includes('attack')) return '#c97070';
-        if (tags.includes('speed')) return '#d4c84a';
-        if (tags.includes('critical')) return '#d4c84a';
-        if (tags.includes('caster')) return '#8888ff';
-        if (tags.includes('minion')) return '#a08ac4';
-        return '#a89a7d';
-      };
-
-      const slotTypeLabel = ({
-        helmet: 'Helmet', body_armour: 'Body Armour', gloves: 'Gloves',
-        boots: 'Boots', belt: 'Belt', amulet: 'Amulet', ring: 'Ring',
-        shield: 'Shield', quiver: 'Quiver', focus: 'Focus',
-        weapon_1h: 'One Handed Weapon', weapon_2h: 'Two Handed Weapon',
-        flask: 'Flask', charm: 'Charm', jewel: 'Jewel',
-        waystone: 'Waystone', tablet: 'Tablet', relic: 'Relic',
-      } as Record<string, string>)[base.slot] || base.slot;
+      const slotTypeLabel = SLOT_LABELS[base.slot] || base.slot;
 
       const rowHTML = (a: any) => `
         <div class="item-row">
           <span class="mod-tier">T${a.tier}</span>
-          <span class="mod-text" style="color: ${modColor(a.tags || [])}">${escapeHtml(a.name)}</span>
+          <span class="mod-text" style="color: ${tagColor(a.tags || [])}">${escapeHtml(a.name)}</span>
         </div>
       `;
 
@@ -1210,7 +1117,7 @@ function openPasteModal() {
       return `
         <div class="item-tooltip">
           <div class="item-header">
-            <div class="item-name" style="color: ${rarityColor}">${escapeHtml(base.name)}</div>
+            <div class="item-name" style="color: ${RARITY_COLORS[item.rarity] || RARITY_COLORS.normal}">${escapeHtml(base.name)}</div>
             <div class="item-type">${slotTypeLabel}</div>
           </div>
           ${item.implicit ? `
@@ -1238,7 +1145,7 @@ function openPasteModal() {
           ${prefixes.length === 0 && suffixes.length === 0 ? `<div class="item-empty">Empty item</div>` : ''}
           ${separatorHTML(false)}
           <div class="item-footer">
-            <div class="item-rarity">${rarityLabel} · Item Level: ${item.itemLevel}</div>
+            <div class="item-rarity">${capitalize(item.rarity)} · Item Level: ${item.itemLevel}</div>
             ${item.corrupted ? `<div class="corrupted-indicator">Corrupted</div>` : ''}
           </div>
         </div>
@@ -1287,6 +1194,13 @@ function openPasteModal() {
       }
 
       let html = '';
+      // Compute mod pool counts once per render — they don't change per button
+      const prefixCount = currentItem && currentBase
+        ? eligibleModCount(currentBase.slot, currentItem.itemLevel, 'prefix', modsData)
+        : 0;
+      const suffixCount = currentItem && currentBase
+        ? eligibleModCount(currentBase.slot, currentItem.itemLevel, 'suffix', modsData)
+        : 0;
       for (const cat of order) {
         const items = grouped[cat];
         if (!items || items.length === 0) continue;
@@ -1300,15 +1214,14 @@ function openPasteModal() {
           const reason = a?.reason || '';
           const key = getOpKey(c.opId);
           const desc = (c.description || '').slice(0, 120);
-          // Guidance-enhanced tooltip content
           const guid = currentItem && currentBase
             ? guidanceFor(
                 c.opId,
                 currentItem.rarity,
                 currentBase.slot,
                 currentItem.itemLevel,
-                eligibleModCount(currentBase.slot, currentItem.itemLevel, 'prefix', modsData),
-                eligibleModCount(currentBase.slot, currentItem.itemLevel, 'suffix', modsData),
+                prefixCount,
+                suffixCount,
               )
             : { summary: desc || '', when: '', odds: undefined, costNote: undefined };
           const tipParts: string[] = [
@@ -1542,58 +1455,72 @@ function openPasteModal() {
       renderAll();
     }
 
-    function parseOmenEffect(o: OmenOpt | undefined): any {
-      if (!o) return { kind: 'force_type', value: 'prefix' };
-      const e = (o.effect || '').toLowerCase();
-      if (/only (have )?prefix/.test(e)) return { kind: 'force_type', value: 'prefix' };
-      if (/only (have )?suffix/.test(e)) return { kind: 'force_type', value: 'suffix' };
-      if (/maximum number of prefix/.test(e)) return { kind: 'force_type', value: 'prefix' };
-      if (/maximum number of suffix/.test(e)) return { kind: 'force_type', value: 'suffix' };
-      if (/adds 2 affixes|add two random modifiers|add two new random modifiers/.test(e)) return { kind: 'double_add' };
-      if (/does not destroy|will not destroy/.test(e)) return { kind: 'no_destroy', for: 'orb_of_chance' };
-      if (/remove two modifiers|removes 2 affixes/.test(e)) return { kind: 'remove_count', value: 2 };
-      if (/removes 1 prefix|only prefix modifiers/.test(e)) return { kind: 'remove_type', value: 'prefix' };
-      if (/removes 1 suffix|only suffix modifiers/.test(e)) return { kind: 'remove_type', value: 'suffix' };
-      if (/lowest level/.test(e)) return { kind: 'remove_lowest_level' };
-      if (/replaces? all (affixes|modifiers)|reroll (the options|desecrated modifiers)/.test(e)) return { kind: 'replace_all_desecrate' };
-      if (/same type as an existing modifier/.test(e)) return { kind: 'force_homogenise' };
-      if (/ulaman/.test(e)) return { kind: 'desecrate_faction', value: 'ulaman' };
-      if (/amanamu/.test(e)) return { kind: 'desecrate_faction', value: 'amanamu' };
-      if (/kurgal/.test(e)) return { kind: 'desecrate_faction', value: 'kurgal' };
-      if (/desecrated affixes/.test(e)) return { kind: 'remove_only_desecrated' };
-      if (/implicit/.test(e)) return { kind: 'divine_implicit_only' };
-      if (/sanctif/.test(e)) return { kind: 'divine_upgrade' };
-      if (/catalysing|catalyst/.test(e)) return { kind: 'exalted_consumes_catalyst' };
-      if (/putrefaction/.test(e)) return { kind: 'desecrate_reroll' };
-      if (/necromancy/.test(e)) return { kind: 'desecrate_minion', value: 'suffix' };
-      if (/crystallisation/.test(e)) return { kind: 'perfect_orb_implicit_upgrade' };
-      if (/chaotic effectiveness/.test(e)) return { kind: 'chaos_effectiveness' };
-      if (/chaotic monsters/.test(e)) return { kind: 'chaos_monsters' };
-      if (/chaotic quantity/.test(e)) return { kind: 'chaos_quantity' };
-      if (/chaotic rarity/.test(e)) return { kind: 'chaos_rarity' };
-      if (/random unique|ancients/.test(e)) return { kind: 'specific_unique', for: 'orb_of_chance' };
-      return { kind: 'force_type', value: 'prefix' };
-    }
+    // Omen effect patterns, ordered from most-specific to most-generic. Each
+// pattern maps to a kind+value used by the emulator.
+const OMEN_EFFECT_RULES: Array<[RegExp, () => any]> = [
+  [/only (have )?prefix|maximum number of prefix/, () => ({ kind: 'force_type', value: 'prefix' })],
+  [/only (have )?suffix|maximum number of suffix/, () => ({ kind: 'force_type', value: 'suffix' })],
+  [/adds 2 affixes|add two random modifiers|add two new random modifiers/, () => ({ kind: 'double_add' })],
+  [/does not destroy|will not destroy/, () => ({ kind: 'no_destroy', for: 'orb_of_chance' })],
+  [/remove two modifiers|removes 2 affixes/, () => ({ kind: 'remove_count', value: 2 })],
+  [/removes 1 prefix|only prefix modifiers/, () => ({ kind: 'remove_type', value: 'prefix' })],
+  [/removes 1 suffix|only suffix modifiers/, () => ({ kind: 'remove_type', value: 'suffix' })],
+  [/lowest level/, () => ({ kind: 'remove_lowest_level' })],
+  [/replaces? all (affixes|modifiers)|reroll (the options|desecrated modifiers)/, () => ({ kind: 'replace_all_desecrate' })],
+  [/same type as an existing modifier/, () => ({ kind: 'force_homogenise' })],
+  [/ulaman/, () => ({ kind: 'desecrate_faction', value: 'ulaman' })],
+  [/amanamu/, () => ({ kind: 'desecrate_faction', value: 'amanamu' })],
+  [/kurgal/, () => ({ kind: 'desecrate_faction', value: 'kurgal' })],
+  [/desecrated affixes/, () => ({ kind: 'remove_only_desecrated' })],
+  [/implicit/, () => ({ kind: 'divine_implicit_only' })],
+  [/sanctif/, () => ({ kind: 'divine_upgrade' })],
+  [/catalysing|catalyst/, () => ({ kind: 'exalted_consumes_catalyst' })],
+  [/putrefaction/, () => ({ kind: 'desecrate_reroll' })],
+  [/necromancy/, () => ({ kind: 'desecrate_minion', value: 'suffix' })],
+  [/crystallisation/, () => ({ kind: 'perfect_orb_implicit_upgrade' })],
+  [/chaotic effectiveness/, () => ({ kind: 'chaos_effectiveness' })],
+  [/chaotic monsters/, () => ({ kind: 'chaos_monsters' })],
+  [/chaotic quantity/, () => ({ kind: 'chaos_quantity' })],
+  [/chaotic rarity/, () => ({ kind: 'chaos_rarity' })],
+  [/random unique|ancients/, () => ({ kind: 'specific_unique', for: 'orb_of_chance' })],
+];
+const OMEN_EFFECT_DEFAULT = { kind: 'force_type', value: 'prefix' };
 
-    function categorizeOmen(name: string): string {
-      const n = name.toLowerCase();
-      if (/saga$/.test(n)) return 'Saga';
-      if (/ancients|blackblooded|liege|sovereign/.test(n)) return 'Faction';
-      if (/alchemy/.test(n)) return 'Alchemy';
-      if (/coronation/.test(n)) return 'Coronation';
-      if (/exaltation/.test(n)) return 'Exaltation';
-      if (/annulment/.test(n)) return 'Annulment';
-      if (/erasure/.test(n)) return 'Erasure';
-      if (/crystallisation/.test(n)) return 'Crystallisation';
-      if (/necromancy/.test(n)) return 'Necromancy';
-      if (/chance/.test(n)) return 'Chance';
-      if (/whittling/.test(n)) return 'Whittling';
-      if (/abyssal/.test(n)) return 'Abyssal';
-      if (/putrefaction/.test(n)) return 'Putrefaction';
-      if (/light/.test(n)) return 'Light';
-      if (/refreshment|resurgence|amelioration|bartering|answered|catalysing|chaotic|corruption/.test(n)) return 'Other';
-      return 'Other';
-    }
+function parseOmenEffect(o: OmenOpt | undefined): any {
+  if (!o) return OMEN_EFFECT_DEFAULT;
+  const e = (o.effect || '').toLowerCase();
+  for (const [re, build] of OMEN_EFFECT_RULES) {
+    if (re.test(e)) return build();
+  }
+  return OMEN_EFFECT_DEFAULT;
+}
+
+// Map omen name → category for the popover grid
+const OMEN_CATEGORY_RULES: Array<[RegExp, string]> = [
+  [/saga$/, 'Saga'],
+  [/ancients|blackblooded|liege|sovereign/, 'Faction'],
+  [/alchemy/, 'Alchemy'],
+  [/coronation/, 'Coronation'],
+  [/exaltation/, 'Exaltation'],
+  [/annulment/, 'Annulment'],
+  [/erasure/, 'Erasure'],
+  [/crystallisation/, 'Crystallisation'],
+  [/necromancy/, 'Necromancy'],
+  [/chance/, 'Chance'],
+  [/whittling/, 'Whittling'],
+  [/abyssal/, 'Abyssal'],
+  [/putrefaction/, 'Putrefaction'],
+  [/light/, 'Light'],
+  [/refreshment|resurgence|amelioration|bartering|answered|catalysing|chaotic|corruption/, 'Other'],
+];
+
+function categorizeOmen(name: string): string {
+  const n = name.toLowerCase();
+  for (const [re, cat] of OMEN_CATEGORY_RULES) {
+    if (re.test(n)) return cat;
+  }
+  return 'Other';
+}
 
     function renderOmensModal() {
       const grouped = new Map<string, OmenOpt[]>();
@@ -1647,14 +1574,10 @@ function openPasteModal() {
     }
 
     function selectBase(baseId: string) {
-      const b = basesData.find((x: BaseOpt) => x.id === baseId);
+      const b = basesById?.get(baseId) ?? basesData.find((x: BaseOpt) => x.id === baseId);
       if (!b) return;
       currentBase = b;
-      currentItem = emptyItem({
-        id: b.id, name: b.name, slot: b.slot as any, rarity: 'normal', level: b.level,
-        attributes: {}, baseStats: {}, imageUrl: b.imageUrl, affixSlots: b.affixSlots,
-        family: b.slot, variant: b.variant, source: 'poe2db',
-      } as any, parseInt(ilvlInput.value || '80'));
+      currentItem = emptyItem(makeBaseRecord(b, 'normal'), parseInt(ilvlInput.value || '80'));
       history = [];
       costTracker.reset();
       activeOmens.clear();
@@ -1663,14 +1586,24 @@ function openPasteModal() {
       renderAll();
     }
 
-    function goHome() {
-      currentBase = null;
-      currentItem = null;
-      history = [];
-      activeOmens.clear();
-      basePicker.value = '';
+    // Build O(1) lookup maps once after data is loaded
+    const basesById = new Map<string, BaseOpt>(basesData.map((b: BaseOpt) => [b.id, b]));
+
+    function finishLoad() {
+      // Don't show empty state if a base was auto-selected via ?base= URL param
+      if (currentBase) return;
+      loadingState.classList.add('hidden');
       emptyState.classList.remove('hidden');
-      mainUi.classList.add('hidden');
+    }
+
+    // Single source of truth for the base record shape consumed by emptyItem()
+    function makeBaseRecord(b: BaseOpt, rarity: 'normal' | 'magic' | 'rare' | 'unique') {
+      return {
+        id: b.id, name: b.name, slot: b.slot, rarity, level: b.level,
+        attributes: {}, baseStats: {}, imageUrl: b.imageUrl,
+        affixSlots: b.affixSlots, family: b.slot, variant: b.variant,
+        source: 'poe2db',
+      } as any;
     }
 
     // Wire up UI
@@ -1680,7 +1613,9 @@ function openPasteModal() {
     ilvlInput.addEventListener('input', () => {
       if (currentItem) {
         currentItem.itemLevel = parseInt(ilvlInput.value || '80');
-        renderAll();
+        // ilvl affects mod pool + currency availability — only re-render those.
+        renderTips();
+        renderCurrencyStrip();
       }
     });
 
@@ -1758,184 +1693,6 @@ function openPasteModal() {
     costTracker.init().then(() => {
       logActivity('Live pricing loaded from poe2scout.', 'info');
       renderCostPanel();
-    });
-  
-        // --- Paste import handlers ---
-
-    setTimeout(function() {
-      var pasteModal = document.getElementById('paste-modal');
-      var pasteTextarea = document.getElementById('paste-textarea');
-      var pastePreview = document.getElementById('paste-preview');
-      var pasteDetected = document.getElementById('paste-detected');
-      var pasteError = document.getElementById('paste-error');
-      var importPasteBtn = document.getElementById('import-paste-btn');
-      var closePasteBtn = document.getElementById('close-paste-modal');
-      var cancelPasteBtn = document.getElementById('cancel-paste-btn');
-      var parsedPasteResult = null;
-
-      function findBaseForImport(name) {
-        if (!name) return null;
-        var n = name.toLowerCase().replace(/[^a-z0-9 ]/g, '').trim();
-        var b = basesData.find(function(x) { return x.name.toLowerCase() === n; });
-        if (b) return b;
-        b = basesData.find(function(x) { return x.name.toLowerCase().indexOf(n) !== -1; });
-        if (b) return b;
-        b = basesData.find(function(x) {
-          var words = x.name.toLowerCase().split(/\s+/);
-          for (var wi = 0; wi < words.length; wi++) {
-            if (words[wi].length > 2 && n.indexOf(words[wi]) !== -1) return true;
-          }
-          return false;
-        });
-        return b || null;
-      }
-
-      function parsePoe2Clipboard(text) {
-        var result = { baseName: '', slot: '', rarity: 'normal', itemLevel: 80, requiredLevel: 0, affixes: [], implicit: null };
-        var lines = text.split('\n');
-        for (var i = 0; i < lines.length; i++) {
-          var l = lines[i].replace(/\r$/, '');
-          if (/^item\s*class\s*:/i.test(l)) {
-            result.slot = l.split(':')[1].trim().toLowerCase().replace(/\s+/g, '_');
-          } else if (/^rarity\s*:/i.test(l)) {
-            var r = l.split(':')[1].trim().toLowerCase();
-            if (r === 'magic') result.rarity = 'magic';
-            else if (r === 'rare') result.rarity = 'rare';
-            else if (r === 'unique') result.rarity = 'unique';
-          } else if (/^item\s*level\s*:/i.test(l)) {
-            var m = l.match(/(\d+)/);
-            if (m) result.itemLevel = parseInt(m[1]);
-          } else if (/^requires\s*:\s*level\s*/i.test(l)) {
-            var m2 = l.match(/level\s+(\d+)/i);
-            if (m2) result.requiredLevel = parseInt(m2[1]);
-          }
-        }
-        var count = 0;
-        for (var j = 0; j < lines.length; j++) {
-          var l2 = lines[j].replace(/\r$/, '').trim();
-          if (!l2 || /^[-]+$/.test(l2) || /^item\s*class/i.test(l2) || /^rarity/i.test(l2) || /^requires/i.test(l2) || /^item\s*level/i.test(l2)) continue;
-          count++;
-          if (count === 2) { result.baseName = l2; break; }
-        }
-        var currentMod = null;
-        for (var k = 0; k < lines.length; k++) {
-          var l4 = lines[k].replace(/\r$/, '');
-          var modHeaderMatch = l4.match(/\{\s*(Crafted|Desecrated)?\s*(Implicit|Prefix|Suffix)\s+Modifier/i);
-          if (modHeaderMatch) {
-            if (currentMod && currentMod.text) result.affixes.push(currentMod);
-            var prefix = (modHeaderMatch[1] || '').toLowerCase();
-            var baseType = modHeaderMatch[2].toLowerCase();
-            if (baseType === 'implicit') {
-              currentMod = { type: 'implicit', crafted: false, desecrated: false, tier: 1, text: '' };
-            } else {
-              var tierMatch = l4.match(/Tier\s*:\s*(\d+)/i);
-              currentMod = {
-                type: prefix === 'crafted' ? 'crafted_' + baseType : prefix === 'desecrated' ? 'desecrated_' + baseType : baseType,
-                crafted: prefix === 'crafted',
-                desecrated: prefix === 'desecrated',
-                tier: tierMatch ? parseInt(tierMatch[1]) : 1,
-                text: ''
-              };
-            }
-          } else if (currentMod && l4.trim() && !/^[-]+$/.test(l4) && !/Item Class/i.test(l4) && !/Rarity/i.test(l4) && !/Requires/i.test(l4) && !/Item Level/i.test(l4)) {
-            currentMod.text += (currentMod.text ? ' ' : '') + l4.replace(/\(\d+[^)]*\)/g, '').trim();
-          }
-        }
-        if (currentMod && currentMod.text) result.affixes.push(currentMod);
-        for (var m = 0; m < result.affixes.length; m++) {
-          if (result.affixes[m].type === 'implicit') {
-            result.implicit = result.affixes[m].text;
-            result.affixes.splice(m, 1);
-            break;
-          }
-        }
-        return result;
-      }
-
-      function importPastedItem(parsed) {
-        var base = findBaseForImport(parsed.baseName);
-        if (!base) { return { ok: false, msg: 'Base not found' }; }
-        basePicker.value = base.id;
-        currentBase = base;
-        currentItem = emptyItem({ id: base.id, name: base.name, slot: base.slot, rarity: parsed.rarity, level: base.level, attributes: {}, baseStats: {}, imageUrl: base.imageUrl, affixSlots: base.affixSlots, family: base.slot, variant: base.variant, source: 'poe2db' }, parsed.itemLevel);
-        history = [];
-        activeOmens.clear();
-        emptyState.classList.add('hidden');
-        mainUi.classList.remove('hidden');
-        currentItem.affixes = [];
-        for (var n = 0; n < parsed.affixes.length; n++) {
-          var a = parsed.affixes[n];
-          currentItem.affixes.push({ type: /^prefix/.test(a.type) ? 'prefix' : 'suffix', tier: a.tier || 1, name: a.text || '', description: a.text || '', crafted: !!a.crafted, desecrated: !!a.desecrated });
-        }
-        if (parsed.implicit) currentItem.implicit = parsed.implicit;
-        costTracker.reset();
-        renderAll();
-        return { ok: true, msg: parsed.affixes.length + ' affixes loaded' };
-      }
-
-      // Wire up
-      document.getElementById('paste-btn')?.addEventListener('click', function() {
-        if (pasteModal) pasteModal.classList.remove('hidden');
-        if (pasteTextarea) { pasteTextarea.value = ''; pasteTextarea.focus(); }
-        if (pastePreview) pastePreview.classList.add('hidden');
-        if (importPasteBtn) importPasteBtn.classList.add('hidden');
-        parsedPasteResult = null;
-      });
-
-      document.getElementById('paste-empty-btn')?.addEventListener('click', function() {
-        if (pasteModal) pasteModal.classList.remove('hidden');
-        if (pasteTextarea) { pasteTextarea.value = ''; pasteTextarea.focus(); }
-        if (pastePreview) pastePreview.classList.add('hidden');
-        if (importPasteBtn) importPasteBtn.classList.add('hidden');
-        parsedPasteResult = null;
-      });
-
-      if (pasteTextarea) {
-        pasteTextarea.addEventListener('input', function() {
-          var text = pasteTextarea.value;
-          if (!text.trim()) {
-            if (pastePreview) pastePreview.classList.add('hidden');
-            if (importPasteBtn) importPasteBtn.classList.add('hidden');
-            parsedPasteResult = null;
-            return;
-          }
-          var parsed = parsePoe2Clipboard(text);
-          if (!parsed.baseName) {
-            if (pasteDetected) pasteDetected.textContent = 'Could not detect base';
-            if (pastePreview) pastePreview.classList.remove('hidden');
-            if (importPasteBtn) importPasteBtn.classList.add('hidden');
-            parsedPasteResult = null;
-            return;
-          }
-          var base = findBaseForImport(parsed.baseName);
-          var pCount = parsed.affixes.filter(function(a) { return /^prefix/.test(a.type); }).length;
-          var sCount = parsed.affixes.filter(function(a) { return /^suffix/.test(a.type); }).length;
-          if (pasteDetected) pasteDetected.textContent = (base ? base.name + ' (' + base.slot + ')' : parsed.baseName) + ' ' + parsed.rarity + ' ILVL:' + parsed.itemLevel + ' ' + parsed.affixes.length + 'mods (' + pCount + 'P/' + sCount + 'S)' + (parsed.implicit ? ' +impl' : '');
-          if (pasteError) pasteError.textContent = base ? '' : 'Base not found';
-          if (pastePreview) pastePreview.classList.remove('hidden');
-          if (importPasteBtn) importPasteBtn.classList.remove('hidden');
-          parsedPasteResult = parsed;
-        });
-      }
-
-      if (importPasteBtn) {
-        importPasteBtn.addEventListener('click', function() {
-          if (!parsedPasteResult) { flash('No parsed data'); return; }
-          if (pasteModal) pasteModal.classList.add('hidden');
-          var result = importPastedItem(parsedPasteResult);
-          if (result.ok) {
-            logActivity('Imported ' + (parsedPasteResult.baseName || 'item') + ' from clipboard', 'info');
-            flash('Item imported.', 'ok');
-          } else {
-            flash(result.msg);
-          }
-          parsedPasteResult = null;
-        });
-      }
-
-      if (closePasteBtn) closePasteBtn.addEventListener('click', function() { if (pasteModal) pasteModal.classList.add('hidden'); });
-      if (cancelPasteBtn) cancelPasteBtn.addEventListener('click', function() { if (pasteModal) pasteModal.classList.add('hidden'); });
-      if (pasteModal) pasteModal.addEventListener('click', function(e) { if (e.target === pasteModal) pasteModal.classList.add('hidden'); });
-    }, 100);
+});
   </script>
 </Base>

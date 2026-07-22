@@ -1,8 +1,8 @@
 {
-  "site.title": "CraftClass",
+  "site.title": "Exile Crafter",
   "site.tagline": "A visual crafting companion for Path of Exile 2. See your affix slots fill in real time, browse every base and mod, and run live simulations without a single spreadsheet.",
   "site.description": "A friendly visual companion for Path of Exile 2 crafting. Browse bases, mods, currency, and run live simulations.",
-  "site.footer.disclaimer": "CraftClass · unaffiliated fan tool for Path of Exile 2.",
+  "site.footer.disclaimer": "Exile Crafter · unaffiliated fan tool for Path of Exile 2.",
   "site.footer.data": "Data: poe2db.tw · Last updated {date}",
   "site.howworks.title": "How this works",
   "site.howworks.body1": "Data is scraped from {poe2db} and refreshed each patch. The simulator uses a weighted mod pool model (with a tier-based fallback when community weights aren't available) so every click is a real random draw from the pool.",
@@ -237,5 +237,5 @@
   "site.footer.status": "Status",
   "site.footer.dataUpdated": "Data last updated",
   "site.footer.source": "Source",
-  "site.footer.copyright": "CraftClass © {year}. Not affiliated with Grinding Gear Games."
+  "site.footer.copyright": "Exile Crafter © {year}. Not affiliated with Grinding Gear Games."
 }

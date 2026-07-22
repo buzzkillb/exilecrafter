@@ -391,6 +391,13 @@ table.poe-table tr:hover td { background: var(--color-bg-hover); }
   margin-top: 0.25rem;
 }
 
+/* Focus ring (keyboard nav) — gold outline that respects dark mode */
+:focus-visible {
+  outline: 2px solid var(--color-gold-bright);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
 /* Tooltip popover (follows mouse) */
 .tooltip-pop {
   position: fixed;
