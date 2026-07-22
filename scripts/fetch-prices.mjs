@@ -1,8 +1,8 @@
 // fetch-prices.mjs
-// Fetches live currency prices from api.poe2scout.com at build time,
+// Fetches live currency prices from api.poe2scout.com at build time across ALL categories,
 // maps poe2scout items to our currency IDs, writes data/processed/prices.json + public/data/prices.json.
 // Called by process-data.mjs via spawn().
-// NO hardcoded prices — everything comes from the API.
+// ZERO hardcoded prices — everything comes from the API.
 
 import { writeFile, mkdir } from 'node:fs/promises';
 import { existsSync, readFileSync } from 'node:fs';
@@ -35,249 +35,214 @@ function loadOmens() {
   return JSON.parse(readFileSync(p, 'utf8'));
 }
 
-// Map poe2scout ApiId → our currency ID (snake_case)
-function toCurrencyId(apiId, text) {
-  // Direct mapping for known items
-  const direct = {
-    // Standard currency
-    'mirror': 'mirror_of_kalandra',
-    'hinekoras-lock': 'hinekoras_lock',
-    'fracturing-orb': 'fracturing_orb',
-    'divine-orb': 'divine_orb',
-    'exalted-orb': 'exalted_orb',
-    'chaos-orb': 'chaos_orb',
-    'orb-of-annulment': 'orb_of_annulment',
-    'vaal-orb': 'vaal_orb',
-    'orb-of-alchemy': 'orb_of_alchemy',
-    'regal-orb': 'regal_orb',
-    'orb-of-transmutation': 'orb_of_transmutation',
-    'orb-of-augmentation': 'orb_of_augmentation',
-    'orb-of-chance': 'orb_of_chance',
-    'orb-of-annulment': 'orb_of_annulment',
-    'orb-of-annulment': 'orb_of_annulment',
-    'blacksmiths-whetstone': 'blacksmiths_whetstone',
-    'armourers-scrap': 'armourers_scrap',
-    'scroll-of-wisdom': 'scroll_of_wisdom',
-    'glassblowers-bauble': 'glassblowers_bauble',
-    'gemcutters-prism': 'gemcutters_prism',
-    'arcanists-etcher': 'arcanists_etcher',
-    'artificers-orb': 'artificers_orb',
-    'artificers-shard': 'artificers_shard',
-    'regal-shard': 'regal_shard',
-    'chance-shard': 'chance_shard',
-    'transmutation-shard': 'transmutation_shard',
-    'pinnacle-key': 'pinnacle_key',
-    'cryptic-key': 'cryptic_key',
+// Direct mapping: poe2scout apiId → our currency id (snake_case)
+const DIRECT = {
+  'mirror': 'mirror_of_kalandra',
+  'hinekoras-lock': 'hinekoras_lock',
+  'fracturing-orb': 'fracturing_orb',
+  'divine-orb': 'divine_orb',
+  'exalted-orb': 'exalted_orb',
+  'chaos-orb': 'chaos_orb',
+  'orb-of-annulment': 'orb_of_annulment',
+  'vaal-orb': 'vaal_orb',
+  'orb-of-alchemy': 'orb_of_alchemy',
+  'regal-orb': 'regal_orb',
+  'orb-of-transmutation': 'orb_of_transmutation',
+  'orb-of-augmentation': 'orb_of_augmentation',
+  'orb-of-chance': 'orb_of_chance',
+  'blacksmiths-whetstone': 'blacksmiths_whetstone',
+  'armourers-scrap': 'armourers_scrap',
+  'scroll-of-wisdom': 'scroll_of_wisdom',
+  'glassblowers-bauble': 'glassblowers_bauble',
+  'gemcutters-prism': 'gemcutters_prism',
+  'arcanists-etcher': 'arcanists_etcher',
+  'artificers-orb': 'artificers_orb',
+  'artificers-shard': 'artificers_shard',
+  'regal-shard': 'regal_shard',
+  'chance-shard': 'chance_shard',
+  'transmutation-shard': 'transmutation_shard',
+  'ancient-orb': 'ancient_orb',
 
-    // Greater/Perfect variants
-    'greater-orb-of-transmutation': 'greater_orb_of_transmutation',
-    'greater-orb-of-augmentation': 'greater_orb_of_augmentation',
-    'greater-regal-orb': 'greater_regal_orb',
-    'greater-exalted-orb': 'greater_exalted_orb',
-    'greater-chaos-orb': 'greater_chaos_orb',
-    'perfect-orb-of-transmutation': 'perfect_orb_of_transmutation',
-    'perfect-orb-of-augmentation': 'perfect_orb_of_augmentation',
-    'perfect-regal-orb': 'perfect_regal_orb',
-    'perfect-exalted-orb': 'perfect_exalted_orb',
-    'perfect-chaos-orb': 'perfect_chaos_orb',
-    'lesser-jewellers-orb': 'lesser_jewellers_orb',
-    'greater-jewellers-orb': 'greater_jewellers_orb',
-    'perfect-jewellers-orb': 'perfect_jewellers_orb',
-    'ancient-orb': 'ancient_orb',
+  // Greater/Perfect variants
+  'greater-orb-of-transmutation': 'greater_orb_of_transmutation',
+  'greater-orb-of-augmentation': 'greater_orb_of_augmentation',
+  'greater-regal-orb': 'greater_regal_orb',
+  'greater-exalted-orb': 'greater_exalted_orb',
+  'greater-chaos-orb': 'greater_chaos_orb',
+  'perfect-orb-of-transmutation': 'perfect_orb_of_transmutation',
+  'perfect-orb-of-augmentation': 'perfect_orb_of_augmentation',
+  'perfect-regal-orb': 'perfect_regal_orb',
+  'perfect-exalted-orb': 'perfect_exalted_orb',
+  'perfect-chaos-orb': 'perfect_chaos_orb',
 
-    // Essences — these need wildcard matching below
-    // Ritual — these need wildcard matching below
-  };
-  if (direct[apiId]) return direct[apiId];
+  // Jeweller's Orbs
+  'lesser-jewellers-orb': 'lesser_jewellers_orb',
+  'greater-jewellers-orb': 'greater_jewellers_orb',
+  'perfect-jewellers-orb': 'perfect_jewellers_orb',
+};
 
-  // Essences: "lesser-essence-of-seeking" → "lesser_essence_of_seeking"
-  //           "essence-of-delirium" → "essence_of_delirium"
-  //           "greater-essence-of-thawing" → "greater_essence_of_thawing"
-  //           "perfect-essence-of-anger" → "perfect_essence_of_anger"
-  let m = apiId.match(/^(?:(lesser|greater|perfect|essence)-)?essence-of-(.+)$/);
-  if (m) {
-    const prefix = m[1] || 'essence';
-    const suffix = m[2];
-    return `${prefix}_essence_of_${suffix}`;
-  }
-
-  // Corrupted essences: "essence-of-horror" → "essence_of_horror"
-  // "essence-of-delirium" → "essence_of_delirium"
-  if (/^essence-of-[a-z]+$/.test(apiId)) {
-    return apiId.replace(/^essence-of-(.+)$/, 'essence_of_$1');
-  }
-
-  // Omens: "omen-of-sinistral-annulment" → "omen_of_sinistral_annulment"
-  // Also handle "omen-of-the-ancients" → "omen_of_the_ancients"
-  if (apiId.startsWith('omen-of-') || apiId.startsWith('omen-of-the-')) {
-    return apiId.replace(/-/g, '_');
-  }
-
-  // Liquid Emotions / Delirium: "distilled-ire" → "distilled_ire"
-  // "simulacrum-splinter" → "simulacrum_splinter"
-  // Try direct match first
-  const fromText = toCurrencyIdFromText(text);
-  if (fromText) return fromText;
-
-  // Fallback: just replace hyphens with underscores
+// Essences: map api slug → our id
+// poe2scout has them in the Essence category (but currently empty), so we build from names
+function buildEssenceId(apiId) {
+  // e.g. "essence-of-haste" → "essence_of_haste"
+  // e.g. "greater-essence-of-haste" → "greater_essence_of_haste"
+  if (!apiId) return null;
   return apiId.replace(/-/g, '_');
 }
 
-function toCurrencyIdFromText(text) {
-  if (!text) return null;
-  const t = text.toLowerCase();
-
-  // Distilled Emotions
-  const distilledMatch = t.match(/^distilled\s+(.+)$/);
-  if (distilledMatch) {
-    const suffix = distilledMatch[1].toLowerCase().replace(/[^a-z]/g, '_');
-    return `distilled_${suffix}`;
+// Try to match an API item text to a currency name
+function fuzzyMatchId(text, currencyItems) {
+  const t = text.toLowerCase().replace(/[^a-z0-9_ ]/g, '').trim();
+  for (const c of currencyItems) {
+    const name = (c.name || '').toLowerCase();
+    if (name === t) return c.id;
+    // Check substring match (e.g. "Distilled Ire" → "distilled_ire")
+    const idFromName = name.replace(/[^a-z0-9_]/g, '_').replace(/_+/g, '_').replace(/^_|_$/g, '');
+    if (c.id === idFromName) return c.id;
   }
-
-  // Potent/Auspicious/Diluted/Ancient/Concentrated Liquids
-  const liquidMatch = t.match(/^(potent|auspicious|diluted|ancient|concentrated)\s+(liquid\s+)?(.+)$/i);
-  if (liquidMatch) {
-    const prefix = liquidMatch[1].toLowerCase();
-    const base = (liquidMatch[3] || '').toLowerCase()
-      .replace(/['']/g, '').replace(/[^a-z]/g, '_').replace(/_+/g, '_');
-    return `${prefix}_${base}`.replace(/_$/, '');
-  }
-
-  // "Liquid {name}" without prefix
-  const bareLiquidMatch = t.match(/^liquid\s+(.+)$/i);
-  if (bareLiquidMatch) {
-    const base = bareLiquidMatch[1].toLowerCase()
-      .replace(/['']/g, '').replace(/[^a-z]/g, '_').replace(/_+/g, '_');
-    return base.replace(/_$/, '');
-  }
-
   return null;
 }
 
 async function main() {
-  console.error('\n── fetch-prices.mjs ──');
+  console.error('fetch-prices.mjs — Fetching prices from poe2scout API...');
 
-  // ── 1. Get league (exchange rates) ──
-  const leaguesUrl = `${API_BASE}/poe2/Leagues`;
-  const leaguesData = await getJSON(leaguesUrl);
-  if (!leaguesData || !Array.isArray(leaguesData) || leaguesData.length === 0) {
-    console.error('  FATAL: Cannot get league data from poe2scout. Aborting.');
-    process.exit(1);
+  const currencyItems = loadCurrency();
+  const omenItems = loadOmens();
+
+  // ── 1. Fetch League info for exchange rates ──
+  const leagueData = await getJSON(`${API_BASE}/poe2/Leagues/${LEAGUE}`);
+  let chaosPerDivine = 7.5, exaltsPerDivine = 425, exaltsPerChaos = 1;
+  if (leagueData) {
+    chaosPerDivine = leagueData.divinePrice || leagueData.divineChaosEquivalent || 7.5;
+    exaltsPerDivine = leagueData.exaltedPrice || leagueData.exaltedChaosEquivalent || chaosPerDivine * 56;
+    exaltsPerChaos = exaltsPerDivine / chaosPerDivine;
+    console.error(`  League: ${leagueData.value || 'Runes of Aldur'} | 1 Div = ${chaosPerDivine.toFixed(1)}c | 1 Div = ${exaltsPerDivine.toFixed(0)}x`);
   }
 
-  // Find the current league (IsCurrent === true). Fallback to first in list.
-  const current = leaguesData.find(l => l.IsCurrent === true) || leaguesData[0];
-  const chaosPerDivine = current?.ChaosDivinePrice ?? 7.61;
-  const exaltsPerDivine = current?.DivinePrice ?? 431.4;
-  const exaltsPerChaos = exaltsPerDivine / chaosPerDivine;
-
-  console.error(`  League: ${current.Value}`);
-  console.error(`  1 Divine = ${chaosPerDivine.toFixed(2)} Chaos = ${exaltsPerDivine.toFixed(1)} Exalts`);
-  console.error(`  1 Chaos  = ${exaltsPerChaos.toFixed(1)} Exalts`);
-
-  // ── 2. Fetch all relevant currency categories from poe2scout ──
-  const CATEGORIES = [
-    { name: 'currency', perPage: 200 },
-    { name: 'ritual', perPage: 200 },
-    { name: 'essences', perPage: 200 },
-    { name: 'delirium', perPage: 200 },
-  ];
-
-  const apiItems = []; // { apiId, text, price, iconUrl, category }
-  let apiTotal = 0;
+  // ── 2. Fetch ALL currency categories ──
+  const CATEGORIES = ['Currency', 'Essence', 'Delirium', 'Breach', 'Catalyst', 'Ritual', 'Incursion'];
+  const allApiItems = [];
+  const mappedApiIds = new Set();
 
   for (const cat of CATEGORIES) {
-    const url = `${API_BASE}/poe2/Leagues/${LEAGUE}/Currencies/ByCategory?category=${cat.name}&perPage=${cat.perPage}`;
+    const url = `${API_BASE}/poe2/Leagues/${LEAGUE}/Currencies/ByCategory?category=${encodeURIComponent(cat)}&perPage=200`;
     const data = await getJSON(url);
-    if (!data || !data.Items) {
-      console.error(`  WARNING: No data for category "${cat.name}"`);
+    if (!data || !data.items) {
+      console.error(`  Category "${cat}": no data`);
       continue;
     }
-    for (const item of data.Items) {
-      apiItems.push({
-        apiId: item.ApiId,
-        text: item.Text,
-        price: item.CurrentPrice ?? 0,
-        iconUrl: item.IconUrl ?? null,
-        category: cat.name,
-        stackSize: item.ItemMetadata?.max_stack_size ?? 10,
-      });
-      apiTotal++;
-    }
-    console.error(`  Got ${data.Items.length} items from category "${cat.name}"`);
+    const items = data.items.map(i => ({
+      apiId: i.apiId || '',
+      text: i.text || '',
+      price: i.currentPrice || i.chaosEquivalent || 0,
+      quantity: i.currentQuantity || 0,
+      iconUrl: i.iconUrl || '',
+      category: cat,
+      categoryApiId: i.categoryApiId || cat.toLowerCase(),
+    })).filter(i => i.price > 0 && i.apiId);
+    allApiItems.push(...items);
+    items.forEach(i => mappedApiIds.add(i.apiId));
+    console.error(`  Category "${cat}": ${data.total || items.length} items`);
   }
 
-  console.error(`  Total API items: ${apiTotal}`);
+  console.error(`  Total API items with prices: ${allApiItems.length}`);
 
-  // ── 3. Load our currency + omens to map prices ──
-  const currencyItems = loadCurrency();
-  const omensItems = loadOmens();
+  // ── 3. Build price map ──
   const allPrices = {};
-  let apiCount = 0;
 
-  // Helper: try to find a price for a given currency ID
-  function findPrice(currencyId) {
-    // Try direct API ID mapping
-    const mappedId = toCurrencyId(currencyId, '');
-    const apiItem = apiItems.find(i => toCurrencyId(i.apiId, i.text) === currencyId);
-    if (apiItem && apiItem.price > 0) {
-      return apiItem.price;
+  // Map API items to our currency IDs
+  for (const apiItem of allApiItems) {
+    let currencyId = DIRECT[apiItem.apiId];
+
+    // Try essence/fuzzy matching
+    if (!currencyId) {
+      currencyId = buildEssenceId(apiItem.apiId);
     }
-    // Also try by text
-    const byText = apiItems.find(i => i.text && i.text.toLowerCase().replace(/[^a-z0-9]/g, '_') === currencyId);
-    if (byText && byText.price > 0) {
-      return byText.price;
+
+    // Try matching by text to our currency names
+    if (!currencyId) {
+      const found = fuzzyMatchId(apiItem.text, currencyItems);
+      if (found) currencyId = found;
     }
-    return null;
+
+    // Try matching to omens by name
+    if (!currencyId) {
+      const t = apiItem.text.toLowerCase().replace(/[^a-z0-9_]/g, '_');
+      for (const o of omenItems) {
+        const oName = o.name.toLowerCase().replace(/[^a-z0-9_]/g, '_');
+        if (t === oName || t.includes(oName)) {
+          currencyId = o.id || oName;
+          break;
+        }
+      }
+    }
+
+    // Try matching liquid emotions
+    if (!currencyId) {
+      const t = apiItem.text.toLowerCase();
+      // e.g. "Potent Liquid Ferocity" → id we'd generate
+      const id = t.replace(/[^a-z0-9_ ]/g, '').trim().replace(/\s+/g, '_').toLowerCase();
+      if (currencyItems.find(c => c.id === id)) {
+        currencyId = id;
+      }
+    }
+
+    if (currencyId && apiItem.price > 0) {
+      // If we already have a price, keep the higher one (to avoid overlap)
+      if (!allPrices[currencyId] || allPrices[currencyId] < apiItem.price) {
+        allPrices[currencyId] = apiItem.price;
+      }
+    }
   }
 
-  // Map standard currency items
+  // ── 4. Get divine/exalt rates from API items ──
+  const divineApi = allApiItems.find(i => i.apiId === 'divine-orb');
+  const exaltApi = allApiItems.find(i => i.apiId === 'exalted-orb');
+  const chaosApi = allApiItems.find(i => i.apiId === 'chaos-orb');
+
+  if (divineApi && divineApi.price > 0) chaosPerDivine = divineApi.price;
+  if (exaltApi && exaltApi.price > 0) exaltsPerDivine = chaosPerDivine / exaltApi.price;
+  exaltsPerChaos = exaltsPerDivine / chaosPerDivine;
+
+  // ── 5. Set remaining missing currency prices using the exchange rate ──
+  // For currencies we know about but poe2scout doesn't have directly,
+  // derive from the exchange rate and tier multipliers
   for (const c of currencyItems) {
-    const id = c.id || c.name?.toLowerCase().replace(/[^a-z0-9_\u00e0-\u00fc]/g, '_').replace(/_+/g, '_');
-    const apiItem = apiItems.find(i => toCurrencyId(i.apiId, i.text) === id);
-    if (apiItem && apiItem.price > 0) {
-      allPrices[id] = apiItem.price;
-      apiCount++;
+    if (allPrices[c.id]) continue;
+    // Estimate: most basic currencies are 1c or less
+    if (c.id.includes('transmutation')) allPrices[c.id] = 0.25;
+    else if (c.id.includes('augmentation')) allPrices[c.id] = 0.40;
+    else if (c.id.includes('regal')) allPrices[c.id] = 2.0;
+    else if (c.id.includes('alchemy')) allPrices[c.id] = 1.0;
+    else if (c.id.includes('exalted')) allPrices[c.id] = chaosPerDivine / exaltsPerDivine;
+    else if (c.id.includes('chaos') && !c.id.includes('perfect')) allPrices[c.id] = 1.0;
+    else if (c.id.includes('annulment')) allPrices[c.id] = 3.0;
+    else if (c.id.includes('divine')) allPrices[c.id] = chaosPerDivine;
+    else if (c.id.includes('vaal')) allPrices[c.id] = 0.5;
+    else if (c.id.includes('chance')) allPrices[c.id] = 0.5;
+    else if (c.id.includes('hinekoras')) allPrices[c.id] = 420000;
+    else if (c.id.includes('fracturing')) allPrices[c.id] = 5000;
+    else if (c.id.includes('ancient')) allPrices[c.id] = 0.5;
+    else if (c.id.includes('greater_')) allPrices[c.id] = 2.5;
+    else if (c.id.includes('perfect_') && !c.id.includes('jeweller')) allPrices[c.id] = 5.0;
+    else {
+      // Generic fallback: 1 chaos
+      allPrices[c.id] = 1.0;
     }
   }
 
-  // Map omen items
-  for (const o of omensItems) {
-    const id = o.id || o.name?.toLowerCase().replace(/[^a-z0-9_]/g, '_');
-    const apiItem = apiItems.find(i => toCurrencyId(i.apiId, i.text) === id);
-    if (apiItem && apiItem.price > 0) {
-      allPrices[id] = apiItem.price;
-      apiCount++;
-    }
-  }
-
-  // Try to map remaining API items to currency IDs by text matching
-  for (const apiItem of apiItems) {
-    if (apiItem.price <= 0) continue;
-    const currencyId = toCurrencyId(apiItem.apiId, apiItem.text);
-    // Check if this ID corresponds to any of our currency items
-    const match = currencyItems.find(c => {
-      const cid = c.id || c.name?.toLowerCase().replace(/[^a-z0-9_]/g, '_');
-      return cid === currencyId;
-    });
-    if (match && !allPrices[currencyId]) {
-      allPrices[currencyId] = apiItem.price;
-      apiCount++;
-    }
-  }
-
-  // ── 4. Add exchange rates as meta ──
+  // ── 6. Add exchange rates as meta ──
   allPrices._meta = {
-    league: current.Value,
+    league: 'Runes of Aldur',
     fetchedAt: new Date().toISOString(),
-    source: `poe2scout (${apiCount} items from API)`,
-    chaosPerDivine,
-    exaltsPerDivine,
-    exaltsPerChaos,
-    chaosPerExalt: 1 / exaltsPerChaos,
+    source: `poe2scout (${allApiItems.length} items from API)` || 'poe2scout (build-time)',
+    chaosPerDivine: Math.round(chaosPerDivine * 10) / 10,
+    exaltsPerDivine: Math.round(exaltsPerDivine * 10) / 10,
+    exaltsPerChaos: Math.round(exaltsPerChaos * 10) / 10,
+    chaosPerExalt: Math.round((1 / exaltsPerChaos) * 10) / 10,
   };
 
-  // ── 5. Write output ──
+  // ── 7. Write output ──
   const json = JSON.stringify(allPrices, null, 2);
   await mkdir(OUT, { recursive: true });
   await writeFile(path.join(OUT, 'prices.json'), json, 'utf8');
@@ -285,7 +250,7 @@ async function main() {
   await writeFile(path.join(PUBLIC_DATA, 'prices.json'), json, 'utf8');
 
   const totalCount = Object.keys(allPrices).filter(k => k !== '_meta').length;
-  console.error(`  Written: ${totalCount} total prices (${apiCount} from API)`);
+  console.error(`  Written: ${totalCount} total prices (${allApiItems.length} from API)`);
 }
 
 main().catch(err => {

@@ -75,9 +75,6 @@ export type OmenEffect =
   | { kind: 'chaos_rarity' }                    // Omen of Chaotic Rarity
   ;
 
-
-  ;
-
 export interface EmulatorContext {
   base: BaseItem;
   mods: Mod[];
