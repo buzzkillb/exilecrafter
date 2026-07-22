@@ -1188,7 +1188,7 @@ function getOpKey(opId: string): string {
 
     function renderCurrencyStrip() {
       if (!currentBase) return;
-      const availability = getCurrencyAvailability(currentItem);
+      const availability = getCurrencyAvailability(currentItem, currentBase);
       const order = ['upgrade_rarity', 'augment', 'reroll', 'annul', 'divine', 'corrupt', 'desecrate', 'essence', 'catalyst', 'liquid_affector', 'breach', 'currency_other', 'special'];
 
       const grouped: Record<string, CurOpt[]> = {};

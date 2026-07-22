@@ -1105,11 +1105,12 @@ export function getCurrencyAvailability(item: ItemState, base: BaseItem): Record
   const rarity = item.rarity;
   const affixes = item.affixes;
 
-  if (!item) {
+  if (!item || !base) {
+    const msg = !item ? 'Select a base item first.' : 'Base data not loaded.';
     for (const id of Object.keys(OPERATIONS)) {
-      result[id] = { valid: false, reason: 'Select a base item first.' };
+      result[id] = { valid: false, reason: msg };
     }
-    result.desecrate = { valid: false, reason: 'Select a base item first.' };
+    result.desecrate = { valid: false, reason: msg };
     return result;
   }
 
