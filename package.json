@@ -13,14 +13,8 @@
     "fetch": "node scripts/fetch-poe2db.mjs",
     "process": "node scripts/process-data.mjs && node scripts/download-images.mjs",
     "weights": "node scripts/fetch-weights.mjs",
-    "check": "node scripts/_regression_check.mjs",
-    "audit:omen": "node scripts/_audit_omen.mjs",
-    "audit:costs": "node scripts/_audit_costs.mjs",
-    "audit": "npm run check && npm run audit:omen && npm run audit:costs",
-    "e2e": "node scripts/_e2e_multibase.mjs",
-    "e2e:all": "node scripts/_e2e_multibase.mjs",
-    "e2e:orbs": "npx tsx scripts/_e2e_orbs.mts",
-    "e2e:minlevel": "npx tsx scripts/_e2e_min_mod_level.mjs"
+    "prices": "node scripts/fetch-prices.mjs",
+    "e2e": "node scripts/_e2e_paste.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",

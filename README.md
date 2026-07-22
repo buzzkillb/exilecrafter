@@ -1,103 +1,145 @@
 # CraftClass
 
-**Path of Exile 2 crafting simulator** — browse every base, modifier, currency, and omen, then run live crafting simulations with real game mechanics and market pricing.
+A visual crafting companion for **Path of Exile 2**. Browse every base, modifier, currency, and omen, then run live crafting simulations with keyboard shortcuts, in-game style item tooltips, and probability calculations.
 
 Built as a fully static site for [Cloudflare Pages](https://pages.cloudflare.com/). Zero server runtime.
 
 ## Features
 
-- **1690 base items** across 18 equipment slots (helmets, body armours, gloves, boots, belts, amulets, rings, shields, weapons, foci, quivers, waystones, jewels, tablets, relics, charms, flasks) — each with level requirement, stat attributes, and affix slot counts
-- **2064 modifiers** with real prefix/suffix type, tier (T1–T13), level gate, tag classification, stat ranges, and DropChance weights from poe2db
-- **200 currency items** — all standard orbs, greater/perfect variants, essences, liquid emotions, catalysts, desecration bones, alloys, omens — all with live market prices from poe2scout
-- **50 omens** with effect descriptions and applies-to tags; 26 wired directly into the simulator (force prefix/suffix, double add/remove, homogenise, corrupt, desecrate faction/reroll, etc.)
-- **Interactive Simulator** — click any orb to apply it to your item. Toggle omens to alter the next craft. Full activity log of every action with cost tracking. Real mod weights so the odds reflect actual GGG data.
-- **Probability Calculator** — pick a base, target specific mods, and see the exact odds using a web worker (UI never freezes)
-- **Crafting guidance** — every currency button shows what it does, when to use it, and expected cost based on your item's current state
-- **Expected cost analysis** — real market pricing from poe2scout API for every craft step
-- **Auto-detected league** — pulls current league name and version from poe2db on data refresh
-- **12 curated crafting examples** — beginner through expert difficulty, with pre-configured bases and goals
-- **i18n** — English + Portuguese (Brazil) UI. Add more languages by dropping a JSON file into `src/i18n/`.
+- **368 base items** across 17 equipment slots (helmets, body armours, gloves, boots, belts, amulets, rings, shields, weapons, foci, quivers, waystones, jewels, tablets, relics, charms, flasks) — each with stat attributes and affix slot counts
+- **97 modifiers** with tier, level gate, tag classification, and stat ranges scraped from poe2db
+- **135 currency items** — all standard orbs (lesser/normal/greater/perfect tiers), essences (all 4 tiers × 14 families), liquid emotions, catalysts, desecration bones, alloys, breachstones — all with real poe2db icons
+- **50 omens** with effect descriptions, grouped by category (Alchemy, Exaltation, Annulment, Coronation, Erasure, etc.)
+- **Interactive Simulator** with keyboard shortcuts (`T` Transmute, `A` Alchemy, `R` Regal, `E` Exalt, `X` Annul, `C` Chaos, `D` Divine, `Z` Undo), only-valid-currency display, omen toggles via popover, full activity log, mod pool summary, cost tracking
+- **Probability Calculator** using a Web Worker for mod pool math (UI never freezes)
+- **Paste Import** — copy an item from PoE2 (Ctrl+C) and paste it into the simulator to load its exact state, including implicit, prefix, suffix, desecrated, and crafted mods
+- **In-game style item tooltip** — rarity-colored name, tier indicators (111/11/1), mod tags colored by damage type, gold separators, implicit/prefix/suffix sections
+- **Crafting guides** — 7 curated step-by-step paths for common goals
+- **i18n-ready** — easy to add languages by dropping a JSON file
 
 ## Quick start
 
 ```bash
 npm install
-npm run process    # fetch poe2db + poe2scout, produce data/processed/*.json
-npm run check      # 39 data invariants
-npm run dev        # local dev server at http://localhost:4321
-npm run build      # static build → dist/
-npm run preview    # preview the built site
+npm run refresh   # scrape poe2db.tw, produce data/processed/*.json
+npm run weights   # optional: bake in community weight data
+npm run dev       # local dev server at http://localhost:4321
+npm run build     # static build → dist/
+npm run preview   # preview the built site
+npm run e2e       # end-to-end paste import test
 ```
-
-After `process` the full dataset is cached in `data/processed/`. Re-run `npm run process` when a new league drops or you want fresh pricing.
 
 ## Project structure
 
 ```
 craftclass/
 ├── data/
-│   ├── raw/                  # cached HTML from poe2db (gitignored)
-│   ├── processed/            # normalized JSON → everything the site consumes
-│   └── manual/               # optional community weight overrides
-├── public/
-│   ├── data/                 # static JSON served to the browser (prices, etc.)
-│   └── images/               # local item images (downloaded from poe2db CDN)
+│   ├── raw/                  # scraped HTML cache (gitignored)
+│   └── processed/            # normalized JSON the site consumes
 ├── scripts/
-│   ├── fetch-poe2db.mjs      # scrape poe2db pages
-│   ├── fetch-prices.mjs      # fetch live pricing from api.poe2scout.com
-│   ├── process-data.mjs      # parse raw HTML → processed JSON
-│   ├── download-images.mjs   # download item images locally
+│   ├── fetch-poe2db.mjs      # discover + scrape poe2db pages
+│   ├── process-data.mjs      # parse raw HTML → JSON
+│   ├── fetch-weights.mjs     # community weights (Krakenbul, etc.)
+│   ├── fetch-prices.mjs      # live currency prices (poe2scout)
+│   ├── download-images.mjs    # local image cache
 │   └── refresh.mjs           # fetch + process in one shot
 ├── src/
-│   ├── components/           # Astro components
-│   ├── i18n/                 # en.json, pt.json
-│   ├── layouts/Base.astro    # site shell (header, footer, metadata)
-│   ├── lib/
-│   │   ├── types.ts          # shared TypeScript types
-│   │   ├── data.ts           # imports JSON + lookup helpers
-│   │   ├── emulator.ts       # crafting simulation engine
-│   │   ├── weights.ts        # weighted pool math
-│   │   ├── cost-tracker.ts   # per-step cost tracking
-│   │   ├── expected-cost.ts  # probability + cost guidance
-│   │   ├── mod-render.ts     # in-game style mod text formatting
-│   │   ├── omens.ts          # omen effect definitions
-│   │   ├── i18n.ts           # t() helper + locale resolution
-│   │   └── workers/          # probability worker (off-main-thread math)
-│   ├── middleware.ts          # locale resolution (cookie → Accept-Language)
-│   └── pages/                # Astro routes
-└── public/
+│   ├── components/           # Astro components (BaseCard, ModBadge, ItemCard, …)
+│   ├── layouts/              # Base layout
+│   ├── lib/                  # core TypeScript
+│   │   ├── emulator.ts       # crafting operations (Transmute, Aug, Regal, Exalt, Chaos, …)
+│   │   ├── weights.ts        # weighted pool math (pure functions)
+│   │   ├── data.ts           # data loader
+│   │   ├── cost-tracker.ts   # run-cost accounting
+│   │   ├── expected-cost.ts  # probability-based guidance
+│   │   ├── i18n.ts           # locale resolution
+│   │   ├── methods.ts        # curated crafting guides
+│   │   └── workers/          # probability.worker.ts (web worker math)
+│   ├── pages/                # routes (index, simulator, calculator, …)
+│   ├── i18n/                 # translation JSON files
+│   └── styles/global.css     # PoE2 theme tokens + components
+├── public/                   # static assets (data JSON, icon cache)
+├── astro.config.mjs          # output: 'static' (Cloudflare-friendly)
+├── wrangler.toml             # Cloudflare Pages config
+└── package.json
 ```
 
 ## Data sources
 
-| Source | What we use |
-|---|---|
-| [poe2db.tw](https://poe2db.tw) | All base items, modifiers, currency descriptions, omen effects, item images — scraped at build time |
-| [poe2scout.com](https://poe2scout.com) | Live market pricing for all currencies (API: `api.poe2scout.com`) |
-| [pathofexile.com](https://www.pathofexile.com) | Game mechanics reference |
+| Source | Provides | Refreshed by |
+|---|---|---|
+| [poe2db.tw](https://poe2db.tw) | base items, mods, currency, omens, current season | `npm run fetch` |
+| [Krakenbul / Prohibited Library](https://discord.gg/3VxKY6gt7j) | mod weights (per base) | manual → `data/manual/weights.json` |
+| [poe2scout.com](https://poe2scout.com) | live currency prices | `npm run prices` |
+
+Item data, mod tiers, mod weights, and the current season are pulled from community-maintained sources — see [Credits](#credits).
+
+## Deploying to Cloudflare Pages
+
+1. Push the repo to GitHub.
+2. In Cloudflare Pages, create a new project pointing at the repo.
+3. Build settings:
+   - **Build command:** `npm run refresh && npm run build`
+   - **Build output directory:** `dist`
+   - **Environment variables:** none required
+4. Cloudflare deploys the static `dist/` directory globally. No Workers, no D1, no KV — just static files served from the edge.
+
+You can also pre-build locally and push `dist/` directly to a Pages branch or any S3-compatible host.
 
 ## League refresh workflow
 
-```bash
-npm run process   # pulls fresh data from poe2db + fresh prices from poe2scout
-npm run check     # 39 data invariants
-npm run build     # regenerate static site
-```
-
-Commit the updated `data/processed/*.json` files after each refresh. Cloudflare Pages' git integration picks up the changes automatically.
-
-## Tests
+When a new PoE2 league drops:
 
 ```bash
-npm run check       # 39 data invariants (bases, mods, currencies, omens)
-npm run audit:omen  # 26 omen patterns verified
-npm run audit:costs # 200 currency prices verified
-npm run e2e:all     # 17 base types end-to-end through simulator
-npm run e2e:orbs    # 20 orb function tests
+npm run refresh       # pulls fresh data from poe2db
+npm run weights       # if you have updated weight spreadsheets
+npm run build         # regenerate static site
+git add data/processed/
+git commit -m "chore(data): weekly poe2db refresh"
+git push
 ```
+
+Cloudflare Pages' git integration rebuilds automatically on push.
+
+## Adding community weights
+
+`data/manual/weights.json` schema:
+
+```json
+[
+  { "baseId": "soldier_greathelm", "modId": "mod_prefix_111_50_...", "weight": 1500, "source": "krakenbul" },
+  { "baseId": "soldier_greathelm", "modId": "mod_prefix_1_86_...", "weight": 50, "source": "krakenbul", "notes": "T1 life" }
+]
+```
+
+Find `modId` and `baseId` by inspecting `data/processed/mods.json` and `data/processed/bases.json`.
+
+You can also point at a remote JSON dataset:
+
+```bash
+CRAFTCLASS_WEIGHTS_URL=https://example.com/poe2-weights.json npm run weights
+```
+
+## Tech
+
+- **Astro 5** — static site generator with island architecture
+- **Tailwind 4** (via Vite plugin)
+- **TypeScript** strict
+- **Cheerio** for HTML parsing in build scripts
+- **Web Workers** for probability math (no UI jank)
+- **Zero client-side frameworks** — vanilla JS shipped in `<script>` tags
+- **jsdom** for end-to-end tests
+
+## Credits
+
+- Item data: [poe2db.tw](https://poe2db.tw) (CC BY-NC-SA)
+- Mod weights: [Krakenbul / Prohibited Library](https://discord.gg/3VxKY6gt7j)
+- Game data extraction: [SnosMe/poe-dat-viewer](https://github.com/SnosMe/poe-dat-viewer) (MIT)
+- Live prices: [poe2scout.com](https://poe2scout.com)
+- Crafting patterns inspired by [Craft of Exile](https://www.craftofexile.com/)
+
+CraftClass is an unofficial fan tool and is not affiliated with or endorsed by Grinding Gear Games.
 
 ## License
 
-Data sourced from poe2db.tw (CC BY-NC-SA). Live pricing from api.poe2scout.com. Game mechanics and item data are the property of Grinding Gear Games.
-
-CraftClass is an unofficial fan tool and is not affiliated with or endorsed by Grinding Gear Games.
+MIT — see [LICENSE](./LICENSE).
