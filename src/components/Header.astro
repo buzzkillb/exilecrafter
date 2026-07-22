@@ -49,6 +49,7 @@ const links = [
 </header>
 
 <script>
+  // Live economy rates in the header — fetched from /api/prices (poe2scout).
   (async () => {
     const el = document.getElementById('header-prices');
     if (!el) return;
@@ -57,14 +58,20 @@ const links = [
       if (!res.ok) { el.innerHTML = ''; return; }
       const raw = await res.json();
       const meta = raw._meta || {};
-      const divine = raw.divine_orb ?? meta.chaosPerDivine ?? 7.5;
-      const exalt = raw.exalted_orb ?? meta.chaosPerExalt ?? 0.018;
+      const divineC = raw.divine_orb ?? meta.chaosPerDivine ?? 7.5;
+      const exaltC = raw.exalted_orb ?? 0.018;
+      const divineX = exaltC > 0 ? divineC / exaltC : 0;
       const t = meta.fetchedAt ? new Date(meta.fetchedAt).toLocaleTimeString() : '';
       el.innerHTML =
-        '<span class="text-dim/60 text-[10px]">' + divine.toFixed(0) + 'c</span>' +
-        '<span class="text-dim/30">·</span>' +
-        '<span class="text-dim/60 text-[10px]">' + exalt.toFixed(1) + 'c</span>' +
-        '<span class="w-1.5 h-1.5 rounded-full bg-green-500 inline-block shrink-0" title="Live from poe2scout · ' + t + '"></span>';
+        '<span class="inline-flex items-center gap-1 text-xs font-mono">' +
+          '<img src="/images/currency/divine_orb.webp" alt="" class="w-4 h-4" />' +
+          '<span class="text-gold-bright font-semibold">' + divineC.toFixed(1) + 'c</span>' +
+        '</span>' +
+        '<span class="inline-flex items-center gap-1 text-xs font-mono ml-2">' +
+          '<img src="/images/currency/exalted_orb.webp" alt="" class="w-4 h-4" />' +
+          '<span class="text-dim font-semibold">' + divineX.toFixed(0) + 'x</span>' +
+        '</span>' +
+        '<span class="w-1.5 h-1.5 rounded-full bg-green-500 inline-block shrink-0 ml-2" title="Live from poe2scout · ' + t + '"></span>';
     } catch (_) { el.innerHTML = ''; }
   })();
 </script>
