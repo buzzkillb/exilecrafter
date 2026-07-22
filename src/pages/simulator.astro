@@ -895,6 +895,8 @@ function openPasteModal() {
       pasteImport.disabled = !foundBase;
     }
 
+    let importGuard = false;
+
     function importPastedItem() {
       if (!parsedPaste || !parsedPaste.baseId) {
         flash('Could not import: base not found.', 'error');
@@ -906,9 +908,10 @@ function openPasteModal() {
         flash('Could not find base in database.', 'error');
         return;
       }
-      // Select the base in the picker
+      importGuard = true;
       basePicker.value = bid;
       selectBase(bid);
+      importGuard = false;
       // Set item level + apply parsed affixes
       ilvlInput.value = String(parsedPaste.itemLevel);
       if (currentItem) {
@@ -1607,6 +1610,7 @@ function categorizeOmen(name: string): string {
 
     // Wire up UI
     basePicker.addEventListener('change', () => {
+      if (importGuard) return;
       if (basePicker.value) selectBase(basePicker.value);
     });
     ilvlInput.addEventListener('input', () => {
