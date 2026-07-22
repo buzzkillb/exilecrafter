@@ -130,7 +130,7 @@ export async function onRequest(context: EventContext<any, any, any>): Promise<R
         chaosPerDivine: Math.round(chaosPerDivine * 10) / 10,
         exaltsPerDivine: Math.round(exaltsPerDivine * 10) / 10,
         exaltsPerChaos: Math.round(exaltsPerChaos * 10) / 10,
-        chaosPerExalt: Math.round((1 / exaltsPerChaos) * 10) / 10,
+        chaosPerExalt: Math.round((1 / exaltsPerChaos) * 1000) / 1000,
       },
     });
 

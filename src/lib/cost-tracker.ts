@@ -19,14 +19,16 @@ export interface CostStep {
 }
 
 export class CostTracker {
-  private snapshot: PriceSnapshot | null = null;
+  /** Public read-only snapshot so consumers don't need `(as any)` casts. */
+  get snapshot(): PriceSnapshot | null { return this._snapshot; }
+  private _snapshot: PriceSnapshot | null = null;
   private steps: CostStep[] = [];
   private loading = false;
   private initAttempted = false;
   private listeners: Array<() => void> = [];
 
   async init(_league?: string): Promise<void> {
-    if (this.snapshot || this.initAttempted) return;
+    if (this._snapshot || this.initAttempted) return;
     this.initAttempted = true;
     this.loading = true;
 
@@ -42,7 +44,7 @@ export class CostTracker {
             prices[key] = val;
           }
         }
-        this.snapshot = {
+        this._snapshot = {
           chaosPerExalt: meta.chaosPerExalt || 1 / 55.719,
           chaosPerDivine: meta.chaosPerDivine || 7.368,
           exaltsPerChaos: meta.exaltsPerChaos || 55.719,
@@ -54,7 +56,7 @@ export class CostTracker {
       }
     } catch {
       // Absolute last resort — derive from known exchange rates
-      this.snapshot = {
+      this._snapshot = {
         chaosPerExalt: 1 / 55.719,
         chaosPerDivine: 7.368,
         exaltsPerChaos: 55.719,
@@ -67,7 +69,7 @@ export class CostTracker {
     this.notify();
   }
 
-  get ready(): boolean { return this.snapshot !== null; }
+  get ready(): boolean { return this._snapshot !== null; }
   get loadingState(): boolean { return this.loading; }
 
   addStep(currencyId: string, currencyName: string, count = 1): void {
@@ -94,26 +96,26 @@ export class CostTracker {
   }
 
   toDivines(chaos: number): { divines: number; remainderChaos: number } {
-    const cd = this.snapshot?.chaosPerDivine || 7.368;
+    const cd = this._snapshot?.chaosPerDivine || 7.368;
     return { divines: Math.floor(chaos / cd), remainderChaos: chaos % cd };
   }
 
   toExalts(chaos: number): { exalts: number; remainderChaos: number } {
-    const ce = this.snapshot?.chaosPerExalt || 0.01795;
+    const ce = this._snapshot?.chaosPerExalt || 0.01795;
     return { exalts: Math.floor(chaos / ce), remainderChaos: chaos % ce };
   }
 
   /** Resolve price by currency ID (then name fallback) */
   lookupPrice(currencyId: string, currencyName?: string): number {
-    if (!this.snapshot) return 1;
+    if (!this._snapshot) return 1;
 
     // Direct ID match
-    const direct = this.snapshot.prices[currencyId];
+    const direct = this._snapshot.prices[currencyId];
     if (direct != null && direct > 0) return direct;
 
     // Strip prefix variants (greater_/perfect_/lesser_/corrupted_)
     const stripped = currencyId.replace(/^(greater_|perfect_|lesser_|corrupted_)/, '');
-    const fromStripped = this.snapshot.prices[stripped];
+    const fromStripped = this._snapshot.prices[stripped];
     if (fromStripped != null && fromStripped > 0) {
       // Apply tier multiplier
       if (currencyId.startsWith('greater_')) return fromStripped * 2.5;
@@ -126,7 +128,7 @@ export class CostTracker {
     if (essenceMatch) {
       const prefix = essenceMatch[1] || '';
       const base = essenceMatch[2];
-      const basePrice = this.snapshot.prices[base];
+      const basePrice = this._snapshot.prices[base];
       if (basePrice != null && basePrice > 0) {
         if (prefix.startsWith('greater_')) return basePrice * 3;
         if (prefix.startsWith('perfect_')) return basePrice * 6;

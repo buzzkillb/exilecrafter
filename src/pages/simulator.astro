@@ -1375,16 +1375,14 @@ function getOpKey(opId: string): string {
 
       if (costChaos) costChaos.textContent = Math.round(total).toLocaleString();
       if (costExalted) {
-        const snap = (costTracker as any).snapshot;
-        const chaosPerExalt = snap?.chaosPerExalt || 7.5;
-        const exalts = total / chaosPerExalt;
-        costExalted.textContent = exalts.toFixed(2);
+        const snap = costTracker.snapshot;
+        const cpe = (snap?.chaosPerExalt && snap.chaosPerExalt > 0) ? snap.chaosPerExalt : 1 / 56;
+        costExalted.textContent = (total / cpe).toFixed(1);
       }
       if (costDivine) {
-        const snap = (costTracker as any).snapshot;
-        const chaosPerDivine = snap?.chaosPerDivine || 7.5;
-        const divines = total / chaosPerDivine;
-        costDivine.textContent = divines.toFixed(2);
+        const snap = costTracker.snapshot;
+        const cpd = (snap?.chaosPerDivine && snap.chaosPerDivine > 0) ? snap.chaosPerDivine : 7.5;
+        costDivine.textContent = (total / cpd).toFixed(2);
       }
 
       if (costBreakdown) {
@@ -1396,7 +1394,7 @@ function getOpKey(opId: string): string {
       }
 
       if (costFallbackBadge) {
-        const snap = (costTracker as any).snapshot;
+        const snap = costTracker.snapshot;
         if (snap && snap.fetchedAt && Object.keys(snap.prices).length <= 12) {
           costFallbackBadge.classList.remove('hidden');
         } else {
