@@ -13,7 +13,6 @@
     "fetch": "node scripts/fetch-poe2db.mjs",
     "process": "node scripts/process-data.mjs && node scripts/download-images.mjs",
     "weights": "node scripts/fetch-weights.mjs",
-    "prices": "node scripts/fetch-prices.mjs",
     "e2e": "node scripts/_e2e_paste.mjs"
   },
   "dependencies": {

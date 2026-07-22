@@ -1,7 +1,6 @@
 ---
 import { season } from '~/lib/data';
 import { useT, type Locale } from '~/lib/i18n';
-import pricesData from '~/../data/processed/prices.json' assert { type: 'json' };
 
 interface Props {
   locale: Locale;
@@ -20,13 +19,6 @@ const links = [
   { href: '/calculator', label: t('nav.calculator') },
   { href: '/guides', label: t('nav.guides') },
 ];
-
-const pd = pricesData as { _meta: { chaosPerExalt: number; chaosPerDivine: number; exaltsPerDivine: number; exaltsPerChaos: number; fetchedAt: string; source: string }; [key: string]: unknown };
-const meta = pd._meta || {};
-const chaosPerDivine = meta.chaosPerDivine || 7.5;
-const exaltsPerDivine = meta.exaltsPerDivine || 414;
-const exaltsPerChaos = meta.exaltsPerChaos || 56;
-const fetchedAt = meta.fetchedAt || '';
 ---
 
 <header class="site-header">
@@ -49,20 +41,6 @@ const fetchedAt = meta.fetchedAt || '';
           {l.label}
         </a>
       ))}
-      <div class="ml-3 flex items-center gap-2 text-xs font-mono whitespace-nowrap" title={"Prices from poe2scout · " + fetchedAt}>
-        <img src="/images/currency/divine_orb.webp" alt="Divine" class="w-4 h-4" />
-        <span class="text-gold-bright">{chaosPerDivine.toFixed(1)}c</span>
-        <span class="text-dim opacity-30">|</span>
-        <img src="/images/currency/chaos_orb.webp" alt="Chaos" class="w-4 h-4" />
-        <span class="text-dim">{exaltsPerChaos.toFixed(1)}x</span>
-        <span class="text-dim opacity-30">|</span>
-        <img src="/images/currency/exalted_orb.webp" alt="Exalt" class="w-4 h-4" />
-        <span class="text-dim">{exaltsPerDivine.toFixed(1)}x</span>
-        <span class="relative inline-flex w-2 h-2 ml-1" title={"Live from poe2scout · " + fetchedAt}>
-          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-          <span class="relative inline-flex rounded-full h-2 w-2 bg-green-400"></span>
-        </span>
-      </div>
     </nav>
   </div>
 </header>

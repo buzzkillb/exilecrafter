@@ -49,3 +49,7 @@ _*.js
 _*.bat
 _*.txt
 *.bak
+
+# Build-time prices (replaced by live CF Pages Function at /api/prices)
+data/processed/prices.json
+public/data/prices.json

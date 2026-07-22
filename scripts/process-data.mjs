@@ -1195,35 +1195,6 @@ async function main() {
   }
   console.log(`Copied ${filesToCopy.length} data files to public/data/`);
 
-  // Fetch current prices from api.poe2scout.com (build-time, uses server-side fetch).
-  // Writes data/processed/prices.json + public/data/prices.json
-  try {
-    const priceScript = path.join(__dirname, 'fetch-prices.mjs');
-    if (existsSync(priceScript)) {
-      const { spawn } = await import('node:child_process');
-      await new Promise((resolve, reject) => {
-        const child = spawn(process.execPath, [priceScript], {
-          stdio: ['ignore', 'inherit', 'inherit'],
-          cwd: ROOT,
-        });
-        child.on('exit', (code) => code === 0 ? resolve(null) : reject(new Error(`fetch-prices.mjs exited with code ${code}`)));
-      });
-    }
-  } catch (priceErr) {
-    console.warn('Price fetch failed, using hardcoded fallback:', priceErr);
-  }
-
-  // Ensure prices.json is in public/data/ too (in case fetch-prices didn't write there)
-  const pricesPath = path.join(OUT, 'prices.json');
-  if (existsSync(pricesPath)) {
-    await writeFile(
-      path.join(PUBLIC_DATA, 'prices.json'),
-      await readFile(pricesPath, 'utf8'),
-      'utf8'
-    );
-    console.log('Copied prices.json to public/data/');
-  }
-
   if (basesFinal.length > 0) {
     console.log('\nSample bases:');
     for (const b of basesFinal.slice(0, 5)) {
