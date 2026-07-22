@@ -177,7 +177,7 @@ const craftingExamples = [
         <div id="item-display" class="parchment p-3"></div>
 
         <!-- Cost tracking bar — below item, above tips -->
-        <div id="cost-panel" class="flex items-center gap-3 parchment px-4 py-2 hidden">
+        <div id="cost-panel" class="flex items-center gap-3 parchment px-4 py-2">
           <span class="text-[10px] uppercase tracking-wider text-mute font-semibold">Cost</span>
           <span class="flex items-center gap-1.5 text-xs font-mono">
             <span class="text-dim">Chaos:</span>
@@ -1369,17 +1369,7 @@ function getOpKey(opId: string): string {
 
     function renderCostPanel() {
       if (!costPanel) return;
-      if (!costTracker.ready) {
-        costPanel.classList.add('hidden');
-        return;
-      }
-      const total = costTracker.totalChaos();
-      const steps = costTracker.getSteps();
-      if (steps.length === 0) {
-        costPanel.classList.add('hidden');
-        return;
-      }
-      costPanel.classList.remove('hidden');
+      const total = costTracker.ready ? costTracker.totalChaos() : 0;
 
       if (costChaos) costChaos.textContent = Math.round(total).toLocaleString();
       if (costExalted) {
