@@ -173,7 +173,10 @@ const craftingExamples = [
     <div id="main-ui" class="hidden grid lg:grid-cols-[1fr_360px] gap-3">
       <!-- LEFT: Item + history -->
       <div class="space-y-3 min-w-0">
-        <!-- Cost tracking bar — always visible once there's spend -->
+        <!-- Item display -->
+        <div id="item-display" class="parchment p-3"></div>
+
+        <!-- Cost tracking bar — below item, above tips -->
         <div id="cost-panel" class="flex items-center gap-3 parchment px-4 py-2 hidden">
           <span class="text-[10px] uppercase tracking-wider text-mute font-semibold">Cost</span>
           <span class="flex items-center gap-1.5 text-xs font-mono">
@@ -191,8 +194,6 @@ const craftingExamples = [
           <div class="hidden" id="cost-fallback-badge"><span class="text-corrupted text-[10px]">(prices may be stale)</span></div>
           <div id="cost-breakdown" class="ml-auto text-[10px] text-dim max-h-20 overflow-y-auto space-y-0.5 hidden"></div>
         </div>
-        <!-- Item display -->
-        <div id="item-display" class="parchment p-3"></div>
 
         <!-- Active omens strip -->
         <div id="active-omens-strip" class="parchment p-2 hidden">
