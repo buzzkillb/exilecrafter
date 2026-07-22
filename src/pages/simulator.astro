@@ -1452,8 +1452,9 @@ function getOpKey(opId: string): string {
         logActivity(`${opName} on ${currentBase.name} - failed: ${result.message}`, 'error');
       }
 
-      if (result.ok && activeCurrency) {
-        costTracker.addStep(activeCurrency.id, activeCurrency.name, 1);
+      if (result.ok) {
+        const displayName = activeCurrency?.name || opId.replace(/_/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase());
+        costTracker.addStep(activeCurrency?.id || opId, displayName, 1);
       }
 
       activeOmens.clear();
