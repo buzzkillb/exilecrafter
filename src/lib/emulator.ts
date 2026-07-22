@@ -351,7 +351,10 @@ export function orbOfAnnulment(ctx: EmulatorContext): CraftResult {
   const omenCount = omenOf(ctx.activeOmens, 'remove_count');
   const omenLight = omenOf(ctx.activeOmens, 'remove_only_desecrated');
 
-  let candidates = item.affixes.slice();
+  // Fractured affixes cannot be annulled
+  const fracturedIds = new Set(item.fractured.map((f: any) => f.modId));
+  let candidates = item.affixes.filter((a) => !fracturedIds.has(a.modId));
+  if (candidates.length === 0) return { ok: false, message: 'Only fractured affixes remain — cannot annul them.', item };
   if (omenLight) {
     candidates = candidates.filter((a) => a.tags.includes('desecrated'));
     if (candidates.length === 0) return { ok: false, message: 'No desecrated affixes to remove.', item };
@@ -386,14 +389,16 @@ export function chaosOrb(ctx: EmulatorContext): CraftResult {
     return { ok: false, message: 'Chaos only works on Rare items.', item };
   }
   const slots = effectiveSlots(item, base);
-  const currentPrefix = item.affixes.filter((a) => a.type === 'prefix').length;
-  const currentSuffix = item.affixes.filter((a) => a.type === 'suffix').length;
-  // Chaos rerolls all affixes â€” keep same count
+  const fracturedIds = new Set(item.fractured.map((f: any) => f.modId));
+  // Count non-fractured affixes for slot usage
+  const currentPrefix = item.affixes.filter((a) => a.type === 'prefix' && !fracturedIds.has(a.modId)).length;
+  const currentSuffix = item.affixes.filter((a) => a.type === 'suffix' && !fracturedIds.has(a.modId)).length;
   const prefixPool = buildPool(ctx.mods, 'prefix', base, ctx.weights, { ilvl: item.itemLevel, minModLevel: ctx.minModLevel ?? 0 });
   const suffixPool = buildPool(ctx.mods, 'suffix', base, ctx.weights, { ilvl: item.itemLevel, minModLevel: ctx.minModLevel ?? 0 });
   const blocked = new Set<string>();
 
-  const newAffixes: Affix[] = [];
+  // Keep fractured affixes in place, only reroll non-fractured
+  const newAffixes: Affix[] = item.fractured.slice();
   const rolledNames: string[] = [];
   for (let i = 0; i < Math.min(currentPrefix, slots.prefix); i++) {
     const a = pickAffix(prefixPool, 'prefix', blocked, ctx.weights, base);
@@ -504,17 +509,16 @@ export function desecrate(ctx: EmulatorContext): CraftResult {
    ============================================================ */
 
 export function ancientOrb(ctx: EmulatorContext): CraftResult {
-  // Ancient Orb: re-rolls a Rare item into another Rare with new implicits
-  // PoE2 rule: works only on Rare items.
+  // Ancient Orb: reforges a Unique item into another Unique of the same item class.
   const { item, base } = ctx;
-  if (item.rarity !== 'rare') {
-    return { ok: false, message: 'Ancient Orb only works on Rare items.', item };
+  if (item.rarity !== 'unique') {
+    return { ok: false, message: 'Ancient Orb only works on Unique items (reforges to another Unique of the same class).', item };
   }
   if (item.corrupted) {
     return { ok: false, message: 'Cannot Ancient a corrupted item.', item };
   }
-  // Clear all current affixes, keep rarity, generate a fresh rare with affixes
-  // matching the base's slots. Implicit is untouched.
+  // Reforge: generate a fresh set of affixes. In the simulator this produces a
+  // random pool of affixes as a stand-in for "another Unique".
   const poolP = buildPool(ctx.mods, 'prefix', base, ctx.weights, { ilvl: item.itemLevel, minModLevel: ctx.minModLevel ?? 0 });
   const poolS = buildPool(ctx.mods, 'suffix', base, ctx.weights, { ilvl: item.itemLevel, minModLevel: ctx.minModLevel ?? 0 });
   const slots2 = effectiveSlots(item, base);
@@ -537,6 +541,7 @@ export function ancientOrb(ctx: EmulatorContext): CraftResult {
 
   const next = {
     ...item,
+    rarity: 'unique' as const,
     affixes: newAffixes,
     history: [...item.history, { action: 'Ancient Orb', detail: 'Rerolled into new Rare' }],
   };
@@ -608,7 +613,13 @@ export function essenceOrb(ctx: EmulatorContext): CraftResult {
     return { ok: false, message: 'Essence not specified.', item };
   }
 
-  // Magic â†’ Rare: just add a guaranteed affix and upgrade
+  // Standard essences upgrade Magic → Rare. Corrupted-tier essences work on Rares.
+  const isCorrupted = (essence as any).tier === 'corrupted' || /hysteria|insanity|horror|delirium|abyss|breach/i.test(essence.name || '');
+  if (item.rarity === 'rare' && !isCorrupted) {
+    return { ok: false, message: `${essence.name} only works on Magic items (use Alt+Regal instead for rares).`, item };
+  }
+
+  // Magic → Rare: just add a guaranteed affix and upgrade
   if (item.rarity === 'magic') {
     const guaranteedMod = (essence as any).guaranteedMod as string | undefined;
     if (!guaranteedMod) {
@@ -1043,17 +1054,24 @@ export const OPERATIONS: Record<string, (c: any) => any> = {
 };
 
 function orbOfChance(ctx: EmulatorContext): CraftResult {
-  // Orb of Chance: gambles an item. In PoE2, failure does not destroy the item.
+  // Orb of Chance: gambles a Normal item. PoE2 outcomes: ~1% Unique, ~10% Rare, ~15% Magic, ~74% nothing.
   const { item } = ctx;
   if (item.rarity !== 'normal') return { ok: false, message: 'Chance only works on Normal items.', item };
-  // PoE2: ~1% Unique, ~20% Rare, ~79% no change
+
+  // Omen of the Ancients: guarantees Unique
+  if (omenOf(ctx.activeOmens, 'specific_unique')) {
+    return { ok: true, message: 'Omen of the Ancients — upgraded to a Unique!', item: { ...item, rarity: 'unique' as const, history: [...item.history, { action: 'Orb of Chance (Ancients)', detail: 'Upgraded to Unique' }] } };
+  }
+
   const roll = Math.random();
   if (roll < 0.01) {
     return { ok: true, message: 'Transformed into a Unique item!', item: { ...item, rarity: 'unique' as const, history: [...item.history, { action: 'Orb of Chance', detail: 'Upgraded to Unique' }] } };
-  } else if (roll < 0.21) {
+  } else if (roll < 0.11) {
     return { ok: true, message: 'Upgraded to Rare!', item: { ...item, rarity: 'rare' as const, history: [...item.history, { action: 'Orb of Chance', detail: 'Upgraded to Rare' }] } };
+  } else if (roll < 0.26) {
+    return { ok: true, message: 'Upgraded to Magic!', item: { ...item, rarity: 'magic' as const, history: [...item.history, { action: 'Orb of Chance', detail: 'Upgraded to Magic' }] } };
   } else {
-    return { ok: true, message: 'Chance missed - item unchanged.', item };
+    return { ok: true, message: (omenOf(ctx.activeOmens, 'no_destroy') ? 'Chance missed — Omen preserved the item.' : 'Chance missed — item unchanged.'), item };
   }
 }
 
@@ -1163,8 +1181,8 @@ export function getCurrencyAvailability(item: ItemState, base: BaseItem): Record
 
   // Ancient Orb
   result.ancient_orb = {
-    valid: rarity === 'rare' && !item.corrupted && !item.mirrored,
-    reason: rarity !== 'rare' ? 'Ancient Orb only works on Rare items.' : 'Re-roll into a new Rare with fresh affixes.',
+    valid: rarity === 'unique' && !item.corrupted && !item.mirrored,
+    reason: rarity !== 'unique' ? 'Ancient Orb only works on Unique items (reforges to another Unique of the same class).' : 'Reforges to another Unique of the same class.',
   };
   result.mirror_of_kalandra = {
     valid: (rarity === 'rare' || rarity === 'unique') && !item.mirrored && !item.corrupted,
