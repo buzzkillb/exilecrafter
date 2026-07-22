@@ -1,0 +1,38 @@
+{
+  "name": "craftclass",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "refresh": "node scripts/refresh.mjs",
+    "fetch": "node scripts/fetch-poe2db.mjs",
+    "process": "node scripts/process-data.mjs && node scripts/download-images.mjs",
+    "weights": "node scripts/fetch-weights.mjs",
+    "check": "node scripts/_regression_check.mjs",
+    "audit:omen": "node scripts/_audit_omen.mjs",
+    "audit:costs": "node scripts/_audit_costs.mjs",
+    "audit": "npm run check && npm run audit:omen && npm run audit:costs",
+    "e2e": "node scripts/_e2e_multibase.mjs",
+    "e2e:all": "node scripts/_e2e_multibase.mjs",
+    "e2e:orbs": "npx tsx scripts/_e2e_orbs.mts",
+    "e2e:minlevel": "npx tsx scripts/_e2e_min_mod_level.mjs"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.3",
+    "@tailwindcss/typography": "^0.5.20",
+    "@tailwindcss/vite": "^4.3.3",
+    "astro": "^7.1.3",
+    "cheerio": "^1.2.0",
+    "tailwindcss": "^4.3.3"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.1",
+    "jsdom": "^29.1.1",
+    "typescript": "^7.0.2"
+  }
+}

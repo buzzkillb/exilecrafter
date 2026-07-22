@@ -1,0 +1,132 @@
+---
+import { manifest } from '~/lib/data';
+import { useT, type Locale } from '~/lib/i18n';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props as Props;
+const t = useT(locale);
+
+const dateFmt: Intl.DateTimeFormatOptions = {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit',
+};
+const updated = new Date(manifest.generatedAt).toLocaleDateString(
+  locale === 'pt' ? 'pt-BR' : 'en-US',
+  dateFmt,
+);
+const { season, counts } = manifest;
+---
+
+<footer class="border-t border-border mt-20 pt-12 pb-8 text-sm text-mute">
+  <div class="container mx-auto max-w-7xl px-4">
+    <!-- Top row: 4 columns -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
+
+      <!-- Brand column -->
+      <div class="space-y-3">
+        <a href="/" class="brand text-lg">CRAFTCLASS</a>
+        <p class="text-sm leading-relaxed">
+          {t('site.footer.tagline')}
+        </p>
+        <div class="flex items-center gap-2">
+          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium border border-gold/30 text-gold">
+            {season.name} v{season.version}
+          </span>
+        </div>
+      </div>
+
+      <!-- Source data column -->
+      <div class="space-y-3">
+        <h4 class="text-xs uppercase tracking-wider text-fg font-semibold">{t('site.footer.sources')}</h4>
+        <ul class="space-y-2">
+          <li>
+            <a href="https://poe2db.tw/us/" target="_blank" rel="noopener noreferrer"
+               class="hover:text-gold-bright transition-colors flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              poe2db.tw
+            </a>
+            <p class="text-[10px] text-dim mt-0.5">{t('site.footer.poe2db.desc')}</p>
+          </li>
+          <li>
+            <a href="https://poe2scout.com/" target="_blank" rel="noopener noreferrer"
+               class="hover:text-gold-bright transition-colors flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              poe2scout
+            </a>
+            <p class="text-[10px] text-dim mt-0.5">{t('site.footer.scout.desc')}</p>
+          </li>
+          <li>
+            <a href="https://www.pathofexile.com/" target="_blank" rel="noopener noreferrer"
+               class="hover:text-gold-bright transition-colors flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              pathofexile.com
+            </a>
+            <p class="text-[10px] text-dim mt-0.5">{t('site.footer.ggg.desc')}</p>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Stats column -->
+      <div class="space-y-3">
+        <h4 class="text-xs uppercase tracking-wider text-fg font-semibold">{t('site.footer.dataset')}</h4>
+        <ul class="space-y-1.5 text-sm">
+          <li class="flex justify-between"><span class="text-dim">{t('site.footer.bases')}</span><span class="text-fg">{counts.bases.toLocaleString()}</span></li>
+          <li class="flex justify-between"><span class="text-dim">{t('site.footer.mods')}</span><span class="text-fg">{counts.mods.toLocaleString()}</span></li>
+          <li class="flex justify-between"><span class="text-dim">{t('site.footer.currency')}</span><span class="text-fg">{counts.currency.toLocaleString()}</span></li>
+          <li class="flex justify-between"><span class="text-dim">{t('site.footer.omens')}</span><span class="text-fg">{counts.omens.toLocaleString()}</span></li>
+          <li class="flex justify-between pt-1 border-t border-border"><span class="text-dim">{t('site.footer.season')}</span><span class="text-gold text-xs">{season.name}</span></li>
+        </ul>
+      </div>
+
+      <!-- Update / Pages column -->
+      <div class="space-y-3">
+        <h4 class="text-xs uppercase tracking-wider text-fg font-semibold">{t('site.footer.status')}</h4>
+        <div class="space-y-2 text-sm">
+          <div class="flex items-start gap-2">
+            <span class="w-2 h-2 rounded-full bg-green-500 mt-1.5 shrink-0"></span>
+            <div>
+              <p class="text-fg">{t('site.footer.dataUpdated')}</p>
+              <p class="text-dim text-xs">{updated} UTC</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-2">
+            <span class="w-2 h-2 rounded-full bg-yellow-500 mt-1.5 shrink-0"></span>
+            <div>
+              <p class="text-fg">{t('site.footer.source')}</p>
+              <p class="text-dim text-xs capitalize">{season.source}</p>
+            </div>
+          </div>
+          <div class="text-xs text-dim pt-1">
+            {t('site.footer.disclaimer')}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom bar -->
+    <div class="border-t border-border/50 pt-4 flex flex-wrap items-center justify-between gap-2 text-xs text-dim">
+      <div>
+        {t('site.footer.copyright', { year: new Date().getFullYear().toString() })}
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="text-dim text-[10px] tracking-wider uppercase flex items-center gap-1.5">
+          Built by
+          <a href="https://cybara.ai" target="_blank" rel="noopener noreferrer" class="hover:text-gold-bright transition-colors flex items-center gap-1">
+            <img src="/cybara-logo.png" alt="" class="w-3.5 h-3.5 object-contain" />
+            Cybara AI
+          </a>
+        </span>
+        <span class="text-dim/30">·</span>
+        <a href="https://github.com/travanx/craftclass" target="_blank" rel="noopener noreferrer" class="hover:text-gold-bright transition-colors flex items-center gap-1">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+          GitHub
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>

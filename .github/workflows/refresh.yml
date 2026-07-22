@@ -1,0 +1,39 @@
+name: Weekly data refresh
+
+on:
+  schedule:
+    # Every Sunday at 06:00 UTC (after typical GGG patch windows)
+    - cron: '0 6 * * 0'
+  workflow_dispatch:        # allow manual trigger
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Refresh poe2db data
+        run: npm run refresh
+
+      - name: Build site
+        run: npm run build
+
+      - name: Commit updated data
+        run: |
+          git config user.name "craftclass-bot"
+          git config user.email "craftclass-bot@users.noreply.github.com"
+          git add data/processed/
+          if git diff --staged --quiet; then
+            echo "No data changes to commit."
+          else
+            git commit -m "chore(data): weekly poe2db refresh"
+            git push
+          fi

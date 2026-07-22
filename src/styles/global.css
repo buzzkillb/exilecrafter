@@ -1,0 +1,428 @@
+@import "tailwindcss";
+
+/* ============================================================
+   PoE2 Theme tokens
+   Inspired by Path of Exile 2's UI: deep parchment, dark stone,
+   aged gold accents, blood red highlights. All defined as CSS
+   custom properties so every component stays consistent.
+   ============================================================ */
+@theme {
+  --color-bg: #0b0a08;
+  --color-bg-elev: #15120d;
+  --color-bg-card: #1c1812;
+  --color-bg-hover: #251f17;
+  --color-border: #3a2f1f;
+  --color-border-strong: #5a4a2a;
+
+  --color-fg: #e9dcc1;
+  --color-fg-dim: #a89a7d;
+  --color-fg-mute: #9b8f6a;
+
+  --color-gold: #c9a14a;
+  --color-gold-bright: #f0c860;
+  --color-gold-dim: #7a5a22;
+
+  --color-fire: #c44a2a;
+  --color-cold: #4a8fc4;
+  --color-lightning: #d4c84a;
+  --color-chaos: #8a4ac4;
+  --color-physical: #c4a07a;
+  --color-life: #d44a4a;
+  --color-mana: #4a6fc4;
+  --color-es: #6accc4;
+
+  --color-prefix: #c44a4a;
+  --color-suffix: #4a8fc4;
+  --color-implicit: #c9a14a;
+  --color-desecrated: #8a4ac4;
+  --color-corrupted: #c4644a;
+
+  --font-display: "Cinzel", "Trajan Pro", "Times New Roman", serif;
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", "Consolas", ui-monospace, monospace;
+
+  --shadow-parchment: 0 0 0 1px rgba(201,161,74,0.15), 0 8px 24px rgba(0,0,0,0.5);
+  --shadow-ornate: 0 0 0 1px rgba(201,161,74,0.4), 0 0 24px rgba(201,161,74,0.15);
+}
+
+/* ============================================================
+   Base
+   ============================================================ */
+:root {
+  color-scheme: dark;
+}
+
+html {
+  background: var(--color-bg);
+  color: var(--color-fg);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background:
+    radial-gradient(ellipse at top, rgba(122, 90, 34, 0.08), transparent 60%),
+    radial-gradient(ellipse at bottom, rgba(74, 50, 20, 0.06), transparent 70%),
+    var(--color-bg);
+  min-height: 100vh;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--color-gold-bright);
+  text-shadow: 0 1px 0 rgba(0,0,0,0.6);
+}
+
+h1 { font-size: 2.25rem; }
+h2 { font-size: 1.75rem; }
+h3 { font-size: 1.35rem; }
+h4 { font-size: 1.1rem; }
+
+a { color: var(--color-gold); }
+a:hover { color: var(--color-gold-bright); }
+
+::selection {
+  background: rgba(201, 161, 74, 0.35);
+  color: var(--color-fg);
+}
+
+/* ============================================================
+   Components
+   ============================================================ */
+.parchment {
+  background:
+    linear-gradient(180deg, var(--color-bg-card), var(--color-bg-elev));
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  box-shadow: var(--shadow-parchment);
+  position: relative;
+}
+
+.parchment::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 20% 0%, rgba(201, 161, 74, 0.06), transparent 40%),
+    radial-gradient(circle at 80% 100%, rgba(74, 50, 20, 0.08), transparent 40%);
+  border-radius: inherit;
+}
+
+.divider-ornate {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-gold-dim), transparent);
+  margin: 1.5rem 0;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-bg-elev);
+  color: var(--color-fg);
+  border-radius: 3px;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.btn:hover {
+  background: var(--color-bg-hover);
+  border-color: var(--color-gold);
+  color: var(--color-gold-bright);
+}
+.btn:active { transform: translateY(1px); }
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.btn-gold {
+  background: linear-gradient(180deg, #6a4f1f, #3a2a10);
+  border-color: var(--color-gold);
+  color: var(--color-gold-bright);
+}
+.btn-gold:hover {
+  background: linear-gradient(180deg, #8a6826, #4a3514);
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: 2px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid currentColor;
+  background: rgba(0,0,0,0.3);
+}
+
+.tag-prefix { color: var(--color-prefix); }
+.tag-suffix { color: var(--color-suffix); }
+.tag-implicit { color: var(--color-implicit); }
+.tag-desecrated { color: var(--color-desecrated); }
+.tag-corrupted { color: var(--color-corrupted); }
+
+.tier-marker {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--color-fg-mute);
+  letter-spacing: -0.05em;
+}
+
+.affix-slot {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  border: 1px dashed var(--color-border-strong);
+  border-radius: 3px;
+  min-height: 1.75rem;
+  background: rgba(0,0,0,0.2);
+  font-size: 0.8125rem;
+  color: var(--color-fg-mute);
+  font-style: italic;
+  position: relative;
+  transition: all 0.15s ease;
+}
+.affix-slot.filled {
+  min-height: 2.25rem;
+  padding: 0.375rem 0.625rem;
+}
+.affix-slot.prefix { border-left: 3px solid var(--color-prefix); }
+.affix-slot.suffix { border-left: 3px solid var(--color-suffix); }
+.affix-slot.filled {
+  border-style: solid;
+  font-style: normal;
+  color: var(--color-fg);
+  background: var(--color-bg-card);
+}
+
+.weight-bar {
+  height: 4px;
+  background: var(--color-border);
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+}
+.weight-bar > span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-gold-dim), var(--color-gold-bright));
+}
+
+.icon-frame {
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: 3px;
+  background: var(--color-bg);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.icon-frame img { width: 100%; height: 100%; object-fit: contain; }
+
+/* Site header banner */
+.site-header {
+  border-bottom: 1px solid var(--color-border);
+  background: linear-gradient(180deg, var(--color-bg-elev), var(--color-bg));
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  backdrop-filter: blur(8px);
+}
+.site-header .brand {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: var(--color-gold-bright);
+  letter-spacing: 0.08em;
+  text-decoration: none;
+}
+
+/* Tables */
+table.poe-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+table.poe-table th {
+  text-align: left;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--color-border-strong);
+  color: var(--color-gold);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+}
+table.poe-table td {
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: top;
+}
+table.poe-table tr:hover td { background: var(--color-bg-hover); }
+
+/* Subtle parchment noise */
+.parchment::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.04;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.8 0 0 0 0 0.7 0 0 0 0 0.4 0 0 0 0.6 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+/* ============================================================
+   Item tooltip (in-game style)
+   ============================================================ */
+.item-tooltip {
+  background: rgba(11, 10, 8, 0.95);
+  border: 1px solid var(--color-border-strong);
+  padding: 0.625rem 0.75rem;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--color-fg);
+}
+
+.item-header {
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+.item-name {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  margin-bottom: 0.125rem;
+}
+.item-type {
+  font-size: 0.7rem;
+  color: var(--color-fg-mute);
+  font-style: italic;
+}
+
+.separator {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  margin: 0.4rem 0;
+}
+.separator-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-border-strong), transparent);
+}
+.separator-line.full {
+  background: var(--color-border-strong);
+}
+.separator-icon {
+  color: var(--color-gold);
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.section-label {
+  font-size: 0.7rem;
+  color: var(--color-gold);
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  letter-spacing: 0.02em;
+}
+
+.item-section {
+  margin-bottom: 0.5rem;
+}
+
+.item-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.05rem 0;
+}
+.mod-tier {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--color-fg-mute);
+  width: 1.75rem;
+  flex-shrink: 0;
+  text-align: right;
+  letter-spacing: -0.05em;
+}
+.mod-text {
+  flex: 1;
+  font-size: 0.8125rem;
+}
+.mod-text.implicit {
+  color: var(--color-gold);
+  font-style: italic;
+}
+
+.item-empty {
+  text-align: center;
+  padding: 1rem 0;
+  color: var(--color-fg-mute);
+  font-style: italic;
+}
+
+.item-footer {
+  text-align: center;
+  font-size: 0.7rem;
+  color: var(--color-fg-mute);
+  padding-top: 0.25rem;
+}
+.item-rarity {
+  margin-bottom: 0.125rem;
+}
+.corrupted-indicator {
+  color: var(--color-corrupted);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  margin-top: 0.25rem;
+}
+
+/* Tooltip popover (follows mouse) */
+.tooltip-pop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 60;
+  pointer-events: none;
+  max-width: 20rem;
+  padding: 0.5rem 0.625rem;
+  background: linear-gradient(180deg, var(--color-bg-card), var(--color-bg-elev));
+  border: 1px solid var(--color-border-strong);
+  border-radius: 3px;
+  box-shadow: var(--shadow-ornate);
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--color-fg);
+  white-space: pre-line;
+  display: none;
+}
+.tooltip-pop:not(.hidden) { display: block; }
+
+/* Utility */
+.text-gold { color: var(--color-gold); }
+.text-gold-bright { color: var(--color-gold-bright); }
+.text-dim { color: var(--color-fg-dim); }
+.text-mute { color: var(--color-fg-mute); }
+.font-display { font-family: var(--font-display); }
+.font-mono { font-family: var(--font-mono); }
+
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(201,161,74,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201,161,74,0.03) 1px, transparent 1px);
+  background-size: 24px 24px;
+}

@@ -1,0 +1,27 @@
+# Cloudflare Pages configuration
+# https://developers.cloudflare.com/pages/configuration/
+
+# Tell Cloudflare which build to run and where to find the output.
+# In the Cloudflare dashboard, set:
+#   Build command:   npm run refresh && npm run build
+#   Build output:    dist
+#   Root directory:  /
+#   Node version:    22 or higher
+#
+# This file documents the recommended settings.
+
+[build]
+command = "npm run refresh && npm run build"
+destination = "dist"
+
+[build.environment]
+NODE_VERSION = "22"
+
+# No functions or workers needed — this is a pure static site.
+# All "computation" runs client-side via Web Workers bundled by Astro/Vite.
+
+# Optional: redirects / headers can go here, e.g.
+# [[redirects]]
+#   from = "/wiki/*"
+#   to   = "https://www.poe2wiki.net/wiki/:splat"
+#   status = 302

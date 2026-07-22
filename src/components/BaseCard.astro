@@ -1,0 +1,33 @@
+---
+import type { BaseItem } from '~/lib/types';
+interface Props {
+  base: BaseItem;
+  href?: string;
+  showSlot?: boolean;
+}
+const { base, href, showSlot = true } = Astro.props;
+const Tag = href ? 'a' : 'div';
+---
+
+<Tag
+  href={href}
+  class="parchment p-3 flex items-center gap-3 transition-transform hover:translate-y-[-2px] hover:shadow-ornate block no-underline"
+>
+  <div class="icon-frame">
+    {base.imageUrl ? (
+      <img src={base.imageUrl} alt={base.name} loading="lazy" />
+    ) : (
+      <span class="text-xs text-mute">?</span>
+    )}
+  </div>
+  <div class="flex-1 min-w-0">
+    <div class="text-sm font-semibold text-fg truncate">{base.name}</div>
+    <div class="text-xs text-mute flex gap-2">
+      {showSlot && <span class="capitalize">{base.slot.replace(/_/g, ' ')}</span>}
+      {base.level > 0 && <span>· L{base.level}</span>}
+      {base.variant && base.variant !== 'normal' && (
+        <span class="text-gold capitalize">· {base.variant}</span>
+      )}
+    </div>
+  </div>
+</Tag>

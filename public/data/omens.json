@@ -1,0 +1,484 @@
+[
+  {
+    "id": "aldurs_saga",
+    "name": "Aldur's Saga",
+    "appliesTo": [
+      "Logbook"
+    ],
+    "description": "While this item is active in your inventory your next Logbook adds special modifiers to revealed Grand Expedition areas",
+    "effect": "While this item is active in your inventory your next Logbook adds special modifiers to revealed Grand Expedition areas",
+    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Expedition2/SpecialExpeditionPage5.webp"
+  },
+  {
+    "id": "medveds_saga",
+    "name": "Medved's Saga",
+    "appliesTo": [],
+    "description": "While this item is active in your inventory your next Logbook guarantees a Medved encounter in the revealed Biome",
+    "effect": "While this item is active in your inventory your next Logbook guarantees a Medved encounter in the revealed Biome",
+    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Expedition2/SpecialExpeditionPage3.webp"
+  },
+  {
+    "id": "olroths_saga",
+    "name": "Olroth's Saga",
+    "appliesTo": [],
+    "description": "While this item is active in your inventory your next Logbook guarantees an Olroth encounter in the revealed Biome",
+    "effect": "While this item is active in your inventory your next Logbook guarantees an Olroth encounter in the revealed Biome",
+    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Expedition2/SpecialExpeditionPage1.webp"
+  },
+  {
+    "id": "omen_of_abyssal_echoes",
+    "name": "Omen of Abyssal Echoes",
+    "appliesTo": [],
+    "description": "While this item is active in your inventory the next time you reveal Desecrated modifiers you can reroll the options once",
+    "effect": "While this item is active in your inventory the next time you reveal Desecrated modifiers you can reroll the options once",
+    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/OmenOnAbyssRerollOptions.webp"
+  },
+  {
+    "id": "omen_of_amelioration",
+    "name": "Omen of Amelioration",
+    "appliesTo": [],
+    "description": "While this item is active in your inventory will prevent 75% of Experience loss when you die",
+    "effect": "While this item is active in your inventory will prevent 75% of Experience loss when you die",
+    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/VoodooOmens3Blue.webp"
+  },
+  {
+    "id": "omen_of_answered_prayers",
+    "name": "Omen of Answered Prayers",
+    "appliesTo": [
+      "Shrine you click on"
+    ],
+    "description": "While this item is active in your inventory the next Shrine you click on will grant an additional Effect",
+    "effect": "While this item is active in your inventory the next Shrine you click on will grant an additional Effect",
+    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/VoodooOmens4Blue.webp"
+  },
+  {
+    "id": "omen_of_bartering",
+    "name": "Omen of Bartering",
+    "appliesTo": [
+      "sold item's Gold value"
+    ],
+    "description": "While this item is active in your inventory your next sold item's Gold value will be incorrectly assessed by the Vendor",
+    "effect": "While this item is active in your inventory your next sold item's Gold value will be incorrectly assessed by the Vendor",
+    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/OmenSellVendorRandomise.webp"
+  },
+  {
+    "id": "omen_of_catalysing_exaltation",
+    "name": "Omen of Catalysing Exaltation",
+    "appliesTo": [
+      "Exalted Orb"
+    ],
+    "description": "While this item is active in your inventory your next Exalted Orb will consume all Catalyst Quality to increase the chance of the corresponding type of Modifier",
+    "effect": "While this item is active in your inventory your next Exalted Orb will consume all Catalyst Quality to increase the chance of the corresponding type of Modifier",
+    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/OmenOnExaltConsumeQuality.webp"
+  },
+  {
+    "id": "omen_of_chance",
+    "name": "Omen of Chance",
+    "appliesTo": [
+      "Orb of Chance"
+    ],
+    "description": "While this item is active in your inventory your next Orb of Chance will not destroy the Item",
+    "effect": "While this item is active in your inventory your next Orb of Chance will not destroy the Item",
+    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/OmenOnChanceNotDestroy.webp"
+  },
+  {
+    "id": "omen_of_chaotic_effectiveness",
+    "name": "Omen of Chaotic Effectiveness",
+    "appliesTo": [
+      "Chaos Orb"
+    ],
+    "description": "While this item is active in your inventory your next Chaos Orb will replace all Modifiers on a Waystone with Modifiers that do not grant Monster Effectiveness",
+    "effect": "While this item is active in your inventory your next Chaos Orb will replace all Modifiers on a Waystone with Modifiers that do not grant Monster Effectiveness",
+    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/OmenOnChaosMapMonsterEffectiveness.webp"
+  },
+  {
+    "id": "omen_of_chaotic_monsters",
+    "name": "Omen of Chaotic Monsters",
+    "appliesTo": [
+      "Chaos Orb"
+    ],
+    "description": "While this item is active in your inventory your next Chaos Orb will replace all Modifiers on a Waystone with Modifiers that do not grant Monster Rarity",
+    "effect": "While this item is active in your inventory your next Chaos Orb will replace all Modifiers on a Waystone with Modifiers that do not grant Monster Rarity",
+    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/OmenOnChaosMapItemQuantity.webp"
+  },
+  {
+    "id": "omen_of_chaotic_quantity",
+    "name": "Omen of Chaotic Quantity",
+    "appliesTo": [
+      "Chaos Orb"
+    ],
+    "description": "While this item is active in your inventory your next Chaos Orb will replace all Modifiers on a Waystone with Modifiers that do not grant Pack Size",
+    "effect": "While this item is active in your inventory your next Chaos Orb will replace all Modifiers on a Waystone with Modifiers that do not grant Pack Size",
+    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/OmenOnChaosMapPackSize.webp"
+  },
+  {
+    "id": "omen_of_chaotic_rarity",
+    "name": "Omen of Chaotic Rarity",
+    "appliesTo": [
+      "Chaos Orb"
+    ],
+    "description": "While this item is active in your inventory your next Chaos Orb will replace all Modifiers on a Waystone with Modifiers that do not grant Item Rarity",
+    "effect": "While this item is active in your inventory your next Chaos Orb will replace all Modifiers on a Waystone with Modifiers that do not grant Item Rarity",
+    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/OmenOnChaosMapItemRarity.webp"
+  },
+  {
+    "id": "omen_of_corruption",
+    "name": "Omen of Corruption",
+    "appliesTo": [
+      "Vaal Orb"
+    ],
+    "description": "While this item is active in your inventory your next Vaal Orb will always result in change",
+    "effect": "While this item is active in your inventory your next Vaal Orb will always result in change",
+    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/VoodooOmens3Red.webp"
+  },
+  {
+    "id": "omen_of_dextral_alchemy",
+    "name": "Omen of Dextral Alchemy",
+    "appliesTo": [
+      "Orb of Alchemy"
+    ],
+    "description": "While this item is active in your inventory your next Orb of Alchemy will result in the maximum number of suffix modifiers",
+    "effect": "While this item is active in your inventory your next Orb of Alchemy will result in the maximum number of suffix modifiers",
+    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/VoodooOmens2Green.webp"
+  },
+  {
+    "id": "omen_of_dextral_annulment",
+    "name": "Omen of Dextral Annulment",
+    "appliesTo": [
+      "Orb of Annulment"
+    ],
+    "description": "While this item is active in your inventory your next Orb of Annulment will remove only suffix modifiers",
+    "effect": "While this item is active in your inventory your next Orb of Annulment will remove only suffix modifiers",
+    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/VoodooOmens3Purple.webp"
+  },
+  {
+    "id": "omen_of_dextral_coronation",
+    "name": "Omen of Dextral Coronation",
+    "appliesTo": [
+      "Regal Orb"
+    ],
+    "description": "While this item is active in your inventory your next Regal Orb will add only suffix modifiers",
+    "effect": "While this item is active in your inventory your next Regal Orb will add only suffix modifiers",
+    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/VoodooOmens2Red.webp"
+  },
+  {
+    "id": "omen_of_dextral_crystallisation",
+    "name": "Omen of Dextral Crystallisation",
+    "appliesTo": [
+      "Perfect or Corrupted Essence"
+    ],
+    "description": "While this item is active in your inventory your next Perfect or Corrupted Essence will remove only Suffix modifiers",
+    "effect": "While this item is active in your inventory your next Perfect or Corrupted Essence will remove only Suffix modifiers",
+    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/OmenOnPerfectEssenceSuffix.webp"
+  },
+  {
+    "id": "omen_of_dextral_erasure",
+    "name": "Omen of Dextral Erasure",
+    "appliesTo": [
+      "Chaos Orb"
+    ],
+    "description": "While this item is active in your inventory your next Chaos Orb will remove only suffix modifiers",
+    "effect": "While this item is active in your inventory your next Chaos Orb will remove only suffix modifiers",
+    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/VoodooOmens3Dark.webp"
+  },
+  {
+    "id": "omen_of_dextral_exaltation",
+    "name": "Omen of Dextral Exaltation",
+    "appliesTo": [
+      "Exalted Orb"
+    ],
+    "description": "While this item is active in your inventory your next Exalted Orb will add only suffix modifiers",
+    "effect": "While this item is active in your inventory your next Exalted Orb will add only suffix modifiers",
+    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/VoodooOmens3Yellow.webp"
+  },
+  {
+    "id": "omen_of_dextral_necromancy",
+    "name": "Omen of Dextral Necromancy",
+    "appliesTo": [
+      "Desecration attempt"
+    ],
+    "description": "While this item is active in your inventory your next Desecration attempt will add only suffix modifiers",
+    "effect": "While this item is active in your inventory your next Desecration attempt will add only suffix modifiers",
+    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/OmenOnAbyssAddSuffixes.webp"
+  },
+  {
+    "id": "omen_of_gambling",
+    "name": "Omen of Gambling",
+    "appliesTo": [
+      "Gamble purchase"
+    ],
+    "description": "While this item is active in your inventory your next Gamble purchase will have a 50% chance of costing no Gold and not consuming this Omen",
+    "effect": "While this item is active in your inventory your next Gamble purchase will have a 50% chance of costing no Gold and not consuming this Omen",
+    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/OmenGambleNoGoldCost.webp"
+  },
+  {
+    "id": "omen_of_greater_annulment",
+    "name": "Omen of Greater Annulment",
+    "appliesTo": [
+      "Orb of Annulment"
+    ],
+    "description": "While this item is active in your inventory your next Orb of Annulment will remove two modifiers",
+    "effect": "While this item is active in your inventory your next Orb of Annulment will remove two modifiers",
+    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/VoodooOmens1Purple.webp"
+  },
+  {
+    "id": "omen_of_greater_exaltation",
+    "name": "Omen of Greater Exaltation",
+    "appliesTo": [
+      "Exalted Orb"
+    ],
+    "description": "While this item is active in your inventory your next Exalted Orb will add two random modifiers",
+    "effect": "While this item is active in your inventory your next Exalted Orb will add two random modifiers",
+    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/VoodooOmens1Yellow.webp"
+  },
+  {
+    "id": "omen_of_homogenising_coronation",
+    "name": "Omen of Homogenising Coronation",
+    "appliesTo": [
+      "Regal Orb"
+    ],
+    "description": "While this item is active in your inventory your next Regal Orb will add a Modifier of the same type as an existing Modifier on the Item",
+    "effect": "While this item is active in your inventory your next Regal Orb will add a Modifier of the same type as an existing Modifier on the Item",
+    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/OmenOnRegalAddExistingModType.webp"
+  },
+  {
+    "id": "omen_of_homogenising_exaltation",
+    "name": "Omen of Homogenising Exaltation",
+    "appliesTo": [
+      "Exalted Orb"
+    ],
+    "description": "While this item is active in your inventory your next Exalted Orb will add a Modifier of the same type as an existing Modifier on the Item",
+    "effect": "While this item is active in your inventory your next Exalted Orb will add a Modifier of the same type as an existing Modifier on the Item",
+    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/OmenOnExaltAddExistingModType.webp"
+  },
+  {
+    "id": "omen_of_light",
+    "name": "Omen of Light",
+    "appliesTo": [
+      "Orb of Annulment"
+    ],
+    "description": "While this item is active in your inventory your next Orb of Annulment will remove only Desecrated modifiers",
+    "effect": "While this item is active in your inventory your next Orb of Annulment will remove only Desecrated modifiers",
+    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/OmenOnAnnulRemoveAbyssMod.webp"
+  },
+  {
+    "id": "omen_of_putrefaction",
+    "name": "Omen of Putrefaction",
+    "appliesTo": [
+      "Desecration attempt"
+    ],
+    "description": "While this item is active in your inventory your next Desecration attempt will replace all modifiers on the item creating an item with up to 6 Unrevealed modifiers and Corrupting the item",
+    "effect": "While this item is active in your inventory your next Desecration attempt will replace all modifiers on the item creating an item with up to 6 Unrevealed modifiers and Corrupting the item",
+    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/OmenOnAbyssVeilAllAndCorrupt.webp"
+  },
+  {
+    "id": "omen_of_recombination",
+    "name": "Omen of Recombination",
+    "appliesTo": [],
+    "description": "",
+    "effect": "",
+    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/OmenSellVendorRandomise.webp"
+  },
+  {
+    "id": "omen_of_refreshment",
+    "name": "Omen of Refreshment",
+    "appliesTo": [],
+    "description": "While this item is active in your inventory will fully recover your flask and charm charges when you reach Low Life",
+    "effect": "While this item is active in your inventory will fully recover your flask and charm charges when you reach Low Life",
+    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/VoodooOmens1Blue.webp"
+  },
+  {
+    "id": "omen_of_reinforcements",
+    "name": "Omen of Reinforcements",
+    "appliesTo": [
+      "Rogue Exile you encounter"
+    ],
+    "description": "While this item is active in your inventory the next Rogue Exile you encounter will summon an ally",
+    "effect": "While this item is active in your inventory the next Rogue Exile you encounter will summon an ally",
+    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/VoodooOmens4Purple.webp"
+  },
+  {
+    "id": "omen_of_resurgence",
+    "name": "Omen of Resurgence",
+    "appliesTo": [],
+    "description": "While this item is active in your inventory fully recover your Life, Mana and Energy Shield when you reach Low Life",
+    "effect": "While this item is active in your inventory fully recover your Life, Mana and Energy Shield when you reach Low Life",
+    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/VoodooOmens2Blue.webp"
+  },
+  {
+    "id": "omen_of_sanctification",
+    "name": "Omen of Sanctification",
+    "appliesTo": [
+      "Divine Orb used on a Rare item"
+    ],
+    "description": "While this item is active in your inventory your next Divine Orb used on a Rare item will Sanctify it",
+    "effect": "While this item is active in your inventory your next Divine Orb used on a Rare item will Sanctify it",
+    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/OmenOnDivineSanctify.webp"
+  },
+  {
+    "id": "omen_of_secret_compartments",
+    "name": "Omen of Secret Compartments",
+    "appliesTo": [
+      "Strongbox you click on"
+    ],
+    "description": "While this item is active in your inventory the next Strongbox you click on will be reopenable",
+    "effect": "While this item is active in your inventory the next Strongbox you click on will be reopenable",
+    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/VoodooOmens4Dark.webp"
+  },
+  {
+    "id": "omen_of_sinistral_alchemy",
+    "name": "Omen of Sinistral Alchemy",
+    "appliesTo": [
+      "Orb of Alchemy"
+    ],
+    "description": "While this item is active in your inventory your next Orb of Alchemy will result in the maximum number of prefix modifiers",
+    "effect": "While this item is active in your inventory your next Orb of Alchemy will result in the maximum number of prefix modifiers",
+    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/VoodooOmens1Green.webp"
+  },
+  {
+    "id": "omen_of_sinistral_annulment",
+    "name": "Omen of Sinistral Annulment",
+    "appliesTo": [
+      "Orb of Annulment"
+    ],
+    "description": "While this item is active in your inventory your next Orb of Annulment will remove only prefix modifiers",
+    "effect": "While this item is active in your inventory your next Orb of Annulment will remove only prefix modifiers",
+    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/VoodooOmens2Purple.webp"
+  },
+  {
+    "id": "omen_of_sinistral_coronation",
+    "name": "Omen of Sinistral Coronation",
+    "appliesTo": [
+      "Regal Orb"
+    ],
+    "description": "While this item is active in your inventory your next Regal Orb will add only prefix modifiers",
+    "effect": "While this item is active in your inventory your next Regal Orb will add only prefix modifiers",
+    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/VoodooOmens1Red.webp"
+  },
+  {
+    "id": "omen_of_sinistral_crystallisation",
+    "name": "Omen of Sinistral Crystallisation",
+    "appliesTo": [
+      "Perfect or Corrupted Essence"
+    ],
+    "description": "While this item is active in your inventory your next Perfect or Corrupted Essence will remove only Prefix modifiers",
+    "effect": "While this item is active in your inventory your next Perfect or Corrupted Essence will remove only Prefix modifiers",
+    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/OmenOnPerfectEssencePrefix.webp"
+  },
+  {
+    "id": "omen_of_sinistral_erasure",
+    "name": "Omen of Sinistral Erasure",
+    "appliesTo": [
+      "Chaos Orb"
+    ],
+    "description": "While this item is active in your inventory your next Chaos Orb will remove only prefix modifiers",
+    "effect": "While this item is active in your inventory your next Chaos Orb will remove only prefix modifiers",
+    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/VoodooOmens2Dark.webp"
+  },
+  {
+    "id": "omen_of_sinistral_exaltation",
+    "name": "Omen of Sinistral Exaltation",
+    "appliesTo": [
+      "Exalted Orb"
+    ],
+    "description": "While this item is active in your inventory your next Exalted Orb will add only prefix modifiers",
+    "effect": "While this item is active in your inventory your next Exalted Orb will add only prefix modifiers",
+    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/VoodooOmens2Yellow.webp"
+  },
+  {
+    "id": "omen_of_sinistral_necromancy",
+    "name": "Omen of Sinistral Necromancy",
+    "appliesTo": [
+      "Desecration attempt"
+    ],
+    "description": "While this item is active in your inventory your next Desecration attempt will add only prefix modifiers",
+    "effect": "While this item is active in your inventory your next Desecration attempt will add only prefix modifiers",
+    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/OmenOnAbyssAddPrefixes.webp"
+  },
+  {
+    "id": "omen_of_the_ancients",
+    "name": "Omen of the Ancients",
+    "appliesTo": [
+      "Orb of Chance"
+    ],
+    "description": "While this item is active in your inventory your next Orb of Chance will upgrade the Item to a random Unique of the same Item Class",
+    "effect": "While this item is active in your inventory your next Orb of Chance will upgrade the Item to a random Unique of the same Item Class",
+    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/OmenOnChanceAncientOrb.webp"
+  },
+  {
+    "id": "omen_of_the_blackblooded",
+    "name": "Omen of the Blackblooded",
+    "appliesTo": [
+      "Weapon or Jewellery Desecration attempt"
+    ],
+    "description": "While this item is active in your inventory your next Weapon or Jewellery Desecration attempt will guarantee a random Kurgal modifier",
+    "effect": "While this item is active in your inventory your next Weapon or Jewellery Desecration attempt will guarantee a random Kurgal modifier",
+    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/OmenOnAbyssGuarenteedLichTypeMod3.webp"
+  },
+  {
+    "id": "omen_of_the_blessed",
+    "name": "Omen of the Blessed",
+    "appliesTo": [
+      "Divine Orb"
+    ],
+    "description": "While this item is active in your inventory your next Divine Orb will only reroll Implicit Modifiers",
+    "effect": "While this item is active in your inventory your next Divine Orb will only reroll Implicit Modifiers",
+    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/OmenOnDivineRerollImplicits.webp"
+  },
+  {
+    "id": "omen_of_the_hunt",
+    "name": "Omen of the Hunt",
+    "appliesTo": [
+      "Possessed monster you kill"
+    ],
+    "description": "While this item is active in your inventory the next Possessed monster you kill will release its Azmeri Spirit",
+    "effect": "While this item is active in your inventory the next Possessed monster you kill will release its Azmeri Spirit",
+    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/VoodooOmens4Green.webp"
+  },
+  {
+    "id": "omen_of_the_liege",
+    "name": "Omen of the Liege",
+    "appliesTo": [
+      "Weapon or Jewellery Desecration attempt"
+    ],
+    "description": "While this item is active in your inventory your next Weapon or Jewellery Desecration attempt will guarantee a random Amanamu modifier",
+    "effect": "While this item is active in your inventory your next Weapon or Jewellery Desecration attempt will guarantee a random Amanamu modifier",
+    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/OmenOnAbyssGuarenteedLichTypeMod2.webp"
+  },
+  {
+    "id": "omen_of_the_sovereign",
+    "name": "Omen of the Sovereign",
+    "appliesTo": [
+      "Weapon or Jewellery Desecration attempt"
+    ],
+    "description": "While this item is active in your inventory your next Weapon or Jewellery Desecration attempt will guarantee a random Ulaman modifier",
+    "effect": "While this item is active in your inventory your next Weapon or Jewellery Desecration attempt will guarantee a random Ulaman modifier",
+    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/OmenOnAbyssGuarenteedLichTypeMod1.webp"
+  },
+  {
+    "id": "omen_of_whittling",
+    "name": "Omen of Whittling",
+    "appliesTo": [
+      "Chaos Orb"
+    ],
+    "description": "While this item is active in your inventory your next Chaos Orb will remove the lowest level modifier",
+    "effect": "While this item is active in your inventory your next Chaos Orb will remove the lowest level modifier",
+    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/VoodooOmens1Dark.webp"
+  },
+  {
+    "id": "uhtreds_saga",
+    "name": "Uhtred's Saga",
+    "appliesTo": [],
+    "description": "While this item is active in your inventory your next Logbook guarantees an Uhtred encounter in the revealed Biome",
+    "effect": "While this item is active in your inventory your next Logbook guarantees an Uhtred encounter in the revealed Biome",
+    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Expedition2/SpecialExpeditionPage4.webp"
+  },
+  {
+    "id": "voranas_saga",
+    "name": "Vorana's Saga",
+    "appliesTo": [],
+    "description": "While this item is active in your inventory your next Logbook guarantees a Vorana encounter in the revealed Biome",
+    "effect": "While this item is active in your inventory your next Logbook guarantees a Vorana encounter in the revealed Biome",
+    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Expedition2/SpecialExpeditionPage2.webp"
+  }
+]

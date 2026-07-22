@@ -1,0 +1,69 @@
+---
+import Base from '~/layouts/Base.astro';
+import BaseCard from '~/components/BaseCard.astro';
+import { mods, bases } from '~/lib/data';
+import { useT } from '~/lib/i18n';
+
+const locale = (Astro.locals.locale as 'en' | 'pt') ?? 'en';
+const t = useT(locale);
+
+export function getStaticPaths() {
+  return mods.map((mod) => ({
+    params: { id: mod.id },
+    props: { mod },
+  }));
+}
+
+const { mod } = Astro.props;
+const compatibleBases = bases.filter((b) => mod.domain.length === 0 || mod.domain.includes(b.slot)).slice(0, 24);
+const tierDigits = mod.tier === 1 ? '111' : mod.tier === 2 ? '11' : mod.tier === 3 ? '1' : mod.tier.toString();
+---
+
+<Base title={`${mod.name} | CraftClass`}>
+  <nav class="text-sm text-mute mb-4">
+    <a href="/mods">{t('mods.detail.breadcrumb')}</a> / <span class="text-fg truncate">{mod.name.slice(0, 60)}</span>
+  </nav>
+
+  <div class="parchment p-6 mb-6">
+    <div class="flex items-start gap-4">
+      <div class="tier-marker text-3xl w-16 text-right pt-2">{tierDigits}</div>
+      <div class="flex-1">
+        <div class="flex flex-wrap items-baseline gap-2 mb-2">
+          <span class={`tag tag-${mod.type}`}>{t(`mods.type.${mod.type}` as 'mods.type.prefix')}</span>
+          {mod.tags.map((tg) => <span class="tag text-fg-dim">{tg.replace(/_/g, ' ')}</span>)}
+        </div>
+        <h1 class="text-2xl mb-2 bg-gradient-to-r from-gold-bright via-gold to-yellow-300 bg-clip-text text-transparent">{mod.description}</h1>
+        <div class="text-sm text-dim">
+          {t('mods.detail.levelAndTier', { level: mod.level, tier: mod.tier })}
+        </div>
+      </div>
+    </div>
+
+    {mod.statRanges.length > 0 && (
+      <>
+        <div class="divider-ornate"></div>
+        <h3>{t('mods.detail.statranges')}</h3>
+        <div class="grid md:grid-cols-2 gap-2 mt-2">
+          {mod.statRanges.map((s) => (
+            <div class="text-sm flex justify-between border-b border-border py-1">
+              <span class="text-mute">{s.stat.slice(-30)}</span>
+              <span class="font-mono text-gold">{s.range.min} .. {s.range.max}</span>
+            </div>
+          ))}
+        </div>
+      </>
+    )}
+  </div>
+
+  <section class="mb-6">
+    <h2>{t('mods.detail.compatible')}</h2>
+    <p class="text-dim text-sm mb-3">
+      {t('mods.detail.compatible.shown', { count: compatibleBases.length })}
+    </p>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+      {compatibleBases.map((base) => (
+        <BaseCard base={base} href={`/bases/${base.id}`} />
+      ))}
+    </div>
+  </section>
+</Base>

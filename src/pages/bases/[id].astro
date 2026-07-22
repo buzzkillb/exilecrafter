@@ -1,0 +1,143 @@
+---
+import Base from '~/layouts/Base.astro';
+import AffixSlots from '~/components/AffixSlots.astro';
+import ModBadge from '~/components/ModBadge.astro';
+import { bases, getModsForBase } from '~/lib/data';
+import { getMethod } from '~/lib/methods';
+import { useT } from '~/lib/i18n';
+
+const locale = (Astro.locals.locale as 'en' | 'pt') ?? 'en';
+const t = useT(locale);
+
+export function getStaticPaths() {
+  return bases.map((base) => ({
+    params: { id: base.id },
+    props: { base },
+  }));
+}
+
+const { base } = Astro.props;
+const { prefix, suffix } = getModsForBase(base);
+const allMods = [...prefix, ...suffix].sort((a, b) => a.tier - b.tier || a.level - b.level);
+
+const slotLabel = t(`slots.${base.slot}` as 'slots.helmet');
+const suggestedMethods = ['transmute_aug_regal', 'al_then_exalt', 'essence_crafting', 'alt_regal_until']
+  .map((id) => getMethod(id))
+  .filter(Boolean);
+---
+
+<Base title={`${base.name} | CraftClass`}>
+  <nav class="text-sm text-mute mb-4">
+    <a href="/bases">Bases</a> / <span class="text-fg">{base.name}</span>
+  </nav>
+
+  <div class="grid lg:grid-cols-3 gap-6">
+    <aside class="lg:col-span-1">
+      <div class="parchment p-6 sticky top-24">
+        <div class="text-center mb-4">
+          <div class="icon-frame mx-auto mb-3 w-24 h-24">
+            {base.imageUrl && <img src={base.imageUrl} alt={base.name} class="w-full h-full object-contain" />}
+          </div>
+          <h1 class="text-2xl bg-gradient-to-r from-gold-bright via-gold to-yellow-300 bg-clip-text text-transparent">{base.name}</h1>
+          <div class="text-sm text-mute mt-1">{slotLabel}</div>
+          {base.variant && base.variant !== 'normal' && (
+            <div class="text-xs text-gold mt-1 capitalize">{base.variant} variant</div>
+          )}
+        </div>
+
+        <div class="divider-ornate"></div>
+
+        <dl class="space-y-2 text-sm">
+          <div class="flex justify-between">
+            <dt class="text-mute">{t('bases.detail.itemlevel')}</dt>
+            <dd>{base.level || 1}</dd>
+          </div>
+          <div class="flex justify-between">
+            <dt class="text-mute">{t('bases.detail.prefixslots')}</dt>
+            <dd class="text-prefix font-semibold">{base.affixSlots.prefix}</dd>
+          </div>
+          <div class="flex justify-between">
+            <dt class="text-mute">{t('bases.detail.suffixslots')}</dt>
+            <dd class="text-suffix font-semibold">{base.affixSlots.suffix}</dd>
+          </div>
+          {base.attributes.str ? (
+            <div class="flex justify-between">
+              <dt class="text-mute">{t('bases.detail.reqstr')}</dt>
+              <dd>{base.attributes.str}</dd>
+            </div>
+          ) : null}
+          {base.attributes.dex ? (
+            <div class="flex justify-between">
+              <dt class="text-mute">{t('bases.detail.reqdex')}</dt>
+              <dd>{base.attributes.dex}</dd>
+            </div>
+          ) : null}
+          {base.attributes.int ? (
+            <div class="flex justify-between">
+              <dt class="text-mute">{t('bases.detail.reqint')}</dt>
+              <dd>{base.attributes.int}</dd>
+            </div>
+          ) : null}
+          {Object.entries(base.baseStats).map(([k, v]) => (
+            <div class="flex justify-between">
+              <dt class="text-mute capitalize">{k.replace(/_/g, ' ')}</dt>
+              <dd>{v}</dd>
+            </div>
+          ))}
+        </dl>
+
+        <div class="divider-ornate"></div>
+
+        <a href={`/simulator?base=${base.id}`} class="btn btn-gold w-full justify-center">
+          {t('bases.detail.simulator')}
+        </a>
+      </div>
+    </aside>
+
+    <main class="lg:col-span-2">
+      <section class="mb-6">
+        <h2>{t('bases.detail.slots.title')}</h2>
+        <p class="text-dim text-sm mb-4">
+          {t('bases.detail.slots.subtitle', { total: base.affixSlots.prefix + base.affixSlots.suffix })}
+        </p>
+        <AffixSlots base={base} affixes={[]} title={`Empty ${base.name}`} />
+      </section>
+
+      <section class="mb-6">
+        <h2>{t('modpool.title')}</h2>
+        <p class="text-dim text-sm mb-4">
+          {t('modpool.subtitle', { count: prefix.length + suffix.length })}
+        </p>
+        {allMods.length > 0 ? (
+          <div class="grid gap-2">
+            {allMods.slice(0, 50).map((mod) => (
+              <ModBadge mod={mod} />
+            ))}
+          </div>
+        ) : (
+          <div class="parchment p-4 text-dim text-sm" set:html={t('modpool.empty', { cmd: '<code class="font-mono text-gold">npm run refresh</code>' })} />
+        )}
+        {allMods.length > 50 && (
+          <div class="text-xs text-mute mt-3">
+            {t('modpool.truncated', { count: allMods.length })}
+          </div>
+        )}
+      </section>
+
+      <section class="mb-6">
+        <h2>{t('modpool.suggested')}</h2>
+        <p class="text-dim text-sm mb-4">
+          {t('modpool.suggested.subtitle', { slot: slotLabel.toLowerCase() })}
+        </p>
+        <div class="grid md:grid-cols-2 gap-3">
+          {suggestedMethods.map((method) => method && (
+            <a href={`/guides#${method.id}`} class="parchment p-4 hover:border-gold transition-colors block no-underline">
+              <div class="font-display text-gold-bright">{method!.name}</div>
+              <p class="text-xs text-dim mt-2">{method!.description}</p>
+            </a>
+          ))}
+        </div>
+      </section>
+    </main>
+  </div>
+</Base>

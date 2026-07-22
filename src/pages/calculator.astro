@@ -1,0 +1,403 @@
+---
+import Base from '~/layouts/Base.astro';
+import { bases } from '~/lib/data';
+import { useT } from '~/lib/i18n';
+
+const locale = (Astro.locals.locale as 'en' | 'pt') ?? 'en';
+const t = useT(locale);
+---
+
+<Base title={`${t('calculator.title')} | CraftClass`}>
+  <section class="relative overflow-hidden rounded-xl border border-border bg-gradient-to-b from-bg-card/80 to-bg p-6 md:p-8 mb-8 text-center">
+    <div class="absolute -top-20 -left-20 w-48 h-48 bg-gold/5 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute -bottom-12 -right-12 w-36 h-36 bg-gold/5 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="relative">
+      <div class="text-4xl mb-3">🧮</div>
+      <h1 class="text-3xl md:text-4xl font-display font-bold bg-gradient-to-r from-gold-bright via-gold to-yellow-300 bg-clip-text text-transparent mb-2">
+        {t('calculator.title')}
+      </h1>
+      <p class="text-sm text-dim max-w-xl mx-auto">{t('calculator.subtitle')}</p>
+    </div>
+  </section>
+
+  <div class="grid lg:grid-cols-3 gap-6">
+    <aside class="lg:col-span-1">
+      <div class="parchment p-4 space-y-4">
+        <div>
+          <label class="block text-xs text-mute mb-1">{t('calculator.base.label')}</label>
+          <select id="base" class="w-full bg-bg border border-border-strong rounded px-3 py-2 text-sm">
+            <option value="">{t('calculator.base.placeholder')}</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs text-mute mb-1">{t('calculator.ilvl.label')}</label>
+          <input id="ilvl" type="number" value="80" min="1" max="100" class="w-full bg-bg border border-border-strong rounded px-3 py-2 text-sm" />
+        </div>
+
+        <div>
+          <label class="block text-xs text-mute mb-1">{t('calculator.op.label')}</label>
+          <select id="operation" class="w-full bg-bg border border-border-strong rounded px-3 py-2 text-sm">
+            <option value="alchemy">{t('calculator.op.alchemy')}</option>
+            <option value="chaos">{t('calculator.op.chaos')}</option>
+            <option value="exalt">{t('calculator.op.exalt')}</option>
+            <option value="regal">{t('calculator.op.regal')}</option>
+            <option value="transmute">{t('calculator.op.transmute')}</option>
+            <option value="augment">{t('calculator.op.augment')}</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs text-mute mb-1">{t('calculator.modsearch.label')}</label>
+          <input id="mod-search" type="text" placeholder={t('calculator.modsearch.placeholder')} class="w-full bg-bg border border-border-strong rounded px-3 py-2 text-sm" />
+        </div>
+
+        <div id="mod-results" class="space-y-1 max-h-64 overflow-y-auto text-xs"></div>
+
+        <div>
+          <label class="block text-xs text-mute mb-1">{t('calculator.method.label')}</label>
+          <div class="flex gap-2">
+            <label class="flex items-center gap-1 text-sm">
+              <input type="radio" name="method" value="exact" checked /> {t('calculator.method.exact')}
+            </label>
+            <label class="flex items-center gap-1 text-sm">
+              <input type="radio" name="method" value="monte" /> {t('calculator.method.monte')}
+            </label>
+          </div>
+        </div>
+
+        <button id="calc-btn" class="btn btn-gold w-full justify-center" disabled>{t('calculator.calculate')}</button>
+        <div id="calc-loading" class="hidden text-center text-sm text-dim py-2">
+          <span class="inline-block animate-spin mr-1">⟳</span> {t('calculator.loading')}
+        </div>
+      </div>
+    </aside>
+
+    <section class="lg:col-span-2">
+      <div class="parchment p-6">
+        <h3>{t('calculator.result')}</h3>
+        <div id="result-display" class="text-center py-12">
+          <div class="text-6xl font-display text-mute">~</div>
+          <div class="text-dim mt-2 text-sm">{t('calculator.result.empty')}</div>
+        </div>
+        <div id="warning" class="hidden mt-4 parchment p-3 text-xs text-dim">
+          ⚠️ {t('calculator.warning')}
+        </div>
+      </div>
+
+      <div class="parchment p-4 mt-4 text-sm text-dim leading-relaxed space-y-3">
+        <h4 class="!mt-0 text-fg font-semibold">{t('calculator.how.title')}</h4>
+        <p>{t('calculator.how.body1')}</p>
+        <div class="p-3 rounded bg-bg-card/40 border border-border">
+          <p class="text-xs text-fg font-semibold mb-1">{t('calculator.how.example')}</p>
+          <ol class="text-xs space-y-1" id="calculator-example-steps">
+            <li><span class="text-gold">1.</span> {t('calculator.how.step1')}</li>
+            <li><span class="text-gold">2.</span> {t('calculator.how.step2')}</li>
+            <li><span class="text-gold">3.</span> {t('calculator.how.step3')}</li>
+            <li><span class="text-gold">4.</span> {t('calculator.how.step4')}</li>
+            <li><span class="text-gold">5.</span> {t('calculator.how.step5')}</li>
+          </ol>
+          <p class="text-xs text-mute mt-1">{t('calculator.how.tip')}</p>
+        </div>
+        <p class="text-xs text-mute">{t('calculator.how.body2')}</p>
+      </div>
+    </section>
+  </div>
+</Base>
+
+<script>
+  (async () => {
+    const baseSel = document.getElementById('base') as HTMLSelectElement;
+    const ilvlInput = document.getElementById('ilvl') as HTMLInputElement;
+    const opSel = document.getElementById('operation') as HTMLSelectElement;
+    const modSearch = document.getElementById('mod-search') as HTMLInputElement;
+    const modResults = document.getElementById('mod-results')!;
+    const calcBtn = document.getElementById('calc-btn') as HTMLButtonElement;
+    const calcLoading = document.getElementById('calc-loading')!;
+    const resultDisplay = document.getElementById('result-display')!;
+    const warning = document.getElementById('warning')!;
+
+    let data: any = null;
+    let dataLoaded = false;
+    let selectedModIds = new Set<string>();
+    let computing = false;
+
+    // Slot display labels
+    const slotLabels: Record<string, string> = {
+      jewel: 'Jewels', helmet: 'Helmets', body_armour: 'Body Armour',
+      gloves: 'Gloves', boots: 'Boots', belt: 'Belts',
+      amulet: 'Amulets', ring: 'Rings', shield: 'Shields',
+      quiver: 'Quivers', focus: 'Foci', weapon_1h: 'One-Hand Weapons',
+      weapon_2h: 'Two-Hand Weapons', charm: 'Charms',
+      waystone: 'Waystones', tablet: 'Tablets', relic: 'Relics',
+    };
+    const slotOrder = ['jewel', 'helmet', 'body_armour', 'gloves', 'boots', 'belt', 'amulet', 'ring', 'shield', 'quiver', 'focus', 'weapon_1h', 'weapon_2h', 'charm', 'waystone', 'tablet', 'relic'];
+
+    // Load data
+    calcLoading.classList.remove('hidden');
+    try {
+      const [basesResp, modsResp, weightsResp] = await Promise.all([
+        fetch('/data/bases.json'),
+        fetch('/data/mods.json'),
+        fetch('/data/weights.json'),
+      ]);
+      if (!basesResp.ok || !modsResp.ok) throw new Error('Failed to load data from /data/');
+      const bases = await basesResp.json();
+      const mods = await modsResp.json();
+      const weights = weightsResp.ok ? await weightsResp.json() : [];
+
+      data = { bases, mods, weights };
+      dataLoaded = true;
+      calcBtn.disabled = false;
+      calcLoading.classList.add('hidden');
+
+      // Populate base dropdown grouped by slot
+      populateBaseDropdown(bases);
+    } catch (err) {
+      calcLoading.innerHTML = `<span class="text-corrupted">Failed to load data: ${(err as Error).message}</span>`;
+      return;
+    }
+
+    function populateBaseDropdown(bases: any[]) {
+      const groups: Record<string, any[]> = {};
+      for (const b of bases) {
+        const key = b.slot || 'unknown';
+        if (!groups[key]) groups[key] = [];
+        groups[key].push(b);
+      }
+      baseSel.innerHTML = '<option value="">Choose a base...</option>';
+      for (const slot of slotOrder) {
+        const items = groups[slot];
+        if (!items || items.length === 0) continue;
+        const label = slotLabels[slot] || slot.replace(/_/g, ' ');
+        const group = document.createElement('optgroup');
+        group.label = `${label} (${items.length})`;
+        items.sort((a: any, b: any) => a.name.localeCompare(b.name));
+        for (const b of items) {
+          const opt = document.createElement('option');
+          opt.value = b.id;
+          opt.textContent = b.name;
+          group.appendChild(opt);
+        }
+        baseSel.appendChild(group);
+      }
+    }
+
+    // Re-populate dropdown when base changes (also triggers mod search update)
+    baseSel.addEventListener('change', () => {
+      selectedModIds.clear();
+      modResults.innerHTML = '';
+      modSearch.value = '';
+      resultDisplay.innerHTML = `
+        <div class="text-6xl font-display text-mute">~</div>
+        <div class="text-dim mt-2 text-sm">Pick target mods to calculate odds.</div>`;
+      warning.classList.add('hidden');
+    });
+
+    // Operation description helper
+    const opDescriptions: Record<string, string> = {
+      transmute: 'Adds 1 random mod (normal to magic)',
+      augment: 'Adds 1 mod (if magic with 1 mod)',
+      alchemy: 'Adds 4 random mods (normal to rare)',
+      regal: 'Adds 1 mod (magic to rare)',
+      exalt: 'Adds 1 mod (rare)',
+      chaos: 'Rerolls all mods (rare)',
+    };
+
+    // Mod search — filter by eligibility for the selected base
+    function renderModResults(term: string) {
+      const baseId = baseSel.value;
+      const base = data.bases.find((b: any) => b.id === baseId);
+      if (!base) { modResults.innerHTML = '<div class="text-mute py-1">Pick a base first.</div>'; return; }
+
+      const ilvl = parseInt(ilvlInput.value || '80');
+      const eligible = data.mods.filter((m: any) => {
+        if (m.level > ilvl) return false;
+        if (m.domain && !m.domain.includes(base.slot)) return false;
+        return true;
+      });
+
+      const q = term.toLowerCase().trim();
+      const matched = q ? eligible.filter((m: any) =>
+        (m.name || m.description || '').toLowerCase().includes(q)
+      ) : [];
+
+      // Show count when no search
+      if (!q) {
+        const pCount = eligible.filter((m: any) => m.type === 'prefix').length;
+        const sCount = eligible.filter((m: any) => m.type === 'suffix').length;
+        modResults.innerHTML = `
+          <div class="text-mute py-1">${eligible.length} eligible mods (${pCount}P / ${sCount}S). Type to search.</div>`;
+        return;
+      }
+
+      if (matched.length === 0) {
+        modResults.innerHTML = '<div class="text-mute py-1">No matching mods.</div>';
+        return;
+      }
+
+      modResults.innerHTML = matched.slice(0, 30).map((m: any) => {
+        const tierLabel = `T${m.tier}`;
+        const typeCls = m.type === 'prefix' ? 'text-prefix' : 'text-suffix';
+        const checked = selectedModIds.has(m.id);
+        const attrId = `mod-chk-${CSS.escape(m.id)}`;
+        const desc = (m.description || m.name || '').slice(0, 70);
+        return `
+          <label class="mod-item flex items-start gap-2 p-1.5 rounded hover:bg-bg-card/60 cursor-pointer ${checked ? 'bg-bg-card border border-gold/30' : ''}" for="${attrId}" data-mod-id="${m.id}">
+            <input type="checkbox" id="${attrId}" class="mt-0.5 accent-gold mod-checkbox" data-mod-id="${m.id}" ${checked ? 'checked' : ''} />
+            <div class="flex-1 min-w-0">
+              <div class="${typeCls} text-xs leading-tight">
+                <span class="font-medium">${tierLabel}</span>
+                <span class="text-dim font-light">(${m.type})</span>
+              </div>
+              <div class="text-fg text-xs leading-relaxed">${escapeHtml(desc)}</div>
+            </div>
+          </label>
+        `;
+      }).join('');
+
+      // Wire checkbox clicks to selectedModIds
+      modResults.querySelectorAll<HTMLInputElement>('.mod-checkbox').forEach((cb) => {
+        cb.addEventListener('change', () => {
+          const id = cb.dataset.modId!;
+          if (cb.checked) selectedModIds.add(id);
+          else selectedModIds.delete(id);
+          // Re-render to update highlight state
+          renderModResults(modSearch.value);
+        });
+      });
+    }
+
+    modSearch.addEventListener('input', () => renderModResults(modSearch.value));
+    ilvlInput.addEventListener('input', () => {
+      if (modSearch.value) renderModResults(modSearch.value);
+    });
+
+    function escapeHtml(s: string): string {
+      return s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]!));
+    }
+
+    function opToNPicks(op: string): number {
+      return ({ transmute: 1, augment: 1, regal: 1, exalt: 1, alchemy: 4, chaos: 6 } as Record<string, number>)[op] || 1;
+    }
+
+    // Worker-based calculation
+    function createWorker(): Worker | null {
+      try {
+        return new Worker(new URL('/src/lib/workers/probability.worker.ts', import.meta.url));
+      } catch {
+        return null;
+      }
+    }
+
+    function runWorker(worker: Worker, msg: any): Promise<any> {
+      return new Promise((resolve, reject) => {
+        const id = Math.random();
+        const timeout = setTimeout(() => { worker.terminate(); reject(new Error('Worker timed out')); }, 30000);
+        worker.addEventListener('message', function handler(e: MessageEvent) {
+          if (e.data.id === id) {
+            clearTimeout(timeout);
+            worker.removeEventListener('message', handler);
+            worker.terminate();
+            if (e.data.type === 'error') reject(new Error(e.data.message));
+            else resolve(e.data);
+          }
+        });
+        worker.postMessage({ ...msg, id } as any);
+      });
+    }
+
+    function renderResult(p: number, monteCarlo = false, trials = 0, hits = 0) {
+      const pct = (p * 100);
+      const oneIn = p > 0 ? Math.round(1 / p) : Infinity;
+      const pctStr = pct < 0.01 ? '< 0.01%' : pct.toFixed(3) + '%';
+      const approxStr = `~1 in ${oneIn === Infinity ? '∞' : oneIn.toLocaleString()} attempts`;
+      const monteStr = `Simulated ${trials.toLocaleString()} rolls (${hits.toLocaleString()} hits)`;
+      resultDisplay.innerHTML = `
+        <div class="text-7xl font-display text-gold-bright mb-2">${pctStr}</div>
+        <div class="text-dim text-sm">Chance to hit at least one selected mod</div>
+        <div class="text-mute text-xs mt-1">${escapeHtml(approxStr)}</div>
+        ${monteCarlo ? `<div class="text-xs text-mute mt-2">${escapeHtml(monteStr)}</div>` : ''}`;
+    }
+
+    calcBtn.addEventListener('click', async () => {
+      if (computing) return;
+      const baseId = baseSel.value;
+      if (!baseId) { flash(data.i18n?.pickbase || 'Pick a base first.'); return; }
+      if (selectedModIds.size === 0) { flash(data.i18n?.pickmod || 'Select at least one target mod.'); return; }
+
+      const base = data.bases.find((b: any) => b.id === baseId);
+      if (!base) return;
+
+      computing = true;
+      calcBtn.disabled = true;
+      calcBtn.textContent = 'Computing...';
+      resultDisplay.innerHTML = '<div class="text-dim animate-pulse py-8">Running the numbers...</div>';
+
+      const ilvl = parseInt(ilvlInput.value || '80');
+      const op = opSel.value;
+      const nPicks = opToNPicks(op);
+      const method = (document.querySelector('input[name=method]:checked') as HTMLInputElement)?.value || 'exact';
+
+      const opts: any = {
+        base: { ...base, rarity: 'normal', source: 'poe2db' },
+        mods: data.mods,
+        weights: data.weights,
+        targetIds: [...selectedModIds],
+        ilvl,
+        nPicks,
+      };
+
+      try {
+        const worker = createWorker();
+        if (!worker) throw new Error('Web workers not supported in this browser.');
+
+        let probability: number;
+        if (method === 'monte') {
+          const mc = await runWorker(worker, { type: 'monte_carlo', ...opts, trials: 100000 });
+          probability = mc.value;
+          renderResult(probability, true, mc.trials, mc.hits);
+        } else if (op === 'exalt' || op === 'regal') {
+          const result = await runWorker(worker, { type: 'prob_any_of', ...opts });
+          probability = result.value;
+          renderResult(probability, false);
+        } else {
+          const result = await runWorker(worker, { type: 'prob_at_least_one', ...opts });
+          probability = result.value;
+          renderResult(probability, false);
+        }
+
+        const hasModWeights = data.mods.some((m: any) => typeof m.weight === 'number' && m.weight > 0);
+        warning.classList.toggle('hidden', hasModWeights);
+      } catch (err) {
+        flash(`Calculation error: ${(err as Error).message}`);
+        resultDisplay.innerHTML = `
+          <div class="text-corrupted text-lg">Calculation Failed</div>
+          <div class="text-dim text-xs mt-2">${escapeHtml((err as Error).message)}</div>`;
+      }
+
+      computing = false;
+      calcBtn.disabled = false;
+      calcBtn.textContent = 'Calculate';
+    });
+
+    function flash(msg: string) {
+      const el = document.createElement('div');
+      el.className = 'fixed top-20 right-4 z-50 parchment px-4 py-2 text-sm border border-corrupted';
+      el.textContent = msg;
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 2400);
+    }
+
+    // Keyboard shortcut: Enter triggers calculate
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !calcBtn.disabled && !computing) {
+        const tag = (e.target as HTMLElement)?.tagName;
+        if (tag === 'INPUT' || tag === 'SELECT') {
+          e.preventDefault();
+          calcBtn.click();
+        }
+      }
+    });
+  })();
+</script>

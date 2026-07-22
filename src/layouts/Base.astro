@@ -1,0 +1,47 @@
+---
+import '~/styles/global.css';
+import Header from '~/components/Header.astro';
+import Footer from '~/components/Footer.astro';
+import { season } from '~/lib/data';
+import { useT } from '~/lib/i18n';
+
+interface Props {
+  title?: string;
+  description?: string;
+  bodyClass?: string;
+}
+
+const locale = (Astro.locals.locale as 'en' | 'pt') ?? 'en';
+const t = useT(locale);
+
+const {
+  title = `${t('site.title')} | Path of Exile 2 Crafting Companion`,
+  description = t('site.description'),
+  bodyClass = '',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+    />
+    <title>{title}</title>
+  </head>
+  <body class={bodyClass}>
+    <Header locale={locale} />
+    <main class="container mx-auto px-4 py-8 max-w-7xl">
+      <slot />
+    </main>
+    <Footer locale={locale} />
+  </body>
+</html>

@@ -1,0 +1,24 @@
+---
+import type { Affix } from '~/lib/types';
+
+interface Props {
+  affix?: Affix;
+  type: 'prefix' | 'suffix';
+  index: number;
+}
+const { affix, type, index } = Astro.props;
+---
+
+<div class:list={['affix-slot', type, affix ? 'filled' : '']}>
+  <span class="text-xs uppercase tracking-wider opacity-70 w-12 shrink-0">
+    {type} {index + 1}
+  </span>
+  {affix ? (
+    <span class="text-sm flex-1 truncate">{affix.name}</span>
+  ) : (
+    <span class="text-xs">empty</span>
+  )}
+  {affix && (
+    <span class="text-xs text-mute font-mono">T{affix.tier}</span>
+  )}
+</div>

@@ -1,0 +1,41 @@
+---
+import Base from '~/layouts/Base.astro';
+import { omens } from '~/lib/data';
+import { useT } from '~/lib/i18n';
+
+const locale = (Astro.locals.locale as 'en' | 'pt') ?? 'en';
+const t = useT(locale);
+---
+
+<Base title={`${t('omens.title')} - CraftClass`}>
+  <section class="relative overflow-hidden rounded-xl border border-border bg-gradient-to-b from-bg-card/80 to-bg p-6 md:p-8 mb-8 text-center">
+    <div class="absolute -top-20 -left-20 w-48 h-48 bg-gold/5 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute -bottom-12 -right-12 w-36 h-36 bg-gold/5 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="relative">
+      <div class="text-4xl mb-3">🔮</div>
+      <h1 class="text-3xl md:text-4xl font-display font-bold bg-gradient-to-r from-gold-bright via-gold to-yellow-300 bg-clip-text text-transparent mb-2">
+        {t('omens.title')}
+      </h1>
+      <p class="text-sm text-dim max-w-xl mx-auto">{t('omens.subtitle')}</p>
+    </div>
+  </section>
+
+  <div class="grid md:grid-cols-2 gap-3">
+    {omens.map((omen) => (
+      <div class="parchment p-4 flex gap-3">
+        <div class="icon-frame">
+          {omen.imageUrl && <img src={omen.imageUrl} alt={omen.name} />}
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="font-display text-gold-bright">{omen.name}</div>
+          {omen.appliesTo.length > 0 && (
+            <div class="text-xs text-mute mt-1">
+              {t('omens.appliesTo', { list: omen.appliesTo.join(', ') })}
+            </div>
+          )}
+          <div class="text-xs text-dim mt-2 leading-relaxed">{omen.description}</div>
+        </div>
+      </div>
+    ))}
+  </div>
+</Base>

@@ -1,0 +1,61 @@
+---
+import type { BaseItem, Affix } from '~/lib/types';
+
+interface Props {
+  base: BaseItem;
+  affixes: Affix[];
+  title?: string;
+}
+const { base, affixes, title = 'Item' } = Astro.props;
+
+const prefixSlots = Array.from({ length: base.affixSlots.prefix }, (_, i) => {
+  return affixes.find((a, idx) => a.type === 'prefix' && affixes.filter((b) => b.type === 'prefix').indexOf(a) === i);
+});
+const suffixSlots = Array.from({ length: base.affixSlots.suffix }, (_, i) => {
+  return affixes.find((a, idx) => a.type === 'suffix' && affixes.filter((b) => b.type === 'suffix').indexOf(a) === i);
+});
+---
+
+<div class="parchment p-4">
+  <div class="flex items-center gap-3 mb-4 pb-3 border-b border-border">
+    <div class="icon-frame">
+      {base.imageUrl && <img src={base.imageUrl} alt={base.name} />}
+    </div>
+    <div class="flex-1 min-w-0">
+      <div class="text-base font-display text-gold-bright">{title}</div>
+      <div class="text-xs text-mute">
+        {base.name} · ilvl {base.level}
+      </div>
+    </div>
+  </div>
+
+  <div class="space-y-2">
+    <div class="text-xs uppercase tracking-wider text-prefix mb-1 font-semibold">Prefixes ({base.affixSlots.prefix})</div>
+    {prefixSlots.map((affix, i) => (
+      <slot name="prefix" index={i} affix={affix}>
+        <div class:list={['affix-slot', 'prefix', affix ? 'filled' : '']}>
+          <span class="text-xs uppercase opacity-70 w-12 shrink-0">P{i + 1}</span>
+          {affix ? (
+            <span class="text-sm flex-1 truncate">{affix.name}</span>
+          ) : (
+            <span class="text-xs">empty</span>
+          )}
+          {affix && <span class="text-xs text-mute font-mono">T{affix.tier}</span>}
+        </div>
+      </slot>
+    ))}
+
+    <div class="text-xs uppercase tracking-wider text-suffix mb-1 font-semibold pt-2">Suffixes ({base.affixSlots.suffix})</div>
+    {suffixSlots.map((affix, i) => (
+      <div class:list={['affix-slot', 'suffix', affix ? 'filled' : '']}>
+        <span class="text-xs uppercase opacity-70 w-12 shrink-0">S{i + 1}</span>
+        {affix ? (
+          <span class="text-sm flex-1 truncate">{affix.name}</span>
+        ) : (
+          <span class="text-xs">empty</span>
+        )}
+        {affix && <span class="text-xs text-mute font-mono">T{affix.tier}</span>}
+      </div>
+    ))}
+  </div>
+</div>

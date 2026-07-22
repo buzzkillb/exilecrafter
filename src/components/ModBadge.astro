@@ -1,0 +1,29 @@
+---
+import type { Mod } from '~/lib/types';
+
+interface Props {
+  mod: Mod;
+  showTier?: boolean;
+}
+const { mod, showTier = true } = Astro.props;
+
+const tierDigits = mod.tier === 1 ? '111' : mod.tier === 2 ? '11' : mod.tier === 3 ? '1' : mod.tier.toString();
+const typeClass = `tag-${mod.type}`;
+---
+
+<div class="parchment p-3 flex items-start gap-3">
+  <div class="tier-marker pt-0.5 w-8 text-right">{showTier ? tierDigits : ''}</div>
+  <div class="flex-1 min-w-0">
+    <div class="text-sm">{mod.description}</div>
+    {mod.tags.length > 0 && (
+      <div class="flex flex-wrap gap-1 mt-2">
+        <span class:list={['tag', typeClass]}>
+          {mod.type}
+        </span>
+        {mod.tags.slice(0, 4).map((tag) => (
+          <span class="tag text-fg-dim">{tag.replace(/_/g, ' ')}</span>
+        ))}
+      </div>
+    )}
+  </div>
+</div>

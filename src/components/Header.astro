@@ -1,0 +1,65 @@
+---
+import { season } from '~/lib/data';
+import { useT, type Locale } from '~/lib/i18n';
+import pricesData from '~/../data/processed/prices.json' assert { type: 'json' };
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props as Props;
+const t = useT(locale);
+
+const path = Astro.url.pathname;
+const links = [
+  { href: '/', label: t('nav.home') },
+  { href: '/bases', label: t('nav.bases') },
+  { href: '/mods', label: t('nav.mods') },
+  { href: '/currency', label: t('nav.currency') },
+  { href: '/omens', label: t('nav.omens') },
+  { href: '/simulator', label: t('nav.simulator') },
+  { href: '/calculator', label: t('nav.calculator') },
+  { href: '/guides', label: t('nav.guides') },
+];
+
+const pd = pricesData as { _meta: { chaosPerExalt: number; chaosPerDivine: number; exaltsPerDivine: number; exaltsPerChaos: number; fetchedAt: string; source: string }; [key: string]: unknown };
+const meta = pd._meta || {};
+const chaosPerDivine = meta.chaosPerDivine || 7.5;
+const exaltsPerDivine = meta.exaltsPerDivine || 414;
+const exaltsPerChaos = meta.exaltsPerChaos || 56;
+const fetchedAt = meta.fetchedAt || '';
+---
+
+<header class="site-header">
+  <div class="container mx-auto max-w-7xl px-4 py-3 flex items-center gap-6 flex-wrap">
+    <a href="/" class="brand">CRAFTCLASS</a>
+    <span class="text-xs text-mute hidden md:inline">
+      <span>{t('season.label')}</span> <span class="text-gold">{season.name}</span> · v{season.version}
+    </span>
+    <nav class="flex items-center gap-1 ml-auto flex-wrap">
+      {links.map((l) => (
+        <a
+          href={l.href}
+          class:list={[
+            'px-3 py-1.5 text-sm rounded transition-colors',
+            path === l.href || (l.href !== '/' && path.startsWith(l.href))
+              ? 'text-gold-bright bg-bg-elev'
+              : 'text-fg-dim hover:text-gold-bright hover:bg-bg-elev',
+          ]}
+        >
+          {l.label}
+        </a>
+      ))}
+      <div class="ml-3 flex items-center gap-2 text-xs font-mono whitespace-nowrap" title={"Prices from poe2scout · " + fetchedAt}>
+        <img src="/images/currency/divine_orb.webp" alt="Divine" class="w-4 h-4" />
+        <span class="text-gold-bright">{chaosPerDivine.toFixed(1)}c</span>
+        <span class="text-dim opacity-30">|</span>
+        <img src="/images/currency/chaos_orb.webp" alt="Chaos" class="w-4 h-4" />
+        <span class="text-dim">{exaltsPerChaos}x</span>
+        <span class="text-dim opacity-30">|</span>
+        <img src="/images/currency/exalted_orb.webp" alt="Exalt" class="w-4 h-4" />
+        <span class="text-dim">{exaltsPerDivine}x</span>
+        <span class="text-green-400 text-[10px]" title={"Fetched " + fetchedAt}>live</span>
+      </div>
+    </nav>
+  </div>
+</header>

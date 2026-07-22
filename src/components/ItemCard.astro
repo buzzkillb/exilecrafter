@@ -1,0 +1,241 @@
+---
+// In-game style item display — mimics the PoE2 item tooltip look
+import type { Affix, BaseItem } from '~/lib/types';
+
+interface Props {
+  base: BaseItem;
+  item: {
+    rarity: 'normal' | 'magic' | 'rare' | 'unique';
+    itemLevel: number;
+    affixes: Affix[];
+    implicit?: string;
+    corrupted?: boolean;
+  };
+}
+
+const { base, item } = Astro.props;
+
+const rarityColor = {
+  normal: '#c8c8c8',
+  magic: '#8888ff',
+  rare: '#ffff77',
+  unique: '#af6025',
+}[item.rarity];
+
+const rarityLabel = {
+  normal: 'Normal', magic: 'Magic', rare: 'Rare', unique: 'Unique',
+}[item.rarity];
+
+// Color mods by their primary tag (best-effort guess from tag list)
+function modColor(tags: string[]): string {
+  if (tags.includes('fire')) return '#c44a2a';
+  if (tags.includes('cold')) return '#4a8fc4';
+  if (tags.includes('lightning')) return '#d4c84a';
+  if (tags.includes('chaos')) return '#a04ac4';
+  if (tags.includes('physical')) return '#c9a87a';
+  if (tags.includes('life')) return '#d44a4a';
+  if (tags.includes('mana')) return '#4a6fc4';
+  if (tags.includes('energy_shield') || tags.includes('ward')) return '#6accc4';
+  if (tags.includes('elemental')) return '#c9a14a';
+  if (tags.includes('damage')) return '#c9a14a';
+  if (tags.includes('attack')) return '#c97070';
+  if (tags.includes('speed')) return '#d4c84a';
+  if (tags.includes('critical')) return '#d4c84a';
+  if (tags.includes('caster')) return '#8888ff';
+  if (tags.includes('minion')) return '#a08ac4';
+  if (tags.includes('defences') || tags.includes('armour') || tags.includes('evasion')) return '#c8c8c8';
+  return '#a89a7d'; // default muted
+}
+
+const prefixes = item.affixes.filter((a) => a.type === 'prefix');
+const suffixes = item.affixes.filter((a) => a.type === 'suffix');
+
+const tierIndicator = (tier: number) => `T${tier}`;
+
+const slotTypeLabel = (() => {
+  const map: Record<string, string> = {
+    helmet: 'Helmet', body_armour: 'Body Armour', gloves: 'Gloves',
+    boots: 'Boots', belt: 'Belt', amulet: 'Amulet', ring: 'Ring',
+    shield: 'Shield', quiver: 'Quiver', focus: 'Focus',
+    weapon_1h: 'One Handed Weapon', weapon_2h: 'Two Handed Weapon',
+    flask: 'Flask', charm: 'Charm', jewel: 'Jewel',
+    waystone: 'Waystone', tablet: 'Tablet', relic: 'Relic',
+  };
+  return map[base.slot] || base.slot;
+})();
+---
+
+<div class="item-tooltip">
+  <div class="item-header">
+    <div class="item-name" style={`color: ${rarityColor}`}>{base.name}</div>
+    <div class="item-type">{slotTypeLabel}</div>
+  </div>
+
+  {item.implicit && (
+    <div class="item-section">
+      <div class="item-row">
+        <span class="mod-tier">·</span>
+        <span class="mod-text implicit">{item.implicit}</span>
+      </div>
+    </div>
+  )}
+
+  <div class="separator">
+    <span class="separator-line"></span>
+    <span class="separator-icon">+</span>
+    <span class="separator-line"></span>
+  </div>
+
+  {prefixes.length > 0 && (
+    <div class="item-section">
+      <div class="section-label">Prefix Modifier</div>
+      {prefixes.map((a) => (
+        <div class="item-row">
+          <span class="mod-tier">{tierIndicator(a.tier)}</span>
+          <span class="mod-text" style={`color: ${modColor(a.tags)}`}>{a.name}</span>
+        </div>
+      ))}
+    </div>
+  )}
+
+  {suffixes.length > 0 && prefixes.length > 0 && (
+    <div class="separator">
+      <span class="separator-line"></span>
+      <span class="separator-icon">+</span>
+      <span class="separator-line"></span>
+    </div>
+  )}
+
+  {suffixes.length > 0 && (
+    <div class="item-section">
+      <div class="section-label">Suffix Modifier</div>
+      {suffixes.map((a) => (
+        <div class="item-row">
+          <span class="mod-tier">{tierIndicator(a.tier)}</span>
+          <span class="mod-text" style={`color: ${modColor(a.tags)}`}>{a.name}</span>
+        </div>
+      ))}
+    </div>
+  )}
+
+  {(prefixes.length === 0 && suffixes.length === 0) && (
+    <div class="item-empty">Empty item</div>
+  )}
+
+  <div class="separator plain">
+    <span class="separator-line full"></span>
+  </div>
+
+  <div class="item-footer">
+    <div class="item-rarity">{rarityLabel} · Item Level: {item.itemLevel}</div>
+    {item.corrupted && <div class="corrupted-indicator">Corrupted</div>}
+  </div>
+</div>
+
+<style>
+  .item-tooltip {
+    background: rgba(11, 10, 8, 0.95);
+    border: 1px solid var(--color-border-strong);
+    padding: 0.625rem 0.75rem;
+    font-size: 0.8125rem;
+    line-height: 1.45;
+    color: var(--color-fg);
+  }
+
+  .item-header {
+    text-align: center;
+    margin-bottom: 0.5rem;
+  }
+  .item-name {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    margin-bottom: 0.125rem;
+  }
+  .item-type {
+    font-size: 0.7rem;
+    color: var(--color-fg-mute);
+    font-style: italic;
+  }
+
+  .separator {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    margin: 0.4rem 0;
+  }
+  .separator-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--color-border-strong), transparent);
+  }
+  .separator-line.full {
+    background: var(--color-border-strong);
+  }
+  .separator-icon {
+    color: var(--color-gold);
+    font-size: 0.85rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .section-label {
+    font-size: 0.7rem;
+    color: var(--color-gold);
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    letter-spacing: 0.02em;
+  }
+
+  .item-section {
+    margin-bottom: 0.5rem;
+  }
+
+  .item-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    padding: 0.05rem 0;
+  }
+  .mod-tier {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--color-fg-mute);
+    width: 1.75rem;
+    flex-shrink: 0;
+    text-align: right;
+    letter-spacing: -0.05em;
+  }
+  .mod-text {
+    flex: 1;
+    font-size: 0.8125rem;
+  }
+  .mod-text.implicit {
+    color: var(--color-gold);
+    font-style: italic;
+  }
+
+  .item-empty {
+    text-align: center;
+    padding: 1rem 0;
+    color: var(--color-fg-mute);
+    font-style: italic;
+  }
+
+  .item-footer {
+    text-align: center;
+    font-size: 0.7rem;
+    color: var(--color-fg-mute);
+    padding-top: 0.25rem;
+  }
+  .item-rarity {
+    margin-bottom: 0.125rem;
+  }
+  .corrupted-indicator {
+    color: var(--color-corrupted);
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    margin-top: 0.25rem;
+  }
+</style>

@@ -1,0 +1,2896 @@
+[
+  {
+    "id": "adaptive_alloy",
+    "name": "Adaptive Alloy",
+    "tier": "normal",
+    "category": "currency_other",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "imageUrl": "/images/currency/adaptive_alloy.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "adaptive_catalyst",
+    "name": "Adaptive Catalyst",
+    "tier": "normal",
+    "category": "catalyst",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Adds quality that enhances Attribute modifiers on a ring or amulet Replaces other quality types",
+    "effect": "Adds quality that enhances Attribute modifiers on a ring or amulet Replaces other quality types",
+    "mechanics": "Adds quality that enhances Attribute modifiers on a ring or amulet Replaces other quality types",
+    "imageUrl": "/images/currency/adaptive_catalyst.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "ancient_collarbone",
+    "name": "Ancient Collarbone",
+    "tier": "normal",
+    "category": "desecrate",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Desecrates a Rare Amulet, Ring or Belt",
+    "effect": "Desecrates a Rare Amulet, Ring or Belt",
+    "mechanics": "Desecrates a Rare Amulet, Ring or Belt",
+    "imageUrl": "/images/currency/ancient_collarbone.webp",
+    "stackSize": 20,
+    "minModifierLevel": 40
+  },
+  {
+    "id": "ancient_concentrated_liquid_fear",
+    "name": "Ancient Concentrated Liquid Fear",
+    "tier": "normal",
+    "category": "liquid_affector",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
+    "effect": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
+    "mechanics": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
+    "imageUrl": "/images/currency/ancient_concentrated_liquid_fear.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "ancient_concentrated_liquid_isolation",
+    "name": "Ancient Concentrated Liquid Isolation",
+    "tier": "normal",
+    "category": "liquid_affector",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
+    "effect": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
+    "mechanics": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
+    "imageUrl": "/images/currency/ancient_concentrated_liquid_isolation.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "ancient_concentrated_liquid_suffering",
+    "name": "Ancient Concentrated Liquid Suffering",
+    "tier": "normal",
+    "category": "liquid_affector",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
+    "effect": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
+    "mechanics": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
+    "imageUrl": "/images/currency/ancient_concentrated_liquid_suffering.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "ancient_diluted_liquid_greed",
+    "name": "Ancient Diluted Liquid Greed",
+    "tier": "normal",
+    "category": "liquid_affector",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
+    "effect": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
+    "mechanics": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
+    "imageUrl": "/images/currency/ancient_diluted_liquid_greed.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "ancient_diluted_liquid_guilt",
+    "name": "Ancient Diluted Liquid Guilt",
+    "tier": "normal",
+    "category": "liquid_affector",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
+    "effect": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
+    "mechanics": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
+    "imageUrl": "/images/currency/ancient_diluted_liquid_guilt.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "ancient_diluted_liquid_ire",
+    "name": "Ancient Diluted Liquid Ire",
+    "tier": "normal",
+    "category": "liquid_affector",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
+    "effect": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
+    "mechanics": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
+    "imageUrl": "/images/currency/ancient_diluted_liquid_ire.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "ancient_jawbone",
+    "name": "Ancient Jawbone",
+    "tier": "normal",
+    "category": "desecrate",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Desecrates a Rare Weapon or Quiver",
+    "effect": "Desecrates a Rare Weapon or Quiver",
+    "mechanics": "Desecrates a Rare Weapon or Quiver",
+    "imageUrl": "/images/currency/ancient_jawbone.webp",
+    "stackSize": 20,
+    "minModifierLevel": 40
+  },
+  {
+    "id": "ancient_liquid_despair",
+    "name": "Ancient Liquid Despair",
+    "tier": "normal",
+    "category": "liquid_affector",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
+    "effect": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
+    "mechanics": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
+    "imageUrl": "/images/currency/ancient_liquid_despair.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "ancient_liquid_disgust",
+    "name": "Ancient Liquid Disgust",
+    "tier": "normal",
+    "category": "liquid_affector",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
+    "effect": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
+    "mechanics": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
+    "imageUrl": "/images/currency/ancient_liquid_disgust.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "ancient_liquid_envy",
+    "name": "Ancient Liquid Envy",
+    "tier": "normal",
+    "category": "liquid_affector",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
+    "effect": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
+    "mechanics": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
+    "imageUrl": "/images/currency/ancient_liquid_envy.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "ancient_liquid_paranoia",
+    "name": "Ancient Liquid Paranoia",
+    "tier": "normal",
+    "category": "liquid_affector",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
+    "effect": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
+    "mechanics": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
+    "imageUrl": "/images/currency/ancient_liquid_paranoia.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "ancient_orb",
+    "name": "Ancient Orb",
+    "tier": "normal",
+    "category": "special",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Reforges a unique equipment as another of the same item class",
+    "effect": "Reforges a unique equipment as another of the same item class",
+    "mechanics": "Reforges a unique equipment as another of the same item class",
+    "imageUrl": "/images/currency/ancient_orb.webp",
+    "stackSize": 20
+  },
+  {
+    "id": "ancient_potent_liquid_contempt",
+    "name": "Ancient Potent Liquid Contempt",
+    "tier": "normal",
+    "category": "liquid_affector",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
+    "effect": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
+    "mechanics": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
+    "imageUrl": "/images/currency/ancient_potent_liquid_contempt.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "ancient_potent_liquid_ferocity",
+    "name": "Ancient Potent Liquid Ferocity",
+    "tier": "normal",
+    "category": "liquid_affector",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
+    "effect": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
+    "mechanics": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
+    "imageUrl": "/images/currency/ancient_potent_liquid_ferocity.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "ancient_potent_liquid_melancholy",
+    "name": "Ancient Potent Liquid Melancholy",
+    "tier": "normal",
+    "category": "liquid_affector",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
+    "effect": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
+    "mechanics": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
+    "imageUrl": "/images/currency/ancient_potent_liquid_melancholy.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "ancient_rib",
+    "name": "Ancient Rib",
+    "tier": "normal",
+    "category": "desecrate",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Desecrates a Rare Armour",
+    "effect": "Desecrates a Rare Armour",
+    "mechanics": "Desecrates a Rare Armour",
+    "imageUrl": "/images/currency/ancient_rib.webp",
+    "stackSize": 20,
+    "minModifierLevel": 40
+  },
+  {
+    "id": "arcanists_etcher",
+    "name": "Arcanist's Etcher",
+    "tier": "normal",
+    "category": "currency_other",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Improves the quality of a wand, staff or sceptre",
+    "effect": "Improves the quality of a wand, staff or sceptre",
+    "mechanics": "Improves the quality of a wand, staff or sceptre",
+    "imageUrl": "/images/currency/arcanists_etcher.webp",
+    "stackSize": 20
+  },
+  {
+    "id": "armourers_scrap",
+    "name": "Armourer's Scrap",
+    "tier": "normal",
+    "category": "special",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Improves the quality of an armour",
+    "effect": "Improves the quality of an armour",
+    "mechanics": "Improves the quality of an armour",
+    "imageUrl": "/images/currency/armourers_scrap.webp",
+    "stackSize": 20
+  },
+  {
+    "id": "artificers_orb",
+    "name": "Artificer's Orb",
+    "tier": "normal",
+    "category": "special",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Adds an Augment Socket to a Martial Weapon, wand, staff or Armour",
+    "effect": "Adds an Augment Socket to a Martial Weapon, wand, staff or Armour",
+    "mechanics": "Adds an Augment Socket to a Martial Weapon, wand, staff or Armour",
+    "imageUrl": "/images/currency/artificers_orb.webp",
+    "stackSize": 20
+  },
+  {
+    "id": "artificers_shard",
+    "name": "Artificer's Shard",
+    "tier": "normal",
+    "category": "special",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "NameShow Full Descriptions Currency Exchange100 Gold NoteCodeartificers-shard DropLevel 5 BaseType Artificer's Shard Class Stackable Currency FlagsAlwaysAllocate TypeMetadata/Items/Currency/CurrencyAddEquipmentSocketShard SoundAudio/Sound Effects/ItemSounds/4.0/Currency/Orbs/OrbUse.ogg Tagscurrency_shard, currency IconArt/2DItems/Currency/CurrencyAddEquipmentSocketShard",
+    "effect": "NameShow Full Descriptions Currency Exchange100 Gold NoteCodeartificers-shard DropLevel 5 BaseType Artificer's Shard Class Stackable Currency FlagsAlwaysAllocate TypeMetadata/Items/Currency/CurrencyAddEquipmentSocketShard SoundAudio/Sound Effects/ItemSounds/4.0/Currency/Orbs/OrbUse.ogg Tagscurrency_shard, currency IconArt/2DItems/Currency/CurrencyAddEquipmentSocketShard",
+    "mechanics": "NameShow Full Descriptions Currency Exchange100 Gold NoteCodeartificers-shard DropLevel 5 BaseType Artificer's Shard Class Stackable Currency FlagsAlwaysAllocate TypeMetadata/Items/Currency/CurrencyAddEquipmentSocketShard SoundAudio/Sound Effects/ItemSounds/4.0/Currency/Orbs/OrbUse.ogg Tagscurrency_shard, currency IconArt/2DItems/Currency/CurrencyAddEquipmentSocketShard",
+    "imageUrl": "/images/currency/artificers_shard.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "blacksmiths_whetstone",
+    "name": "Blacksmith's Whetstone",
+    "tier": "normal",
+    "category": "special",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Improves the quality of a martial weapon",
+    "effect": "Improves the quality of a martial weapon",
+    "mechanics": "Improves the quality of a martial weapon",
+    "imageUrl": "/images/currency/blacksmiths_whetstone.webp",
+    "stackSize": 20
+  },
+  {
+    "id": "carapace_catalyst",
+    "name": "Carapace Catalyst",
+    "tier": "normal",
+    "category": "catalyst",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Adds quality that enhances Armour, Evasion and Energy Shield modifiers on a ring or amulet Replaces other quality types",
+    "effect": "Adds quality that enhances Armour, Evasion and Energy Shield modifiers on a ring or amulet Replaces other quality types",
+    "mechanics": "Adds quality that enhances Armour, Evasion and Energy Shield modifiers on a ring or amulet Replaces other quality types",
+    "imageUrl": "/images/currency/carapace_catalyst.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "celestial_alloy",
+    "name": "Celestial Alloy",
+    "tier": "normal",
+    "category": "currency_other",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "imageUrl": "/images/currency/celestial_alloy.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "chance_shard",
+    "name": "Chance Shard",
+    "tier": "normal",
+    "category": "upgrade_rarity",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "NameShow Full Descriptions Currency Exchange100 Gold NoteCodechance-shard DropLevel 1 BaseType Chance Shard Class Stackable Currency FlagsAlwaysAllocate TypeMetadata/Items/Currency/CurrencyUpgradeRandomlyShard Tagscurrency_shard, currency IconArt/2DItems/Currency/CurrencyUpgradeToUniqueShard",
+    "effect": "NameShow Full Descriptions Currency Exchange100 Gold NoteCodechance-shard DropLevel 1 BaseType Chance Shard Class Stackable Currency FlagsAlwaysAllocate TypeMetadata/Items/Currency/CurrencyUpgradeRandomlyShard Tagscurrency_shard, currency IconArt/2DItems/Currency/CurrencyUpgradeToUniqueShard",
+    "mechanics": "NameShow Full Descriptions Currency Exchange100 Gold NoteCodechance-shard DropLevel 1 BaseType Chance Shard Class Stackable Currency FlagsAlwaysAllocate TypeMetadata/Items/Currency/CurrencyUpgradeRandomlyShard Tagscurrency_shard, currency IconArt/2DItems/Currency/CurrencyUpgradeToUniqueShard",
+    "imageUrl": "/images/currency/chance_shard.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "chaos_orb",
+    "name": "Chaos Orb",
+    "tier": "normal",
+    "category": "reroll",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifier and augments a Rare item with a new random modifier",
+    "effect": "Removes a random modifier and augments a Rare item with a new random modifier",
+    "mechanics": "Removes a random modifier and augments a Rare item with a new random modifier",
+    "imageUrl": "/images/currency/chaos_orb.webp",
+    "stackSize": 20
+  },
+  {
+    "id": "chayulas_catalyst",
+    "name": "Chayula's Catalyst",
+    "tier": "normal",
+    "category": "catalyst",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Adds quality that enhances Chaos modifiers on a ring or amulet Replaces other quality types",
+    "effect": "Adds quality that enhances Chaos modifiers on a ring or amulet Replaces other quality types",
+    "mechanics": "Adds quality that enhances Chaos modifiers on a ring or amulet Replaces other quality types",
+    "imageUrl": "/images/currency/chayulas_catalyst.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "concentrated_liquid_fear",
+    "name": "Concentrated Liquid Fear",
+    "tier": "normal",
+    "category": "liquid_affector",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
+    "effect": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
+    "mechanics": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
+    "imageUrl": "/images/currency/concentrated_liquid_fear.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "concentrated_liquid_isolation",
+    "name": "Concentrated Liquid Isolation",
+    "tier": "normal",
+    "category": "liquid_affector",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
+    "effect": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
+    "mechanics": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
+    "imageUrl": "/images/currency/concentrated_liquid_isolation.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "concentrated_liquid_suffering",
+    "name": "Concentrated Liquid Suffering",
+    "tier": "normal",
+    "category": "liquid_affector",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
+    "effect": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
+    "mechanics": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
+    "imageUrl": "/images/currency/concentrated_liquid_suffering.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "cyclonic_alloy",
+    "name": "Cyclonic Alloy",
+    "tier": "normal",
+    "category": "currency_other",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "imageUrl": "/images/currency/cyclonic_alloy.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "diluted_liquid_greed",
+    "name": "Diluted Liquid Greed",
+    "tier": "normal",
+    "category": "liquid_affector",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
+    "effect": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
+    "mechanics": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
+    "imageUrl": "/images/currency/diluted_liquid_greed.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "diluted_liquid_guilt",
+    "name": "Diluted Liquid Guilt",
+    "tier": "normal",
+    "category": "liquid_affector",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
+    "effect": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
+    "mechanics": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
+    "imageUrl": "/images/currency/diluted_liquid_guilt.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "diluted_liquid_ire",
+    "name": "Diluted Liquid Ire",
+    "tier": "normal",
+    "category": "liquid_affector",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
+    "effect": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
+    "mechanics": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
+    "imageUrl": "/images/currency/diluted_liquid_ire.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "divine_orb",
+    "name": "Divine Orb",
+    "tier": "normal",
+    "category": "divine",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Randomises the numeric values of modifiers on an item",
+    "effect": "Randomises the numeric values of modifiers on an item",
+    "mechanics": "Randomises the numeric values of modifiers on an item",
+    "imageUrl": "/images/currency/divine_orb.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "eshs_catalyst",
+    "name": "Esh's Catalyst",
+    "tier": "normal",
+    "category": "catalyst",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Adds quality that enhances Lightning modifiers on a ring or amulet Replaces other quality types",
+    "effect": "Adds quality that enhances Lightning modifiers on a ring or amulet Replaces other quality types",
+    "mechanics": "Adds quality that enhances Lightning modifiers on a ring or amulet Replaces other quality types",
+    "imageUrl": "/images/currency/eshs_catalyst.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "essence_of_abrasion",
+    "name": "Essence of Abrasion",
+    "tier": "normal",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/essence_of_abrasion.webp",
+    "stackSize": 10,
+    "guaranteedMod": "One Handed Melee Weapon or Bow: Adds (10—15) to (18—26) Physical Damage"
+  },
+  {
+    "id": "essence_of_alacrity",
+    "name": "Essence of Alacrity",
+    "tier": "normal",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/essence_of_alacrity.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Focus or Wand: (17—20)% increased Cast Speed"
+  },
+  {
+    "id": "essence_of_battle",
+    "name": "Essence of Battle",
+    "tier": "normal",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/essence_of_battle.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Martial Weapon: +(124—167) to Accuracy Rating"
+  },
+  {
+    "id": "essence_of_command",
+    "name": "Essence of Command",
+    "tier": "normal",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/essence_of_command.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Sceptre: Allies in your Presence deal (55—64)% increased Damage"
+  },
+  {
+    "id": "essence_of_delirium",
+    "name": "Essence of Delirium",
+    "tier": "normal",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "imageUrl": "/images/currency/essence_of_delirium.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Removes a random modifier and augments a Rare item with a new guaranteed modifier"
+  },
+  {
+    "id": "essence_of_electricity",
+    "name": "Essence of Electricity",
+    "tier": "normal",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/essence_of_electricity.webp",
+    "stackSize": 10,
+    "guaranteedMod": "One Handed Melee Weapon or Bow: Adds (1—3) to (55—60) Lightning Damage"
+  },
+  {
+    "id": "essence_of_enhancement",
+    "name": "Essence of Enhancement",
+    "tier": "normal",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/essence_of_enhancement.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Armour: (56—67)% increased Armour, Evasion and Energy Shield"
+  },
+  {
+    "id": "essence_of_flames",
+    "name": "Essence of Flames",
+    "tier": "normal",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/essence_of_flames.webp",
+    "stackSize": 10,
+    "guaranteedMod": "One Handed Melee Weapon or Bow: Adds (20—24) to (32—37) Fire Damage"
+  },
+  {
+    "id": "essence_of_grounding",
+    "name": "Essence of Grounding",
+    "tier": "normal",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/essence_of_grounding.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Armour, Belt or Jewellery: +(21—25)% to Lightning Resistance"
+  },
+  {
+    "id": "essence_of_haste",
+    "name": "Essence of Haste",
+    "tier": "normal",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/essence_of_haste.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Melee Weapon: (17—19)% increased Attack Speed"
+  },
+  {
+    "id": "essence_of_horror",
+    "name": "Essence of Horror",
+    "tier": "normal",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "imageUrl": "/images/currency/essence_of_horror.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Removes a random modifier and augments a Rare item with a new guaranteed modifier"
+  },
+  {
+    "id": "essence_of_hysteria",
+    "name": "Essence of Hysteria",
+    "tier": "normal",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "imageUrl": "/images/currency/essence_of_hysteria.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Removes a random modifier and augments a Rare item with a new guaranteed modifier"
+  },
+  {
+    "id": "essence_of_ice",
+    "name": "Essence of Ice",
+    "tier": "normal",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/essence_of_ice.webp",
+    "stackSize": 10,
+    "guaranteedMod": "One Handed Melee Weapon or Bow: Adds (17—20) to (26—32) Cold Damage"
+  },
+  {
+    "id": "essence_of_insanity",
+    "name": "Essence of Insanity",
+    "tier": "normal",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "imageUrl": "/images/currency/essence_of_insanity.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Removes a random modifier and augments a Rare item with a new guaranteed modifier"
+  },
+  {
+    "id": "essence_of_insulation",
+    "name": "Essence of Insulation",
+    "tier": "normal",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/essence_of_insulation.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Armour, Belt or Jewellery: +(21—25)% to Fire Resistance"
+  },
+  {
+    "id": "essence_of_opulence",
+    "name": "Essence of Opulence",
+    "tier": "normal",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/essence_of_opulence.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Boots, Gloves, Helmet or Jewellery: (11—14)% increased Rarity of Items found"
+  },
+  {
+    "id": "essence_of_ruin",
+    "name": "Essence of Ruin",
+    "tier": "normal",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/essence_of_ruin.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Armour, Belt or Jewellery: +(8—11)% to Chaos Resistance"
+  },
+  {
+    "id": "essence_of_seeking",
+    "name": "Essence of Seeking",
+    "tier": "normal",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/essence_of_seeking.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Martial Weapon: +(2.11—2.7)% to Critical Hit Chance"
+  },
+  {
+    "id": "essence_of_sorcery",
+    "name": "Essence of Sorcery",
+    "tier": "normal",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/essence_of_sorcery.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Focus or Wand: (55—64)% increased Spell Damage"
+  },
+  {
+    "id": "essence_of_thawing",
+    "name": "Essence of Thawing",
+    "tier": "normal",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/essence_of_thawing.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Armour, Belt or Jewellery: +(21—25)% to Cold Resistance"
+  },
+  {
+    "id": "essence_of_the_abyss",
+    "name": "Essence of the Abyss",
+    "tier": "normal",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "imageUrl": "/images/currency/essence_of_the_abyss.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Removes a random modifier and augments a Rare item with a new guaranteed modifier"
+  },
+  {
+    "id": "essence_of_the_body",
+    "name": "Essence of the Body",
+    "tier": "normal",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/essence_of_the_body.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Belt, Body Armour, Helmet or Shield: +(85—99) to maximum Life"
+  },
+  {
+    "id": "essence_of_the_breach",
+    "name": "Essence of the Breach",
+    "tier": "normal",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "imageUrl": "/images/currency/essence_of_the_breach.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Removes a random modifier and augments a Rare item with a new guaranteed modifier"
+  },
+  {
+    "id": "essence_of_the_infinite",
+    "name": "Essence of the Infinite",
+    "tier": "normal",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/essence_of_the_infinite.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Equipment: +(17—20) to Strength, Dexterity or Intelligence"
+  },
+  {
+    "id": "essence_of_the_mind",
+    "name": "Essence of the Mind",
+    "tier": "normal",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/essence_of_the_mind.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Belt, Boots, Gloves or Helmet: +(65—79) to maximum Mana"
+  },
+  {
+    "id": "exalted_orb",
+    "name": "Exalted Orb",
+    "tier": "normal",
+    "category": "augment",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Augments a Rare item with a new random modifier",
+    "effect": "Augments a Rare item with a new random modifier",
+    "mechanics": "Augments a Rare item with a new random modifier",
+    "imageUrl": "/images/currency/exalted_orb.webp",
+    "stackSize": 20
+  },
+  {
+    "id": "expansive_alloy",
+    "name": "Expansive Alloy",
+    "tier": "normal",
+    "category": "currency_other",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "imageUrl": "/images/currency/expansive_alloy.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "flesh_catalyst",
+    "name": "Flesh Catalyst",
+    "tier": "normal",
+    "category": "catalyst",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Adds quality that enhances Life modifiers on a ring or amulet Replaces other quality types",
+    "effect": "Adds quality that enhances Life modifiers on a ring or amulet Replaces other quality types",
+    "mechanics": "Adds quality that enhances Life modifiers on a ring or amulet Replaces other quality types",
+    "imageUrl": "/images/currency/flesh_catalyst.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "fracturing_orb",
+    "name": "Fracturing Orb",
+    "tier": "normal",
+    "category": "special",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Fracture a random modifier on a rare item with at least 4 modifiers, locking it in place.",
+    "effect": "Fracture a random modifier on a rare item with at least 4 modifiers, locking it in place.",
+    "mechanics": "Fracture a random modifier on a rare item with at least 4 modifiers, locking it in place.",
+    "imageUrl": "/images/currency/fracturing_orb.webp",
+    "stackSize": 20
+  },
+  {
+    "id": "gemcutters_prism",
+    "name": "Gemcutter's Prism",
+    "tier": "normal",
+    "category": "special",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Improves the quality of a Skill Gem",
+    "effect": "Improves the quality of a Skill Gem",
+    "mechanics": "Improves the quality of a Skill Gem",
+    "imageUrl": "/images/currency/gemcutters_prism.webp",
+    "stackSize": 20
+  },
+  {
+    "id": "glassblowers_bauble",
+    "name": "Glassblower's Bauble",
+    "tier": "normal",
+    "category": "special",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Improves the quality of a flask",
+    "effect": "Improves the quality of a flask",
+    "mechanics": "Improves the quality of a flask",
+    "imageUrl": "/images/currency/glassblowers_bauble.webp",
+    "stackSize": 20
+  },
+  {
+    "id": "gnawed_collarbone",
+    "name": "Gnawed Collarbone",
+    "tier": "normal",
+    "category": "desecrate",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Desecrates a Rare Amulet, Ring or Belt",
+    "effect": "Desecrates a Rare Amulet, Ring or Belt",
+    "mechanics": "Desecrates a Rare Amulet, Ring or Belt",
+    "imageUrl": "/images/currency/gnawed_collarbone.webp",
+    "stackSize": 20
+  },
+  {
+    "id": "gnawed_jawbone",
+    "name": "Gnawed Jawbone",
+    "tier": "normal",
+    "category": "desecrate",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Desecrates a Rare Weapon or Quiver",
+    "effect": "Desecrates a Rare Weapon or Quiver",
+    "mechanics": "Desecrates a Rare Weapon or Quiver",
+    "imageUrl": "/images/currency/gnawed_jawbone.webp",
+    "stackSize": 20
+  },
+  {
+    "id": "gnawed_rib",
+    "name": "Gnawed Rib",
+    "tier": "normal",
+    "category": "desecrate",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Desecrates a Rare Armour",
+    "effect": "Desecrates a Rare Armour",
+    "mechanics": "Desecrates a Rare Armour",
+    "imageUrl": "/images/currency/gnawed_rib.webp",
+    "stackSize": 20
+  },
+  {
+    "id": "greater_chaos_orb",
+    "name": "Greater Chaos Orb",
+    "tier": "greater",
+    "category": "reroll",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifier and augments a Rare item with a new random modifier",
+    "effect": "Removes a random modifier and augments a Rare item with a new random modifier",
+    "mechanics": "Removes a random modifier and augments a Rare item with a new random modifier",
+    "imageUrl": "/images/currency/greater_chaos_orb.webp",
+    "stackSize": 20,
+    "minModifierLevel": 35
+  },
+  {
+    "id": "greater_essence_of_abrasion",
+    "name": "Greater Essence of Abrasion",
+    "tier": "greater",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/greater_essence_of_abrasion.webp",
+    "stackSize": 10,
+    "guaranteedMod": "One Handed Melee Weapon or Bow: Adds (16—24) to (28—42) Physical Damage"
+  },
+  {
+    "id": "greater_essence_of_alacrity",
+    "name": "Greater Essence of Alacrity",
+    "tier": "greater",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/greater_essence_of_alacrity.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Focus or Wand: (25—28)% increased Cast Speed"
+  },
+  {
+    "id": "greater_essence_of_battle",
+    "name": "Greater Essence of Battle",
+    "tier": "greater",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/greater_essence_of_battle.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Martial Weapon, Gloves or Quiver: +(237—346) to Accuracy Rating"
+  },
+  {
+    "id": "greater_essence_of_command",
+    "name": "Greater Essence of Command",
+    "tier": "greater",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/greater_essence_of_command.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Sceptre: Allies in your Presence deal (75—89)% increased Damage"
+  },
+  {
+    "id": "greater_essence_of_electricity",
+    "name": "Greater Essence of Electricity",
+    "tier": "greater",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/greater_essence_of_electricity.webp",
+    "stackSize": 10,
+    "guaranteedMod": "One Handed Melee Weapon or Bow: Adds (1—6) to (85—107) Lightning Damage"
+  },
+  {
+    "id": "greater_essence_of_enhancement",
+    "name": "Greater Essence of Enhancement",
+    "tier": "greater",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/greater_essence_of_enhancement.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Armour: (68—79)% increased Armour, Evasion and Energy Shield"
+  },
+  {
+    "id": "greater_essence_of_flames",
+    "name": "Greater Essence of Flames",
+    "tier": "greater",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/greater_essence_of_flames.webp",
+    "stackSize": 10,
+    "guaranteedMod": "One Handed Melee Weapon or Bow: Adds (35—44) to (56—71) Fire Damage"
+  },
+  {
+    "id": "greater_essence_of_grounding",
+    "name": "Greater Essence of Grounding",
+    "tier": "greater",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/greater_essence_of_grounding.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Armour, Belt or Jewellery: +(31—35)% to Lightning Resistance"
+  },
+  {
+    "id": "greater_essence_of_haste",
+    "name": "Greater Essence of Haste",
+    "tier": "greater",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/greater_essence_of_haste.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Melee Weapon: (23—25)% increased Attack Speed"
+  },
+  {
+    "id": "greater_essence_of_ice",
+    "name": "Greater Essence of Ice",
+    "tier": "greater",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/greater_essence_of_ice.webp",
+    "stackSize": 10,
+    "guaranteedMod": "One Handed Melee Weapon or Bow: Adds (31—38) to (47—59) Cold Damage"
+  },
+  {
+    "id": "greater_essence_of_insulation",
+    "name": "Greater Essence of Insulation",
+    "tier": "greater",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/greater_essence_of_insulation.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Armour, Belt or Jewellery: +(31—35)% to Fire Resistance"
+  },
+  {
+    "id": "greater_essence_of_opulence",
+    "name": "Greater Essence of Opulence",
+    "tier": "greater",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/greater_essence_of_opulence.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Boots, Gloves, Helmet or Jewellery: (15—18)% increased Rarity of Items found"
+  },
+  {
+    "id": "greater_essence_of_ruin",
+    "name": "Greater Essence of Ruin",
+    "tier": "greater",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/greater_essence_of_ruin.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Armour, Belt or Jewellery: +(16—19)% to Chaos Resistance"
+  },
+  {
+    "id": "greater_essence_of_seeking",
+    "name": "Greater Essence of Seeking",
+    "tier": "greater",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/greater_essence_of_seeking.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Martial Weapon: +(3.11—3.8)% to Critical Hit Chance"
+  },
+  {
+    "id": "greater_essence_of_sorcery",
+    "name": "Greater Essence of Sorcery",
+    "tier": "greater",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/greater_essence_of_sorcery.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Focus or Wand: (75—89)% increased Spell Damage"
+  },
+  {
+    "id": "greater_essence_of_thawing",
+    "name": "Greater Essence of Thawing",
+    "tier": "greater",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/greater_essence_of_thawing.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Armour, Belt or Jewellery: +(31—35)% to Cold Resistance"
+  },
+  {
+    "id": "greater_essence_of_the_body",
+    "name": "Greater Essence of the Body",
+    "tier": "greater",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/greater_essence_of_the_body.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Belt, Body Armour, Helmet or Shield: +(100—119) to maximum Life"
+  },
+  {
+    "id": "greater_essence_of_the_infinite",
+    "name": "Greater Essence of the Infinite",
+    "tier": "greater",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/greater_essence_of_the_infinite.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Equipment: +(25—27) to Strength, Dexterity or Intelligence"
+  },
+  {
+    "id": "greater_essence_of_the_mind",
+    "name": "Greater Essence of the Mind",
+    "tier": "greater",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/greater_essence_of_the_mind.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Belt, Boots, Gloves or Helmet: +(80—89) to maximum Mana"
+  },
+  {
+    "id": "greater_exalted_orb",
+    "name": "Greater Exalted Orb",
+    "tier": "greater",
+    "category": "augment",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Augments a Rare item with a new random modifier",
+    "effect": "Augments a Rare item with a new random modifier",
+    "mechanics": "Augments a Rare item with a new random modifier",
+    "imageUrl": "/images/currency/greater_exalted_orb.webp",
+    "stackSize": 20,
+    "minModifierLevel": 35
+  },
+  {
+    "id": "greater_jewellers_orb",
+    "name": "Greater Jeweller's Orb",
+    "tier": "greater",
+    "category": "special",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Sets a Skill Gem to have 4 Support Gem Sockets",
+    "effect": "Sets a Skill Gem to have 4 Support Gem Sockets",
+    "mechanics": "Sets a Skill Gem to have 4 Support Gem Sockets",
+    "imageUrl": "/images/currency/greater_jewellers_orb.webp",
+    "stackSize": 20
+  },
+  {
+    "id": "greater_orb_of_augmentation",
+    "name": "Greater Orb of Augmentation",
+    "tier": "greater",
+    "category": "augment",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Augments a Magic item with a new random modifier",
+    "effect": "Augments a Magic item with a new random modifier",
+    "mechanics": "Augments a Magic item with a new random modifier",
+    "imageUrl": "/images/currency/greater_orb_of_augmentation.webp",
+    "stackSize": 30,
+    "minModifierLevel": 44
+  },
+  {
+    "id": "greater_orb_of_transmutation",
+    "name": "Greater Orb of Transmutation",
+    "tier": "greater",
+    "category": "upgrade_rarity",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Normal item to a Magic item with 1 modifier",
+    "effect": "Upgrades a Normal item to a Magic item with 1 modifier",
+    "mechanics": "Upgrades a Normal item to a Magic item with 1 modifier",
+    "imageUrl": "/images/currency/greater_orb_of_transmutation.webp",
+    "stackSize": 40,
+    "minModifierLevel": 44
+  },
+  {
+    "id": "greater_regal_orb",
+    "name": "Greater Regal Orb",
+    "tier": "greater",
+    "category": "augment",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding 1 modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding 1 modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding 1 modifier",
+    "imageUrl": "/images/currency/greater_regal_orb.webp",
+    "stackSize": 20,
+    "minModifierLevel": 35
+  },
+  {
+    "id": "hinekoras_lock",
+    "name": "Hinekora's Lock",
+    "tier": "normal",
+    "category": "currency_other",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Allows an item to foresee the result of the next Currency item used on it Modifying the item in any way removes the ability to foresee",
+    "effect": "Allows an item to foresee the result of the next Currency item used on it Modifying the item in any way removes the ability to foresee",
+    "mechanics": "Allows an item to foresee the result of the next Currency item used on it Modifying the item in any way removes the ability to foresee",
+    "imageUrl": "/images/currency/hinekoras_lock.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "lesser_essence_of_abrasion",
+    "name": "Lesser Essence of Abrasion",
+    "tier": "lesser",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/lesser_essence_of_abrasion.webp",
+    "stackSize": 10,
+    "guaranteedMod": "One Handed Melee Weapon or Bow: Adds (4—6) to (7—11) Physical Damage"
+  },
+  {
+    "id": "lesser_essence_of_alacrity",
+    "name": "Lesser Essence of Alacrity",
+    "tier": "lesser",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/lesser_essence_of_alacrity.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Focus or Wand: (13—16)% increased Cast Speed"
+  },
+  {
+    "id": "lesser_essence_of_battle",
+    "name": "Lesser Essence of Battle",
+    "tier": "lesser",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/lesser_essence_of_battle.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Martial Weapon: +(61—84) to Accuracy Rating"
+  },
+  {
+    "id": "lesser_essence_of_command",
+    "name": "Lesser Essence of Command",
+    "tier": "lesser",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/lesser_essence_of_command.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Sceptre: Allies in your Presence deal (35—44)% increased Damage"
+  },
+  {
+    "id": "lesser_essence_of_electricity",
+    "name": "Lesser Essence of Electricity",
+    "tier": "lesser",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/lesser_essence_of_electricity.webp",
+    "stackSize": 10,
+    "guaranteedMod": "One Handed Melee Weapon or Bow: Adds 1 to (13—19) Lightning Damage"
+  },
+  {
+    "id": "lesser_essence_of_enhancement",
+    "name": "Lesser Essence of Enhancement",
+    "tier": "lesser",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/lesser_essence_of_enhancement.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Armour: (27—42)% increased Armour, Evasion and Energy Shield"
+  },
+  {
+    "id": "lesser_essence_of_flames",
+    "name": "Lesser Essence of Flames",
+    "tier": "lesser",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/lesser_essence_of_flames.webp",
+    "stackSize": 10,
+    "guaranteedMod": "One Handed Melee Weapon or Bow: Adds (4—6) to (7—10) Fire Damage"
+  },
+  {
+    "id": "lesser_essence_of_grounding",
+    "name": "Lesser Essence of Grounding",
+    "tier": "lesser",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/lesser_essence_of_grounding.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Armour, Belt or Jewellery: +(11—15)% to Lightning Resistance"
+  },
+  {
+    "id": "lesser_essence_of_haste",
+    "name": "Lesser Essence of Haste",
+    "tier": "lesser",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/lesser_essence_of_haste.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Melee Weapon: (11—13)% increased Attack Speed"
+  },
+  {
+    "id": "lesser_essence_of_ice",
+    "name": "Lesser Essence of Ice",
+    "tier": "lesser",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/lesser_essence_of_ice.webp",
+    "stackSize": 10,
+    "guaranteedMod": "One Handed Melee Weapon or Bow: Adds (3—5) to (6—9) Cold Damage"
+  },
+  {
+    "id": "lesser_essence_of_insulation",
+    "name": "Lesser Essence of Insulation",
+    "tier": "lesser",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/lesser_essence_of_insulation.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Armour, Belt or Jewellery: +(11—15)% to Fire Resistance"
+  },
+  {
+    "id": "lesser_essence_of_opulence",
+    "name": "Lesser Essence of Opulence",
+    "tier": "lesser",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/lesser_essence_of_opulence.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Boots, Gloves, Helmet or Jewellery: (6—10)% increased Rarity of Items found"
+  },
+  {
+    "id": "lesser_essence_of_ruin",
+    "name": "Lesser Essence of Ruin",
+    "tier": "lesser",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/lesser_essence_of_ruin.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Armour, Belt or Jewellery: +(4—7)% to Chaos Resistance"
+  },
+  {
+    "id": "lesser_essence_of_seeking",
+    "name": "Lesser Essence of Seeking",
+    "tier": "lesser",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/lesser_essence_of_seeking.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Martial Weapon: +(1.51—2.1)% to Critical Hit Chance"
+  },
+  {
+    "id": "lesser_essence_of_sorcery",
+    "name": "Lesser Essence of Sorcery",
+    "tier": "lesser",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/lesser_essence_of_sorcery.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Focus or Wand: (35—44)% increased Spell Damage"
+  },
+  {
+    "id": "lesser_essence_of_thawing",
+    "name": "Lesser Essence of Thawing",
+    "tier": "lesser",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/lesser_essence_of_thawing.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Armour, Belt or Jewellery: +(11—15)% to Cold Resistance"
+  },
+  {
+    "id": "lesser_essence_of_the_body",
+    "name": "Lesser Essence of the Body",
+    "tier": "lesser",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/lesser_essence_of_the_body.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Armour or Belt: +(30—39) to maximum Life"
+  },
+  {
+    "id": "lesser_essence_of_the_infinite",
+    "name": "Lesser Essence of the Infinite",
+    "tier": "lesser",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/lesser_essence_of_the_infinite.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Equipment: +(9—12) to Strength, Dexterity or Intelligence"
+  },
+  {
+    "id": "lesser_essence_of_the_mind",
+    "name": "Lesser Essence of the Mind",
+    "tier": "lesser",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
+    "imageUrl": "/images/currency/lesser_essence_of_the_mind.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Belt, Boots, Gloves, Helmet or Jewellery: +(25—34) to maximum Mana"
+  },
+  {
+    "id": "lesser_jewellers_orb",
+    "name": "Lesser Jeweller's Orb",
+    "tier": "lesser",
+    "category": "special",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Sets a Skill Gem to have 3 Support Gem Sockets",
+    "effect": "Sets a Skill Gem to have 3 Support Gem Sockets",
+    "mechanics": "Sets a Skill Gem to have 3 Support Gem Sockets",
+    "imageUrl": "/images/currency/lesser_jewellers_orb.webp",
+    "stackSize": 20
+  },
+  {
+    "id": "liquid_despair",
+    "name": "Liquid Despair",
+    "tier": "normal",
+    "category": "liquid_affector",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
+    "effect": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
+    "mechanics": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
+    "imageUrl": "/images/currency/liquid_despair.webp",
+    "stackSize": 1030
+  },
+  {
+    "id": "liquid_disgust",
+    "name": "Liquid Disgust",
+    "tier": "normal",
+    "category": "liquid_affector",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
+    "effect": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
+    "mechanics": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
+    "imageUrl": "/images/currency/liquid_disgust.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "liquid_envy",
+    "name": "Liquid Envy",
+    "tier": "normal",
+    "category": "liquid_affector",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
+    "effect": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
+    "mechanics": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
+    "imageUrl": "/images/currency/liquid_envy.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "liquid_paranoia",
+    "name": "Liquid Paranoia",
+    "tier": "normal",
+    "category": "liquid_affector",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
+    "effect": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
+    "mechanics": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
+    "imageUrl": "/images/currency/liquid_paranoia.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "liquid_verisium",
+    "name": "Liquid Verisium",
+    "tier": "normal",
+    "category": "liquid_affector",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Immediately start a Runic Remnant Encounter with a random Runic Inscription",
+    "effect": "Immediately start a Runic Remnant Encounter with a random Runic Inscription",
+    "mechanics": "Immediately start a Runic Remnant Encounter with a random Runic Inscription",
+    "imageUrl": "/images/currency/liquid_verisium.webp",
+    "stackSize": 20
+  },
+  {
+    "id": "mirror_of_kalandra",
+    "name": "Mirror of Kalandra",
+    "tier": "normal",
+    "category": "special",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Creates a Mirrored copy of an item",
+    "effect": "Creates a Mirrored copy of an item",
+    "mechanics": "Creates a Mirrored copy of an item",
+    "imageUrl": "/images/currency/mirror_of_kalandra.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "mystery_leaguestone",
+    "name": "Mystery Leaguestone",
+    "tier": "normal",
+    "category": "currency_other",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Contains an unknown Leaguestone.",
+    "effect": "Contains an unknown Leaguestone.",
+    "mechanics": "Contains an unknown Leaguestone.",
+    "imageUrl": "/images/currency/mystery_leaguestone.webp"
+  },
+  {
+    "id": "mystic_alloy",
+    "name": "Mystic Alloy",
+    "tier": "normal",
+    "category": "currency_other",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "imageUrl": "/images/currency/mystic_alloy.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "necrotic_catalyst",
+    "name": "Necrotic Catalyst",
+    "tier": "normal",
+    "category": "catalyst",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Adds quality that enhances Minion modifiers on a ring or amulet Replaces other quality types",
+    "effect": "Adds quality that enhances Minion modifiers on a ring or amulet Replaces other quality types",
+    "mechanics": "Adds quality that enhances Minion modifiers on a ring or amulet Replaces other quality types",
+    "imageUrl": "/images/currency/necrotic_catalyst.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "neural_catalyst",
+    "name": "Neural Catalyst",
+    "tier": "normal",
+    "category": "catalyst",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Adds quality that enhances Mana modifiers on a ring or amulet Replaces other quality types",
+    "effect": "Adds quality that enhances Mana modifiers on a ring or amulet Replaces other quality types",
+    "mechanics": "Adds quality that enhances Mana modifiers on a ring or amulet Replaces other quality types",
+    "imageUrl": "/images/currency/neural_catalyst.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "omen_of_catalysing_exaltation",
+    "name": "Omen of Catalysing Exaltation",
+    "tier": "normal",
+    "category": "omen",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "While this item is active in your inventory your next Exalted Orb will consume all Catalyst Quality to increase the chance of the corresponding type of Modifier",
+    "effect": "While this item is active in your inventory your next Exalted Orb will consume all Catalyst Quality to increase the chance of the corresponding type of Modifier",
+    "mechanics": "While this item is active in your inventory your next Exalted Orb will consume all Catalyst Quality to increase the chance of the corresponding type of Modifier",
+    "imageUrl": "/images/currency/omen_of_catalysing_exaltation.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "omen_of_dextral_crystallisation",
+    "name": "Omen of Dextral Crystallisation",
+    "tier": "normal",
+    "category": "omen",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "While this item is active in your inventory your next Perfect or Corrupted Essence will remove only Suffix modifiers",
+    "effect": "While this item is active in your inventory your next Perfect or Corrupted Essence will remove only Suffix modifiers",
+    "mechanics": "While this item is active in your inventory your next Perfect or Corrupted Essence will remove only Suffix modifiers",
+    "imageUrl": "/images/currency/omen_of_dextral_crystallisation.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "omen_of_sinistral_crystallisation",
+    "name": "Omen of Sinistral Crystallisation",
+    "tier": "normal",
+    "category": "omen",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "While this item is active in your inventory your next Perfect or Corrupted Essence will remove only Prefix modifiers",
+    "effect": "While this item is active in your inventory your next Perfect or Corrupted Essence will remove only Prefix modifiers",
+    "mechanics": "While this item is active in your inventory your next Perfect or Corrupted Essence will remove only Prefix modifiers",
+    "imageUrl": "/images/currency/omen_of_sinistral_crystallisation.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "orb_of_alchemy",
+    "name": "Orb of Alchemy",
+    "tier": "normal",
+    "category": "upgrade_rarity",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Normal or Magic item to a Rare item with 4 random modifiers",
+    "effect": "Upgrades a Normal or Magic item to a Rare item with 4 random modifiers",
+    "mechanics": "Upgrades a Normal or Magic item to a Rare item with 4 random modifiers",
+    "imageUrl": "/images/currency/orb_of_alchemy.webp",
+    "stackSize": 20
+  },
+  {
+    "id": "orb_of_annulment",
+    "name": "Orb of Annulment",
+    "tier": "normal",
+    "category": "annul",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifier from an item",
+    "effect": "Removes a random modifier from an item",
+    "mechanics": "Removes a random modifier from an item",
+    "imageUrl": "/images/currency/orb_of_annulment.webp",
+    "stackSize": 20
+  },
+  {
+    "id": "orb_of_augmentation",
+    "name": "Orb of Augmentation",
+    "tier": "normal",
+    "category": "augment",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Augments a Magic item with a new random modifier",
+    "effect": "Augments a Magic item with a new random modifier",
+    "mechanics": "Augments a Magic item with a new random modifier",
+    "imageUrl": "/images/currency/orb_of_augmentation.webp",
+    "stackSize": 30
+  },
+  {
+    "id": "orb_of_chance",
+    "name": "Orb of Chance",
+    "tier": "normal",
+    "category": "upgrade_rarity",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Unpredictably either upgrades a Normal item to Unique rarity or destroys it",
+    "effect": "Unpredictably either upgrades a Normal item to Unique rarity or destroys it",
+    "mechanics": "Unpredictably either upgrades a Normal item to Unique rarity or destroys it",
+    "imageUrl": "/images/currency/orb_of_chance.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "orb_of_transmutation",
+    "name": "Orb of Transmutation",
+    "tier": "normal",
+    "category": "upgrade_rarity",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Normal item to a Magic item with 1 modifier",
+    "effect": "Upgrades a Normal item to a Magic item with 1 modifier",
+    "mechanics": "Upgrades a Normal item to a Magic item with 1 modifier",
+    "imageUrl": "/images/currency/orb_of_transmutation.webp",
+    "stackSize": 40
+  },
+  {
+    "id": "perfect_chaos_orb",
+    "name": "Perfect Chaos Orb",
+    "tier": "perfect",
+    "category": "reroll",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifier and augments a Rare item with a new random modifier",
+    "effect": "Removes a random modifier and augments a Rare item with a new random modifier",
+    "mechanics": "Removes a random modifier and augments a Rare item with a new random modifier",
+    "imageUrl": "/images/currency/perfect_chaos_orb.webp",
+    "stackSize": 20,
+    "minModifierLevel": 50
+  },
+  {
+    "id": "perfect_essence_of_abrasion",
+    "name": "Perfect Essence of Abrasion",
+    "tier": "perfect",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "imageUrl": "/images/currency/perfect_essence_of_abrasion.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Removes a random modifier and augments a Rare item with a new guaranteed modifier"
+  },
+  {
+    "id": "perfect_essence_of_alacrity",
+    "name": "Perfect Essence of Alacrity",
+    "tier": "perfect",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "imageUrl": "/images/currency/perfect_essence_of_alacrity.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Removes a random modifier and augments a Rare item with a new guaranteed modifier"
+  },
+  {
+    "id": "perfect_essence_of_battle",
+    "name": "Perfect Essence of Battle",
+    "tier": "perfect",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "imageUrl": "/images/currency/perfect_essence_of_battle.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Removes a random modifier and augments a Rare item with a new guaranteed modifier"
+  },
+  {
+    "id": "perfect_essence_of_command",
+    "name": "Perfect Essence of Command",
+    "tier": "perfect",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "imageUrl": "/images/currency/perfect_essence_of_command.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Removes a random modifier and augments a Rare item with a new guaranteed modifier"
+  },
+  {
+    "id": "perfect_essence_of_electricity",
+    "name": "Perfect Essence of Electricity",
+    "tier": "perfect",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "imageUrl": "/images/currency/perfect_essence_of_electricity.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Removes a random modifier and augments a Rare item with a new guaranteed modifier"
+  },
+  {
+    "id": "perfect_essence_of_enhancement",
+    "name": "Perfect Essence of Enhancement",
+    "tier": "perfect",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "imageUrl": "/images/currency/perfect_essence_of_enhancement.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Removes a random modifier and augments a Rare item with a new guaranteed modifier"
+  },
+  {
+    "id": "perfect_essence_of_flames",
+    "name": "Perfect Essence of Flames",
+    "tier": "perfect",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "imageUrl": "/images/currency/perfect_essence_of_flames.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Removes a random modifier and augments a Rare item with a new guaranteed modifier"
+  },
+  {
+    "id": "perfect_essence_of_grounding",
+    "name": "Perfect Essence of Grounding",
+    "tier": "perfect",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "imageUrl": "/images/currency/perfect_essence_of_grounding.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Removes a random modifier and augments a Rare item with a new guaranteed modifier"
+  },
+  {
+    "id": "perfect_essence_of_haste",
+    "name": "Perfect Essence of Haste",
+    "tier": "perfect",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "imageUrl": "/images/currency/perfect_essence_of_haste.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Removes a random modifier and augments a Rare item with a new guaranteed modifier"
+  },
+  {
+    "id": "perfect_essence_of_ice",
+    "name": "Perfect Essence of Ice",
+    "tier": "perfect",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "imageUrl": "/images/currency/perfect_essence_of_ice.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Removes a random modifier and augments a Rare item with a new guaranteed modifier"
+  },
+  {
+    "id": "perfect_essence_of_insulation",
+    "name": "Perfect Essence of Insulation",
+    "tier": "perfect",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "imageUrl": "/images/currency/perfect_essence_of_insulation.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Removes a random modifier and augments a Rare item with a new guaranteed modifier"
+  },
+  {
+    "id": "perfect_essence_of_opulence",
+    "name": "Perfect Essence of Opulence",
+    "tier": "perfect",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "imageUrl": "/images/currency/perfect_essence_of_opulence.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Removes a random modifier and augments a Rare item with a new guaranteed modifier"
+  },
+  {
+    "id": "perfect_essence_of_ruin",
+    "name": "Perfect Essence of Ruin",
+    "tier": "perfect",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "imageUrl": "/images/currency/perfect_essence_of_ruin.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Removes a random modifier and augments a Rare item with a new guaranteed modifier"
+  },
+  {
+    "id": "perfect_essence_of_seeking",
+    "name": "Perfect Essence of Seeking",
+    "tier": "perfect",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "imageUrl": "/images/currency/perfect_essence_of_seeking.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Removes a random modifier and augments a Rare item with a new guaranteed modifier"
+  },
+  {
+    "id": "perfect_essence_of_sorcery",
+    "name": "Perfect Essence of Sorcery",
+    "tier": "perfect",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "imageUrl": "/images/currency/perfect_essence_of_sorcery.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Removes a random modifier and augments a Rare item with a new guaranteed modifier"
+  },
+  {
+    "id": "perfect_essence_of_thawing",
+    "name": "Perfect Essence of Thawing",
+    "tier": "perfect",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "imageUrl": "/images/currency/perfect_essence_of_thawing.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Removes a random modifier and augments a Rare item with a new guaranteed modifier"
+  },
+  {
+    "id": "perfect_essence_of_the_body",
+    "name": "Perfect Essence of the Body",
+    "tier": "perfect",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "imageUrl": "/images/currency/perfect_essence_of_the_body.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Removes a random modifier and augments a Rare item with a new guaranteed modifier"
+  },
+  {
+    "id": "perfect_essence_of_the_infinite",
+    "name": "Perfect Essence of the Infinite",
+    "tier": "perfect",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "imageUrl": "/images/currency/perfect_essence_of_the_infinite.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Removes a random modifier and augments a Rare item with a new guaranteed modifier"
+  },
+  {
+    "id": "perfect_essence_of_the_mind",
+    "name": "Perfect Essence of the Mind",
+    "tier": "perfect",
+    "category": "essence",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "imageUrl": "/images/currency/perfect_essence_of_the_mind.webp",
+    "stackSize": 10,
+    "guaranteedMod": "Removes a random modifier and augments a Rare item with a new guaranteed modifier"
+  },
+  {
+    "id": "perfect_exalted_orb",
+    "name": "Perfect Exalted Orb",
+    "tier": "perfect",
+    "category": "augment",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Augments a Rare item with a new random modifier",
+    "effect": "Augments a Rare item with a new random modifier",
+    "mechanics": "Augments a Rare item with a new random modifier",
+    "imageUrl": "/images/currency/perfect_exalted_orb.webp",
+    "stackSize": 20,
+    "minModifierLevel": 50
+  },
+  {
+    "id": "perfect_jewellers_orb",
+    "name": "Perfect Jeweller's Orb",
+    "tier": "perfect",
+    "category": "special",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Sets a Skill Gem to have 5 Support Gem Sockets",
+    "effect": "Sets a Skill Gem to have 5 Support Gem Sockets",
+    "mechanics": "Sets a Skill Gem to have 5 Support Gem Sockets",
+    "imageUrl": "/images/currency/perfect_jewellers_orb.webp",
+    "stackSize": 20
+  },
+  {
+    "id": "perfect_orb_of_augmentation",
+    "name": "Perfect Orb of Augmentation",
+    "tier": "perfect",
+    "category": "augment",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Augments a Magic item with a new random modifier",
+    "effect": "Augments a Magic item with a new random modifier",
+    "mechanics": "Augments a Magic item with a new random modifier",
+    "imageUrl": "/images/currency/perfect_orb_of_augmentation.webp",
+    "stackSize": 30,
+    "minModifierLevel": 70
+  },
+  {
+    "id": "perfect_orb_of_transmutation",
+    "name": "Perfect Orb of Transmutation",
+    "tier": "perfect",
+    "category": "upgrade_rarity",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Normal item to a Magic item with 1 modifier",
+    "effect": "Upgrades a Normal item to a Magic item with 1 modifier",
+    "mechanics": "Upgrades a Normal item to a Magic item with 1 modifier",
+    "imageUrl": "/images/currency/perfect_orb_of_transmutation.webp",
+    "stackSize": 40,
+    "minModifierLevel": 70
+  },
+  {
+    "id": "perfect_regal_orb",
+    "name": "Perfect Regal Orb",
+    "tier": "perfect",
+    "category": "augment",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding 1 modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding 1 modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding 1 modifier",
+    "imageUrl": "/images/currency/perfect_regal_orb.webp",
+    "stackSize": 20,
+    "minModifierLevel": 50
+  },
+  {
+    "id": "potent_liquid_contempt",
+    "name": "Potent Liquid Contempt",
+    "tier": "normal",
+    "category": "liquid_affector",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
+    "effect": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
+    "mechanics": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
+    "imageUrl": "/images/currency/potent_liquid_contempt.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "potent_liquid_ferocity",
+    "name": "Potent Liquid Ferocity",
+    "tier": "normal",
+    "category": "liquid_affector",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
+    "effect": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
+    "mechanics": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
+    "imageUrl": "/images/currency/potent_liquid_ferocity.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "potent_liquid_melancholy",
+    "name": "Potent Liquid Melancholy",
+    "tier": "normal",
+    "category": "liquid_affector",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
+    "effect": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
+    "mechanics": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
+    "imageUrl": "/images/currency/potent_liquid_melancholy.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "preserved_collarbone",
+    "name": "Preserved Collarbone",
+    "tier": "normal",
+    "category": "desecrate",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Desecrates a Rare Amulet, Ring or Belt",
+    "effect": "Desecrates a Rare Amulet, Ring or Belt",
+    "mechanics": "Desecrates a Rare Amulet, Ring or Belt",
+    "imageUrl": "/images/currency/preserved_collarbone.webp",
+    "stackSize": 20
+  },
+  {
+    "id": "preserved_cranium",
+    "name": "Preserved Cranium",
+    "tier": "normal",
+    "category": "desecrate",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Desecrates a Rare Jewel",
+    "effect": "Desecrates a Rare Jewel",
+    "mechanics": "Desecrates a Rare Jewel",
+    "imageUrl": "/images/currency/preserved_cranium.webp",
+    "stackSize": 20
+  },
+  {
+    "id": "preserved_jawbone",
+    "name": "Preserved Jawbone",
+    "tier": "normal",
+    "category": "desecrate",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Desecrates a Rare Weapon or Quiver",
+    "effect": "Desecrates a Rare Weapon or Quiver",
+    "mechanics": "Desecrates a Rare Weapon or Quiver",
+    "imageUrl": "/images/currency/preserved_jawbone.webp",
+    "stackSize": 20
+  },
+  {
+    "id": "preserved_rib",
+    "name": "Preserved Rib",
+    "tier": "normal",
+    "category": "desecrate",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Desecrates a Rare Armour",
+    "effect": "Desecrates a Rare Armour",
+    "mechanics": "Desecrates a Rare Armour",
+    "imageUrl": "/images/currency/preserved_rib.webp",
+    "stackSize": 20
+  },
+  {
+    "id": "prismatic_alloy",
+    "name": "Prismatic Alloy",
+    "tier": "normal",
+    "category": "currency_other",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "imageUrl": "/images/currency/prismatic_alloy.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "protective_alloy",
+    "name": "Protective Alloy",
+    "tier": "normal",
+    "category": "currency_other",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "imageUrl": "/images/currency/protective_alloy.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "reaver_catalyst",
+    "name": "Reaver Catalyst",
+    "tier": "normal",
+    "category": "catalyst",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Adds quality that enhances Attack modifiers on a ring or amulet Replaces other quality types",
+    "effect": "Adds quality that enhances Attack modifiers on a ring or amulet Replaces other quality types",
+    "mechanics": "Adds quality that enhances Attack modifiers on a ring or amulet Replaces other quality types",
+    "imageUrl": "/images/currency/reaver_catalyst.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "refined_adaptive_catalyst",
+    "name": "Refined Adaptive Catalyst",
+    "tier": "normal",
+    "category": "catalyst",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Adds quality that enhances Attribute modifiers on a jewel Replaces other quality types",
+    "effect": "Adds quality that enhances Attribute modifiers on a jewel Replaces other quality types",
+    "mechanics": "Adds quality that enhances Attribute modifiers on a jewel Replaces other quality types",
+    "imageUrl": "/images/currency/refined_adaptive_catalyst.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "refined_carapace_catalyst",
+    "name": "Refined Carapace Catalyst",
+    "tier": "normal",
+    "category": "catalyst",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Adds quality that enhances Armour, Evasion and Energy Shield modifiers on a jewel Replaces other quality types",
+    "effect": "Adds quality that enhances Armour, Evasion and Energy Shield modifiers on a jewel Replaces other quality types",
+    "mechanics": "Adds quality that enhances Armour, Evasion and Energy Shield modifiers on a jewel Replaces other quality types",
+    "imageUrl": "/images/currency/refined_carapace_catalyst.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "refined_chayulas_catalyst",
+    "name": "Refined Chayula's Catalyst",
+    "tier": "normal",
+    "category": "catalyst",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Adds quality that enhances Chaos modifiers on a jewel Replaces other quality types",
+    "effect": "Adds quality that enhances Chaos modifiers on a jewel Replaces other quality types",
+    "mechanics": "Adds quality that enhances Chaos modifiers on a jewel Replaces other quality types",
+    "imageUrl": "/images/currency/refined_chayulas_catalyst.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "refined_eshs_catalyst",
+    "name": "Refined Esh's Catalyst",
+    "tier": "normal",
+    "category": "catalyst",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Adds quality that enhances Lightning modifiers on a jewel Replaces other quality types",
+    "effect": "Adds quality that enhances Lightning modifiers on a jewel Replaces other quality types",
+    "mechanics": "Adds quality that enhances Lightning modifiers on a jewel Replaces other quality types",
+    "imageUrl": "/images/currency/refined_eshs_catalyst.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "refined_flesh_catalyst",
+    "name": "Refined Flesh Catalyst",
+    "tier": "normal",
+    "category": "catalyst",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Adds quality that enhances Life modifiers on a jewel Replaces other quality types",
+    "effect": "Adds quality that enhances Life modifiers on a jewel Replaces other quality types",
+    "mechanics": "Adds quality that enhances Life modifiers on a jewel Replaces other quality types",
+    "imageUrl": "/images/currency/refined_flesh_catalyst.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "refined_necrotic_catalyst",
+    "name": "Refined Necrotic Catalyst",
+    "tier": "normal",
+    "category": "catalyst",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Adds quality that enhances Minion modifiers on a jewel Replaces other quality types",
+    "effect": "Adds quality that enhances Minion modifiers on a jewel Replaces other quality types",
+    "mechanics": "Adds quality that enhances Minion modifiers on a jewel Replaces other quality types",
+    "imageUrl": "/images/currency/refined_necrotic_catalyst.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "refined_neural_catalyst",
+    "name": "Refined Neural Catalyst",
+    "tier": "normal",
+    "category": "catalyst",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Adds quality that enhances Mana modifiers on a jewel Replaces other quality types",
+    "effect": "Adds quality that enhances Mana modifiers on a jewel Replaces other quality types",
+    "mechanics": "Adds quality that enhances Mana modifiers on a jewel Replaces other quality types",
+    "imageUrl": "/images/currency/refined_neural_catalyst.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "refined_reaver_catalyst",
+    "name": "Refined Reaver Catalyst",
+    "tier": "normal",
+    "category": "catalyst",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Adds quality that enhances Attack modifiers on a jewel Replaces other quality types",
+    "effect": "Adds quality that enhances Attack modifiers on a jewel Replaces other quality types",
+    "mechanics": "Adds quality that enhances Attack modifiers on a jewel Replaces other quality types",
+    "imageUrl": "/images/currency/refined_reaver_catalyst.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "refined_sibilant_catalyst",
+    "name": "Refined Sibilant Catalyst",
+    "tier": "normal",
+    "category": "catalyst",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Adds quality that enhances Caster modifiers on a jewel Replaces other quality types",
+    "effect": "Adds quality that enhances Caster modifiers on a jewel Replaces other quality types",
+    "mechanics": "Adds quality that enhances Caster modifiers on a jewel Replaces other quality types",
+    "imageUrl": "/images/currency/refined_sibilant_catalyst.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "refined_skittering_catalyst",
+    "name": "Refined Skittering Catalyst",
+    "tier": "normal",
+    "category": "catalyst",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Adds quality that enhances Speed modifiers on a jewel Replaces other quality types",
+    "effect": "Adds quality that enhances Speed modifiers on a jewel Replaces other quality types",
+    "mechanics": "Adds quality that enhances Speed modifiers on a jewel Replaces other quality types",
+    "imageUrl": "/images/currency/refined_skittering_catalyst.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "refined_tuls_catalyst",
+    "name": "Refined Tul's Catalyst",
+    "tier": "normal",
+    "category": "catalyst",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Adds quality that enhances Cold modifiers on a jewel Replaces other quality types",
+    "effect": "Adds quality that enhances Cold modifiers on a jewel Replaces other quality types",
+    "mechanics": "Adds quality that enhances Cold modifiers on a jewel Replaces other quality types",
+    "imageUrl": "/images/currency/refined_tuls_catalyst.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "refined_uul-netols_catalyst",
+    "name": "Refined Uul-Netol's Catalyst",
+    "tier": "normal",
+    "category": "catalyst",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Adds quality that enhances Physical modifiers on a jewel Replaces other quality types",
+    "effect": "Adds quality that enhances Physical modifiers on a jewel Replaces other quality types",
+    "mechanics": "Adds quality that enhances Physical modifiers on a jewel Replaces other quality types",
+    "imageUrl": "/images/currency/refined_uul_netols_catalyst.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "refined_xophs_catalyst",
+    "name": "Refined Xoph's Catalyst",
+    "tier": "normal",
+    "category": "catalyst",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Adds quality that enhances Fire modifiers on a jewel Replaces other quality types",
+    "effect": "Adds quality that enhances Fire modifiers on a jewel Replaces other quality types",
+    "mechanics": "Adds quality that enhances Fire modifiers on a jewel Replaces other quality types",
+    "imageUrl": "/images/currency/refined_xophs_catalyst.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "regal_orb",
+    "name": "Regal Orb",
+    "tier": "normal",
+    "category": "augment",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Upgrades a Magic item to a Rare item, adding 1 modifier",
+    "effect": "Upgrades a Magic item to a Rare item, adding 1 modifier",
+    "mechanics": "Upgrades a Magic item to a Rare item, adding 1 modifier",
+    "imageUrl": "/images/currency/regal_orb.webp",
+    "stackSize": 20
+  },
+  {
+    "id": "regal_shard",
+    "name": "Regal Shard",
+    "tier": "normal",
+    "category": "augment",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "NameShow Full Descriptions Currency Exchange12 Gold NoteCoderegal-shard DropLevel 5 BaseType Regal Shard Class Stackable Currency FlagsAlwaysAllocate TypeMetadata/Items/Currency/CurrencyUpgradeMagicToRareShard SoundAudio/Sound Effects/ItemSounds/4.0/Currency/Orbs/OrbUse.ogg Tagscurrency_shard, currency IconArt/2DItems/Currency/CurrencyUpgradeMagicToRareShard",
+    "effect": "NameShow Full Descriptions Currency Exchange12 Gold NoteCoderegal-shard DropLevel 5 BaseType Regal Shard Class Stackable Currency FlagsAlwaysAllocate TypeMetadata/Items/Currency/CurrencyUpgradeMagicToRareShard SoundAudio/Sound Effects/ItemSounds/4.0/Currency/Orbs/OrbUse.ogg Tagscurrency_shard, currency IconArt/2DItems/Currency/CurrencyUpgradeMagicToRareShard",
+    "mechanics": "NameShow Full Descriptions Currency Exchange12 Gold NoteCoderegal-shard DropLevel 5 BaseType Regal Shard Class Stackable Currency FlagsAlwaysAllocate TypeMetadata/Items/Currency/CurrencyUpgradeMagicToRareShard SoundAudio/Sound Effects/ItemSounds/4.0/Currency/Orbs/OrbUse.ogg Tagscurrency_shard, currency IconArt/2DItems/Currency/CurrencyUpgradeMagicToRareShard",
+    "imageUrl": "/images/currency/regal_shard.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "runic_alloy",
+    "name": "Runic Alloy",
+    "tier": "normal",
+    "category": "currency_other",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "imageUrl": "/images/currency/runic_alloy.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "scroll_of_wisdom",
+    "name": "Scroll of Wisdom",
+    "tier": "normal",
+    "category": "currency_other",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Identifies an item",
+    "effect": "Identifies an item",
+    "mechanics": "Identifies an item",
+    "imageUrl": "/images/currency/scroll_of_wisdom.webp",
+    "stackSize": 40
+  },
+  {
+    "id": "sibilant_catalyst",
+    "name": "Sibilant Catalyst",
+    "tier": "normal",
+    "category": "catalyst",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Adds quality that enhances Caster modifiers on a ring or amulet Replaces other quality types",
+    "effect": "Adds quality that enhances Caster modifiers on a ring or amulet Replaces other quality types",
+    "mechanics": "Adds quality that enhances Caster modifiers on a ring or amulet Replaces other quality types",
+    "imageUrl": "/images/currency/sibilant_catalyst.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "skittering_catalyst",
+    "name": "Skittering Catalyst",
+    "tier": "normal",
+    "category": "catalyst",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Adds quality that enhances Speed modifiers on a ring or amulet Replaces other quality types",
+    "effect": "Adds quality that enhances Speed modifiers on a ring or amulet Replaces other quality types",
+    "mechanics": "Adds quality that enhances Speed modifiers on a ring or amulet Replaces other quality types",
+    "imageUrl": "/images/currency/skittering_catalyst.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "sovereign_alloy",
+    "name": "Sovereign Alloy",
+    "tier": "normal",
+    "category": "currency_other",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "imageUrl": "/images/currency/sovereign_alloy.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "swift_alloy",
+    "name": "Swift Alloy",
+    "tier": "normal",
+    "category": "currency_other",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "imageUrl": "/images/currency/swift_alloy.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "the_runebinders_alloy",
+    "name": "The Runebinder's Alloy",
+    "tier": "normal",
+    "category": "currency_other",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "imageUrl": "/images/currency/the_runebinders_alloy.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "the_runefathers_alloy",
+    "name": "The Runefather's Alloy",
+    "tier": "normal",
+    "category": "currency_other",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "imageUrl": "/images/currency/the_runefathers_alloy.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "transcendent_alloy",
+    "name": "Transcendent Alloy",
+    "tier": "normal",
+    "category": "currency_other",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
+    "imageUrl": "/images/currency/transcendent_alloy.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "transmutation_shard",
+    "name": "Transmutation Shard",
+    "tier": "normal",
+    "category": "upgrade_rarity",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "NameShow Full Descriptions Currency Exchange4 Gold NoteCodetransmutation-shard DropLevel 1 BaseType Transmutation Shard Class Stackable Currency FlagsAlwaysAllocate TypeMetadata/Items/Currency/CurrencyUpgradeToMagicShard Tagscurrency_shard, currency IconArt/2DItems/Currency/CurrencyUpgradeToMagicShard",
+    "effect": "NameShow Full Descriptions Currency Exchange4 Gold NoteCodetransmutation-shard DropLevel 1 BaseType Transmutation Shard Class Stackable Currency FlagsAlwaysAllocate TypeMetadata/Items/Currency/CurrencyUpgradeToMagicShard Tagscurrency_shard, currency IconArt/2DItems/Currency/CurrencyUpgradeToMagicShard",
+    "mechanics": "NameShow Full Descriptions Currency Exchange4 Gold NoteCodetransmutation-shard DropLevel 1 BaseType Transmutation Shard Class Stackable Currency FlagsAlwaysAllocate TypeMetadata/Items/Currency/CurrencyUpgradeToMagicShard Tagscurrency_shard, currency IconArt/2DItems/Currency/CurrencyUpgradeToMagicShard",
+    "imageUrl": "/images/currency/transmutation_shard.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "tuls_catalyst",
+    "name": "Tul's Catalyst",
+    "tier": "normal",
+    "category": "catalyst",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Adds quality that enhances Cold modifiers on a ring or amulet Replaces other quality types",
+    "effect": "Adds quality that enhances Cold modifiers on a ring or amulet Replaces other quality types",
+    "mechanics": "Adds quality that enhances Cold modifiers on a ring or amulet Replaces other quality types",
+    "imageUrl": "/images/currency/tuls_catalyst.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "uul-netols_catalyst",
+    "name": "Uul-Netol's Catalyst",
+    "tier": "normal",
+    "category": "catalyst",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Adds quality that enhances Physical modifiers on a ring or amulet Replaces other quality types",
+    "effect": "Adds quality that enhances Physical modifiers on a ring or amulet Replaces other quality types",
+    "mechanics": "Adds quality that enhances Physical modifiers on a ring or amulet Replaces other quality types",
+    "imageUrl": "/images/currency/uul_netols_catalyst.webp",
+    "stackSize": 10
+  },
+  {
+    "id": "vaal_orb",
+    "name": "Vaal Orb",
+    "tier": "normal",
+    "category": "corrupt",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Modifies an item unpredictably and Corrupts it",
+    "effect": "Modifies an item unpredictably and Corrupts it",
+    "mechanics": "Modifies an item unpredictably and Corrupts it",
+    "imageUrl": "/images/currency/vaal_orb.webp",
+    "stackSize": 20
+  },
+  {
+    "id": "xophs_catalyst",
+    "name": "Xoph's Catalyst",
+    "tier": "normal",
+    "category": "catalyst",
+    "appliesTo": [
+      "any"
+    ],
+    "description": "Adds quality that enhances Fire modifiers on a ring or amulet Replaces other quality types",
+    "effect": "Adds quality that enhances Fire modifiers on a ring or amulet Replaces other quality types",
+    "mechanics": "Adds quality that enhances Fire modifiers on a ring or amulet Replaces other quality types",
+    "imageUrl": "/images/currency/xophs_catalyst.webp",
+    "stackSize": 10
+  }
+]

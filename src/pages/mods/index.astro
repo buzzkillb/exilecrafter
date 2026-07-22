@@ -1,0 +1,84 @@
+---
+import Base from '~/layouts/Base.astro';
+import ModBadge from '~/components/ModBadge.astro';
+import { searchMods, mods } from '~/lib/data';
+import { useT } from '~/lib/i18n';
+
+const locale = (Astro.locals.locale as 'en' | 'pt') ?? 'en';
+const t = useT(locale);
+
+const url = new URL(Astro.request.url);
+const q = url.searchParams.get('q') || '';
+const type = url.searchParams.get('type') || undefined;
+const tier = url.searchParams.get('tier') ? parseInt(url.searchParams.get('tier')!) : undefined;
+const tag = url.searchParams.get('tag') || undefined;
+
+const results = searchMods(q, { type, tag, tier });
+const allTags = [...new Set(mods.flatMap((m) => m.tags))].sort();
+---
+
+<Base title={`${t('mods.title')} | CraftClass`}>
+  <section class="relative overflow-hidden rounded-xl border border-border bg-gradient-to-b from-bg-card/80 to-bg p-6 md:p-8 mb-8 text-center">
+    <div class="absolute -top-20 -left-20 w-48 h-48 bg-gold/5 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute -bottom-12 -right-12 w-36 h-36 bg-gold/5 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="relative">
+      <div class="text-4xl mb-3">✨</div>
+      <h1 class="text-3xl md:text-4xl font-display font-bold bg-gradient-to-r from-gold-bright via-gold to-yellow-300 bg-clip-text text-transparent mb-2">
+        {t('mods.title')}
+      </h1>
+      <p class="text-sm text-dim max-w-xl mx-auto">{t('mods.subtitle')}</p>
+    </div>
+  </section>
+
+  <form method="get" class="parchment p-4 mb-6 flex gap-3 items-end flex-wrap">
+    <div class="flex-1 min-w-[200px]">
+      <label class="block text-xs text-mute mb-1">{t('mods.search.label')}</label>
+      <input
+        type="text"
+        name="q"
+        value={q}
+        placeholder={t('mods.search.placeholder')}
+        class="w-full bg-bg border border-border-strong rounded px-3 py-2 text-sm focus:outline-none focus:border-gold"
+      />
+    </div>
+    <div>
+      <label class="block text-xs text-mute mb-1">{t('mods.type.label')}</label>
+      <select name="type" class="bg-bg border border-border-strong rounded px-3 py-2 text-sm">
+        <option value="">{t('mods.type.any')}</option>
+        <option value="prefix" selected={type === 'prefix'}>{t('mods.type.prefix')}</option>
+        <option value="suffix" selected={type === 'suffix'}>{t('mods.type.suffix')}</option>
+      </select>
+    </div>
+    <div>
+      <label class="block text-xs text-mute mb-1">{t('mods.tier.label')}</label>
+      <select name="tier" class="bg-bg border border-border-strong rounded px-3 py-2 text-sm">
+        <option value="">Any</option>
+        {[1,2,3,4,5,6,7,8,9,10,11,12,13].map((tt) => (
+          <option value={tt} selected={tier === tt}>T{tt}</option>
+        ))}
+      </select>
+    </div>
+    <div>
+      <label class="block text-xs text-mute mb-1">{t('mods.tag.label')}</label>
+      <select name="tag" class="bg-bg border border-border-strong rounded px-3 py-2 text-sm">
+        <option value="">Any</option>
+        {allTags.map((tg) => (
+          <option value={tg} selected={tag === tg}>{tg.replace(/_/g, ' ')}</option>
+        ))}
+      </select>
+    </div>
+    <button type="submit" class="btn btn-gold">Filter</button>
+    <a href="/mods" class="btn">Clear</a>
+  </form>
+
+  <div class="text-sm text-mute mb-3">{t('mods.count', { count: results.length })}</div>
+
+  <div class="grid gap-2">
+    {results.slice(0, 100).map((mod) => (
+      <ModBadge mod={mod} />
+    ))}
+  </div>
+  {results.length > 100 && (
+    <div class="text-xs text-mute mt-3">{t('mods.truncated', { count: results.length })}</div>
+  )}
+</Base>

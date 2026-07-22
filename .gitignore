@@ -1,0 +1,24 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build output
+dist/
+dist.zip
+
+# Vite/astro cache
+node_modules/.vite/
+
+# Data cache (scraped HTML pages — regenerate with npm run process)
+data/raw/
+
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Temp
+tmp/
+temp/
