@@ -1105,12 +1105,11 @@ export function getCurrencyAvailability(item: ItemState, base: BaseItem): Record
   const rarity = item.rarity;
   const affixes = item.affixes;
 
-  if (!item || !base) {
-    const msg = !item ? 'Select a base item first.' : 'Base data not loaded.';
+  if (!item) {
     for (const id of Object.keys(OPERATIONS)) {
-      result[id] = { valid: false, reason: msg };
+      result[id] = { valid: false, reason: 'Select a base item first.' };
     }
-    result.desecrate = { valid: false, reason: msg };
+    result.desecrate = { valid: false, reason: 'Select a base item first.' };
     return result;
   }
 
@@ -1147,8 +1146,9 @@ export function getCurrencyAvailability(item: ItemState, base: BaseItem): Record
   };
 
   // Rare-only
+  const maxSlots = base ? effectiveSlots(item, base).prefix + effectiveSlots(item, base).suffix : 6;
   result.exalted_orb = {
-    valid: rarity === 'rare' && affixes.length < effectiveSlots(item, base).prefix + effectiveSlots(item, base).suffix && !item.mirrored,
+    valid: rarity === 'rare' && affixes.length < maxSlots && !item.mirrored,
     reason: rarity !== 'rare' ? 'Exalted only works on Rare items.' : 'Rare item is full (all affix slots filled).',
   };
   result.chaos_orb = {
