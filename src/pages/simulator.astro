@@ -911,7 +911,8 @@ function openPasteModal() {
 
       // Build item directly — bypass selectBase to avoid change-event clash
       currentBase = baseRecord;
-      currentItem = emptyItem(makeBaseRecord(baseRecord, parsedPaste.rarity === 'magic' ? 'magic' : 'rare'), parsedPaste.itemLevel);
+      currentItem = emptyItem(makeBaseRecord(baseRecord, 'rare'), parsedPaste.itemLevel);
+      currentItem.rarity = parsedPaste.rarity === 'magic' ? 'magic' : 'rare';
       currentItem.implicit = parsedPaste.implicit || '';
       const affixes: any[] = (parsedPaste.affixes || []).map((a: any) => ({
         modId: `imported_${a.type}_${a.name.slice(0, 20).replace(/\W+/g, '_').toLowerCase()}`,
