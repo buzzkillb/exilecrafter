@@ -914,16 +914,15 @@ function openPasteModal() {
         currentItem.itemLevel = parsedPaste.itemLevel;
         currentItem.rarity = parsedPaste.rarity === 'magic' ? 'magic' : parsedPaste.rarity === 'normal' ? 'normal' : 'rare';
         currentItem.implicit = parsedPaste.implicit || '';
-        currentItem.affixes = (parsedPaste.affixes || []).map((a: any) => ({
+        const affixes: any[] = (parsedPaste.affixes || []).map((a: any) => ({
           modId: `imported_${a.type}_${a.name.slice(0, 20).replace(/\W+/g, '_').toLowerCase()}`,
-          type: a.type,
-          tier: a.tier || 1,
-          name: a.name,
-          tags: [],
-          crafted: !!a.crafted,
-          desecrated: !!a.desecrated,
+          type: a.type, tier: a.tier || 1, name: a.name,
+          tags: [], crafted: !!a.crafted, desecrated: !!a.desecrated,
         }));
-        // Reset history — this is an imported item, not a fresh craft
+        currentItem.affixes = affixes;
+        // Bonus slots: desecrated prefix = +1 prefix slot, crafted suffix = +1 suffix slot
+        currentItem.bonusPrefixSlots = affixes.filter((a: any) => (a.desecrated || a.crafted) && a.type === 'prefix').length;
+        currentItem.bonusSuffixSlots = affixes.filter((a: any) => (a.desecrated || a.crafted) && a.type === 'suffix').length;
         history = [];
         costTracker.reset();
         activeOmens.clear();
