@@ -173,6 +173,24 @@ const craftingExamples = [
     <div id="main-ui" class="hidden grid lg:grid-cols-[1fr_360px] gap-3">
       <!-- LEFT: Item + history -->
       <div class="space-y-3 min-w-0">
+        <!-- Cost tracking bar — always visible once there's spend -->
+        <div id="cost-panel" class="flex items-center gap-3 parchment px-4 py-2 hidden">
+          <span class="text-[10px] uppercase tracking-wider text-mute font-semibold">Cost</span>
+          <span class="flex items-center gap-1.5 text-xs font-mono">
+            <span class="text-dim">Chaos:</span>
+            <span id="cost-chaos" class="text-gold-bright font-semibold">0</span>
+          </span>
+          <span class="flex items-center gap-1.5 text-xs font-mono">
+            <span class="text-dim">Exalted:</span>
+            <span id="cost-exalted" class="text-gold-bright font-semibold">0</span>
+          </span>
+          <span class="flex items-center gap-1.5 text-xs font-mono">
+            <span class="text-dim">Divine:</span>
+            <span id="cost-divine" class="text-gold-bright font-semibold">0</span>
+          </span>
+          <div class="hidden" id="cost-fallback-badge"><span class="text-corrupted text-[10px]">(prices may be stale)</span></div>
+          <div id="cost-breakdown" class="ml-auto text-[10px] text-dim max-h-20 overflow-y-auto space-y-0.5 hidden"></div>
+        </div>
         <!-- Item display -->
         <div id="item-display" class="parchment p-3"></div>
 
@@ -277,17 +295,7 @@ const craftingExamples = [
           </div>
           <div id="currency-strip" class="grid grid-cols-[repeat(auto-fill,minmax(72px,1fr))] gap-1.5"></div>
 
-          <!-- Cost tracking panel -->
-          <div id="cost-panel" class="mt-2 border-t border-border pt-2 hidden">
-            <div class="text-xs uppercase tracking-wider text-mute font-semibold mb-1.5">Craft Cost</div>
-            <div class="flex flex-wrap gap-x-4 gap-y-1 text-xs">
-              <div><span class="text-dim">Chaos:</span> <span id="cost-chaos" class="text-gold-bright font-semibold">0</span></div>
-              <div><span class="text-dim">Exalted:</span> <span id="cost-exalted" class="text-gold-bright font-semibold">0</span></div>
-              <div><span class="text-dim">Divine:</span> <span id="cost-divine" class="text-gold-bright font-semibold">0</span></div>
-              <div class="hidden" id="cost-fallback-badge"><span class="text-corrupted text-[10px]">(prices may be stale)</span></div>
-            </div>
-            <div id="cost-breakdown" class="mt-1.5 text-[10px] text-dim max-h-28 overflow-y-auto space-y-0.5"></div>
-          </div>
+
           <div class="text-xs text-mute mt-2">Tip: keyboard shortcuts work when an item is selected - <span class="font-mono text-gold">T A R E X C D Z</span></div>
         </div>
       </div>
