@@ -56,10 +56,6 @@ async function fetchJSON(url: string): Promise<any> {
 }
 
 export async function onRequest(context: EventContext<any, any, any>): Promise<Response> {
-  const cache = caches.default;
-  const cachedResp = await cache.match(new Request(context.request));
-  if (cachedResp) return cachedResp;
-
   try {
     // 1. Fetch league to find current league + exchange rates
     const leaguesRaw = await fetchJSON(`${SCOUT_BASE}/${REALM}/Leagues`);
@@ -130,21 +126,18 @@ export async function onRequest(context: EventContext<any, any, any>): Promise<R
         fetchedAt: new Date().toISOString(),
         source: `poe2scout (${allItems.length} items from API)`,
         chaosPerDivine: Math.round(chaosPerDivine * 10) / 10,
-        chaosPerExalt: Math.round(chaosPerExalt * 1000) / 1000,
         exaltsPerDivine: Math.round(exaltsPerDivine * 10) / 10,
-        chaosPerExalt: Math.round(chaosPerExalt * 1000) / 1000,
       },
     });
 
     const response = new Response(body, {
       headers: {
         'Content-Type': 'application/json',
-        'Cache-Control': `public, max-age=${SIX_HOURS}`,
+        'Cache-Control': 'public, max-age=60',
         'Access-Control-Allow-Origin': '*',
       },
     });
 
-    context.waitUntil(cache.put(new Request(context.request), response.clone()));
     return response;
   } catch (err) {
     const fallback = {
