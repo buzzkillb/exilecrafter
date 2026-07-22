@@ -1697,7 +1697,8 @@ function categorizeOmen(name: string): string {
     // Initialize cost tracker — fetches live prices from poe2scout
     costTracker.init().then(() => {
       logActivity('Live pricing loaded from poe2scout.', 'info');
-      renderCostPanel();
+      if (currentBase) renderAll();
+      else renderCostPanel();
 });
   </script>
 </Base>
