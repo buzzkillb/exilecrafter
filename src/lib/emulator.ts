@@ -1129,8 +1129,8 @@ export function getCurrencyAvailability(item: ItemState, base: BaseItem): Record
 
   // Rare-only
   result.exalted_orb = {
-    valid: rarity === 'rare' && affixes.length < 6 && !item.mirrored,
-    reason: rarity !== 'rare' ? 'Exalted only works on Rare items.' : 'Rare item is full (6 affixes).',
+    valid: rarity === 'rare' && affixes.length < effectiveSlots(item, base).prefix + effectiveSlots(item, base).suffix && !item.mirrored,
+    reason: rarity !== 'rare' ? 'Exalted only works on Rare items.' : 'Rare item is full (all affix slots filled).',
   };
   result.chaos_orb = {
     valid: rarity === 'rare' && affixes.length > 0 && !item.mirrored,
