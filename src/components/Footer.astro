@@ -114,8 +114,14 @@ const { season, counts } = manifest;
         {t('site.footer.copyright', { year: new Date().getFullYear().toString() })}
       </div>
       <div class="flex items-center gap-3">
+        <span class="flex items-center gap-1 text-[10px] text-dim/50 hover:text-dim transition-colors">
+          <a href="https://opencode.ai/go?ref=51XDS1EEQE" target="_blank" rel="noopener noreferrer" class="hover:text-gold-bright">
+            Built with opencode
+          </a>
+        </span>
+        <span class="text-dim/30">·</span>
         <span class="text-dim text-[10px] tracking-wider uppercase flex items-center gap-1.5">
-          Built by
+          by
           <a href="https://cybara.ai" target="_blank" rel="noopener noreferrer" class="hover:text-gold-bright transition-colors flex items-center gap-1">
             <img src="/cybara-logo.png" alt="" class="w-3.5 h-3.5 object-contain" />
             Cybara AI

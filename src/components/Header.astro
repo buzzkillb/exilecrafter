@@ -41,6 +41,30 @@ const links = [
           {l.label}
         </a>
       ))}
+      <div id="header-prices" class="ml-3 flex items-center gap-1.5 text-xs font-mono whitespace-nowrap">
+        <span class="text-mute text-[10px]">loading…</span>
+      </div>
     </nav>
   </div>
 </header>
+
+<script>
+  (async () => {
+    const el = document.getElementById('header-prices');
+    if (!el) return;
+    try {
+      const res = await fetch('/api/prices');
+      if (!res.ok) { el.innerHTML = ''; return; }
+      const raw = await res.json();
+      const meta = raw._meta || {};
+      const divine = raw.divine_orb ?? meta.chaosPerDivine ?? 7.5;
+      const exalt = raw.exalted_orb ?? meta.chaosPerExalt ?? 0.018;
+      const t = meta.fetchedAt ? new Date(meta.fetchedAt).toLocaleTimeString() : '';
+      el.innerHTML =
+        '<span class="text-dim/60 text-[10px]">' + divine.toFixed(0) + 'c</span>' +
+        '<span class="text-dim/30">·</span>' +
+        '<span class="text-dim/60 text-[10px]">' + exalt.toFixed(1) + 'c</span>' +
+        '<span class="w-1.5 h-1.5 rounded-full bg-green-500 inline-block shrink-0" title="Live from poe2scout · ' + t + '"></span>';
+    } catch (_) { el.innerHTML = ''; }
+  })();
+</script>
