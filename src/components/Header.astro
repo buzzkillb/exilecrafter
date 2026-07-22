@@ -54,11 +54,14 @@ const fetchedAt = meta.fetchedAt || '';
         <span class="text-gold-bright">{chaosPerDivine.toFixed(1)}c</span>
         <span class="text-dim opacity-30">|</span>
         <img src="/images/currency/chaos_orb.webp" alt="Chaos" class="w-4 h-4" />
-        <span class="text-dim">{exaltsPerChaos}x</span>
+        <span class="text-dim">{exaltsPerChaos.toFixed(1)}x</span>
         <span class="text-dim opacity-30">|</span>
         <img src="/images/currency/exalted_orb.webp" alt="Exalt" class="w-4 h-4" />
-        <span class="text-dim">{exaltsPerDivine}x</span>
-        <span class="text-green-400 text-[10px]" title={"Fetched " + fetchedAt}>live</span>
+        <span class="text-dim">{exaltsPerDivine.toFixed(1)}x</span>
+        <span class="relative inline-flex w-2 h-2 ml-1" title={"Live from poe2scout · " + fetchedAt}>
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-green-400"></span>
+        </span>
       </div>
     </nav>
   </div>

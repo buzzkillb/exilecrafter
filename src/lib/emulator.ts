@@ -1,4 +1,4 @@
-﻿// src/lib/emulator.ts
+// src/lib/emulator.ts
 // PoE2 crafting emulator. Drives the interactive simulator + simulator worker.
 // Models item state, applies currency operations, and produces mod rolls.
 
@@ -48,7 +48,7 @@ export interface ActiveOmen {
   mirrored: boolean;
 }
 
-export interface ActiveOmen {
+export type OmenEffect =
   | { kind: 'double_add' }
   | { kind: 'no_destroy', for: 'orb_of_chance' }
   | { kind: 'specific_unique', for: 'orb_of_chance' }
@@ -73,6 +73,9 @@ export interface ActiveOmen {
   | { kind: 'chaos_monsters' }                  // Omen of Chaotic Monsters
   | { kind: 'chaos_quantity' }                  // Omen of Chaotic Quantity
   | { kind: 'chaos_rarity' }                    // Omen of Chaotic Rarity
+  ;
+
+
   ;
 
 export interface EmulatorContext {
@@ -429,6 +432,12 @@ export function divineOrb(ctx: EmulatorContext): CraftResult {
   }
 
   const next: ItemState = {
+    ...item,
+    affixes: item.affixes.map((a) => ({ ...a })),
+    history: [...item.history, { action: 'Divine Orb', detail }],
+  };
+  return { ok: true, message: detail, item: next };
+}
 
 export function vaalOrb(ctx: EmulatorContext): CraftResult {
   // Corrupts the item; if it's a normal/magic/rare without implicit, the implicit
@@ -450,33 +459,6 @@ export function vaalOrb(ctx: EmulatorContext): CraftResult {
   return {
     ok: true,
     message: roll < 0.5 ? 'Vaal Orb upgraded implicit.' : roll < 0.75 ? 'Vaal Orb shuffled affixes.' : 'Vaal Orb corrupted the item (no other effect).',
-    item: { ...item, corrupted: true, history: [...item.history, { action: 'Vaal Orb', detail: 'Corrupted' }] },
-  };
-}
-  const omenNoDestroy = omenOf(ctx.activeOmens, 'no_destroy');
-  // 1/N chance for unique where N is the unique pool size for this base (varies)
-  // For the simulator we model it probabilistically: ~1% hit rate
-  const hit = Math.random() < 0.01;
-  if (hit) {
-    return {
-      ok: true,
-      message: 'Chance hit! Upgraded to Unique!',
-      item: { ...item, rarity: 'unique', history: [...item.history, { action: 'Orb of Chance', detail: 'HIT! Unique!' }] },
-    };
-  }
-  // In PoE2, Chance fails silently â€” the item stays Normal.
-  // Unlike PoE1, there is no item destruction.
-  return { ok: true, message: 'Chance missed â€” item unchanged.', item: { ...item, history: [...item.history, { action: 'Orb of Chance', detail: 'Miss, item kept' }] } };
-}
-
-export function vaalOrb(ctx: EmulatorContext): CraftResult {
-  // Corrupts the item; if it's a normal/magic/rare without implicit, the implicit
-  // slot gets a corrupted implicit (we represent this as a corrupted flag).
-  const { item } = ctx;
-  if (item.corrupted) return { ok: false, message: 'Already corrupted.', item };
-  return {
-    ok: true,
-    message: 'Item corrupted.',
     item: { ...item, corrupted: true, history: [...item.history, { action: 'Vaal Orb', detail: 'Corrupted' }] },
   };
 }
@@ -551,6 +533,20 @@ export function ancientOrb(ctx: EmulatorContext): CraftResult {
   }
   for (let i = 0; i < maxS; i++) {
     const a = pickAffix(poolS, 'suffix', blocked, ctx.weights, base);
+    if (!a) break;
+    newAffixes.push(a);
+    blocked.add(a.modId);
+  }
+
+  const next = {
+    ...item,
+    affixes: newAffixes,
+    history: [...item.history, { action: 'Ancient Orb', detail: 'Rerolled into new Rare' }],
+  };
+  return { ok: true, message: 'Re-rolled into a new Rare.', item: next };
+
+}
+
 export function mirrorOfKalandra(ctx: EmulatorContext): CraftResult {
   // Mirror of Kalandra: creates a Mirrored copy of a Rare item.
   // The simulator doesn't have a side-by-side compare view, so we model
@@ -566,23 +562,6 @@ export function mirrorOfKalandra(ctx: EmulatorContext): CraftResult {
     item: {
       ...item,
       mirrored: true,
-      history: [...item.history, { action: 'Mirror of Kalandra', detail: 'Mirrored' }],
-    },
-  };
-}
-
-export function fracturingOrb(ctx: EmulatorContext): CraftResult {
-  // Fracturing Orb: locks in a random modifier on a Rare item with â‰¥4 mods.
-  const { item } = ctx;
-  const { item } = ctx;
-  if (item.rarity !== 'rare' && item.rarity !== 'unique') {
-    return { ok: false, message: 'Mirror of Kalandra only works on Rare or Unique items.', item };
-  }
-  return {
-    ok: true,
-    message: 'Mirrored, current state locked in.',
-    item: {
-      ...item,
       history: [...item.history, { action: 'Mirror of Kalandra', detail: 'Mirrored' }],
     },
   };
@@ -1007,135 +986,111 @@ export function catalystOrb(ctx: EmulatorContext): CraftResult {
     tier: 1,
     name: `${qualityGained}% ${tagAffinity} Quality`,
     tags: ['catalyst', tagAffinity],
+    };
+  // Apply the catalyst to the item
+  return {
+    ok: true,
+    message: 'Applied catalyst: ' + catalystAffix.name + '.',
+    item: {
+      ...item,
+      affixes: [...item.affixes, catalystAffix],
+      history: [...item.history, { action: 'Catalyst', detail: 'Applied catalyst: ' + catalystAffix.name }],
+    },
   };
+}
 
-  // Normal-only
-  result.orb_of_transmutation = {
-    valid: rarity === 'normal' && !item.mirrored,
-    reason: rarity === 'normal' ? 'Upgrade Normal â†’ Magic (adds 1 random prefix).' : 'Transmutation only works on Normal items.',
-  };
 
-  // Magic-only / Magic-applicable
-  result.orb_of_augmentation = {
-    valid: rarity === 'magic' && affixes.length < 2 && !item.mirrored,
-    reason: rarity !== 'magic'
-      ? 'Augmentation only works on Magic items.'
-      : 'Magic item is already full (1 prefix + 1 suffix).',
-  };
-  result.regal_orb = {
-    valid: rarity === 'magic' && affixes.length >= 2 && !item.mirrored,
-    reason: rarity !== 'magic'
-      ? 'Regal only works on Magic items.'
-      : 'Magic item must have 2 affixes before Regal.',
-  orb_of_annulment: orbOfAnnulment,
 
-  // Rare-only / Rare-applicable
-  result.exalted_orb = {
-    valid: rarity === 'rare' && affixes.length < 6 && !item.mirrored,
-    reason: rarity !== 'rare'
-      ? 'Exalted only works on Rare items.'
-      : 'Rare item is full (6 affixes).',
-  };
-  result.chaos_orb = {
-    valid: rarity === 'rare' && affixes.length > 0 && !item.mirrored,
-    reason: rarity !== 'rare'
-      ? 'Chaos only works on Rare items.'
-      : 'Rare item has no affixes to reroll.',
-  };
-
-  // Hybrid Magic/Rare
-  result.orb_of_annulment = {
-    valid: (rarity === 'magic' || rarity === 'rare') && affixes.length > 0 && !item.mirrored,
-    reason: affixes.length === 0
-      ? 'No affixes to remove.'
-      : 'Annul works on Magic or Rare items.',
-  alloy: essenceOrb,
-
-  // Divine always works if affixes exist
-  result.divine_orb = {
-    valid: affixes.length > 0 && !item.mirrored,
-    reason: affixes.length === 0 ? 'No affixes to divine.' : 'Rerolls numeric values of all affixes.',
-  };
-
-  // Vaal â€” one-time, can't be on mirrored
-  result.vaal_orb = {
-    valid: !item.corrupted && !item.mirrored,
-    reason: item.corrupted ? 'Already corrupted.' : 'Corrupts the item. Locks further crafting.',
-  };
-
-  // Desecration â€” slot-dependent
-  result.desecrate = {
-    valid: ['amulet', 'ring', 'belt', 'weapon_1h', 'weapon_2h', 'quiver', 'jewel'].includes(item.slot) && rarity === 'rare' && !item.mirrored,
-    reason: !['amulet', 'ring', 'belt', 'weapon_1h', 'weapon_2h', 'quiver', 'jewel'].includes(item.slot)
-      ? 'This item type cannot be desecrated.'
-      : rarity !== 'rare'
+export function emptyItem(base, itemLevel) {
+  return {
+    baseId: base.id,
+    baseName: base.name,
+    slot: base.slot,
+    rarity: 'normal',
+    itemLevel: itemLevel || 1,
+    affixes: [],
+    corrupted: false,
+    desecrated: false,
+    fractured: [],
+    bonusPrefixSlots: 0,
+    bonusSuffixSlots: 0,
+    appliedLiquids: [],
+    foresight: false,
     history: [],
   };
 }
 
-  // Ancient Orb â€” Rare only, no corrupt
-  result.ancient_orb = {
-    valid: rarity === 'rare' && !item.corrupted && !item.mirrored,
-    reason: rarity !== 'rare' ? 'Ancient Orb only works on Rare items.' : 'Re-roll into a new Rare with fresh affixes.',
+
+
+export const OPERATIONS: Record<string, (c: any) => any> = {
+  orb_of_transmutation: orbOfTransmutation,
+  orb_of_augmentation: orbOfAugmentation,
+  regal_orb: regalOrb,
+  orb_of_alchemy: orbOfAlchemy,
+  exalted_orb: exaltedOrb,
+  orb_of_annulment: orbOfAnnulment,
+  chaos_orb: chaosOrb,
+  divine_orb: divineOrb,
+  vaal_orb: vaalOrb,
+  orb_of_chance: orbOfChance,
+  desecrate: desecrate,
+  ancient_orb: ancientOrb,
+  mirror_of_kalandra: mirrorOfKalandra,
+  fracturing_orb: fracturingOrb,
+  essence: essenceOrb,
+  preserved_cranium: preservedCranium,
+  liquid_emotion: liquidEmotion,
+  catalyst: catalystOrb,
+  alloy: essenceOrb,
+  hinekoras_lock: hinekoraLock,
+};
+
+function orbOfChance(ctx: EmulatorContext): CraftResult {
+  // Orb of Chance: gambles an item. In PoE2, failure does not destroy the item.
+  const { item } = ctx;
+  if (item.rarity !== 'normal') return { ok: false, message: 'Chance only works on Normal items.', item };
+  // PoE2: ~1% Unique, ~20% Rare, ~79% no change
+  const roll = Math.random();
+  if (roll < 0.01) {
+    return { ok: true, message: 'Transformed into a Unique item!', item: { ...item, rarity: 'unique' as const, history: [...item.history, { action: 'Orb of Chance', detail: 'Upgraded to Unique' }] } };
+  } else if (roll < 0.21) {
+    return { ok: true, message: 'Upgraded to Rare!', item: { ...item, rarity: 'rare' as const, history: [...item.history, { action: 'Orb of Chance', detail: 'Upgraded to Rare' }] } };
+  } else {
+    return { ok: true, message: 'Chance missed - item unchanged.', item };
+  }
+}
+
+function hinekoraLock(ctx: EmulatorContext): CraftResult {
+  // Hinekora's Lock: sets foresight on the item so next currency previews without consuming.
+  const { item } = ctx;
+  if (item.foresight) return { ok: false, message: 'Already under foresight.', item };
+  return {
+    ok: true,
+    message: 'Foresight active. Next currency will preview without consuming.',
+    item: {
+      ...item,
+      foresight: true,
+      history: [...item.history, { action: 'Hinekora\'s Lock', detail: 'Foresight activated' }],
+    },
   };
-  result.mirror_of_kalandra = {
-  const item = ctx.item;
-  if (item.foresight) {
-  };
-  // Fracturing Orb
-  result.fracturing_orb = {
-    valid: rarity === 'rare' && affixes.length >= 4 && item.fractured.length === 0 && !item.mirrored,
-    reason: rarity !== 'rare'
-      ? 'Fracturing Orb only works on Rare items.'
-      : affixes.length < 4
+}
+
 export function applyOperation(
   currencyId: string,
-  };
-  // Preserved Cranium
-  result.preserved_cranium = {
-    valid: item.slot === 'jewel' && rarity === 'rare' && !item.mirrored,
-    reason: item.slot !== 'jewel'
-      ? 'Preserved Cranium only works on Jewels.'
-      : 'Requires a Rare Jewel.',
-  };
-  result.liquid_emotion = {
-    valid: item.slot === 'jewel' && rarity === 'rare' && !item.mirrored,
-    reason: item.slot !== 'jewel'
-      ? 'Liquid Emotions only work on Jewels.'
-      : rarity !== 'rare'
-      ? 'Requires a Rare Jewel.'
-      : 'Apply a liquid emotion to add a guaranteed mod.',
-  };
-  result.essence = {
-    valid: (rarity === 'magic' || rarity === 'rare') && !item.mirrored,
-    reason: rarity !== 'magic' && rarity !== 'rare' ? 'Essence requires a Magic or Rare item.' : 'Apply a guaranteed-mod essence.',
-  };
-
-    const resultItem = previewResult.ok ? previewResult.item : previewItem;
-
-  // Alloy
-  result.alloy = {
-    valid: rarity === 'rare' && !item.mirrored,
-    reason: rarity !== 'rare' ? 'Alloy requires a Rare item.' : 'Removes a random mod and adds a guaranteed mod.',
-  };
-
-
+  ctx: EmulatorContext
+): CraftResult {
+  // Use module-level OPERATIONS constant
   const op = OPERATIONS[currencyId];
-  if (!op) return { ok: false, message: `Unknown operation: ${currencyId}`, item: ctx.item };
+  if (!op) return { ok: false, message: "Unknown operation: " + currencyId, item: ctx.item };
   return op(ctx);
 }
 
-      : 'Applies foresight: next currency shows preview without consuming it.',
-  };
-
-  // Mirrored check already applied per-currency above
-  return result;
-}
-
+export function getCurrencyAvailability(item: ItemState, base: BaseItem): Record<string, { valid: boolean; reason: string }> {
   const result: Record<string, { valid: boolean; reason: string }> = {};
+  const rarity = item.rarity;
+  const affixes = item.affixes;
 
   if (!item) {
-    // No base selected â€” everything disabled
     for (const id of Object.keys(OPERATIONS)) {
       result[id] = { valid: false, reason: 'Select a base item first.' };
     }
@@ -1144,7 +1099,6 @@ export function applyOperation(
   }
 
   if (item.corrupted) {
-    // Most currencies can't be used on corrupted items (PoE2 rule)
     for (const id of Object.keys(OPERATIONS)) {
       result[id] = { valid: false, reason: 'Cannot apply to a corrupted item.' };
     }
@@ -1152,128 +1106,100 @@ export function applyOperation(
     return result;
   }
 
-  const { rarity, affixes } = item;
-
   // Normal-only
   result.orb_of_transmutation = {
-    valid: rarity === 'normal',
-    reason: rarity === 'normal' ? 'Upgrade Normal â†’ Magic (adds 1 random prefix).' : 'Transmutation only works on Normal items.',
+    valid: rarity === 'normal' && !item.mirrored,
+    reason: rarity === 'normal' ? 'Upgrade Normal → Magic (adds 1 random prefix).' : 'Transmutation only works on Normal items.',
   };
   result.orb_of_alchemy = {
-    valid: rarity === 'normal',
-    reason: rarity === 'normal' ? 'Upgrade Normal â†’ Rare (4 affixes).' : 'Alchemy only works on Normal items.',
+    valid: rarity === 'normal' && !item.mirrored,
+    reason: rarity === 'normal' ? 'Upgrade Normal → Rare (adds 4 random affixes).' : 'Alchemy only works on Normal items.',
   };
   result.orb_of_chance = {
-    valid: rarity === 'normal',
-    reason: rarity === 'normal' ? '1% chance to upgrade Normal â†’ Unique, otherwise nothing happens (item stays Normal).' : 'Chance only works on Normal items.',
+    valid: rarity === 'normal' && !item.mirrored,
+    reason: rarity === 'normal' ? 'Gamble Normal → random outcome (magic/rare/unique/nothing).' : 'Chance only works on Normal items.',
   };
 
-  // Magic-only / Magic-applicable
+  // Magic-only
   result.orb_of_augmentation = {
-    valid: rarity === 'magic' && affixes.length < 2,
-    reason: rarity !== 'magic'
-      ? 'Augmentation only works on Magic items.'
-      : 'Magic item is already full (1 prefix + 1 suffix).',
+    valid: rarity === 'magic' && affixes.length < 2 && !item.mirrored,
+    reason: rarity !== 'magic' ? 'Augmentation only works on Magic items.' : 'Magic item is already full (1 prefix + 1 suffix).',
   };
   result.regal_orb = {
-    valid: rarity === 'magic' && affixes.length >= 2,
-    reason: rarity !== 'magic'
-      ? 'Regal only works on Magic items.'
-      : 'Magic item must have 2 affixes before Regal.',
+    valid: rarity === 'magic' && affixes.length >= 2 && !item.mirrored,
+    reason: rarity !== 'magic' ? 'Regal only works on Magic items.' : 'Magic item must have 2 affixes before Regal.',
   };
 
-  // Rare-only / Rare-applicable
+  // Rare-only
   result.exalted_orb = {
-    valid: rarity === 'rare' && affixes.length < 6,
-    reason: rarity !== 'rare'
-      ? 'Exalted only works on Rare items.'
-      : 'Rare item is full (6 affixes).',
+    valid: rarity === 'rare' && affixes.length < 6 && !item.mirrored,
+    reason: rarity !== 'rare' ? 'Exalted only works on Rare items.' : 'Rare item is full (6 affixes).',
   };
   result.chaos_orb = {
-    valid: rarity === 'rare' && affixes.length > 0,
-    reason: rarity !== 'rare'
-      ? 'Chaos only works on Rare items.'
-      : 'Rare item has no affixes to reroll.',
+    valid: rarity === 'rare' && affixes.length > 0 && !item.mirrored,
+    reason: rarity !== 'rare' ? 'Chaos only works on Rare items.' : 'Rare item has no affixes to reroll.',
   };
 
-  // Magic or Rare
+  // Hybrid Magic/Rare
   result.orb_of_annulment = {
-    valid: (rarity === 'magic' || rarity === 'rare') && affixes.length > 0,
-    reason: affixes.length === 0
-      ? 'No affixes to remove.'
-      : 'Annul works on Magic or Rare items.',
+    valid: (rarity === 'magic' || rarity === 'rare') && affixes.length > 0 && !item.mirrored,
+    reason: affixes.length === 0 ? 'No affixes to remove.' : 'Annul works on Magic or Rare items.',
   };
 
-  // Always-on (any rarity with affixes)
+  // Always if affixes exist
   result.divine_orb = {
-    valid: affixes.length > 0,
-    reason: affixes.length === 0 ? 'No affixes to divine.' : 'Reroll numeric values of all affixes.',
+    valid: affixes.length > 0 && !item.mirrored,
+    reason: affixes.length === 0 ? 'No affixes to divine.' : 'Rerolls numeric values of all affixes.',
   };
 
-  // Corruption (one-time)
+  // Corrupt-only
   result.vaal_orb = {
-    valid: !item.corrupted,
+    valid: !item.corrupted && !item.mirrored,
     reason: item.corrupted ? 'Already corrupted.' : 'Corrupts the item. Locks further crafting.',
   };
 
-  // Desecration (slot-dependent)
+  // Desecrate
   result.desecrate = {
-    valid: ['amulet', 'ring', 'belt', 'weapon_1h', 'weapon_2h', 'quiver', 'jewel'].includes(item.slot) && rarity === 'rare',
-    reason: !['amulet', 'ring', 'belt', 'weapon_1h', 'weapon_2h', 'quiver', 'jewel'].includes(item.slot)
-      ? 'This item type cannot be desecrated.'
-      : rarity !== 'rare'
-      ? 'Desecration requires a Rare item.'
-      : 'Add a Desecrated affix from one of three factions.',
+    valid: ['amulet', 'ring', 'belt', 'weapon_1h', 'weapon_2h', 'quiver', 'jewel'].includes(item.slot) && rarity === 'rare' && !item.mirrored,
+    reason: !['amulet', 'ring', 'belt', 'weapon_1h', 'weapon_2h', 'quiver', 'jewel'].includes(item.slot) ? 'This item type cannot be desecrated.' : rarity !== 'rare' ? 'Requires a Rare item.' : 'Adds a desecrated affix from one of 3 factions.',
   };
 
-  // Newly-wired orbs
+  // Ancient Orb
   result.ancient_orb = {
-    valid: rarity === 'rare' && !item.corrupted,
+    valid: rarity === 'rare' && !item.corrupted && !item.mirrored,
     reason: rarity !== 'rare' ? 'Ancient Orb only works on Rare items.' : 'Re-roll into a new Rare with fresh affixes.',
   };
   result.mirror_of_kalandra = {
-    valid: (rarity === 'rare' || rarity === 'unique') && !item.corrupted,
+    valid: (rarity === 'rare' || rarity === 'unique') && !item.mirrored && !item.corrupted,
     reason: rarity !== 'rare' && rarity !== 'unique' ? 'Mirror of Kalandra only works on Rare or Unique items.' : 'Mirrors the current state.',
   };
+
+  // Fracturing Orb
   result.fracturing_orb = {
-    valid: rarity === 'rare' && affixes.length >= 4 && item.fractured.length === 0,
-    reason: rarity !== 'rare'
-      ? 'Fracturing Orb only works on Rare items.'
-      : affixes.length < 4
-      ? 'Fracturing Orb requires at least 4 modifiers.'
-      : 'Item already has a fractured modifier.',
+    valid: rarity === 'rare' && affixes.length >= 4 && item.fractured.length === 0 && !item.mirrored,
+    reason: rarity !== 'rare' ? 'Fracturing Orb only works on Rare items.' : affixes.length < 4 ? 'Fracturing Orb requires at least 4 modifiers.' : 'Item already has a fractured modifier.',
   };
+
+  // Others
   result.preserved_cranium = {
-    valid: item.slot === 'jewel' && rarity === 'rare',
-    reason: item.slot !== 'jewel'
-      ? 'Preserved Cranium only works on Jewels.'
-      : 'Requires a Rare Jewel.',
+    valid: item.slot === 'jewel' && rarity === 'rare' && !item.mirrored,
+    reason: item.slot !== 'jewel' ? 'Preserved Cranium only works on Jewels.' : 'Requires a Rare Jewel.',
   };
   result.liquid_emotion = {
-    valid: item.slot === 'jewel' && rarity === 'rare',
-    reason: item.slot !== 'jewel'
-      ? 'Liquid Emotions only work on Jewels.'
-      : rarity !== 'rare'
-      ? 'Requires a Rare Jewel.'
-      : 'Apply a liquid emotion to add a guaranteed mod.',
+    valid: item.slot === 'jewel' && rarity === 'rare' && !item.mirrored,
+    reason: item.slot !== 'jewel' ? 'Liquid Emotions only work on Jewels.' : rarity !== 'rare' ? 'Requires a Rare Jewel.' : 'Apply a liquid emotion to add a guaranteed mod.',
   };
   result.essence = {
-    valid: rarity === 'magic' || rarity === 'rare',
+    valid: (rarity === 'magic' || rarity === 'rare') && !item.mirrored,
     reason: rarity !== 'magic' && rarity !== 'rare' ? 'Essence requires a Magic or Rare item.' : 'Apply a guaranteed-mod essence.',
   };
-
   result.alloy = {
-    valid: rarity === 'rare',
+    valid: rarity === 'rare' && !item.mirrored,
     reason: rarity !== 'rare' ? 'Alloy requires a Rare item.' : 'Removes a random mod and adds a guaranteed mod.',
   };
-
   result.hinekoras_lock = {
     valid: !item.foresight && (rarity === 'normal' || rarity === 'magic' || rarity === 'rare') && !item.corrupted,
-    reason: item.foresight
-      ? 'Already under foresight.'
-      : item.corrupted
-      ? 'Cannot apply to a corrupted item.'
-      : 'Applies foresight: next currency shows preview without consuming it.',
+    reason: item.foresight ? 'Already under foresight.' : item.corrupted ? 'Cannot apply to a corrupted item.' : 'Applies foresight: next currency shows preview without consuming it.',
   };
 
   return result;
