@@ -903,40 +903,36 @@ function openPasteModal() {
         return;
       }
       const bid = parsedPaste.baseId;
-      const base = basesData.find((b: any) => b.id === bid);
-      if (!base) {
+      const baseRecord = basesById?.get(bid) ?? basesData.find((b: any) => b.id === bid);
+      if (!baseRecord) {
         flash('Could not find base in database.', 'error');
         return;
       }
-      importGuard = true;
-      basePicker.value = bid;
-      selectBase(bid);
-      importGuard = false;
-      // Set item level + apply parsed affixes
-      ilvlInput.value = String(parsedPaste.itemLevel);
-      if (currentItem) {
-        currentItem.itemLevel = parsedPaste.itemLevel;
-        currentItem.rarity = parsedPaste.rarity === 'magic' ? 'magic' : parsedPaste.rarity === 'normal' ? 'normal' : 'rare';
-        currentItem.implicit = parsedPaste.implicit || '';
-        const affixes: any[] = (parsedPaste.affixes || []).map((a: any) => ({
-          modId: `imported_${a.type}_${a.name.slice(0, 20).replace(/\W+/g, '_').toLowerCase()}`,
-          type: a.type, tier: a.tier || 1, name: a.name,
-          tags: [], crafted: !!a.crafted, desecrated: !!a.desecrated,
-        }));
-        currentItem.affixes = affixes;
-        // Bonus slots: desecrated prefix = +1 prefix slot, crafted suffix = +1 suffix slot
-        currentItem.bonusPrefixSlots = affixes.filter((a: any) => (a.desecrated || a.crafted) && a.type === 'prefix').length;
-        currentItem.bonusSuffixSlots = affixes.filter((a: any) => (a.desecrated || a.crafted) && a.type === 'suffix').length;
-        history = [];
-        costTracker.reset();
-        activeOmens.clear();
-        renderAll();
-      }
 
-      // Close modal
+      // Build item directly — bypass selectBase to avoid change-event clash
+      currentBase = baseRecord;
+      currentItem = emptyItem(makeBaseRecord(baseRecord, parsedPaste.rarity === 'magic' ? 'magic' : 'rare'), parsedPaste.itemLevel);
+      currentItem.implicit = parsedPaste.implicit || '';
+      const affixes: any[] = (parsedPaste.affixes || []).map((a: any) => ({
+        modId: `imported_${a.type}_${a.name.slice(0, 20).replace(/\W+/g, '_').toLowerCase()}`,
+        type: a.type, tier: a.tier || 1, name: a.name,
+        tags: [], crafted: !!a.crafted, desecrated: !!a.desecrated,
+      }));
+      currentItem.affixes = affixes;
+      currentItem.bonusPrefixSlots = affixes.filter((a: any) => (a.desecrated || a.crafted) && a.type === 'prefix').length;
+      currentItem.bonusSuffixSlots = affixes.filter((a: any) => (a.desecrated || a.crafted) && a.type === 'suffix').length;
+      basePicker.value = bid;
+      ilvlInput.value = String(parsedPaste.itemLevel);
+      emptyState.classList.add('hidden');
+      mainUi.classList.remove('hidden');
+      history = [];
+      costTracker.reset();
+      activeOmens.clear();
+      renderAll();
+
       closePasteModalFn();
-      flash(`Imported ${parsedPaste.name} (${base.name}) — ${currentItem?.affixes?.length || 0} mods loaded`, 'ok');
-      logActivity(`Imported ${parsedPaste.name} (${base.name}) — ${currentItem?.affixes?.length || 0} mods`, 'info');
+      flash(`Imported ${parsedPaste.name} (${baseRecord.name}) — ${affixes.length} mods`, 'ok');
+      logActivity(`Imported ${parsedPaste.name} (${baseRecord.name}) — ${affixes.length} mods`, 'info');
     }
 
     // Wire paste buttons with null guards (DOM may be mocked in tests)
@@ -1610,7 +1606,6 @@ function categorizeOmen(name: string): string {
 
     // Wire up UI
     basePicker.addEventListener('change', () => {
-      if (importGuard) return;
       if (basePicker.value) selectBase(basePicker.value);
     });
     ilvlInput.addEventListener('input', () => {
