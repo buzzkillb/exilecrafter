@@ -1370,6 +1370,7 @@ function getOpKey(opId: string): string {
     function renderCostPanel() {
       if (!costPanel) return;
       const total = costTracker.ready ? costTracker.totalChaos() : 0;
+      const steps = costTracker.ready ? costTracker.getSteps() : [];
 
       if (costChaos) costChaos.textContent = Math.round(total).toLocaleString();
       if (costExalted) {
