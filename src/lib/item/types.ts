@@ -90,6 +90,9 @@ export interface ParsedPaste {
   unknownLines: string[];
   /** Detected descriptive names of corruption outcomes (e.g. "Enhancement", "Corruption Enhancement — Attack"). */
   enhancementNames: string[];
+  /** Resolved base record (if found). Same lookup logic as findBaseByName — exposed here
+   *  so call sites don't have to redo the work after parsePaste() returns. */
+  base: BaseLike | null;
 }
 
 /** Subset of BaseItem fields used by pure functions. Mirrors the minimum the simulator passes in. */

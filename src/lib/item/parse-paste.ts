@@ -158,6 +158,7 @@ export function parsePaste(
     corruptionLevel: 0,
     unknownLines: [],
     enhancementNames: [],
+    base: null,
   };
   if (!text || !text.trim()) return out;
 
@@ -441,6 +442,9 @@ export function parsePaste(
   // Stitch base name from foundBase if we found one — the input may have
   // empty baseName (in case the second candidate was wrong).
   if (foundBase && !out.baseName) out.baseName = foundBase.name;
+
+  // Expose the resolved base record so callers don't have to re-resolve.
+  out.base = foundBase;
 
   return out;
 }
