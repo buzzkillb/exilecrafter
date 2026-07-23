@@ -1,0 +1,627 @@
+[
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "(15—25)% increased Armour Armour"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "(15—25)% increased Evasion Rating Evasion"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "(15—25)% increased Energy Shield Energy Shield"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "(15—25)% increased Armour and Evasion Armour Evasion"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "(15—25)% increased Armour and Energy Shield Armour Energy Shield"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "(15—25)% increased Evasion and Energy Shield Evasion Energy Shield"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "(10—20)% reduced Attribute Requirements"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "(3—5)% additional Physical Damage Reduction Physical"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "(10—20)% of Damage taken Recouped as Life Life"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "(10—20)% of Damage taken Recouped as Mana Life Mana"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "Leech 3% of Physical Attack Damage as Life Life Physical Attack"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "Leech 2% of Physical Attack Damage as Mana Mana Physical Attack"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "+1% to all Maximum Elemental Resistances Elemental Fire Cold Lightning Resistance"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "+(30—40) to maximum Life Life"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "+(20—25) to maximum Mana Mana"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "(15—25)% increased Armour Armour"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "(15—25)% increased Evasion Rating Evasion"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "(15—25)% increased maximum Energy Shield Energy Shield"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "(40—50)% increased Thorns damage Damage"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "+(13—19)% to Chaos Resistance Chaos Resistance"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "+(20—25)% to Fire Resistance Elemental Fire Resistance"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "+(20—25)% to Cold Resistance Elemental Cold Resistance"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "+(20—25)% to Lightning Resistance Elemental Lightning Resistance"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "+(1—3)% to Maximum Fire Resistance Elemental Fire Resistance"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "+(1—3)% to Maximum Cold Resistance Elemental Cold Resistance"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "+(1—3)% to Maximum Lightning Resistance Elemental Lightning Resistance"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "+(20—30) to Spirit"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "Damage Penetrates (10—15)% Fire Resistance Damage Elemental Fire"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "Damage Penetrates (10—15)% Cold Resistance Damage Elemental Cold"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "Damage Penetrates (10—15)% Lightning Resistance Damage Elemental Lightning"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "Break (10—15)% increased Armour"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "(5—10)% increased Quantity of Gold Dropped by Slain Enemies"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "+1 to Maximum Endurance Charges"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "+1 to Maximum Frenzy Charges"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "+1 to Maximum Power Charges"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "+(50—100) to Accuracy Rating Attack"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "(3—5)% increased Movement Speed Speed"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "(20—30)% increased Stun Threshold"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "(20—30)% increased Freeze Threshold Elemental Cold Ailment"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "(20—30)% reduced Slowing Potency of Debuffs on You"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "Regenerate (1—2)% of maximum Life per second Life"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "(15—25)% increased Life Regeneration rate Life"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "(20—30)% increased Mana Regeneration Rate Mana"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "(10—15)% increased Block chance"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "+3% to maximum Block chance"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "(20—25) Life gained when you Block Life"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "(10—15) Mana gained when you Block Mana"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "+(5—10)% to all Elemental Resistances Elemental Fire Cold Lightning Resistance"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "+1 to Level of all Fire Spell Skills Elemental Fire Caster Gem"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "+1 to Level of all Cold Spell Skills Elemental Cold Caster Gem"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "+1 to Level of all Lightning Spell Skills Elemental Lightning Caster Gem"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "+1 to Level of all Chaos Spell Skills Chaos Caster Gem"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "+1 to Level of all Physical Spell Skills Physical Caster Gem"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "+1 to Level of all Minion Skills Minion Gem"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "+1 to Level of all Melee Skills Attack"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "+1 to Level of all Trap Skill Gems"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "(10—15)% increased Rarity of Items found"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "(20—30)% increased Damage Damage"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "(4—6)% increased Skill Speed Speed"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "(15—20)% increased Critical Damage Bonus Damage Critical"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "+1 to Level of all Skills Gem"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "+(10—15) to Strength Attribute"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "+(10—15) to Dexterity Attribute"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "+(10—15) to Intelligence Attribute"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "Debuffs you inflict have (20—30)% increased Slow Magnitude"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "(20—30)% increased Weapon Swap Speed Attack Speed"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "Life Flasks gain (0.08—0.17) charges per Second"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "Mana Flasks gain (0.08—0.17) charges per Second"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "Charms gain (0.08—0.17) charges per Second Charm"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "(15—25)% increased Physical Damage Damage Physical Attack"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "(20—30)% increased Spell Damage Damage Caster"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "(40—60)% increased Spell Damage Damage Caster"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "(15—25)% increased Spirit"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "Adds (9—14) to (15—22) Fire Damage Damage Elemental Fire Attack"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "Adds (13—20) to (21—31) Fire Damage Damage Elemental Fire Attack"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "Adds (8—12) to (13—19) Cold Damage Damage Elemental Cold Attack"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "Adds (11—17) to (18—26) Cold Damage Damage Elemental Cold Attack"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "Adds (1—2) to (29—43) Lightning Damage Damage Elemental Lightning Attack"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "Adds (1—3) to (41—61) Lightning Damage Damage Elemental Lightning Attack"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "Adds (7—11) to (12—18) Chaos damage Damage Chaos Attack"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "Adds (10—16) to (17—25) Chaos damage Damage Chaos Attack"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "(6—8)% increased Attack Speed Attack Speed"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "+(5—10)% to Critical Damage Bonus Damage Attack Critical"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "Causes (20—30)% increased Stun Buildup"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "(10—20)% increased Melee Strike Range with this weapon Attack"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "(10—15)% chance to cause Bleeding on Hit Physical Attack Ailment"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "(10—15)% chance to Poison on Hit with this weapon Chaos Attack Ailment"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "Grants 1 Rage on Hit"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "(10—15)% chance to Maim on Hit Attack"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "(5—10)% chance to Blind Enemies on hit"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "(20—30)% increased Elemental Damage with Attacks Damage Elemental Fire Cold Lightning"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "(40—50)% increased Elemental Damage with Attacks Damage Elemental Fire Cold Lightning"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "Bow Attacks fire 1 additional Arrows Attack"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "Loads an additional bolt Attack"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "(20—30)% increased Flammability Magnitude Elemental Fire Ailment"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "(20—30)% increased Freeze Buildup Elemental Cold Ailment"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "(20—30)% increased chance to Shock Elemental Lightning Ailment"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "(20—30)% increased Critical Hit Chance for Spells Caster Critical"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "Gain (20—25) Life per enemy killed Life"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "Gain (10—15) Mana per enemy killed Mana"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "(10—15)% increased Cast Speed Caster Speed"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "(20—30)% faster start of Energy Shield Recharge Energy Shield"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "Allies in your Presence deal (20—30)% increased Damage Damage"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "Allies in your Presence have (5—10)% increased Attack Speed Attack Speed"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "Allies in your Presence have (5—10)% increased Cast Speed Caster Speed"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "Allies in your Presence have (10—15)% increased Critical Damage Bonus Damage Critical"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "(20—30)% chance to Pierce an Enemy"
+  },
+  {
+    "level": 1,
+    "domain": "Item",
+    "text": "Projectiles have (10—20)% chance to Chain an additional time from terrain"
+  },
+  {
+    "level": 1,
+    "domain": "Jewel",
+    "text": "+(4—6) to Strength Attribute"
+  },
+  {
+    "level": 1,
+    "domain": "Jewel",
+    "text": "+(4—6) to Dexterity Attribute"
+  },
+  {
+    "level": 1,
+    "domain": "Jewel",
+    "text": "+(4—6) to Intelligence Attribute"
+  },
+  {
+    "level": 1,
+    "domain": "Jewel",
+    "text": "+(5—10)% to Fire Resistance Elemental Fire Resistance"
+  },
+  {
+    "level": 1,
+    "domain": "Jewel",
+    "text": "+(5—10)% to Cold Resistance Elemental Cold Resistance"
+  },
+  {
+    "level": 1,
+    "domain": "Jewel",
+    "text": "+(5—10)% to Lightning Resistance Elemental Lightning Resistance"
+  },
+  {
+    "level": 1,
+    "domain": "Jewel",
+    "text": "+(3—7)% to Chaos Resistance Chaos Resistance"
+  },
+  {
+    "level": 1,
+    "domain": "Jewel",
+    "text": "Immune to Maim"
+  },
+  {
+    "level": 1,
+    "domain": "Jewel",
+    "text": "You cannot be Hindered"
+  },
+  {
+    "level": 1,
+    "domain": "Jewel",
+    "text": "Corrupted Blood cannot be inflicted on you Physical Ailment"
+  },
+  {
+    "level": 1,
+    "domain": "Jewel",
+    "text": "Cannot be Blinded"
+  },
+  {
+    "level": 1,
+    "domain": "Monster",
+    "text": ""
+  },
+  {
+    "level": 1,
+    "domain": "Monster",
+    "text": "hits against you have decimating strike [1]"
+  },
+  {
+    "level": 1,
+    "domain": "Monster",
+    "text": "hits against you have culling strike [1]"
+  },
+  {
+    "level": 1,
+    "domain": "Monster",
+    "text": "cannot be dominated [1]corpse cannot be destroyed [1]monster raises after death [1]"
+  },
+  {
+    "level": 1,
+    "domain": "Monster",
+    "text": "is gigantic [1]"
+  },
+  {
+    "level": 1,
+    "domain": "SanctumRelic",
+    "text": "(8—10)% increased Honour restored"
+  }
+]
