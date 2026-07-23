@@ -472,8 +472,8 @@ export function vaalOrb(ctx: EmulatorContext): CraftResult {
     const tierMatch = item.slot === 'waystone' ? item.baseName.match(/Waystone \(Tier (\d+)\)/) || item.baseName.match(/tier (\d+)/i) : null;
     if (tierMatch) {
       const currentTier = parseInt(tierMatch[1]);
-      const newTier = Math.min(currentTier + 1 + Math.floor(Math.random() * 4), 16);
-      return { ok: true, message: `Vaal Orb upgraded waystone to Tier ${newTier}!`, item: { ...item, corrupted: true, history: [...item.history, { action: 'Vaal Orb', detail: `Upgraded to Tier ${newTier}` }] }, newBaseId: `waystone_tier_${newTier}` };
+      const newTier = Math.max(1, Math.min(16, currentTier + Math.floor(Math.random() * 3) - 1));
+      return { ok: true, message: newTier > currentTier ? `Vaal Orb upgraded waystone to Tier ${newTier}!` : newTier < currentTier ? `Vaal Orb downgraded waystone to Tier ${newTier}.` : 'Vaal Orb corrupted the waystone (tier unchanged).', item: { ...item, corrupted: true, history: [...item.history, { action: 'Vaal Orb', detail: `Tier ${newTier}` }] }, newBaseId: `waystone_tier_${newTier}` };
     }
     const implicits = ['(20\u201330)% increased Fire Damage', '(20\u201330)% increased Cold Damage', '(20\u201330)% increased Lightning Damage', '+1 to Level of Socketed Gems', '(5\u201310)% increased maximum Life'];
     const imp = implicits[Math.floor(Math.random() * implicits.length)];
