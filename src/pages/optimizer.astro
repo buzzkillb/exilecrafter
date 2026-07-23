@@ -129,7 +129,7 @@ import Base from '~/layouts/Base.astro';
     const affixes: string[] = [];
     for (let i = 0; i < lines.length; i++) {
       const l = lines[i].trim();
-      if (/^\{?\s*(Crafted\s+)?(Desecrated\s+)?(Prefix|Suffix|Implicit)\s+Modifier/i.test(l)) {
+      if (/^\{?\s*(Crafted\s+)?(Desecrated\s+)?(Prefix|Suffix)\s+Modifier/i.test(l)) {
         // Next non-blank non-separator line is the mod text
         for (let j = i + 1; j < lines.length; j++) {
           const n = lines[j].trim().replace(/\r$/, '');
