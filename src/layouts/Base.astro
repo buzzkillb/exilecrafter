@@ -11,7 +11,9 @@ interface Props {
   bodyClass?: string;
 }
 
-const locale = (Astro.locals.locale as 'en' | 'pt') ?? 'en';
+// Static site — no middleware, no request headers. All content builds in English.
+// A future client-side locale switcher can override this at runtime.
+const locale = 'en';
 const t = useT(locale);
 
 const {
