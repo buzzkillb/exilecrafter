@@ -441,9 +441,9 @@ function openPasteModal() {
       const itemLevel = parsed.itemLevel || 80;
 
       // Re-resolve the base record (legacy fields want baseId, slot, etc.).
-      let foundBase = findBaseByName(parsed.baseName, basesData)?.base ?? null;
+      let foundBase = findBaseByName(parsed.baseName, basesData) ?? null;
       if (!foundBase && parsed.baseName) {
-        foundBase = findBaseByName(name, basesData)?.base ?? null;
+        foundBase = findBaseByName(name, basesData) ?? null;
       }
       if (!foundBase && parsed.itemClass) {
         const slot = slotFromLabel(parsed.itemClass);
