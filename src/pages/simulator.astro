@@ -137,9 +137,12 @@ import OmenModal from '~/components/simulator/OmenModal.astro';
     <LoadingState />
     <EmptyState craftingExamples={craftingExamples} />
 
-    <LeftPanel />
-      <!-- RIGHT: Tips + currency -->
-      <RightPanel />
+    <div id="main-ui" class="hidden">
+      <div class="grid grid-cols-1 lg:grid-cols-[1fr_14rem] gap-6">
+        <LeftPanel />
+        <RightPanel />
+      </div>
+    </div>
   </div>
 
   <OmenModal />
