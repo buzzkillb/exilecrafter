@@ -300,9 +300,6 @@ import OmenModal from '~/components/simulator/OmenModal.astro';
     let history: any[] = [];
     const activeOmens = new Set<string>();
 
-    function escapeHtml(s: string): string {
-      return s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]!));
-    }
 
     /** Persistent activity log */
     let activityLog: { ts: number; msg: string; kind: 'ok' | 'error' | 'info' }[] = [];

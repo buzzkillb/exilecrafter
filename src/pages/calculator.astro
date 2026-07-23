@@ -106,6 +106,7 @@ const t = useT(locale);
 </Base>
 
 <script>
+  import { escapeHtml } from '~/lib/item';
   (async () => {
     const baseSel = document.getElementById('base') as HTMLSelectElement;
     const ilvlInput = document.getElementById('ilvl') as HTMLInputElement;
@@ -273,9 +274,6 @@ const t = useT(locale);
       if (modSearch.value) renderModResults(modSearch.value);
     });
 
-    function escapeHtml(s: string): string {
-      return s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]!));
-    }
 
     function opToNPicks(op: string): number {
       return ({ transmute: 1, augment: 1, regal: 1, exalt: 1, alchemy: 4, chaos: 6 } as Record<string, number>)[op] || 1;

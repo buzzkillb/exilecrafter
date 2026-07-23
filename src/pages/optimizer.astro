@@ -38,6 +38,7 @@ import Base from '~/layouts/Base.astro';
 
 <script>
   import { optimize } from '~/lib/optimizer';
+  import { escapeHtml } from '~/lib/item';
 
   const pasteArea = document.getElementById('paste-area') as HTMLTextAreaElement;
   const optimizeBtn = document.getElementById('optimize-btn') as HTMLButtonElement;
@@ -134,5 +135,4 @@ import Base from '~/layouts/Base.astro';
     `).join('') + (result.unmatched.length > 0 ? `<div class="text-xs text-dim">${result.unmatched.length} affixes not matched</div>` : '');
   });
 
-  function escapeHtml(s: string) { return s.replace(/[&<>"']/g, (c: string) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' } as any)[c]); }
 </script>
