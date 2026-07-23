@@ -153,7 +153,8 @@ a:hover { color: var(--color-gold-bright); }
 .btn-danger {
   background: linear-gradient(180deg, #5c1a1a, #2a0a0a);
   border-color: var(--color-gold-dim);
-  color: #ffffff;
+  border-width: 1px;
+  color: #f0e6d2;
   text-shadow: 0 1px 3px rgba(0,0,0,0.8);
   font-weight: 500;
   letter-spacing: 0.02em;
