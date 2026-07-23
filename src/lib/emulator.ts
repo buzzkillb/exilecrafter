@@ -1236,5 +1236,31 @@ export function getCurrencyAvailability(item: ItemState, base: BaseItem): Record
     reason: item.foresight ? 'Already under foresight.' : item.corrupted ? 'Cannot apply to a corrupted item.' : 'Applies foresight: next currency shows preview without consuming it.',
   };
 
+  // Utility / bench items — always available, no item-state gate
+  const utilityOps = [
+    'arcanists_etcher', 'armourers_scrap', 'artificers_orb', 'artificers_shard',
+    'blacksmiths_whetstone', 'gemcutters_prism', 'glassblowers_bauble',
+    'jewellers_orb', 'mystery_leaguestone', 'scroll_of_wisdom',
+  ];
+  for (const opId of utilityOps) {
+    result[opId] = { valid: true, reason: '' };
+  }
+
+  // Catalyst — available on all non-unique items
+  result.catalyst = {
+    valid: !!item && rarity !== 'unique' && !item.mirrored,
+    reason: !item ? 'Select a base item first.' : rarity === 'unique' ? 'Catalysts cannot be used on Unique items.' : 'Catalysts enhance socketed rune modifiers.',
+  };
+
+  // Omen of Crystallisation — standalone currency
+  result.omen_of_dextral_crystallisation = {
+    valid: !item.mirrored && !item.corrupted,
+    reason: item.mirrored ? 'Cannot apply to a mirrored item.' : item.corrupted ? 'Cannot apply to a corrupted item.' : 'Extracts a prefix modifier into a core.',
+  };
+  result.omen_of_sinistral_crystallisation = {
+    valid: !item.mirrored && !item.corrupted,
+    reason: item.mirrored ? 'Cannot apply to a mirrored item.' : item.corrupted ? 'Cannot apply to a corrupted item.' : 'Extracts a suffix modifier into a core.',
+  };
+
   return result;
 }

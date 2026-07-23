@@ -19,6 +19,7 @@ export const CURRENCY_NAME_TO_OP: Array<[RegExp | string, string]> = [
   ['liquid|potent|auspicious|concentrated|diluted|ancient|distilled', 'liquid_emotion'],
   ['catalyst', 'catalyst'],
   ['alloy', 'alloy'],
+  ['essence', 'essence'],
 ];
 
 export const OP_KEYBOARD_HINTS: Record<string, string> = {
