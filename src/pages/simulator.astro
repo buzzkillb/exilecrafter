@@ -748,11 +748,12 @@ function openPasteModal() {
       for (const cat of order) {
         const items = grouped[cat];
         if (!items || items.length === 0) continue;
-        html += `<div class="col-span-full flex items-center gap-2 mt-1 first:mt-0">
+        html += `<div class="flex items-center gap-2 mt-1">
           <span class="text-[10px] uppercase tracking-wider text-mute">${escapeHtml(categoryLabel(cat))}</span>
           <div class="flex-1 h-px bg-border"></div>
         </div>`;
         const ilvl = currentItem?.itemLevel ?? 0;
+        html += `<div class="col-span-full flex flex-wrap gap-1">`;
         html += items.map((c: any) => {
           const a = availability[c.opId];
           // minModifierLevel gate: Greater/Perfect orbs require a minimum item level
@@ -786,12 +787,13 @@ function openPasteModal() {
             ? 'border-border-strong bg-bg hover:border-gold hover:bg-bg-hover cursor-pointer focus-visible:ring-2 focus-visible:ring-gold'
             : 'border-border bg-bg opacity-30 cursor-not-allowed';
           return `
-            <button class="currency-btn relative flex flex-col items-center justify-center p-1 border ${cls} rounded transition-all aspect-square" data-op="${escapeHtml(c.opId)}" data-original-id="${escapeHtml(c.id)}" ${valid ? '' : 'disabled aria-disabled="true"'} aria-label="${escapeHtml(c.name)}${key ? ' [' + key + ']' : ''}${valid ? '' : ' (' + escapeHtml(overriddenReason) + ')'}" data-tooltip-html="${escapeHtml(tooltipHtml)}">
+            <button class="currency-btn relative flex flex-col items-center justify-center p-0.5 border ${cls} rounded transition-all w-9 h-9 shrink-0" data-op="${escapeHtml(c.opId)}" data-original-id="${escapeHtml(c.id)}" ${valid ? '' : 'disabled aria-disabled="true"'} aria-label="${escapeHtml(c.name)}${key ? ' [' + key + ']' : ''}${valid ? '' : ' (' + escapeHtml(overriddenReason) + ')'}" data-tooltip-html="${escapeHtml(tooltipHtml)}">
               ${c.imageUrl ? `<img src="${c.imageUrl}" alt="" class="w-full h-full object-contain" loading="lazy" />` : `<div class="flex-1 flex items-center justify-center text-[10px] text-mute">${escapeHtml(c.name.slice(0,3))}</div>`}
               ${key ? `<span class="absolute top-0.5 right-1 text-[10px] text-gold-bright font-mono drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">${key}</span>` : ''}
             </button>
           `;
         }).join('');
+        html += `</div>`;
       }
 
       if (!html) {
