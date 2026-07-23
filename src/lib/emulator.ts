@@ -58,6 +58,8 @@ export type OmenEffect =
   | { kind: 'replace_all_desecrate' }
   | { kind: 'desecrate_faction', value: 'ulaman' | 'amanamu' | 'kurgal' }
   | { kind: 'remove_only_desecrated' }
+  | { kind: 'force_type', value: 'prefix' | 'suffix' }        // Sinistral/Dextral Coronation/Alchemy/Exaltation
+  | { kind: 'force_homogenise' }                               // Homogenising Coronation/Exaltation
   // Divine Orb variants
   | { kind: 'divine_implicit_only' }           // Omen of the Blessed
   | { kind: 'divine_upgrade' }                  // Omen of Sanctification
@@ -327,8 +329,13 @@ export function exaltedOrb(ctx: EmulatorContext): CraftResult {
 
   const additions: Affix[] = [a];
   if (greater) {
-    const a2 = pickAffix(pool, rollType, new Set([...item.affixes.map((x) => x.modId), a.modId]), ctx.weights, base);
-    if (a2) additions.push(a2);
+    // Greater Exalted Omen requires 2 open slots
+    const usedBefore = item.affixes.length;
+    const hasRoom2 = (rollType === 'prefix' && usedPrefix + 1 < slots.prefix) || (rollType === 'suffix' && usedSuffix + 1 < slots.suffix);
+    if (hasRoom2) {
+      const a2 = pickAffix(pool, rollType, new Set([...item.affixes.map((x) => x.modId), a.modId]), ctx.weights, base);
+      if (a2) additions.push(a2);
+    }
   }
 
   const next = {
@@ -457,13 +464,22 @@ export function vaalOrb(ctx: EmulatorContext): CraftResult {
     const next = { ...item, corrupted: true, affixes: [], rarity: 'normal' as ItemRarity, desecrated: false, fractured: [], bonusPrefixSlots: 0, bonusSuffixSlots: 0, appliedLiquids: [], history: [...item.history, { action: 'Vaal Orb', detail: 'Destroyed' }] };
     return { ok: true, message: 'Vaal Orb destroyed the item â€” all affixes lost.', item: next };
   }
-  // 25% upgrade, 25% modify, 25% no change â€” all just corrupt with implicit
-  return {
-    ok: true,
-    message: roll < 0.5 ? 'Vaal Orb upgraded implicit.' : roll < 0.75 ? 'Vaal Orb shuffled affixes.' : 'Vaal Orb corrupted the item (no other effect).',
-    item: { ...item, corrupted: true, history: [...item.history, { action: 'Vaal Orb', detail: 'Corrupted' }] },
-  };
+  // 25% upgrade — adds corrupted implicit
+  if (roll < 0.5) {
+    const implicits = ['(20–30)% increased Fire Damage', '(20–30)% increased Cold Damage', '(20–30)% increased Lightning Damage', '+1 to Level of Socketed Gems', '(5–10)% increased maximum Life'];
+    const imp = implicits[Math.floor(Math.random() * implicits.length)];
+    return { ok: true, message: 'Vaal Orb added corrupted implicit: ' + imp, item: { ...item, corrupted: true, implicit: (item.implicit ? item.implicit + ' | ' : '') + imp, history: [...item.history, { action: 'Vaal Orb', detail: 'Implicit: ' + imp }] } };
+  }
+  // 25% modify — shuffle some affix types
+  if (roll < 0.75) {
+    const shuffled = item.affixes.map((a: any) => Math.random() < 0.3 ? { ...a, type: a.type === 'prefix' ? 'suffix' : 'prefix' } : a);
+    return { ok: true, message: 'Vaal Orb shuffled affixes (some mods swapped type).', item: { ...item, corrupted: true, affixes: shuffled, history: [...item.history, { action: 'Vaal Orb', detail: 'Affixes shuffled' }] } };
+  }
+  // 25% no change
+  return { ok: true, message: 'Vaal Orb corrupted the item (no other effect).', item: { ...item, corrupted: true, history: [...item.history, { action: 'Vaal Orb', detail: 'Corrupted' }] } };
 }
+
+// Hinekora's Lock: foresight — next currency previews without consuming
 
 export function desecrate(ctx: EmulatorContext): CraftResult {
   // Add a desecrated affix (one of 3 factions: Ulaman/Amanamu/Kurgal)
@@ -487,18 +503,14 @@ export function desecrate(ctx: EmulatorContext): CraftResult {
     tags: ['desecrated'],
   };
 
+  const bonusSlots = { bonusSuffixSlots: item.bonusSuffixSlots + 1, desecrated: true };
   let next = item;
   if (slot === 'open') {
-    next = { ...item, affixes: [...item.affixes, desecrated], history: [...item.history, { action: 'Desecrate', detail: `Rolled ${faction} desecrated affix` }] };
+    next = { ...item, ...bonusSlots, affixes: [...item.affixes, desecrated], history: [...item.history, { action: 'Desecrate', detail: `Rolled ${faction} desecrated affix` }] };
   } else {
-    // Replace a random existing affix
     const idx = Math.floor(Math.random() * item.affixes.length);
     const removed = item.affixes[idx];
-    next = {
-      ...item,
-      affixes: [...item.affixes.slice(0, idx), desecrated, ...item.affixes.slice(idx + 1)],
-      history: [...item.history, { action: 'Desecrate', detail: `Replaced ${removed.name} with ${faction} desecrated affix` }],
-    };
+    next = { ...item, ...bonusSlots, affixes: [...item.affixes.slice(0, idx), desecrated, ...item.affixes.slice(idx + 1)], history: [...item.history, { action: 'Desecrate', detail: `Replaced ${removed.name} with ${faction} desecrated affix` }] };
   }
 
   return { ok: true, message: `Desecrated with ${faction}.`, item: next, rolledAffixes: [desecrated] };
@@ -646,8 +658,11 @@ export function essenceOrb(ctx: EmulatorContext): CraftResult {
     if (item.affixes.length === 0) {
       return { ok: false, message: 'No affixes to remove.', item };
     }
-    const removeIdx = Math.floor(Math.random() * item.affixes.length);
-    const removed = item.affixes[removeIdx];
+    const fracturedIds = new Set(item.fractured.map((f: any) => f.modId));
+    const removable = item.affixes.filter((a: Affix) => !fracturedIds.has(a.modId));
+    if (removable.length === 0) return { ok: false, message: 'Only fractured affixes remain — cannot remove them.', item };
+    const removeIdx = Math.floor(Math.random() * removable.length);
+    const removed = removable[removeIdx];
     const guaranteedMod = (essence as any).guaranteedMod as string | undefined;
     let mod = guaranteedMod ? ctx.mods.find((m) => m.id === guaranteedMod || m.name === guaranteedMod) : null;
     if (!mod && guaranteedMod) {
@@ -1214,7 +1229,7 @@ export function getCurrencyAvailability(item: ItemState, base: BaseItem): Record
     reason: rarity !== 'rare' ? 'Alloy requires a Rare item.' : 'Removes a random mod and adds a guaranteed mod.',
   };
   result.hinekoras_lock = {
-    valid: !item.foresight && (rarity === 'normal' || rarity === 'magic' || rarity === 'rare') && !item.corrupted,
+    valid: !item.foresight && (rarity === 'normal' || rarity === 'magic' || rarity === 'rare') && !item.corrupted && !item.mirrored,
     reason: item.foresight ? 'Already under foresight.' : item.corrupted ? 'Cannot apply to a corrupted item.' : 'Applies foresight: next currency shows preview without consuming it.',
   };
 
