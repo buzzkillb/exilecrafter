@@ -33,7 +33,7 @@ const PREVIEW_SLOT_LABELS: Record<string, string> = {
 /** Row HTML for a single affix line — tier pill + name (in colored span). */
 export function rowHTML(affix: ParsedAffix): string {
   const tier = affix.tier != null ? `T${affix.tier}` : '-';
-  const color = tagColor(affix.tags ?? []);
+  const color = tagColor(affix.descriptiveTags ?? []);
   const label =
     affix.descriptiveName && affix.descriptiveName.length > 0
       ? `${affix.descriptiveName}: ${affix.name}`
