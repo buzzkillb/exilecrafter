@@ -1,0 +1,33 @@
+---
+import CostPanel from './CostPanel.astro';
+import ActiveOmensStrip from './ActiveOmensStrip.astro';
+import TipsPanel from './TipsPanel.astro';
+import QuickActions from './QuickActions.astro';
+import RefLog from './RefLog.astro';
+import ActivityLog from './ActivityLog.astro';
+
+export interface Props {}
+---
+
+<div class="space-y-3 min-w-0">
+  <!-- Item display (populated by script) -->
+  <div id="item-display" class="parchment p-3"></div>
+
+  <!-- Cost tracking bar -->
+  <CostPanel />
+
+  <!-- Active omens strip (hidden until omens are selected) -->
+  <ActiveOmensStrip />
+
+  <!-- Tips panel -->
+  <TipsPanel />
+
+  <!-- Quick action bar -->
+  <QuickActions />
+
+  <!-- Reference & Log -->
+  <RefLog />
+
+  <!-- Activity log -->
+  <ActivityLog />
+</div>

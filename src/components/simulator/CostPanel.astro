@@ -1,0 +1,23 @@
+---
+export interface Props {}
+---
+
+<div id="cost-panel" class="flex items-center gap-3 parchment px-4 py-2">
+  <span class="text-[10px] uppercase tracking-wider text-mute font-semibold">Cost</span>
+  <span class="flex items-center gap-1.5 text-xs font-mono">
+    <span class="text-dim">Chaos:</span>
+    <span id="cost-chaos" class="text-gold-bright font-semibold">0</span>
+  </span>
+  <span class="flex items-center gap-1.5 text-xs font-mono">
+    <span class="text-dim">Exalted:</span>
+    <span id="cost-exalted" class="text-gold-bright font-semibold">0</span>
+  </span>
+  <span class="flex items-center gap-1.5 text-xs font-mono">
+    <span class="text-dim">Divine:</span>
+    <span id="cost-divine" class="text-gold-bright font-semibold">0</span>
+  </span>
+  <div class="hidden" id="cost-fallback-badge">
+    <span class="text-corrupted text-[10px]">(prices may be stale)</span>
+  </div>
+  <div id="cost-breakdown" class="ml-auto text-[10px] text-dim max-h-20 overflow-y-auto space-y-0.5 hidden"></div>
+</div>

@@ -1,0 +1,34 @@
+---
+export interface Props {}
+---
+
+<div id="paste-modal" class="hidden fixed inset-0 z-[100] flex items-start justify-center pt-12 bg-black/60 backdrop-blur-sm">
+  <div class="bg-bg-card border border-border-strong rounded-lg shadow-2xl w-full max-w-lg mx-4 overflow-hidden">
+    <div class="flex items-center justify-between px-4 py-3 border-b border-border">
+      <span class="text-sm font-semibold">Paste Item Text</span>
+      <button id="close-paste-modal" class="text-mute hover:text-fg text-lg leading-none" aria-label="Close">&times;</button>
+    </div>
+    <div class="p-4">
+      <textarea
+        id="paste-textarea"
+        class="w-full h-40 bg-bg border border-border-strong rounded p-3 text-xs font-mono resize-y focus:outline-none focus:border-gold placeholder:text-mute/40"
+        placeholder="Copy an item in PoE2 (Ctrl+C) and paste it here (Ctrl+V)…"
+        spellcheck="false"
+      ></textarea>
+      <div id="paste-detected" class="hidden mt-2 text-xs space-y-1"></div>
+      <div id="paste-preview" class="hidden mt-2">
+        <div id="paste-preview-content" class="p-2 border border-border rounded text-xs"></div>
+        <div id="paste-error" class="hidden mt-2">
+          <div class="text-xs text-corrupted">Could not parse item text. Make sure you copied an item in PoE2 (Ctrl+C).</div>
+        </div>
+      </div>
+    </div>
+    <div class="border-t border-border p-4 flex items-center justify-between bg-bg-card rounded-b">
+      <span id="paste-hint" class="text-xs text-mute">Paste with Ctrl+V or right-click</span>
+      <div class="flex gap-2">
+        <button id="paste-cancel" class="btn text-xs">Cancel</button>
+        <button id="paste-import" class="btn btn-gold text-xs" disabled>Import Item</button>
+      </div>
+    </div>
+  </div>
+</div>

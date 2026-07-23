@@ -1,0 +1,20 @@
+---
+import CurrencyStrip from './CurrencyStrip.astro';
+
+export interface Props {}
+---
+
+<div class="space-y-3">
+  <div>
+    <div class="flex items-center justify-between">
+      <div class="text-xs uppercase tracking-wider text-mute font-semibold">Apply</div>
+      <div class="flex items-center gap-2">
+        <button id="open-omens-btn" class="text-xs text-gold hover:text-gold-bright">
+          <span id="omens-btn-label">+ Add Omens</span>
+        </button>
+      </div>
+    </div>
+    <CurrencyStrip />
+    <div class="text-xs text-mute mt-2">Tip: keyboard shortcuts work when an item is selected - <span class="font-mono text-gold">T A R E X C D Z</span></div>
+  </div>
+</div>

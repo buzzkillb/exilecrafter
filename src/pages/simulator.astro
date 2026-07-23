@@ -111,6 +111,12 @@ const craftingExamples = [
   },
 ].filter((ex) => ex.id);
 
+import LoadingState from '~/components/simulator/LoadingState.astro';
+import EmptyState from '~/components/simulator/EmptyState.astro';
+import LeftPanel from '~/components/simulator/LeftPanel.astro';
+import RightPanel from '~/components/simulator/RightPanel.astro';
+import PasteModal from '~/components/simulator/PasteModal.astro';
+import OmenModal from '~/components/simulator/OmenModal.astro';
 ---
 
 <Base title={`${t('simulator.title')} - Exile Crafter`}>
@@ -128,243 +134,17 @@ const craftingExamples = [
   </div>
 
   <div class="max-w-5xl mx-auto">
-    <!-- Loading state -->
-    <div id="loading-state" class="parchment p-6 text-center">
-      <div class="text-3xl mb-2">⏳</div>
-      <div class="font-display text-xl text-fg mb-1">Loading data…</div>
-      <p class="text-sm text-dim">Fetching mods, currencies, and omens from the database.</p>
-    </div>
+    <LoadingState />
+    <EmptyState craftingExamples={craftingExamples} />
 
-    <!-- Empty state with quick picks -->
-    <div id="empty-state" class="hidden parchment p-6 text-center">
-      <div class="text-3xl mb-2">⚒️</div>
-      <div class="font-display text-xl text-fg mb-1">Pick a base to start crafting</div>
-      <p class="text-sm text-dim mb-4">Or try one of these popular starters:</p>
-      <div class="mb-4">
-        <button id="paste-empty-btn" class="btn text-sm px-4 py-2 border border-gold/40 text-gold hover:bg-gold/10 rounded-lg transition-all">
-          📋 Paste an item from your clipboard
-        </button>
-      </div>
-      <div id="quick-picks" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 justify-center">
-        {craftingExamples.map((ex) => {
-          const b = bases.find((x) => x.id === ex.id);
-          const difficultyColors: Record<string, string> = {
-            beginner: 'border-green-700/40 text-green-400',
-            intermediate: 'border-blue-700/40 text-blue-400',
-            advanced: 'border-purple-700/40 text-purple-400',
-            expert: 'border-gold/40 text-gold',
-          };
-          const diffCls = difficultyColors[ex.difficulty] || 'border-border text-mute';
-          return b ? (
-            <button class="flex flex-col items-start gap-1 p-3 border rounded-lg text-left transition-all hover:border-gold hover:bg-bg-card/60 cursor-pointer w-full quick-pick-btn" data-base={b.id} data-name={b.name}>
-              <div class="flex items-center gap-2 w-full">
-                {b.imageUrl && <img src={b.imageUrl} alt="" class="w-7 h-7 shrink-0" />}
-                <span class="font-semibold text-sm text-fg leading-tight">{ex.name}</span>
-                <span class="ml-auto text-[10px] font-medium uppercase tracking-wide px-1.5 py-0.5 rounded border {diffCls}">{ex.tag}</span>
-              </div>
-              <p class="text-[11px] text-dim leading-relaxed">{ex.description}</p>
-              <span class="text-[10px] text-mute italic">→ {ex.goal}</span>
-            </button>
-          ) : null;
-        })}
-      </div>
-    </div>
-
-    <div id="main-ui" class="hidden grid lg:grid-cols-[1fr_360px] gap-3">
-      <!-- LEFT: Item + history -->
-      <div class="space-y-3 min-w-0">
-        <!-- Item display -->
-        <div id="item-display" class="parchment p-3"></div>
-
-        <!-- Cost tracking bar — below item, above tips -->
-        <div id="cost-panel" class="flex items-center gap-3 parchment px-4 py-2">
-          <span class="text-[10px] uppercase tracking-wider text-mute font-semibold">Cost</span>
-          <span class="flex items-center gap-1.5 text-xs font-mono">
-            <span class="text-dim">Chaos:</span>
-            <span id="cost-chaos" class="text-gold-bright font-semibold">0</span>
-          </span>
-          <span class="flex items-center gap-1.5 text-xs font-mono">
-            <span class="text-dim">Exalted:</span>
-            <span id="cost-exalted" class="text-gold-bright font-semibold">0</span>
-          </span>
-          <span class="flex items-center gap-1.5 text-xs font-mono">
-            <span class="text-dim">Divine:</span>
-            <span id="cost-divine" class="text-gold-bright font-semibold">0</span>
-          </span>
-          <div class="hidden" id="cost-fallback-badge"><span class="text-corrupted text-[10px]">(prices may be stale)</span></div>
-          <div id="cost-breakdown" class="ml-auto text-[10px] text-dim max-h-20 overflow-y-auto space-y-0.5 hidden"></div>
-        </div>
-
-        <!-- Active omens strip -->
-        <div id="active-omens-strip" class="parchment p-2 hidden">
-          <div class="flex items-center justify-between mb-1.5">
-            <div class="text-xs uppercase tracking-wider text-gold font-semibold">Active Omens</div>
-            <button id="clear-omens-btn" class="text-xs text-mute hover:text-gold-bright">Clear all</button>
-          </div>
-          <div id="active-omens-chips" class="flex flex-wrap gap-1.5"></div>
-          <div class="text-xs text-mute mt-1">These alter your next currency action, then expire.</div>
-        </div>
-
-        <!-- Tips -->
-        <div id="tips-panel" class="parchment p-3 text-sm"></div>
-
-        <!-- Quick action bar -->
-        <div class="flex gap-2">
-          <button id="undo-btn" class="btn text-xs flex-1" title="Undo last craft [Z]" aria-label="Undo last craft">
-            ↶ Undo
-          </button>
-          <button id="copy-btn" class="btn text-xs flex-1" title="Copy item to clipboard" aria-label="Copy item to clipboard">
-            📋 Copy
-          </button>
-          <button id="paste-btn" class="btn text-xs flex-1" title="Paste an item from in-game copy" aria-label="Paste an item">
-            📋 Paste
-          </button>
-          <button id="seed-rare-btn" class="btn text-xs flex-1" title="Jump straight to a 6-mod Rare (Alchemy + 2 Exalts)" aria-label="Seed a Rare item">
-            ⚡ Seed Rare
-          </button>
-          <button id="reset-btn" class="btn text-xs flex-1" title="Reset to a fresh Normal item" aria-label="Reset item">
-            ↺ Reset
-          </button>
-        </div>
-
-        <!-- Reference & Log (always expanded, above activity log) -->
-        <details class="parchment" open>
-          <summary class="p-3 cursor-pointer text-sm text-fg-dim hover:text-gold-bright flex items-center justify-between">
-            <span>📖 Reference &amp; Log</span>
-            <span class="text-xs text-mute">click to collapse</span>
-          </summary>
-          <div class="px-3 pb-3 border-t border-border space-y-3 pt-3">
-            <div>
-              <div class="text-xs uppercase tracking-wider text-mute font-semibold mb-1">Mods that can roll on this base</div>
-              <div id="mod-pool-summary" class="text-xs text-dim">
-                <div class="text-mute">Pick a base to see its pool.</div>
-              </div>
-            </div>
-            <div>
-              <div class="text-xs uppercase tracking-wider text-mute font-semibold mb-1">Crafting Log <span id="history-count" class="text-mute">(0)</span></div>
-              <ol id="history-list" class="text-sm space-y-1 max-h-40 overflow-y-auto">
-                <li class="text-mute">No actions yet.</li>
-              </ol>
-            </div>
-            <div>
-              <div class="text-xs uppercase tracking-wider text-mute font-semibold mb-1">Glossary</div>
-              <dl class="text-xs text-dim flex flex-wrap gap-x-4 gap-y-1">
-                <div><dt class="text-fg inline">Prefix</dt> – left affix</div>
-                <div><dt class="text-fg inline">Suffix</dt> – right affix</div>
-                <div><dt class="text-fg inline">T1</dt> – best tier</div>
-                <div><dt class="text-fg inline">ilvl</dt> – gates tier rolls</div>
-                <div><dt class="text-fg inline">Omen</dt> – alters next craft</div>
-                <div><dt class="text-fg inline">Corrupt</dt> – locks item</div>
-              </dl>
-            </div>
-          </div>
-        </details>
-
-        <!-- Persistent activity log -->
-        <div id="activity-log-panel" class="parchment p-3">
-          <div class="flex items-center justify-between mb-1.5">
-            <div class="text-xs uppercase tracking-wider text-mute font-semibold">
-              Activity Log <span id="activity-log-count" class="text-mute">(0)</span>
-            </div>
-            <div class="flex items-center gap-2">
-              <label class="flex items-center gap-1 text-xs text-mute cursor-pointer" title="Auto-scroll to newest message">
-                <input id="activity-log-autoscroll" type="checkbox" checked class="accent-gold" />
-                Auto
-              </label>
-              <button id="activity-log-clear" class="text-xs text-mute hover:text-gold-bright" title="Clear the activity log">
-                Clear
-              </button>
-            </div>
-          </div>
-          <ol id="activity-log-list" class="text-xs space-y-0.5 max-h-48 overflow-y-auto font-mono">
-            <li class="text-mute italic">No activity yet. Apply a currency to see what happens.</li>
-          </ol>
-        </div>
-      </div>
-
-      <!-- RIGHT: Currency + reference -->
-      <div class="space-y-3 min-w-0">
-        <!-- Currency action bar -->
-        <div class="parchment p-3">
-          <div class="flex items-center justify-between mb-2">
-            <div class="text-xs uppercase tracking-wider text-mute font-semibold">Apply</div>
-            <div class="flex items-center gap-2">
-              <button id="open-omens-btn" class="text-xs text-gold hover:text-gold-bright">
-                <span id="omens-btn-label">+ Add Omens</span>
-              </button>
-            </div>
-          </div>
-          <div id="currency-strip" class="grid grid-cols-[repeat(auto-fill,minmax(72px,1fr))] gap-1.5"></div>
-
-
-          <div class="text-xs text-mute mt-2">Tip: keyboard shortcuts work when an item is selected - <span class="font-mono text-gold">T A R E X C D Z</span></div>
-        </div>
-      </div>
-    </div>
+    <LeftPanel />
+      <!-- RIGHT: Tips + currency -->
+      <RightPanel />
   </div>
 
-  <!-- Omen picker modal -->
-  <div id="omen-modal" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center p-4">
-    <div class="parchment w-full max-w-2xl max-h-[85vh] flex flex-col">
-      <div class="sticky top-0 z-10 bg-bg-card border-b border-border p-4 rounded-t">
-        <div class="flex items-center justify-between">
-          <div>
-            <h3 class="!m-0">Pick Omens</h3>
-            <p class="text-xs text-mute mt-1">Toggle omens to alter your next craft. They expire after one use.</p>
-          </div>
-          <button id="close-omen-modal" class="text-2xl text-mute hover:text-gold-bright leading-none" aria-label="Close omen picker">×</button>
-        </div>
-        <div class="mt-3 flex items-center gap-2">
-          <input id="omen-search" type="text" placeholder="Search omens…" class="flex-1 bg-bg border border-border-strong rounded px-3 py-1.5 text-sm focus:outline-none focus:border-gold" />
-          <button id="omen-clear-all" class="btn text-xs">Clear</button>
-        </div>
-      </div>
-      <div id="omen-modal-body" class="p-4 overflow-y-auto flex-1"></div>
-      <div class="p-4 border-t border-border flex items-center justify-between bg-bg-card rounded-b">
-        <span id="omen-modal-count" class="text-xs text-mute">0 selected</span>
-        <button id="omen-done" class="btn btn-gold">Done</button>
-      </div>
-    </div>
-  </div>
+  <OmenModal />
 
-  <!-- Paste item modal -->
-  <div id="paste-modal" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center p-4">
-    <div class="parchment w-full max-w-xl max-h-[85vh] flex flex-col">
-      <div class="flex items-center justify-between border-b border-border p-4">
-        <div>
-          <h3 class="!m-0">Paste an Item</h3>
-          <p class="text-xs text-mute mt-1">Copy an item in PoE2 (Ctrl+C) and paste it here.</p>
-        </div>
-        <button id="close-paste-modal" class="text-2xl text-mute hover:text-gold-bright leading-none" aria-label="Close paste modal">x</button>
-      </div>
-      <div class="p-4 flex-1">
-        <textarea id="paste-textarea" class="w-full h-64 bg-bg border border-border-strong rounded px-3 py-2 text-xs font-mono focus:outline-none focus:border-gold resize-none" placeholder='Paste your PoE2 item text here...
-e.g.:
-Item Class: Rings
-Rarity: Rare
-Wrath Eye Prismatic Ring
---------
-Item Level: 75
---------
-Adds 3 to 6 Physical Damage to Attacks
-+39% to Cold Resistance'></textarea>
-        <div id="paste-preview" class="mt-3 hidden">
-          <div class="text-xs uppercase tracking-wider text-mute font-semibold mb-1">Detected</div>
-          <div id="paste-detected" class="text-sm text-fg space-y-1"></div>
-        </div>
-        <div id="paste-error" class="mt-3 hidden">
-          <div class="text-xs text-corrupted">Could not parse item text. Make sure you copied an item in PoE2 (Ctrl+C).</div>
-        </div>
-      </div>
-      <div class="border-t border-border p-4 flex items-center justify-between bg-bg-card rounded-b">
-        <span id="paste-hint" class="text-xs text-mute">Paste with Ctrl+V or right-click</span>
-        <div class="flex gap-2">
-          <button id="paste-cancel" class="btn text-xs">Cancel</button>
-          <button id="paste-import" class="btn btn-gold text-xs" disabled>Import Item</button>
-        </div>
-      </div>
-    </div>
-  </div>
+  <PasteModal />
 
   <!-- Custom tooltip -->
 <div id="tooltip" class="tooltip-pop"></div>

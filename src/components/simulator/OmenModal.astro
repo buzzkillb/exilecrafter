@@ -1,0 +1,17 @@
+---
+export interface Props {}
+---
+
+<div id="omen-modal" class="hidden fixed inset-0 z-[100] flex items-start justify-center pt-12 bg-black/60 backdrop-blur-sm">
+  <div class="bg-bg-card border border-border-strong rounded-lg shadow-2xl w-full max-w-2xl mx-4 max-h-[80vh] flex flex-col">
+    <div class="flex items-center justify-between px-4 py-3 border-b border-border shrink-0">
+      <span class="text-sm font-semibold">Select Omens</span>
+      <button id="close-omen-modal" class="text-mute hover:text-fg text-lg leading-none" aria-label="Close">&times;</button>
+    </div>
+    <div id="omen-modal-body" class="p-4 overflow-y-auto grow"></div>
+    <div class="border-t border-border p-4 flex items-center justify-between bg-bg-card rounded-b shrink-0">
+      <span id="omen-modal-count" class="text-xs text-mute">0 selected</span>
+      <button id="omen-done" class="btn btn-gold text-xs">Done</button>
+    </div>
+  </div>
+</div>

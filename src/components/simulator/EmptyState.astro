@@ -1,0 +1,49 @@
+---
+export interface CraftingExample {
+  id: string;
+  name: string;
+  tag: string;
+  description: string;
+  goal: string;
+  difficulty: string;
+}
+
+export interface Props {
+  craftingExamples: CraftingExample[];
+}
+
+const { craftingExamples } = Astro.props;
+
+const difficultyColors: Record<string, string> = {
+  beginner: 'border-green-700/40 text-green-400',
+  intermediate: 'border-blue-700/40 text-blue-400',
+  advanced: 'border-purple-700/40 text-purple-400',
+  expert: 'border-gold/40 text-gold',
+};
+---
+
+<div id="empty-state" class="hidden parchment p-6 text-center">
+  <div class="text-3xl mb-2">⚒️</div>
+  <div class="font-display text-xl text-fg mb-1">Pick a base to start crafting</div>
+  <p class="text-sm text-dim mb-4">Or try one of these popular starters:</p>
+  <div class="mb-4">
+    <button id="paste-empty-btn" class="btn text-sm px-4 py-2 border border-gold/40 text-gold hover:bg-gold/10 rounded-lg transition-all">
+      📋 Paste an item from your clipboard
+    </button>
+  </div>
+  <div id="quick-picks" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 justify-center">
+    {craftingExamples.map((ex) => {
+      const diffCls = difficultyColors[ex.difficulty] || 'border-border text-mute';
+      return (
+        <button class="flex flex-col items-start gap-1 p-3 border rounded-lg text-left transition-all hover:border-gold hover:bg-bg-card/60 cursor-pointer w-full quick-pick-btn" data-base={ex.id} data-name={ex.name}>
+          <div class="flex items-center gap-2 w-full">
+            <span class="font-semibold text-sm text-fg leading-tight">{ex.name}</span>
+            <span class="ml-auto text-[10px] font-medium uppercase tracking-wide px-1.5 py-0.5 rounded border {diffCls}">{ex.tag}</span>
+          </div>
+          <p class="text-[11px] text-dim leading-relaxed">{ex.description}</p>
+          <span class="text-[10px] text-mute italic">→ {ex.goal}</span>
+        </button>
+      );
+    })}
+  </div>
+</div>

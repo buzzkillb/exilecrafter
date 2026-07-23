@@ -1,0 +1,23 @@
+---
+export interface Props {}
+---
+
+<div id="activity-log-panel" class="parchment p-3">
+  <div class="flex items-center justify-between mb-1.5">
+    <div class="text-xs uppercase tracking-wider text-mute font-semibold">
+      Activity Log <span id="activity-log-count" class="text-mute">(0)</span>
+    </div>
+    <div class="flex items-center gap-2 text-xs">
+      <label class="flex items-center gap-1 text-mute cursor-pointer" title="Scroll to the latest entry automatically">
+        <input id="activity-log-autoscroll" type="checkbox" checked class="accent-gold" />
+        Autoscroll
+      </label>
+      <button id="activity-log-clear" class="text-xs text-mute hover:text-gold-bright" title="Clear the activity log">
+        Clear
+      </button>
+    </div>
+  </div>
+  <div id="activity-log-list" class="text-sm space-y-0.5 max-h-40 overflow-y-auto">
+    <div class="text-mute">No activity yet.</div>
+  </div>
+</div>
