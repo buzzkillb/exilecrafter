@@ -3,6 +3,7 @@
 // Models item state, applies currency operations, and produces mod rolls.
 
 import type { Mod, BaseItem, Currency, Omen, WeightEntry } from './types';
+import { CORRUPTED_IMPLICITS } from './corrupted-implicits';
 import { buildPool, pickN, type PoolResult } from './weights';
 
 export type ItemRarity = 'normal' | 'magic' | 'rare' | 'unique';
@@ -475,26 +476,7 @@ export function vaalOrb(ctx: EmulatorContext): CraftResult {
       const newTier = Math.max(1, Math.min(16, currentTier + Math.floor(Math.random() * 3) - 1));
       return { ok: true, message: newTier > currentTier ? `Vaal Orb upgraded waystone to Tier ${newTier}!` : newTier < currentTier ? `Vaal Orb downgraded waystone to Tier ${newTier}.` : 'Vaal Orb corrupted the waystone (tier unchanged).', item: { ...item, corrupted: true, history: [...item.history, { action: 'Vaal Orb', detail: `Tier ${newTier}` }] }, newBaseId: `waystone_tier_${newTier}` };
     }
-    const corruptedImplicits = [
-      '(15\u201325)% increased Armour', '(15\u201325)% increased Evasion Rating', '(15\u201325)% increased Energy Shield',
-      '(15\u201325)% increased Armour and Evasion', '(15\u201325)% increased Armour and Energy Shield',
-      '(15\u201325)% increased Evasion and Energy Shield',
-      '(10\u201320)% reduced Attribute Requirements', '(3\u20135)% additional Physical Damage Reduction',
-      '(10\u201320)% of Damage taken Recouped as Life', '(10\u201320)% of Damage taken Recouped as Mana',
-      '+1% to all Maximum Elemental Resistances', '+(30\u201340) to maximum Life', '+(20\u201325) to maximum Mana',
-      '+(13\u201319)% to Chaos Resistance', '+(20\u201325)% to Fire Resistance', '+(20\u201325)% to Cold Resistance',
-      '+(20\u201325)% to Lightning Resistance', '(3\u20135)% increased Movement Speed',
-      '(15\u201325)% increased Physical Damage', '(6\u20138)% increased Attack Speed',
-      '(20\u201330)% increased Stun Threshold', '(40\u201350)% increased Thorns damage',
-      '+(5\u201310)% to Critical Damage Bonus', '(10\u201315)% chance to Blind Enemies on hit',
-      '(10\u201315)% chance to Maim on Hit', '(15\u201325)% increased Spell Damage',
-      '+(20\u201330) to Spirit', '+1 to Maximum Power Charges',
-      '+1 to Level of all Minion Skills', '+1 to Level of all Melee Skills',
-      '+(50\u2013100) to Accuracy Rating', '(20\u201330)% increased Mana Regeneration Rate',
-      '(15\u201325)% increased Life Regeneration rate', '+(4\u20136) to Strength',
-      '+(4\u20136) to Dexterity', '+(4\u20136) to Intelligence',
-    ];
-    const imp = corruptedImplicits[Math.floor(Math.random() * corruptedImplicits.length)];
+    const imp = CORRUPTED_IMPLICITS[Math.floor(Math.random() * CORRUPTED_IMPLICITS.length)];
     return { ok: true, message: 'Vaal Orb added corrupted implicit: ' + imp, item: { ...item, corrupted: true, implicit: (item.implicit ? item.implicit + ' | ' : '') + imp, history: [...item.history, { action: 'Vaal Orb', detail: 'Implicit: ' + imp }] } };
   }
   // 25% modify — shuffle some affix types
