@@ -165,6 +165,10 @@ async function main() {
 
     if (changed) {
       writeFileSync(filePath, JSON.stringify(items, null, 2), 'utf-8');
+      // Also sync to public/data/ so the deployed site serves local images
+      const publicDataDir = join(ROOT, 'public', 'data');
+      mkdirSync(publicDataDir, { recursive: true });
+      writeFileSync(join(publicDataDir, cat.file), JSON.stringify(items, null, 2), 'utf-8');
       console.log(`  ✓ URLs localised` + (needDownload.length > 0 ? ` (${needDownload.length} new)` : ''));
     } else {
       console.log(`  (no changes)`);

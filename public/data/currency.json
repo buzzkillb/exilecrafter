@@ -10,7 +10,7 @@
     "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Expedition2/ChippedVerisium.webp",
+    "imageUrl": "/images/currency/adaptive_alloy.webp",
     "stackSize": 10
   },
   {
@@ -24,7 +24,7 @@
     "description": "Adds quality that enhances Attribute modifiers on a ring or amulet Replaces other quality types",
     "effect": "Adds quality that enhances Attribute modifiers on a ring or amulet Replaces other quality types",
     "mechanics": "Adds quality that enhances Attribute modifiers on a ring or amulet Replaces other quality types",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Breach/BreachCatalystAttribute.webp",
+    "imageUrl": "/images/currency/adaptive_catalyst.webp",
     "stackSize": 10
   },
   {
@@ -38,7 +38,7 @@
     "description": "Desecrates a Rare Amulet, Ring or Belt",
     "effect": "Desecrates a Rare Amulet, Ring or Belt",
     "mechanics": "Desecrates a Rare Amulet, Ring or Belt",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Abyss/AncientClavicle.webp",
+    "imageUrl": "/images/currency/ancient_collarbone.webp",
     "stackSize": 20,
     "minModifierLevel": 40
   },
@@ -53,7 +53,7 @@
     "description": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
     "effect": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
     "mechanics": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/DistilledEmotions/TimelostConcentratedDistilledFear.webp",
+    "imageUrl": "/images/currency/ancient_concentrated_liquid_fear.webp",
     "stackSize": 10
   },
   {
@@ -67,7 +67,7 @@
     "description": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
     "effect": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
     "mechanics": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/DistilledEmotions/TimelostConcentratedDistilledIsolation.webp",
+    "imageUrl": "/images/currency/ancient_concentrated_liquid_isolation.webp",
     "stackSize": 10
   },
   {
@@ -81,7 +81,7 @@
     "description": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
     "effect": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
     "mechanics": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/DistilledEmotions/TimelostConcentratedDistilledSuffering.webp",
+    "imageUrl": "/images/currency/ancient_concentrated_liquid_suffering.webp",
     "stackSize": 10
   },
   {
@@ -95,7 +95,7 @@
     "description": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
     "effect": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
     "mechanics": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/DistilledEmotions/TimelostDilutedDistilledGreed.webp",
+    "imageUrl": "/images/currency/ancient_diluted_liquid_greed.webp",
     "stackSize": 10
   },
   {
@@ -109,7 +109,7 @@
     "description": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
     "effect": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
     "mechanics": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/DistilledEmotions/TimelostDilutedDistilledGuilt.webp",
+    "imageUrl": "/images/currency/ancient_diluted_liquid_guilt.webp",
     "stackSize": 10
   },
   {
@@ -123,7 +123,7 @@
     "description": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
     "effect": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
     "mechanics": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/DistilledEmotions/TimelostDilutedDistilledIre.webp",
+    "imageUrl": "/images/currency/ancient_diluted_liquid_ire.webp",
     "stackSize": 10
   },
   {
@@ -137,7 +137,7 @@
     "description": "Desecrates a Rare Weapon or Quiver",
     "effect": "Desecrates a Rare Weapon or Quiver",
     "mechanics": "Desecrates a Rare Weapon or Quiver",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Abyss/AncientJawbone.webp",
+    "imageUrl": "/images/currency/ancient_jawbone.webp",
     "stackSize": 20,
     "minModifierLevel": 40
   },
@@ -152,7 +152,7 @@
     "description": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
     "effect": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
     "mechanics": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/DistilledEmotions/TimelostDistilledDespair.webp",
+    "imageUrl": "/images/currency/ancient_liquid_despair.webp",
     "stackSize": 10
   },
   {
@@ -166,7 +166,7 @@
     "description": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
     "effect": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
     "mechanics": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/DistilledEmotions/TimelostDistilledDisgust.webp",
+    "imageUrl": "/images/currency/ancient_liquid_disgust.webp",
     "stackSize": 10
   },
   {
@@ -180,7 +180,7 @@
     "description": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
     "effect": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
     "mechanics": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/DistilledEmotions/TimelostDistilledEnvy.webp",
+    "imageUrl": "/images/currency/ancient_liquid_envy.webp",
     "stackSize": 10
   },
   {
@@ -194,7 +194,7 @@
     "description": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
     "effect": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
     "mechanics": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/DistilledEmotions/TimelostDistilledParanoia.webp",
+    "imageUrl": "/images/currency/ancient_liquid_paranoia.webp",
     "stackSize": 10
   },
   {
@@ -208,7 +208,7 @@
     "description": "Reforges a unique equipment as another of the same item class",
     "effect": "Reforges a unique equipment as another of the same item class",
     "mechanics": "Reforges a unique equipment as another of the same item class",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/AncientOrb.webp",
+    "imageUrl": "/images/currency/ancient_orb.webp",
     "stackSize": 20
   },
   {
@@ -222,7 +222,7 @@
     "description": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
     "effect": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
     "mechanics": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/DistilledEmotions/TimelessUniqueBeastEmotion.webp",
+    "imageUrl": "/images/currency/ancient_potent_liquid_contempt.webp",
     "stackSize": 10
   },
   {
@@ -236,7 +236,7 @@
     "description": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
     "effect": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
     "mechanics": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/DistilledEmotions/TimlessUniqueConstructsEmotion.webp",
+    "imageUrl": "/images/currency/ancient_potent_liquid_ferocity.webp",
     "stackSize": 10
   },
   {
@@ -250,7 +250,7 @@
     "description": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
     "effect": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
     "mechanics": "Removes a random modifer and Augments a Rare Time-Lost Jewel with a new guaranteed Crafted modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/DistilledEmotions/TimelessUniqueHumansEmotion.webp",
+    "imageUrl": "/images/currency/ancient_potent_liquid_melancholy.webp",
     "stackSize": 10
   },
   {
@@ -264,7 +264,7 @@
     "description": "Desecrates a Rare Armour",
     "effect": "Desecrates a Rare Armour",
     "mechanics": "Desecrates a Rare Armour",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Abyss/AncientRibs.webp",
+    "imageUrl": "/images/currency/ancient_rib.webp",
     "stackSize": 20,
     "minModifierLevel": 40
   },
@@ -279,7 +279,7 @@
     "description": "Improves the quality of a wand, staff or sceptre",
     "effect": "Improves the quality of a wand, staff or sceptre",
     "mechanics": "Improves the quality of a wand, staff or sceptre",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/CurrencyWeaponMagicQuality.webp",
+    "imageUrl": "/images/currency/arcanists_etcher.webp",
     "stackSize": 20
   },
   {
@@ -293,7 +293,7 @@
     "description": "Improves the quality of an armour",
     "effect": "Improves the quality of an armour",
     "mechanics": "Improves the quality of an armour",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/CurrencyArmourQuality.webp",
+    "imageUrl": "/images/currency/armourers_scrap.webp",
     "stackSize": 20
   },
   {
@@ -307,7 +307,7 @@
     "description": "Adds an Augment Socket to a Martial Weapon, wand, staff or Armour",
     "effect": "Adds an Augment Socket to a Martial Weapon, wand, staff or Armour",
     "mechanics": "Adds an Augment Socket to a Martial Weapon, wand, staff or Armour",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/CurrencyAddEquipmentSocket.webp",
+    "imageUrl": "/images/currency/artificers_orb.webp",
     "stackSize": 20
   },
   {
@@ -321,7 +321,7 @@
     "description": "NameShow Full Descriptions Currency Exchange100 Gold NoteCodeartificers-shard DropLevel 5 BaseType Artificer's Shard Class Stackable Currency FlagsAlwaysAllocate TypeMetadata/Items/Currency/CurrencyAddEquipmentSocketShard SoundAudio/Sound Effects/ItemSounds/4.0/Currency/Orbs/OrbUse.ogg Tagscurrency_shard, currency IconArt/2DItems/Currency/CurrencyAddEquipmentSocketShard",
     "effect": "NameShow Full Descriptions Currency Exchange100 Gold NoteCodeartificers-shard DropLevel 5 BaseType Artificer's Shard Class Stackable Currency FlagsAlwaysAllocate TypeMetadata/Items/Currency/CurrencyAddEquipmentSocketShard SoundAudio/Sound Effects/ItemSounds/4.0/Currency/Orbs/OrbUse.ogg Tagscurrency_shard, currency IconArt/2DItems/Currency/CurrencyAddEquipmentSocketShard",
     "mechanics": "NameShow Full Descriptions Currency Exchange100 Gold NoteCodeartificers-shard DropLevel 5 BaseType Artificer's Shard Class Stackable Currency FlagsAlwaysAllocate TypeMetadata/Items/Currency/CurrencyAddEquipmentSocketShard SoundAudio/Sound Effects/ItemSounds/4.0/Currency/Orbs/OrbUse.ogg Tagscurrency_shard, currency IconArt/2DItems/Currency/CurrencyAddEquipmentSocketShard",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/CurrencyAddEquipmentSocketShard.webp",
+    "imageUrl": "/images/currency/artificers_shard.webp",
     "stackSize": 10
   },
   {
@@ -335,7 +335,7 @@
     "description": "Improves the quality of a martial weapon",
     "effect": "Improves the quality of a martial weapon",
     "mechanics": "Improves the quality of a martial weapon",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/CurrencyWeaponQuality.webp",
+    "imageUrl": "/images/currency/blacksmiths_whetstone.webp",
     "stackSize": 20
   },
   {
@@ -349,7 +349,7 @@
     "description": "Adds quality that enhances Armour, Evasion and Energy Shield modifiers on a ring or amulet Replaces other quality types",
     "effect": "Adds quality that enhances Armour, Evasion and Energy Shield modifiers on a ring or amulet Replaces other quality types",
     "mechanics": "Adds quality that enhances Armour, Evasion and Energy Shield modifiers on a ring or amulet Replaces other quality types",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Breach/BreachCatalystDefences.webp",
+    "imageUrl": "/images/currency/carapace_catalyst.webp",
     "stackSize": 10
   },
   {
@@ -363,7 +363,7 @@
     "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Expedition2/Alloy4.webp",
+    "imageUrl": "/images/currency/celestial_alloy.webp",
     "stackSize": 10
   },
   {
@@ -377,7 +377,7 @@
     "description": "NameShow Full Descriptions Currency Exchange100 Gold NoteCodechance-shard DropLevel 1 BaseType Chance Shard Class Stackable Currency FlagsAlwaysAllocate TypeMetadata/Items/Currency/CurrencyUpgradeRandomlyShard Tagscurrency_shard, currency IconArt/2DItems/Currency/CurrencyUpgradeToUniqueShard",
     "effect": "NameShow Full Descriptions Currency Exchange100 Gold NoteCodechance-shard DropLevel 1 BaseType Chance Shard Class Stackable Currency FlagsAlwaysAllocate TypeMetadata/Items/Currency/CurrencyUpgradeRandomlyShard Tagscurrency_shard, currency IconArt/2DItems/Currency/CurrencyUpgradeToUniqueShard",
     "mechanics": "NameShow Full Descriptions Currency Exchange100 Gold NoteCodechance-shard DropLevel 1 BaseType Chance Shard Class Stackable Currency FlagsAlwaysAllocate TypeMetadata/Items/Currency/CurrencyUpgradeRandomlyShard Tagscurrency_shard, currency IconArt/2DItems/Currency/CurrencyUpgradeToUniqueShard",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/CurrencyUpgradeToUniqueShard.webp",
+    "imageUrl": "/images/currency/chance_shard.webp",
     "stackSize": 10
   },
   {
@@ -391,7 +391,7 @@
     "description": "Removes a random modifier and augments a Rare item with a new random modifier",
     "effect": "Removes a random modifier and augments a Rare item with a new random modifier",
     "mechanics": "Removes a random modifier and augments a Rare item with a new random modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/CurrencyRerollRare.webp",
+    "imageUrl": "/images/currency/chaos_orb.webp",
     "stackSize": 20
   },
   {
@@ -405,7 +405,7 @@
     "description": "Adds quality that enhances Chaos modifiers on a ring or amulet Replaces other quality types",
     "effect": "Adds quality that enhances Chaos modifiers on a ring or amulet Replaces other quality types",
     "mechanics": "Adds quality that enhances Chaos modifiers on a ring or amulet Replaces other quality types",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Breach/BreachCatalystChaos.webp",
+    "imageUrl": "/images/currency/chayulas_catalyst.webp",
     "stackSize": 10
   },
   {
@@ -419,7 +419,7 @@
     "description": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
     "effect": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
     "mechanics": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/DistilledEmotions/ConcentratedDistilledFear.webp",
+    "imageUrl": "/images/currency/concentrated_liquid_fear.webp",
     "stackSize": 10
   },
   {
@@ -433,7 +433,7 @@
     "description": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
     "effect": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
     "mechanics": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/DistilledEmotions/ConcentratedDistilledIsolation.webp",
+    "imageUrl": "/images/currency/concentrated_liquid_isolation.webp",
     "stackSize": 10
   },
   {
@@ -447,7 +447,7 @@
     "description": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
     "effect": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
     "mechanics": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/DistilledEmotions/ConcentratedDistilledSuffering.webp",
+    "imageUrl": "/images/currency/concentrated_liquid_suffering.webp",
     "stackSize": 10
   },
   {
@@ -461,7 +461,7 @@
     "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Expedition2/ImbuedVerisium.webp",
+    "imageUrl": "/images/currency/cyclonic_alloy.webp",
     "stackSize": 10
   },
   {
@@ -475,7 +475,7 @@
     "description": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
     "effect": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
     "mechanics": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/DistilledEmotions/DilutedDistilledGreed.webp",
+    "imageUrl": "/images/currency/diluted_liquid_greed.webp",
     "stackSize": 10
   },
   {
@@ -489,7 +489,7 @@
     "description": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
     "effect": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
     "mechanics": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/DistilledEmotions/DilutedDistilledGuilt.webp",
+    "imageUrl": "/images/currency/diluted_liquid_guilt.webp",
     "stackSize": 10
   },
   {
@@ -503,7 +503,7 @@
     "description": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
     "effect": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
     "mechanics": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/DistilledEmotions/DilutedDistilledIre.webp",
+    "imageUrl": "/images/currency/diluted_liquid_ire.webp",
     "stackSize": 10
   },
   {
@@ -517,7 +517,7 @@
     "description": "Randomises the numeric values of modifiers on an item",
     "effect": "Randomises the numeric values of modifiers on an item",
     "mechanics": "Randomises the numeric values of modifiers on an item",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/CurrencyModValues.webp",
+    "imageUrl": "/images/currency/divine_orb.webp",
     "stackSize": 10
   },
   {
@@ -531,7 +531,7 @@
     "description": "Adds quality that enhances Lightning modifiers on a ring or amulet Replaces other quality types",
     "effect": "Adds quality that enhances Lightning modifiers on a ring or amulet Replaces other quality types",
     "mechanics": "Adds quality that enhances Lightning modifiers on a ring or amulet Replaces other quality types",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Breach/BreachCatalystLightning.webp",
+    "imageUrl": "/images/currency/eshs_catalyst.webp",
     "stackSize": 10
   },
   {
@@ -545,7 +545,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/PhysicalEssence.webp",
+    "imageUrl": "/images/currency/essence_of_abrasion.webp",
     "stackSize": 10,
     "guaranteedMod": "One Handed Melee Weapon or Bow: Adds (10—15) to (18—26) Physical Damage"
   },
@@ -560,7 +560,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/SpeedCasterEssence.webp",
+    "imageUrl": "/images/currency/essence_of_alacrity.webp",
     "stackSize": 10,
     "guaranteedMod": "Focus or Wand: (17—20)% increased Cast Speed"
   },
@@ -575,7 +575,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/AttackEssence.webp",
+    "imageUrl": "/images/currency/essence_of_battle.webp",
     "stackSize": 10,
     "guaranteedMod": "Martial Weapon: +(124—167) to Accuracy Rating"
   },
@@ -590,7 +590,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/AllyEssence.webp",
+    "imageUrl": "/images/currency/essence_of_command.webp",
     "stackSize": 10,
     "guaranteedMod": "Sceptre: Allies in your Presence deal (55—64)% increased Damage"
   },
@@ -605,7 +605,7 @@
     "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/CorruptedEssenceDelirium.webp",
+    "imageUrl": "/images/currency/essence_of_delirium.webp",
     "stackSize": 10,
     "guaranteedMod": "Removes a random modifier and augments a Rare item with a new guaranteed modifier"
   },
@@ -620,7 +620,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/LightningEssence.webp",
+    "imageUrl": "/images/currency/essence_of_electricity.webp",
     "stackSize": 10,
     "guaranteedMod": "One Handed Melee Weapon or Bow: Adds (1—3) to (55—60) Lightning Damage"
   },
@@ -635,7 +635,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/DefencesEssence.webp",
+    "imageUrl": "/images/currency/essence_of_enhancement.webp",
     "stackSize": 10,
     "guaranteedMod": "Armour: (56—67)% increased Armour, Evasion and Energy Shield"
   },
@@ -650,7 +650,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/FireEssence.webp",
+    "imageUrl": "/images/currency/essence_of_flames.webp",
     "stackSize": 10,
     "guaranteedMod": "One Handed Melee Weapon or Bow: Adds (20—24) to (32—37) Fire Damage"
   },
@@ -665,7 +665,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/LightningResistanceEssence.webp",
+    "imageUrl": "/images/currency/essence_of_grounding.webp",
     "stackSize": 10,
     "guaranteedMod": "Armour, Belt or Jewellery: +(21—25)% to Lightning Resistance"
   },
@@ -680,7 +680,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/SpeedEssence.webp",
+    "imageUrl": "/images/currency/essence_of_haste.webp",
     "stackSize": 10,
     "guaranteedMod": "Melee Weapon: (17—19)% increased Attack Speed"
   },
@@ -695,7 +695,7 @@
     "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/CorruptedEssenceHorror.webp",
+    "imageUrl": "/images/currency/essence_of_horror.webp",
     "stackSize": 10,
     "guaranteedMod": "Removes a random modifier and augments a Rare item with a new guaranteed modifier"
   },
@@ -710,7 +710,7 @@
     "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/CorruptedEssenceHysteria.webp",
+    "imageUrl": "/images/currency/essence_of_hysteria.webp",
     "stackSize": 10,
     "guaranteedMod": "Removes a random modifier and augments a Rare item with a new guaranteed modifier"
   },
@@ -725,7 +725,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/ColdEssence.webp",
+    "imageUrl": "/images/currency/essence_of_ice.webp",
     "stackSize": 10,
     "guaranteedMod": "One Handed Melee Weapon or Bow: Adds (17—20) to (26—32) Cold Damage"
   },
@@ -740,7 +740,7 @@
     "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/CorruptedEssenceInsanity.webp",
+    "imageUrl": "/images/currency/essence_of_insanity.webp",
     "stackSize": 10,
     "guaranteedMod": "Removes a random modifier and augments a Rare item with a new guaranteed modifier"
   },
@@ -755,7 +755,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/FireResistanceEssence.webp",
+    "imageUrl": "/images/currency/essence_of_insulation.webp",
     "stackSize": 10,
     "guaranteedMod": "Armour, Belt or Jewellery: +(21—25)% to Fire Resistance"
   },
@@ -770,7 +770,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/RarityResistanceEssence.webp",
+    "imageUrl": "/images/currency/essence_of_opulence.webp",
     "stackSize": 10,
     "guaranteedMod": "Boots, Gloves, Helmet or Jewellery: (11—14)% increased Rarity of Items found"
   },
@@ -785,7 +785,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/ChaosEssence.webp",
+    "imageUrl": "/images/currency/essence_of_ruin.webp",
     "stackSize": 10,
     "guaranteedMod": "Armour, Belt or Jewellery: +(8—11)% to Chaos Resistance"
   },
@@ -800,7 +800,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/CriticalEssence.webp",
+    "imageUrl": "/images/currency/essence_of_seeking.webp",
     "stackSize": 10,
     "guaranteedMod": "Martial Weapon: +(2.11—2.7)% to Critical Hit Chance"
   },
@@ -815,7 +815,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/CasterEssence.webp",
+    "imageUrl": "/images/currency/essence_of_sorcery.webp",
     "stackSize": 10,
     "guaranteedMod": "Focus or Wand: (55—64)% increased Spell Damage"
   },
@@ -830,7 +830,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/ColdResistanceEssence.webp",
+    "imageUrl": "/images/currency/essence_of_thawing.webp",
     "stackSize": 10,
     "guaranteedMod": "Armour, Belt or Jewellery: +(21—25)% to Cold Resistance"
   },
@@ -845,7 +845,7 @@
     "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/AbyssalEssence.webp",
+    "imageUrl": "/images/currency/essence_of_the_abyss.webp",
     "stackSize": 10,
     "guaranteedMod": "Removes a random modifier and augments a Rare item with a new guaranteed modifier"
   },
@@ -860,7 +860,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/LifeEssence.webp",
+    "imageUrl": "/images/currency/essence_of_the_body.webp",
     "stackSize": 10,
     "guaranteedMod": "Belt, Body Armour, Helmet or Shield: +(85—99) to maximum Life"
   },
@@ -875,7 +875,7 @@
     "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/BreachEssence.webp",
+    "imageUrl": "/images/currency/essence_of_the_breach.webp",
     "stackSize": 10,
     "guaranteedMod": "Removes a random modifier and augments a Rare item with a new guaranteed modifier"
   },
@@ -890,7 +890,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/AttributeEssence.webp",
+    "imageUrl": "/images/currency/essence_of_the_infinite.webp",
     "stackSize": 10,
     "guaranteedMod": "Equipment: +(17—20) to Strength, Dexterity or Intelligence"
   },
@@ -905,7 +905,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/ManaEssence.webp",
+    "imageUrl": "/images/currency/essence_of_the_mind.webp",
     "stackSize": 10,
     "guaranteedMod": "Belt, Boots, Gloves or Helmet: +(65—79) to maximum Mana"
   },
@@ -920,7 +920,7 @@
     "description": "Augments a Rare item with a new random modifier",
     "effect": "Augments a Rare item with a new random modifier",
     "mechanics": "Augments a Rare item with a new random modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/CurrencyAddModToRare.webp",
+    "imageUrl": "/images/currency/exalted_orb.webp",
     "stackSize": 20
   },
   {
@@ -934,7 +934,7 @@
     "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Expedition2/StandardVerisium.webp",
+    "imageUrl": "/images/currency/expansive_alloy.webp",
     "stackSize": 10
   },
   {
@@ -948,7 +948,7 @@
     "description": "Adds quality that enhances Life modifiers on a ring or amulet Replaces other quality types",
     "effect": "Adds quality that enhances Life modifiers on a ring or amulet Replaces other quality types",
     "mechanics": "Adds quality that enhances Life modifiers on a ring or amulet Replaces other quality types",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Breach/BreachCatalystLife.webp",
+    "imageUrl": "/images/currency/flesh_catalyst.webp",
     "stackSize": 10
   },
   {
@@ -962,7 +962,7 @@
     "description": "Fracture a random modifier on a rare item with at least 4 modifiers, locking it in place.",
     "effect": "Fracture a random modifier on a rare item with at least 4 modifiers, locking it in place.",
     "mechanics": "Fracture a random modifier on a rare item with at least 4 modifiers, locking it in place.",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/FracturingOrb.webp",
+    "imageUrl": "/images/currency/fracturing_orb.webp",
     "stackSize": 20
   },
   {
@@ -976,7 +976,7 @@
     "description": "Improves the quality of a Skill Gem",
     "effect": "Improves the quality of a Skill Gem",
     "mechanics": "Improves the quality of a Skill Gem",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/CurrencyGemQuality.webp",
+    "imageUrl": "/images/currency/gemcutters_prism.webp",
     "stackSize": 20
   },
   {
@@ -990,7 +990,7 @@
     "description": "Improves the quality of a flask",
     "effect": "Improves the quality of a flask",
     "mechanics": "Improves the quality of a flask",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/CurrencyFlaskQuality.webp",
+    "imageUrl": "/images/currency/glassblowers_bauble.webp",
     "stackSize": 20
   },
   {
@@ -1004,7 +1004,7 @@
     "description": "Desecrates a Rare Amulet, Ring or Belt",
     "effect": "Desecrates a Rare Amulet, Ring or Belt",
     "mechanics": "Desecrates a Rare Amulet, Ring or Belt",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Abyss/GnawedClavicle.webp",
+    "imageUrl": "/images/currency/gnawed_collarbone.webp",
     "stackSize": 20
   },
   {
@@ -1018,7 +1018,7 @@
     "description": "Desecrates a Rare Weapon or Quiver",
     "effect": "Desecrates a Rare Weapon or Quiver",
     "mechanics": "Desecrates a Rare Weapon or Quiver",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Abyss/GnawedJawbone.webp",
+    "imageUrl": "/images/currency/gnawed_jawbone.webp",
     "stackSize": 20
   },
   {
@@ -1032,7 +1032,7 @@
     "description": "Desecrates a Rare Armour",
     "effect": "Desecrates a Rare Armour",
     "mechanics": "Desecrates a Rare Armour",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Abyss/GnawedRibs.webp",
+    "imageUrl": "/images/currency/gnawed_rib.webp",
     "stackSize": 20
   },
   {
@@ -1046,7 +1046,7 @@
     "description": "Removes a random modifier and augments a Rare item with a new random modifier",
     "effect": "Removes a random modifier and augments a Rare item with a new random modifier",
     "mechanics": "Removes a random modifier and augments a Rare item with a new random modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/CurrencyRerollRare.webp",
+    "imageUrl": "/images/currency/greater_chaos_orb.webp",
     "stackSize": 20,
     "minModifierLevel": 35
   },
@@ -1061,7 +1061,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/GreaterPhysicalEssence.webp",
+    "imageUrl": "/images/currency/greater_essence_of_abrasion.webp",
     "stackSize": 10,
     "guaranteedMod": "One Handed Melee Weapon or Bow: Adds (16—24) to (28—42) Physical Damage"
   },
@@ -1076,7 +1076,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/GreaterSpeedCasterEssence.webp",
+    "imageUrl": "/images/currency/greater_essence_of_alacrity.webp",
     "stackSize": 10,
     "guaranteedMod": "Focus or Wand: (25—28)% increased Cast Speed"
   },
@@ -1091,7 +1091,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/GreaterAttackEssence.webp",
+    "imageUrl": "/images/currency/greater_essence_of_battle.webp",
     "stackSize": 10,
     "guaranteedMod": "Martial Weapon, Gloves or Quiver: +(237—346) to Accuracy Rating"
   },
@@ -1106,7 +1106,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/GreaterAllyEssence.webp",
+    "imageUrl": "/images/currency/greater_essence_of_command.webp",
     "stackSize": 10,
     "guaranteedMod": "Sceptre: Allies in your Presence deal (75—89)% increased Damage"
   },
@@ -1121,7 +1121,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/GreaterLightningEssence.webp",
+    "imageUrl": "/images/currency/greater_essence_of_electricity.webp",
     "stackSize": 10,
     "guaranteedMod": "One Handed Melee Weapon or Bow: Adds (1—6) to (85—107) Lightning Damage"
   },
@@ -1136,7 +1136,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/GreaterDefencesEssence.webp",
+    "imageUrl": "/images/currency/greater_essence_of_enhancement.webp",
     "stackSize": 10,
     "guaranteedMod": "Armour: (68—79)% increased Armour, Evasion and Energy Shield"
   },
@@ -1151,7 +1151,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/GreaterFireEssence.webp",
+    "imageUrl": "/images/currency/greater_essence_of_flames.webp",
     "stackSize": 10,
     "guaranteedMod": "One Handed Melee Weapon or Bow: Adds (35—44) to (56—71) Fire Damage"
   },
@@ -1166,7 +1166,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/GreaterLightningResistanceEssence.webp",
+    "imageUrl": "/images/currency/greater_essence_of_grounding.webp",
     "stackSize": 10,
     "guaranteedMod": "Armour, Belt or Jewellery: +(31—35)% to Lightning Resistance"
   },
@@ -1181,7 +1181,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/GreaterSpeedEssence.webp",
+    "imageUrl": "/images/currency/greater_essence_of_haste.webp",
     "stackSize": 10,
     "guaranteedMod": "Melee Weapon: (23—25)% increased Attack Speed"
   },
@@ -1196,7 +1196,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/GreaterColdEssence.webp",
+    "imageUrl": "/images/currency/greater_essence_of_ice.webp",
     "stackSize": 10,
     "guaranteedMod": "One Handed Melee Weapon or Bow: Adds (31—38) to (47—59) Cold Damage"
   },
@@ -1211,7 +1211,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/GreaterFireResistanceEssence.webp",
+    "imageUrl": "/images/currency/greater_essence_of_insulation.webp",
     "stackSize": 10,
     "guaranteedMod": "Armour, Belt or Jewellery: +(31—35)% to Fire Resistance"
   },
@@ -1226,7 +1226,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/GreaterRarityResistanceEssence.webp",
+    "imageUrl": "/images/currency/greater_essence_of_opulence.webp",
     "stackSize": 10,
     "guaranteedMod": "Boots, Gloves, Helmet or Jewellery: (15—18)% increased Rarity of Items found"
   },
@@ -1241,7 +1241,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/GreaterChaosEssence.webp",
+    "imageUrl": "/images/currency/greater_essence_of_ruin.webp",
     "stackSize": 10,
     "guaranteedMod": "Armour, Belt or Jewellery: +(16—19)% to Chaos Resistance"
   },
@@ -1256,7 +1256,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/GreaterCriticalEssence.webp",
+    "imageUrl": "/images/currency/greater_essence_of_seeking.webp",
     "stackSize": 10,
     "guaranteedMod": "Martial Weapon: +(3.11—3.8)% to Critical Hit Chance"
   },
@@ -1271,7 +1271,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/GreaterCasterEssence.webp",
+    "imageUrl": "/images/currency/greater_essence_of_sorcery.webp",
     "stackSize": 10,
     "guaranteedMod": "Focus or Wand: (75—89)% increased Spell Damage"
   },
@@ -1286,7 +1286,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/GreaterColdResistanceEssence.webp",
+    "imageUrl": "/images/currency/greater_essence_of_thawing.webp",
     "stackSize": 10,
     "guaranteedMod": "Armour, Belt or Jewellery: +(31—35)% to Cold Resistance"
   },
@@ -1301,7 +1301,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/GreaterLifeEssence.webp",
+    "imageUrl": "/images/currency/greater_essence_of_the_body.webp",
     "stackSize": 10,
     "guaranteedMod": "Belt, Body Armour, Helmet or Shield: +(100—119) to maximum Life"
   },
@@ -1316,7 +1316,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/GreaterAttributeEssence.webp",
+    "imageUrl": "/images/currency/greater_essence_of_the_infinite.webp",
     "stackSize": 10,
     "guaranteedMod": "Equipment: +(25—27) to Strength, Dexterity or Intelligence"
   },
@@ -1331,7 +1331,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/GreaterManaEssence.webp",
+    "imageUrl": "/images/currency/greater_essence_of_the_mind.webp",
     "stackSize": 10,
     "guaranteedMod": "Belt, Boots, Gloves or Helmet: +(80—89) to maximum Mana"
   },
@@ -1346,7 +1346,7 @@
     "description": "Augments a Rare item with a new random modifier",
     "effect": "Augments a Rare item with a new random modifier",
     "mechanics": "Augments a Rare item with a new random modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/CurrencyAddModToRare.webp",
+    "imageUrl": "/images/currency/greater_exalted_orb.webp",
     "stackSize": 20,
     "minModifierLevel": 35
   },
@@ -1361,7 +1361,7 @@
     "description": "Sets a Skill Gem to have 4 Support Gem Sockets",
     "effect": "Sets a Skill Gem to have 4 Support Gem Sockets",
     "mechanics": "Sets a Skill Gem to have 4 Support Gem Sockets",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/CurrencyRerollSocketNumbers02.webp",
+    "imageUrl": "/images/currency/greater_jewellers_orb.webp",
     "stackSize": 20
   },
   {
@@ -1375,7 +1375,7 @@
     "description": "Augments a Magic item with a new random modifier",
     "effect": "Augments a Magic item with a new random modifier",
     "mechanics": "Augments a Magic item with a new random modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/CurrencyAddModToMagic.webp",
+    "imageUrl": "/images/currency/greater_orb_of_augmentation.webp",
     "stackSize": 30,
     "minModifierLevel": 44
   },
@@ -1390,7 +1390,7 @@
     "description": "Upgrades a Normal item to a Magic item with 1 modifier",
     "effect": "Upgrades a Normal item to a Magic item with 1 modifier",
     "mechanics": "Upgrades a Normal item to a Magic item with 1 modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/CurrencyUpgradeToMagic.webp",
+    "imageUrl": "/images/currency/greater_orb_of_transmutation.webp",
     "stackSize": 40,
     "minModifierLevel": 44
   },
@@ -1405,7 +1405,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding 1 modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding 1 modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding 1 modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/CurrencyUpgradeMagicToRare.webp",
+    "imageUrl": "/images/currency/greater_regal_orb.webp",
     "stackSize": 20,
     "minModifierLevel": 35
   },
@@ -1420,7 +1420,7 @@
     "description": "Allows an item to foresee the result of the next Currency item used on it Modifying the item in any way removes the ability to foresee",
     "effect": "Allows an item to foresee the result of the next Currency item used on it Modifying the item in any way removes the ability to foresee",
     "mechanics": "Allows an item to foresee the result of the next Currency item used on it Modifying the item in any way removes the ability to foresee",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/HinekorasLock.webp",
+    "imageUrl": "/images/currency/hinekoras_lock.webp",
     "stackSize": 10
   },
   {
@@ -1434,7 +1434,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/PhysicalEssenceLesser.webp",
+    "imageUrl": "/images/currency/lesser_essence_of_abrasion.webp",
     "stackSize": 10,
     "guaranteedMod": "One Handed Melee Weapon or Bow: Adds (4—6) to (7—11) Physical Damage"
   },
@@ -1449,7 +1449,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/SpeedCasterEssenceLesser.webp",
+    "imageUrl": "/images/currency/lesser_essence_of_alacrity.webp",
     "stackSize": 10,
     "guaranteedMod": "Focus or Wand: (13—16)% increased Cast Speed"
   },
@@ -1464,7 +1464,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/AttackEssenceLesser.webp",
+    "imageUrl": "/images/currency/lesser_essence_of_battle.webp",
     "stackSize": 10,
     "guaranteedMod": "Martial Weapon: +(61—84) to Accuracy Rating"
   },
@@ -1479,7 +1479,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/AllyEssenceLesser.webp",
+    "imageUrl": "/images/currency/lesser_essence_of_command.webp",
     "stackSize": 10,
     "guaranteedMod": "Sceptre: Allies in your Presence deal (35—44)% increased Damage"
   },
@@ -1494,7 +1494,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/LightningEssenceLesser.webp",
+    "imageUrl": "/images/currency/lesser_essence_of_electricity.webp",
     "stackSize": 10,
     "guaranteedMod": "One Handed Melee Weapon or Bow: Adds 1 to (13—19) Lightning Damage"
   },
@@ -1509,7 +1509,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/DefencesEssenceLesser.webp",
+    "imageUrl": "/images/currency/lesser_essence_of_enhancement.webp",
     "stackSize": 10,
     "guaranteedMod": "Armour: (27—42)% increased Armour, Evasion and Energy Shield"
   },
@@ -1524,7 +1524,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/FireEssenceLesser.webp",
+    "imageUrl": "/images/currency/lesser_essence_of_flames.webp",
     "stackSize": 10,
     "guaranteedMod": "One Handed Melee Weapon or Bow: Adds (4—6) to (7—10) Fire Damage"
   },
@@ -1539,7 +1539,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/LightningResistanceEssenceLesser.webp",
+    "imageUrl": "/images/currency/lesser_essence_of_grounding.webp",
     "stackSize": 10,
     "guaranteedMod": "Armour, Belt or Jewellery: +(11—15)% to Lightning Resistance"
   },
@@ -1554,7 +1554,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/SpeedEssenceLesser.webp",
+    "imageUrl": "/images/currency/lesser_essence_of_haste.webp",
     "stackSize": 10,
     "guaranteedMod": "Melee Weapon: (11—13)% increased Attack Speed"
   },
@@ -1569,7 +1569,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/ColdEssenceLesser.webp",
+    "imageUrl": "/images/currency/lesser_essence_of_ice.webp",
     "stackSize": 10,
     "guaranteedMod": "One Handed Melee Weapon or Bow: Adds (3—5) to (6—9) Cold Damage"
   },
@@ -1584,7 +1584,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/FireResistanceEssenceLesser.webp",
+    "imageUrl": "/images/currency/lesser_essence_of_insulation.webp",
     "stackSize": 10,
     "guaranteedMod": "Armour, Belt or Jewellery: +(11—15)% to Fire Resistance"
   },
@@ -1599,7 +1599,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/RarityResistanceEssenceLesser.webp",
+    "imageUrl": "/images/currency/lesser_essence_of_opulence.webp",
     "stackSize": 10,
     "guaranteedMod": "Boots, Gloves, Helmet or Jewellery: (6—10)% increased Rarity of Items found"
   },
@@ -1614,7 +1614,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/ChaosEssenceLesser.webp",
+    "imageUrl": "/images/currency/lesser_essence_of_ruin.webp",
     "stackSize": 10,
     "guaranteedMod": "Armour, Belt or Jewellery: +(4—7)% to Chaos Resistance"
   },
@@ -1629,7 +1629,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/CriticalEssenceLesser.webp",
+    "imageUrl": "/images/currency/lesser_essence_of_seeking.webp",
     "stackSize": 10,
     "guaranteedMod": "Martial Weapon: +(1.51—2.1)% to Critical Hit Chance"
   },
@@ -1644,7 +1644,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/CasterEssenceLesser.webp",
+    "imageUrl": "/images/currency/lesser_essence_of_sorcery.webp",
     "stackSize": 10,
     "guaranteedMod": "Focus or Wand: (35—44)% increased Spell Damage"
   },
@@ -1659,7 +1659,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/ColdResistanceEssenceLesser.webp",
+    "imageUrl": "/images/currency/lesser_essence_of_thawing.webp",
     "stackSize": 10,
     "guaranteedMod": "Armour, Belt or Jewellery: +(11—15)% to Cold Resistance"
   },
@@ -1674,7 +1674,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/LifeEssenceLesser.webp",
+    "imageUrl": "/images/currency/lesser_essence_of_the_body.webp",
     "stackSize": 10,
     "guaranteedMod": "Armour or Belt: +(30—39) to maximum Life"
   },
@@ -1689,7 +1689,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/AttributeEssenceLesser.webp",
+    "imageUrl": "/images/currency/lesser_essence_of_the_infinite.webp",
     "stackSize": 10,
     "guaranteedMod": "Equipment: +(9—12) to Strength, Dexterity or Intelligence"
   },
@@ -1704,7 +1704,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding a guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/ManaEssenceLesser.webp",
+    "imageUrl": "/images/currency/lesser_essence_of_the_mind.webp",
     "stackSize": 10,
     "guaranteedMod": "Belt, Boots, Gloves, Helmet or Jewellery: +(25—34) to maximum Mana"
   },
@@ -1719,7 +1719,7 @@
     "description": "Sets a Skill Gem to have 3 Support Gem Sockets",
     "effect": "Sets a Skill Gem to have 3 Support Gem Sockets",
     "mechanics": "Sets a Skill Gem to have 3 Support Gem Sockets",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/CurrencyRerollSocketNumbers01.webp",
+    "imageUrl": "/images/currency/lesser_jewellers_orb.webp",
     "stackSize": 20
   },
   {
@@ -1733,7 +1733,7 @@
     "description": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
     "effect": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
     "mechanics": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/DistilledEmotions/DistilledDespair.webp",
+    "imageUrl": "/images/currency/liquid_despair.webp",
     "stackSize": 1030
   },
   {
@@ -1747,7 +1747,7 @@
     "description": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
     "effect": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
     "mechanics": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/DistilledEmotions/DistilledDisgust.webp",
+    "imageUrl": "/images/currency/liquid_disgust.webp",
     "stackSize": 10
   },
   {
@@ -1761,7 +1761,7 @@
     "description": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
     "effect": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
     "mechanics": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/DistilledEmotions/DistilledEnvy.webp",
+    "imageUrl": "/images/currency/liquid_envy.webp",
     "stackSize": 10
   },
   {
@@ -1775,7 +1775,7 @@
     "description": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
     "effect": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
     "mechanics": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/DistilledEmotions/DistilledParanoia.webp",
+    "imageUrl": "/images/currency/liquid_paranoia.webp",
     "stackSize": 10
   },
   {
@@ -1789,7 +1789,7 @@
     "description": "Immediately start a Runic Remnant Encounter with a random Runic Inscription",
     "effect": "Immediately start a Runic Remnant Encounter with a random Runic Inscription",
     "mechanics": "Immediately start a Runic Remnant Encounter with a random Runic Inscription",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Expedition2/LiquidMetalVerisium.webp",
+    "imageUrl": "/images/currency/liquid_verisium.webp",
     "stackSize": 20
   },
   {
@@ -1803,7 +1803,7 @@
     "description": "Creates a Mirrored copy of an item",
     "effect": "Creates a Mirrored copy of an item",
     "mechanics": "Creates a Mirrored copy of an item",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/CurrencyDuplicate.webp",
+    "imageUrl": "/images/currency/mirror_of_kalandra.webp",
     "stackSize": 10
   },
   {
@@ -1817,7 +1817,7 @@
     "description": "Contains an unknown Leaguestone.",
     "effect": "Contains an unknown Leaguestone.",
     "mechanics": "Contains an unknown Leaguestone.",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Classic/Mystery.webp"
+    "imageUrl": "/images/currency/mystery_leaguestone.webp"
   },
   {
     "id": "mystic_alloy",
@@ -1830,7 +1830,7 @@
     "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Expedition2/CelestialVerisium.webp",
+    "imageUrl": "/images/currency/mystic_alloy.webp",
     "stackSize": 10
   },
   {
@@ -1844,7 +1844,7 @@
     "description": "Adds quality that enhances Minion modifiers on a ring or amulet Replaces other quality types",
     "effect": "Adds quality that enhances Minion modifiers on a ring or amulet Replaces other quality types",
     "mechanics": "Adds quality that enhances Minion modifiers on a ring or amulet Replaces other quality types",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Breach/BreachCatalystNecrotic.webp",
+    "imageUrl": "/images/currency/necrotic_catalyst.webp",
     "stackSize": 10
   },
   {
@@ -1858,7 +1858,7 @@
     "description": "Adds quality that enhances Mana modifiers on a ring or amulet Replaces other quality types",
     "effect": "Adds quality that enhances Mana modifiers on a ring or amulet Replaces other quality types",
     "mechanics": "Adds quality that enhances Mana modifiers on a ring or amulet Replaces other quality types",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Breach/BreachCatalystMana.webp",
+    "imageUrl": "/images/currency/neural_catalyst.webp",
     "stackSize": 10
   },
   {
@@ -1872,7 +1872,7 @@
     "description": "While this item is active in your inventory your next Exalted Orb will consume all Catalyst Quality to increase the chance of the corresponding type of Modifier",
     "effect": "While this item is active in your inventory your next Exalted Orb will consume all Catalyst Quality to increase the chance of the corresponding type of Modifier",
     "mechanics": "While this item is active in your inventory your next Exalted Orb will consume all Catalyst Quality to increase the chance of the corresponding type of Modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/OmenOnExaltConsumeQuality.webp",
+    "imageUrl": "/images/currency/omen_of_catalysing_exaltation.webp",
     "stackSize": 10
   },
   {
@@ -1886,7 +1886,7 @@
     "description": "While this item is active in your inventory your next Perfect or Corrupted Essence will remove only Suffix modifiers",
     "effect": "While this item is active in your inventory your next Perfect or Corrupted Essence will remove only Suffix modifiers",
     "mechanics": "While this item is active in your inventory your next Perfect or Corrupted Essence will remove only Suffix modifiers",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/OmenOnPerfectEssenceSuffix.webp",
+    "imageUrl": "/images/currency/omen_of_dextral_crystallisation.webp",
     "stackSize": 10
   },
   {
@@ -1900,7 +1900,7 @@
     "description": "While this item is active in your inventory your next Perfect or Corrupted Essence will remove only Prefix modifiers",
     "effect": "While this item is active in your inventory your next Perfect or Corrupted Essence will remove only Prefix modifiers",
     "mechanics": "While this item is active in your inventory your next Perfect or Corrupted Essence will remove only Prefix modifiers",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/OmenOnPerfectEssencePrefix.webp",
+    "imageUrl": "/images/currency/omen_of_sinistral_crystallisation.webp",
     "stackSize": 10
   },
   {
@@ -1914,7 +1914,7 @@
     "description": "Upgrades a Normal or Magic item to a Rare item with 4 random modifiers",
     "effect": "Upgrades a Normal or Magic item to a Rare item with 4 random modifiers",
     "mechanics": "Upgrades a Normal or Magic item to a Rare item with 4 random modifiers",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/CurrencyUpgradeToRare.webp",
+    "imageUrl": "/images/currency/orb_of_alchemy.webp",
     "stackSize": 20
   },
   {
@@ -1928,7 +1928,7 @@
     "description": "Removes a random modifier from an item",
     "effect": "Removes a random modifier from an item",
     "mechanics": "Removes a random modifier from an item",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/AnnullOrb.webp",
+    "imageUrl": "/images/currency/orb_of_annulment.webp",
     "stackSize": 20
   },
   {
@@ -1942,7 +1942,7 @@
     "description": "Augments a Magic item with a new random modifier",
     "effect": "Augments a Magic item with a new random modifier",
     "mechanics": "Augments a Magic item with a new random modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/CurrencyAddModToMagic.webp",
+    "imageUrl": "/images/currency/orb_of_augmentation.webp",
     "stackSize": 30
   },
   {
@@ -1956,7 +1956,7 @@
     "description": "Unpredictably either upgrades a Normal item to Unique rarity or destroys it",
     "effect": "Unpredictably either upgrades a Normal item to Unique rarity or destroys it",
     "mechanics": "Unpredictably either upgrades a Normal item to Unique rarity or destroys it",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/CurrencyUpgradeToUnique.webp",
+    "imageUrl": "/images/currency/orb_of_chance.webp",
     "stackSize": 10
   },
   {
@@ -1970,7 +1970,7 @@
     "description": "Upgrades a Normal item to a Magic item with 1 modifier",
     "effect": "Upgrades a Normal item to a Magic item with 1 modifier",
     "mechanics": "Upgrades a Normal item to a Magic item with 1 modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/CurrencyUpgradeToMagic.webp",
+    "imageUrl": "/images/currency/orb_of_transmutation.webp",
     "stackSize": 40
   },
   {
@@ -1984,7 +1984,7 @@
     "description": "Removes a random modifier and augments a Rare item with a new random modifier",
     "effect": "Removes a random modifier and augments a Rare item with a new random modifier",
     "mechanics": "Removes a random modifier and augments a Rare item with a new random modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/CurrencyRerollRare.webp",
+    "imageUrl": "/images/currency/perfect_chaos_orb.webp",
     "stackSize": 20,
     "minModifierLevel": 50
   },
@@ -1999,7 +1999,7 @@
     "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/PhysicalEssencePerfect.webp",
+    "imageUrl": "/images/currency/perfect_essence_of_abrasion.webp",
     "stackSize": 10,
     "guaranteedMod": "Removes a random modifier and augments a Rare item with a new guaranteed modifier"
   },
@@ -2014,7 +2014,7 @@
     "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/SpeedCasterEssencePerfect.webp",
+    "imageUrl": "/images/currency/perfect_essence_of_alacrity.webp",
     "stackSize": 10,
     "guaranteedMod": "Removes a random modifier and augments a Rare item with a new guaranteed modifier"
   },
@@ -2029,7 +2029,7 @@
     "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/AttackEssencePerfect.webp",
+    "imageUrl": "/images/currency/perfect_essence_of_battle.webp",
     "stackSize": 10,
     "guaranteedMod": "Removes a random modifier and augments a Rare item with a new guaranteed modifier"
   },
@@ -2044,7 +2044,7 @@
     "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/AllyEssencePerfect.webp",
+    "imageUrl": "/images/currency/perfect_essence_of_command.webp",
     "stackSize": 10,
     "guaranteedMod": "Removes a random modifier and augments a Rare item with a new guaranteed modifier"
   },
@@ -2059,7 +2059,7 @@
     "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/LightningEssencePerfect.webp",
+    "imageUrl": "/images/currency/perfect_essence_of_electricity.webp",
     "stackSize": 10,
     "guaranteedMod": "Removes a random modifier and augments a Rare item with a new guaranteed modifier"
   },
@@ -2074,7 +2074,7 @@
     "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/DefencesEssencePerfect.webp",
+    "imageUrl": "/images/currency/perfect_essence_of_enhancement.webp",
     "stackSize": 10,
     "guaranteedMod": "Removes a random modifier and augments a Rare item with a new guaranteed modifier"
   },
@@ -2089,7 +2089,7 @@
     "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/FireEssencePerfect.webp",
+    "imageUrl": "/images/currency/perfect_essence_of_flames.webp",
     "stackSize": 10,
     "guaranteedMod": "Removes a random modifier and augments a Rare item with a new guaranteed modifier"
   },
@@ -2104,7 +2104,7 @@
     "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/LightningResistanceEssencePerfect.webp",
+    "imageUrl": "/images/currency/perfect_essence_of_grounding.webp",
     "stackSize": 10,
     "guaranteedMod": "Removes a random modifier and augments a Rare item with a new guaranteed modifier"
   },
@@ -2119,7 +2119,7 @@
     "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/SpeedEssencePerfect.webp",
+    "imageUrl": "/images/currency/perfect_essence_of_haste.webp",
     "stackSize": 10,
     "guaranteedMod": "Removes a random modifier and augments a Rare item with a new guaranteed modifier"
   },
@@ -2134,7 +2134,7 @@
     "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/ColdEssencePerfect.webp",
+    "imageUrl": "/images/currency/perfect_essence_of_ice.webp",
     "stackSize": 10,
     "guaranteedMod": "Removes a random modifier and augments a Rare item with a new guaranteed modifier"
   },
@@ -2149,7 +2149,7 @@
     "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/FireResistanceEssencePerfect.webp",
+    "imageUrl": "/images/currency/perfect_essence_of_insulation.webp",
     "stackSize": 10,
     "guaranteedMod": "Removes a random modifier and augments a Rare item with a new guaranteed modifier"
   },
@@ -2164,7 +2164,7 @@
     "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/RarityResistanceEssencePerfect.webp",
+    "imageUrl": "/images/currency/perfect_essence_of_opulence.webp",
     "stackSize": 10,
     "guaranteedMod": "Removes a random modifier and augments a Rare item with a new guaranteed modifier"
   },
@@ -2179,7 +2179,7 @@
     "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/ChaosEssencePerfect.webp",
+    "imageUrl": "/images/currency/perfect_essence_of_ruin.webp",
     "stackSize": 10,
     "guaranteedMod": "Removes a random modifier and augments a Rare item with a new guaranteed modifier"
   },
@@ -2194,7 +2194,7 @@
     "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/CriticalEssencePerfect.webp",
+    "imageUrl": "/images/currency/perfect_essence_of_seeking.webp",
     "stackSize": 10,
     "guaranteedMod": "Removes a random modifier and augments a Rare item with a new guaranteed modifier"
   },
@@ -2209,7 +2209,7 @@
     "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/CasterEssencePerfect.webp",
+    "imageUrl": "/images/currency/perfect_essence_of_sorcery.webp",
     "stackSize": 10,
     "guaranteedMod": "Removes a random modifier and augments a Rare item with a new guaranteed modifier"
   },
@@ -2224,7 +2224,7 @@
     "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/ColdResistanceEssencePerfect.webp",
+    "imageUrl": "/images/currency/perfect_essence_of_thawing.webp",
     "stackSize": 10,
     "guaranteedMod": "Removes a random modifier and augments a Rare item with a new guaranteed modifier"
   },
@@ -2239,7 +2239,7 @@
     "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/LifeEssencePerfect.webp",
+    "imageUrl": "/images/currency/perfect_essence_of_the_body.webp",
     "stackSize": 10,
     "guaranteedMod": "Removes a random modifier and augments a Rare item with a new guaranteed modifier"
   },
@@ -2254,7 +2254,7 @@
     "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/AttributeEssencePerfect.webp",
+    "imageUrl": "/images/currency/perfect_essence_of_the_infinite.webp",
     "stackSize": 10,
     "guaranteedMod": "Removes a random modifier and augments a Rare item with a new guaranteed modifier"
   },
@@ -2269,7 +2269,7 @@
     "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Essence/ManaEssencePerfect.webp",
+    "imageUrl": "/images/currency/perfect_essence_of_the_mind.webp",
     "stackSize": 10,
     "guaranteedMod": "Removes a random modifier and augments a Rare item with a new guaranteed modifier"
   },
@@ -2284,7 +2284,7 @@
     "description": "Augments a Rare item with a new random modifier",
     "effect": "Augments a Rare item with a new random modifier",
     "mechanics": "Augments a Rare item with a new random modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/CurrencyAddModToRare.webp",
+    "imageUrl": "/images/currency/perfect_exalted_orb.webp",
     "stackSize": 20,
     "minModifierLevel": 50
   },
@@ -2299,7 +2299,7 @@
     "description": "Sets a Skill Gem to have 5 Support Gem Sockets",
     "effect": "Sets a Skill Gem to have 5 Support Gem Sockets",
     "mechanics": "Sets a Skill Gem to have 5 Support Gem Sockets",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/CurrencyRerollSocketNumbers03.webp",
+    "imageUrl": "/images/currency/perfect_jewellers_orb.webp",
     "stackSize": 20
   },
   {
@@ -2313,7 +2313,7 @@
     "description": "Augments a Magic item with a new random modifier",
     "effect": "Augments a Magic item with a new random modifier",
     "mechanics": "Augments a Magic item with a new random modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/CurrencyAddModToMagic.webp",
+    "imageUrl": "/images/currency/perfect_orb_of_augmentation.webp",
     "stackSize": 30,
     "minModifierLevel": 70
   },
@@ -2328,7 +2328,7 @@
     "description": "Upgrades a Normal item to a Magic item with 1 modifier",
     "effect": "Upgrades a Normal item to a Magic item with 1 modifier",
     "mechanics": "Upgrades a Normal item to a Magic item with 1 modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/CurrencyUpgradeToMagic.webp",
+    "imageUrl": "/images/currency/perfect_orb_of_transmutation.webp",
     "stackSize": 40,
     "minModifierLevel": 70
   },
@@ -2343,7 +2343,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding 1 modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding 1 modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding 1 modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/CurrencyUpgradeMagicToRare.webp",
+    "imageUrl": "/images/currency/perfect_regal_orb.webp",
     "stackSize": 20,
     "minModifierLevel": 50
   },
@@ -2358,7 +2358,7 @@
     "description": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
     "effect": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
     "mechanics": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/DistilledEmotions/UniqueBeastEmotion.webp",
+    "imageUrl": "/images/currency/potent_liquid_contempt.webp",
     "stackSize": 10
   },
   {
@@ -2372,7 +2372,7 @@
     "description": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
     "effect": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
     "mechanics": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/DistilledEmotions/UniqueConstructsEmotion.webp",
+    "imageUrl": "/images/currency/potent_liquid_ferocity.webp",
     "stackSize": 10
   },
   {
@@ -2386,7 +2386,7 @@
     "description": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
     "effect": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
     "mechanics": "Removes a random modifer and Augments a Rare Basic Jewel with a new guaranteed Crafted modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/DistilledEmotions/UniqueHumansEmotion.webp",
+    "imageUrl": "/images/currency/potent_liquid_melancholy.webp",
     "stackSize": 10
   },
   {
@@ -2400,7 +2400,7 @@
     "description": "Desecrates a Rare Amulet, Ring or Belt",
     "effect": "Desecrates a Rare Amulet, Ring or Belt",
     "mechanics": "Desecrates a Rare Amulet, Ring or Belt",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Abyss/PreservedCalvicle.webp",
+    "imageUrl": "/images/currency/preserved_collarbone.webp",
     "stackSize": 20
   },
   {
@@ -2414,7 +2414,7 @@
     "description": "Desecrates a Rare Jewel",
     "effect": "Desecrates a Rare Jewel",
     "mechanics": "Desecrates a Rare Jewel",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Abyss/PreservedCranium.webp",
+    "imageUrl": "/images/currency/preserved_cranium.webp",
     "stackSize": 20
   },
   {
@@ -2428,7 +2428,7 @@
     "description": "Desecrates a Rare Weapon or Quiver",
     "effect": "Desecrates a Rare Weapon or Quiver",
     "mechanics": "Desecrates a Rare Weapon or Quiver",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Abyss/PreservedJawbone.webp",
+    "imageUrl": "/images/currency/preserved_jawbone.webp",
     "stackSize": 20
   },
   {
@@ -2442,7 +2442,7 @@
     "description": "Desecrates a Rare Armour",
     "effect": "Desecrates a Rare Armour",
     "mechanics": "Desecrates a Rare Armour",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Abyss/PreservedRibs.webp",
+    "imageUrl": "/images/currency/preserved_rib.webp",
     "stackSize": 20
   },
   {
@@ -2456,7 +2456,7 @@
     "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Expedition2/SovereignVerisium.webp",
+    "imageUrl": "/images/currency/prismatic_alloy.webp",
     "stackSize": 10
   },
   {
@@ -2470,7 +2470,7 @@
     "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Expedition2/ImpureVerisium.webp",
+    "imageUrl": "/images/currency/protective_alloy.webp",
     "stackSize": 10
   },
   {
@@ -2484,7 +2484,7 @@
     "description": "Adds quality that enhances Attack modifiers on a ring or amulet Replaces other quality types",
     "effect": "Adds quality that enhances Attack modifiers on a ring or amulet Replaces other quality types",
     "mechanics": "Adds quality that enhances Attack modifiers on a ring or amulet Replaces other quality types",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Breach/BreachCatalystAttack.webp",
+    "imageUrl": "/images/currency/reaver_catalyst.webp",
     "stackSize": 10
   },
   {
@@ -2498,7 +2498,7 @@
     "description": "Adds quality that enhances Attribute modifiers on a jewel Replaces other quality types",
     "effect": "Adds quality that enhances Attribute modifiers on a jewel Replaces other quality types",
     "mechanics": "Adds quality that enhances Attribute modifiers on a jewel Replaces other quality types",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Breach/JewelCatalystAttribute.webp",
+    "imageUrl": "/images/currency/refined_adaptive_catalyst.webp",
     "stackSize": 10
   },
   {
@@ -2512,7 +2512,7 @@
     "description": "Adds quality that enhances Armour, Evasion and Energy Shield modifiers on a jewel Replaces other quality types",
     "effect": "Adds quality that enhances Armour, Evasion and Energy Shield modifiers on a jewel Replaces other quality types",
     "mechanics": "Adds quality that enhances Armour, Evasion and Energy Shield modifiers on a jewel Replaces other quality types",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Breach/JewelCatalystDefences.webp",
+    "imageUrl": "/images/currency/refined_carapace_catalyst.webp",
     "stackSize": 10
   },
   {
@@ -2526,7 +2526,7 @@
     "description": "Adds quality that enhances Chaos modifiers on a jewel Replaces other quality types",
     "effect": "Adds quality that enhances Chaos modifiers on a jewel Replaces other quality types",
     "mechanics": "Adds quality that enhances Chaos modifiers on a jewel Replaces other quality types",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Breach/JewelCatalystChaos.webp",
+    "imageUrl": "/images/currency/refined_chayulas_catalyst.webp",
     "stackSize": 10
   },
   {
@@ -2540,7 +2540,7 @@
     "description": "Adds quality that enhances Lightning modifiers on a jewel Replaces other quality types",
     "effect": "Adds quality that enhances Lightning modifiers on a jewel Replaces other quality types",
     "mechanics": "Adds quality that enhances Lightning modifiers on a jewel Replaces other quality types",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Breach/JewelCatalystLightning.webp",
+    "imageUrl": "/images/currency/refined_eshs_catalyst.webp",
     "stackSize": 10
   },
   {
@@ -2554,7 +2554,7 @@
     "description": "Adds quality that enhances Life modifiers on a jewel Replaces other quality types",
     "effect": "Adds quality that enhances Life modifiers on a jewel Replaces other quality types",
     "mechanics": "Adds quality that enhances Life modifiers on a jewel Replaces other quality types",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Breach/JewelCatalystLife.webp",
+    "imageUrl": "/images/currency/refined_flesh_catalyst.webp",
     "stackSize": 10
   },
   {
@@ -2568,7 +2568,7 @@
     "description": "Adds quality that enhances Minion modifiers on a jewel Replaces other quality types",
     "effect": "Adds quality that enhances Minion modifiers on a jewel Replaces other quality types",
     "mechanics": "Adds quality that enhances Minion modifiers on a jewel Replaces other quality types",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Breach/JewelCatalystNecrotic.webp",
+    "imageUrl": "/images/currency/refined_necrotic_catalyst.webp",
     "stackSize": 10
   },
   {
@@ -2582,7 +2582,7 @@
     "description": "Adds quality that enhances Mana modifiers on a jewel Replaces other quality types",
     "effect": "Adds quality that enhances Mana modifiers on a jewel Replaces other quality types",
     "mechanics": "Adds quality that enhances Mana modifiers on a jewel Replaces other quality types",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Breach/JewelCatalystMana.webp",
+    "imageUrl": "/images/currency/refined_neural_catalyst.webp",
     "stackSize": 10
   },
   {
@@ -2596,7 +2596,7 @@
     "description": "Adds quality that enhances Attack modifiers on a jewel Replaces other quality types",
     "effect": "Adds quality that enhances Attack modifiers on a jewel Replaces other quality types",
     "mechanics": "Adds quality that enhances Attack modifiers on a jewel Replaces other quality types",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Breach/JewelCatalystAttack.webp",
+    "imageUrl": "/images/currency/refined_reaver_catalyst.webp",
     "stackSize": 10
   },
   {
@@ -2610,7 +2610,7 @@
     "description": "Adds quality that enhances Caster modifiers on a jewel Replaces other quality types",
     "effect": "Adds quality that enhances Caster modifiers on a jewel Replaces other quality types",
     "mechanics": "Adds quality that enhances Caster modifiers on a jewel Replaces other quality types",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Breach/JewelCatalystCaster.webp",
+    "imageUrl": "/images/currency/refined_sibilant_catalyst.webp",
     "stackSize": 10
   },
   {
@@ -2624,7 +2624,7 @@
     "description": "Adds quality that enhances Speed modifiers on a jewel Replaces other quality types",
     "effect": "Adds quality that enhances Speed modifiers on a jewel Replaces other quality types",
     "mechanics": "Adds quality that enhances Speed modifiers on a jewel Replaces other quality types",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Breach/JewelCatalystSpeed.webp",
+    "imageUrl": "/images/currency/refined_skittering_catalyst.webp",
     "stackSize": 10
   },
   {
@@ -2638,7 +2638,7 @@
     "description": "Adds quality that enhances Cold modifiers on a jewel Replaces other quality types",
     "effect": "Adds quality that enhances Cold modifiers on a jewel Replaces other quality types",
     "mechanics": "Adds quality that enhances Cold modifiers on a jewel Replaces other quality types",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Breach/JewelCatalystCold.webp",
+    "imageUrl": "/images/currency/refined_tuls_catalyst.webp",
     "stackSize": 10
   },
   {
@@ -2652,7 +2652,7 @@
     "description": "Adds quality that enhances Physical modifiers on a jewel Replaces other quality types",
     "effect": "Adds quality that enhances Physical modifiers on a jewel Replaces other quality types",
     "mechanics": "Adds quality that enhances Physical modifiers on a jewel Replaces other quality types",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Breach/JewelCatalystPhysical.webp",
+    "imageUrl": "/images/currency/refined_uul_netols_catalyst.webp",
     "stackSize": 10
   },
   {
@@ -2666,7 +2666,7 @@
     "description": "Adds quality that enhances Fire modifiers on a jewel Replaces other quality types",
     "effect": "Adds quality that enhances Fire modifiers on a jewel Replaces other quality types",
     "mechanics": "Adds quality that enhances Fire modifiers on a jewel Replaces other quality types",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Breach/JewelCatalystFire.webp",
+    "imageUrl": "/images/currency/refined_xophs_catalyst.webp",
     "stackSize": 10
   },
   {
@@ -2680,7 +2680,7 @@
     "description": "Upgrades a Magic item to a Rare item, adding 1 modifier",
     "effect": "Upgrades a Magic item to a Rare item, adding 1 modifier",
     "mechanics": "Upgrades a Magic item to a Rare item, adding 1 modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/CurrencyUpgradeMagicToRare.webp",
+    "imageUrl": "/images/currency/regal_orb.webp",
     "stackSize": 20
   },
   {
@@ -2694,7 +2694,7 @@
     "description": "NameShow Full Descriptions Currency Exchange12 Gold NoteCoderegal-shard DropLevel 5 BaseType Regal Shard Class Stackable Currency FlagsAlwaysAllocate TypeMetadata/Items/Currency/CurrencyUpgradeMagicToRareShard SoundAudio/Sound Effects/ItemSounds/4.0/Currency/Orbs/OrbUse.ogg Tagscurrency_shard, currency IconArt/2DItems/Currency/CurrencyUpgradeMagicToRareShard",
     "effect": "NameShow Full Descriptions Currency Exchange12 Gold NoteCoderegal-shard DropLevel 5 BaseType Regal Shard Class Stackable Currency FlagsAlwaysAllocate TypeMetadata/Items/Currency/CurrencyUpgradeMagicToRareShard SoundAudio/Sound Effects/ItemSounds/4.0/Currency/Orbs/OrbUse.ogg Tagscurrency_shard, currency IconArt/2DItems/Currency/CurrencyUpgradeMagicToRareShard",
     "mechanics": "NameShow Full Descriptions Currency Exchange12 Gold NoteCoderegal-shard DropLevel 5 BaseType Regal Shard Class Stackable Currency FlagsAlwaysAllocate TypeMetadata/Items/Currency/CurrencyUpgradeMagicToRareShard SoundAudio/Sound Effects/ItemSounds/4.0/Currency/Orbs/OrbUse.ogg Tagscurrency_shard, currency IconArt/2DItems/Currency/CurrencyUpgradeMagicToRareShard",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/CurrencyUpgradeMagicToRareShard.webp",
+    "imageUrl": "/images/currency/regal_shard.webp",
     "stackSize": 10
   },
   {
@@ -2708,7 +2708,7 @@
     "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Expedition2/ScrapVerisium.webp",
+    "imageUrl": "/images/currency/runic_alloy.webp",
     "stackSize": 10
   },
   {
@@ -2722,7 +2722,7 @@
     "description": "Identifies an item",
     "effect": "Identifies an item",
     "mechanics": "Identifies an item",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/CurrencyIdentification.webp",
+    "imageUrl": "/images/currency/scroll_of_wisdom.webp",
     "stackSize": 40
   },
   {
@@ -2736,7 +2736,7 @@
     "description": "Adds quality that enhances Caster modifiers on a ring or amulet Replaces other quality types",
     "effect": "Adds quality that enhances Caster modifiers on a ring or amulet Replaces other quality types",
     "mechanics": "Adds quality that enhances Caster modifiers on a ring or amulet Replaces other quality types",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Breach/BreachCatalystCaster.webp",
+    "imageUrl": "/images/currency/sibilant_catalyst.webp",
     "stackSize": 10
   },
   {
@@ -2750,7 +2750,7 @@
     "description": "Adds quality that enhances Speed modifiers on a ring or amulet Replaces other quality types",
     "effect": "Adds quality that enhances Speed modifiers on a ring or amulet Replaces other quality types",
     "mechanics": "Adds quality that enhances Speed modifiers on a ring or amulet Replaces other quality types",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Breach/BreachCatalystSpeed.webp",
+    "imageUrl": "/images/currency/skittering_catalyst.webp",
     "stackSize": 10
   },
   {
@@ -2764,7 +2764,7 @@
     "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Expedition2/Alloy1.webp",
+    "imageUrl": "/images/currency/sovereign_alloy.webp",
     "stackSize": 10
   },
   {
@@ -2778,7 +2778,7 @@
     "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Expedition2/PureVerisium.webp",
+    "imageUrl": "/images/currency/swift_alloy.webp",
     "stackSize": 10
   },
   {
@@ -2792,7 +2792,7 @@
     "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Expedition2/Alloy2.webp",
+    "imageUrl": "/images/currency/the_runebinders_alloy.webp",
     "stackSize": 10
   },
   {
@@ -2806,7 +2806,7 @@
     "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Expedition2/Alloy3.webp",
+    "imageUrl": "/images/currency/the_runefathers_alloy.webp",
     "stackSize": 10
   },
   {
@@ -2820,7 +2820,7 @@
     "description": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "effect": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
     "mechanics": "Removes a random modifier and augments a Rare item with a new guaranteed modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Expedition2/Alloy5.webp",
+    "imageUrl": "/images/currency/transcendent_alloy.webp",
     "stackSize": 10
   },
   {
@@ -2834,7 +2834,7 @@
     "description": "NameShow Full Descriptions Currency Exchange4 Gold NoteCodetransmutation-shard DropLevel 1 BaseType Transmutation Shard Class Stackable Currency FlagsAlwaysAllocate TypeMetadata/Items/Currency/CurrencyUpgradeToMagicShard Tagscurrency_shard, currency IconArt/2DItems/Currency/CurrencyUpgradeToMagicShard",
     "effect": "NameShow Full Descriptions Currency Exchange4 Gold NoteCodetransmutation-shard DropLevel 1 BaseType Transmutation Shard Class Stackable Currency FlagsAlwaysAllocate TypeMetadata/Items/Currency/CurrencyUpgradeToMagicShard Tagscurrency_shard, currency IconArt/2DItems/Currency/CurrencyUpgradeToMagicShard",
     "mechanics": "NameShow Full Descriptions Currency Exchange4 Gold NoteCodetransmutation-shard DropLevel 1 BaseType Transmutation Shard Class Stackable Currency FlagsAlwaysAllocate TypeMetadata/Items/Currency/CurrencyUpgradeToMagicShard Tagscurrency_shard, currency IconArt/2DItems/Currency/CurrencyUpgradeToMagicShard",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/CurrencyUpgradeToMagicShard.webp",
+    "imageUrl": "/images/currency/transmutation_shard.webp",
     "stackSize": 10
   },
   {
@@ -2848,7 +2848,7 @@
     "description": "Adds quality that enhances Cold modifiers on a ring or amulet Replaces other quality types",
     "effect": "Adds quality that enhances Cold modifiers on a ring or amulet Replaces other quality types",
     "mechanics": "Adds quality that enhances Cold modifiers on a ring or amulet Replaces other quality types",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Breach/BreachCatalystCold.webp",
+    "imageUrl": "/images/currency/tuls_catalyst.webp",
     "stackSize": 10
   },
   {
@@ -2862,7 +2862,7 @@
     "description": "Adds quality that enhances Physical modifiers on a ring or amulet Replaces other quality types",
     "effect": "Adds quality that enhances Physical modifiers on a ring or amulet Replaces other quality types",
     "mechanics": "Adds quality that enhances Physical modifiers on a ring or amulet Replaces other quality types",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Breach/BreachCatalystPhysical.webp",
+    "imageUrl": "/images/currency/uul_netols_catalyst.webp",
     "stackSize": 10
   },
   {
@@ -2876,7 +2876,7 @@
     "description": "Modifies an item unpredictably and Corrupts it",
     "effect": "Modifies an item unpredictably and Corrupts it",
     "mechanics": "Modifies an item unpredictably and Corrupts it",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/CurrencyVaal.webp",
+    "imageUrl": "/images/currency/vaal_orb.webp",
     "stackSize": 20
   },
   {
@@ -2890,7 +2890,7 @@
     "description": "Adds quality that enhances Fire modifiers on a ring or amulet Replaces other quality types",
     "effect": "Adds quality that enhances Fire modifiers on a ring or amulet Replaces other quality types",
     "mechanics": "Adds quality that enhances Fire modifiers on a ring or amulet Replaces other quality types",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Breach/BreachCatalystFire.webp",
+    "imageUrl": "/images/currency/xophs_catalyst.webp",
     "stackSize": 10
   }
 ]
