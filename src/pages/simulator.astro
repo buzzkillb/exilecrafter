@@ -378,7 +378,6 @@ Adds 3 to 6 Physical Damage to Attacks
     import { guidanceFor, eligibleModCount } from '~/lib/expected-cost';
     import {
       RARITY_COLORS,
-      SLOT_DISPLAY as SLOT_LABELS,
       tagColor,
       capitalize,
       escapeHtml,
@@ -389,13 +388,23 @@ Adds 3 to 6 Physical Damage to Attacks
       renderPastePreviewHTML,
       itemToText,
     } from '~/lib/item';
+    import {
+      CURRENCY_NAME_TO_OP,
+      OP_KEYBOARD_HINTS,
+      SLOT_LABELS,
+      mapCurrencyToOp,
+      getOpKey,
+      categoryLabel,
+      parseOmenEffect,
+      categorizeOmen,
+    } from '~/lib/simulator';
 
     const basesData = JSON.parse(document.getElementById('base-data')!.textContent || '[]');
 
     // Pure helpers (RARITY_COLORS, SLOT_LABELS, tagColor, capitalize,
     // escapeHtml, findBaseByName, parsePaste, renderItemCardHTML,
     // renderPastePreviewHTML, itemToText) come from ~/lib/item.
-    // Tag color rules + defaults are folded into tagColor() there.
+    // Operations + SLOT_LABELS now come from ~/lib/simulator.
 
 // Populated by fetch
     let currencyData: any[] = [];
@@ -833,59 +842,6 @@ function openPasteModal() {
       });
     }
 
-    // Keyboard shortcuts
-    const KEY_MAP: Record<string, string> = {
-      t: 'orb_of_transmutation',
-      a: 'orb_of_alchemy',
-      r: 'regal_orb',
-      e: 'exalted_orb',
-      x: 'orb_of_annulment',
-      c: 'chaos_orb',
-      d: 'divine_orb',
-      u: 'orb_of_augmentation',
-      v: 'vaal_orb',
-    };
-
-    // Map currency id (or name) to the canonical operation id.
-// First tries the id directly, then strips lesser/greater/perfect/corrupted prefix,
-// then falls back to a name keyword lookup.
-const CURRENCY_NAME_TO_OP: Array<[RegExp | string, string]> = [
-  ['transmutation', 'orb_of_transmutation'],
-  ['augmentation', 'orb_of_augmentation'],
-  ['alchemy', 'orb_of_alchemy'],
-  ['regal', 'regal_orb'],
-  ['exalt', 'exalted_orb'],
-  ['annul', 'orb_of_annulment'],
-  ['chaos', 'chaos_orb'],
-  ['divine', 'divine_orb'],
-  ['chance', 'orb_of_chance'],
-  ['vaal', 'vaal_orb'],
-  ['desecrat', 'desecrate'],
-  ['collarbone|jawbone|rib|cranium', 'desecrate'],
-  ['liquid|potent|auspicious|concentrated|diluted|ancient|distilled', 'liquid_emotion'],
-  ['catalyst', 'catalyst'],
-  ['alloy', 'alloy'],
-];
-const OP_KEYBOARD_HINTS: Record<string, string> = {
-  orb_of_transmutation: 'T', orb_of_alchemy: 'A', regal_orb: 'R',
-  exalted_orb: 'E', orb_of_annulment: 'X', chaos_orb: 'C', divine_orb: 'D',
-  orb_of_augmentation: 'U', vaal_orb: 'V',
-};
-
-function mapCurrencyToOp(id: string, name: string): string {
-  if (OPERATIONS[id]) return id;
-  const stripped = id.replace(/^(lesser_|greater_|perfect_|corrupted_)/, '');
-  if (OPERATIONS[stripped]) return stripped;
-  const n = name.toLowerCase();
-  for (const [needle, opId] of CURRENCY_NAME_TO_OP) {
-    if (typeof needle === 'string' ? n.includes(needle) : needle.test(n)) return opId;
-  }
-  return stripped || id;
-}
-
-function getOpKey(opId: string): string {
-  return OP_KEYBOARD_HINTS[opId] || '';
-}
 
     function usedCount(type: string) {
       return currentItem?.affixes.filter((a: any) => a.type === type).length || 0;
@@ -1071,10 +1027,6 @@ function getOpKey(opId: string): string {
           applyCraft(opId, originalId);
         });
       });
-    }
-
-    function categoryLabel(cat: string): string {
-      return ({ upgrade_rarity: 'Upgrade', augment: 'Add Affix', reroll: 'Reroll', annul: 'Annul', divine: 'Divine', corrupt: 'Corrupt', desecrate: 'Desecrate', essence: 'Essences', breach: 'Breach', special: 'Special', catalyst: 'Catalysts', liquid_affector: 'Liquids', currency_other: 'Other' } as Record<string, string>)[cat] || cat;
     }
 
     function renderHistory() {
@@ -1267,72 +1219,6 @@ function getOpKey(opId: string): string {
 
     // Omen effect patterns, ordered from most-specific to most-generic. Each
 // pattern maps to a kind+value used by the emulator.
-const OMEN_EFFECT_RULES: Array<[RegExp, () => any]> = [
-  [/only (have )?prefix|maximum number of prefix/, () => ({ kind: 'force_type', value: 'prefix' })],
-  [/only (have )?suffix|maximum number of suffix/, () => ({ kind: 'force_type', value: 'suffix' })],
-  [/adds 2 affixes|add two random modifiers|add two new random modifiers/, () => ({ kind: 'double_add' })],
-  [/does not destroy|will not destroy/, () => ({ kind: 'no_destroy', for: 'orb_of_chance' })],
-  [/remove two modifiers|removes 2 affixes/, () => ({ kind: 'remove_count', value: 2 })],
-  [/removes 1 prefix|only prefix modifiers/, () => ({ kind: 'remove_type', value: 'prefix' })],
-  [/removes 1 suffix|only suffix modifiers/, () => ({ kind: 'remove_type', value: 'suffix' })],
-  [/lowest level/, () => ({ kind: 'remove_lowest_level' })],
-  [/replaces? all (affixes|modifiers)|reroll (the options|desecrated modifiers)/, () => ({ kind: 'replace_all_desecrate' })],
-  [/same type as an existing modifier/, () => ({ kind: 'force_homogenise' })],
-  [/ulaman/, () => ({ kind: 'desecrate_faction', value: 'ulaman' })],
-  [/amanamu/, () => ({ kind: 'desecrate_faction', value: 'amanamu' })],
-  [/kurgal/, () => ({ kind: 'desecrate_faction', value: 'kurgal' })],
-  [/desecrated affixes/, () => ({ kind: 'remove_only_desecrated' })],
-  [/implicit/, () => ({ kind: 'divine_implicit_only' })],
-  [/sanctif/, () => ({ kind: 'divine_upgrade' })],
-  [/catalysing|catalyst/, () => ({ kind: 'exalted_consumes_catalyst' })],
-  [/putrefaction/, () => ({ kind: 'desecrate_reroll' })],
-  [/sinistral.*necromancy/, () => ({ kind: 'desecrate_minion', value: 'prefix' })],
-  [/dextral.*necromancy/, () => ({ kind: 'desecrate_minion', value: 'suffix' })],
-  [/crystallisation/, () => ({ kind: 'perfect_orb_implicit_upgrade' })],
-  [/chaotic effectiveness/, () => ({ kind: 'chaos_effectiveness' })],
-  [/chaotic monsters/, () => ({ kind: 'chaos_monsters' })],
-  [/chaotic quantity/, () => ({ kind: 'chaos_quantity' })],
-  [/chaotic rarity/, () => ({ kind: 'chaos_rarity' })],
-  [/random unique|ancients/, () => ({ kind: 'specific_unique', for: 'orb_of_chance' })],
-];
-const OMEN_EFFECT_DEFAULT = { kind: 'force_type', value: 'prefix' };
-
-function parseOmenEffect(o: OmenOpt | undefined): any {
-  if (!o) return OMEN_EFFECT_DEFAULT;
-  const e = (o.effect || '').toLowerCase();
-  for (const [re, build] of OMEN_EFFECT_RULES) {
-    if (re.test(e)) return build();
-  }
-  return OMEN_EFFECT_DEFAULT;
-}
-
-// Map omen name → category for the popover grid
-const OMEN_CATEGORY_RULES: Array<[RegExp, string]> = [
-  [/saga$/, 'Saga'],
-  [/ancients|blackblooded|liege|sovereign/, 'Faction'],
-  [/alchemy/, 'Alchemy'],
-  [/coronation/, 'Coronation'],
-  [/exaltation/, 'Exaltation'],
-  [/annulment/, 'Annulment'],
-  [/erasure/, 'Erasure'],
-  [/crystallisation/, 'Crystallisation'],
-  [/necromancy/, 'Necromancy'],
-  [/chance/, 'Chance'],
-  [/whittling/, 'Whittling'],
-  [/abyssal/, 'Abyssal'],
-  [/putrefaction/, 'Putrefaction'],
-  [/light/, 'Light'],
-  [/refreshment|resurgence|amelioration|bartering|answered|catalysing|chaotic|corruption/, 'Other'],
-];
-
-function categorizeOmen(name: string): string {
-  const n = name.toLowerCase();
-  for (const [re, cat] of OMEN_CATEGORY_RULES) {
-    if (re.test(n)) return cat;
-  }
-  return 'Other';
-}
-
     function renderOmensModal() {
       const grouped = new Map<string, OmenOpt[]>();
       for (const o of omensData as OmenOpt[]) {
@@ -1468,7 +1354,11 @@ function categorizeOmen(name: string): string {
       });
     });
 
-    // Keyboard shortcuts
+    // Keyboard shortcuts (built from OP_KEYBOARD_HINTS)
+    const KEY_MAP: Record<string, string> = {};
+    for (const [op, key] of Object.entries(OP_KEYBOARD_HINTS)) {
+      if (key) KEY_MAP[key.toLowerCase()] = op;
+    }
     document.addEventListener('keydown', (e) => {
       if (!currentItem) return;
       const tag = (e.target as HTMLElement)?.tagName;
