@@ -453,42 +453,36 @@ export function divineOrb(ctx: EmulatorContext): CraftResult {
 }
 
 export function vaalOrb(ctx: EmulatorContext): CraftResult {
-  // Corrupts the item; if it's a normal/magic/rare without implicit, the implicit
-  // slot gets a corrupted implicit (we represent this as a corrupted flag).
-  // PoE2 Vaal Orb has 4 equally-likely outcomes:
-  //   25% upgrade â€” adds corrupted implicit
-  //   25% modify â€” rerolls affixes (adds/removes some)
-  //   25% no change â€” just corrupts, nothing else
-  //   25% destroy â€” item is destroyed (lose all affixes)
   const { item } = ctx;
   if (item.corrupted) return { ok: false, message: 'Already corrupted.', item };
-  const roll = Math.random();
-  if (roll < 0.25) {
-    // Destroy â€” clear all affixes, revert to normal
-    const next = { ...item, corrupted: true, affixes: [], rarity: 'normal' as ItemRarity, desecrated: false, fractured: [], bonusPrefixSlots: 0, bonusSuffixSlots: 0, appliedLiquids: [], history: [...item.history, { action: 'Vaal Orb', detail: 'Destroyed' }] };
-    return { ok: true, message: 'Vaal Orb destroyed the item â€” all affixes lost.', item: next };
-  }
-  // 25% upgrade — adds corrupted implicit. On waystones, this increases the tier.
-  if (roll < 0.5) {
-    const tierMatch = item.slot === 'waystone' ? item.baseName.match(/Waystone \(Tier (\d+)\)/) || item.baseName.match(/tier (\d+)/i) : null;
+
+  // Waystones: 2 outcomes per poe2db (no destroy, no shuffle — only tier change or nothing)
+  if (item.slot === 'waystone') {
+    const tierMatch = item.baseName.match(/Waystone \(Tier (\d+)\)/) || item.baseName.match(/tier (\d+)/i);
     if (tierMatch) {
       const currentTier = parseInt(tierMatch[1]);
       const newTier = Math.max(1, Math.min(16, currentTier + Math.floor(Math.random() * 3) - 1));
-      return { ok: true, message: newTier > currentTier ? `Vaal Orb upgraded waystone to Tier ${newTier}!` : newTier < currentTier ? `Vaal Orb downgraded waystone to Tier ${newTier}.` : 'Vaal Orb corrupted the waystone (tier unchanged).', item: { ...item, corrupted: true, history: [...item.history, { action: 'Vaal Orb', detail: `Tier ${newTier}` }] }, newBaseId: `waystone_tier_${newTier}` };
+      return { ok: true, message: newTier > currentTier ? 'Vaal Orb upgraded waystone to Tier ' + newTier + '!' : newTier < currentTier ? 'Vaal Orb downgraded waystone to Tier ' + newTier + '.' : 'Vaal Orb corrupted the waystone (no tier change).', item: { ...item, corrupted: true, history: [...item.history, { action: 'Vaal Orb', detail: 'Tier ' + newTier }] }, newBaseId: 'waystone_tier_' + newTier };
     }
+    return { ok: true, message: 'Vaal Orb corrupted the waystone (no tier change).', item: { ...item, corrupted: true, history: [...item.history, { action: 'Vaal Orb', detail: 'Corrupted' }] } };
+  }
+
+  // Equipment: 4 equally-likely outcomes per poe2db
+  const roll = Math.random();
+  if (roll < 0.25) {
+    const next = { ...item, corrupted: true, affixes: [], rarity: 'normal', desecrated: false, fractured: [], bonusPrefixSlots: 0, bonusSuffixSlots: 0, appliedLiquids: [], history: [...item.history, { action: 'Vaal Orb', detail: 'Destroyed' }] };
+    return { ok: true, message: 'Vaal Orb destroyed the item - all affixes lost.', item: next };
+  }
+  if (roll < 0.5) {
     const imp = CORRUPTED_IMPLICITS[Math.floor(Math.random() * CORRUPTED_IMPLICITS.length)];
     return { ok: true, message: 'Vaal Orb added corrupted implicit: ' + imp, item: { ...item, corrupted: true, implicit: (item.implicit ? item.implicit + ' | ' : '') + imp, history: [...item.history, { action: 'Vaal Orb', detail: 'Implicit: ' + imp }] } };
   }
-  // 25% modify — shuffle some affix types
   if (roll < 0.75) {
-    const shuffled = item.affixes.map((a: any) => Math.random() < 0.3 ? { ...a, type: a.type === 'prefix' ? 'suffix' : 'prefix' } : a);
+    const shuffled = item.affixes.map((a) => Math.random() < 0.3 ? { ...a, type: a.type === 'prefix' ? 'suffix' : 'prefix' } : a);
     return { ok: true, message: 'Vaal Orb shuffled affixes (some mods swapped type).', item: { ...item, corrupted: true, affixes: shuffled, history: [...item.history, { action: 'Vaal Orb', detail: 'Affixes shuffled' }] } };
   }
-  // 25% no change
   return { ok: true, message: 'Vaal Orb corrupted the item (no other effect).', item: { ...item, corrupted: true, history: [...item.history, { action: 'Vaal Orb', detail: 'Corrupted' }] } };
 }
-
-// Hinekora's Lock: foresight — next currency previews without consuming
 
 export function desecrate(ctx: EmulatorContext): CraftResult {
   // Add a desecrated affix (one of 3 factions: Ulaman/Amanamu/Kurgal)
