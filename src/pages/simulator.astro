@@ -730,7 +730,7 @@ function openPasteModal() {
 
       const grouped: Record<string, CurOpt[]> = {};
       for (const c of currencyData as CurOpt[]) {
-        const opId = mapCurrencyToOp(c.id, c.name);
+        const opId = mapCurrencyToOp(c.id, c.name, OPERATIONS);
         const avail = availability[opId];
         if (!avail) continue;
         if (!grouped[c.category]) grouped[c.category] = [];
