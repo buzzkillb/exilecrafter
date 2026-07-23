@@ -572,7 +572,7 @@ function openPasteModal() {
         pasteParseTimer = window.setTimeout(handlePasteText, 80);
       };
       pasteTextarea.addEventListener('input', scheduleParse);
-      pasteTextarea.addEventListener('paste', scheduleParse);
+      pasteTextarea.addEventListener('paste', handlePasteText);
       pasteTextarea.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' && (e.ctrlKey || e.metaKey) && pasteImport && !pasteImport.disabled) {
           e.preventDefault();
