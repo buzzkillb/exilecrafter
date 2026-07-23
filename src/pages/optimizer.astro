@@ -170,18 +170,24 @@ import Base from '~/layouts/Base.astro';
     totalCost.textContent = `${result.totalChaos.toLocaleString()}c`;
     exaltCost.textContent = result.totalExalts.toLocaleString();
     divineCost.textContent = result.totalDivines.toLocaleString();
-    stepsEl.innerHTML = result.steps.map((s, i) => `
-      <div class="flex items-center gap-3 border border-border rounded p-3 text-sm">
-        <span class="text-xs text-mute w-8 shrink-0">#${i + 1}</span>
+
+    const slotLabel = (t: string) => t === 'prefix' ? 'Prefix' : 'Suffix';
+    stepsEl.innerHTML = result.matched.map((s, i) => `
+      <div class="flex items-start gap-3 border border-border rounded p-3 text-sm">
+        <span class="text-xs text-mute w-6 shrink-0 pt-0.5">T${s.tier}</span>
         <div class="flex-1 min-w-0">
-          <div class="text-fg font-semibold">${s.operation}</div>
-          <div class="text-dim text-xs truncate" title="${s.description}">${s.description}</div>
+          <div class="text-fg">${s.mod}</div>
+          <div class="text-xs text-mute mt-0.5">
+            ${slotLabel(s.type)} · weight ${s.poolWeight} in pool of ${s.poolSize}
+          </div>
         </div>
         <div class="text-right shrink-0">
-          <div class="text-gold-bright font-mono font-semibold">${s.subtotal.toFixed(1)}c</div>
-          <div class="text-mute text-xs">${s.perAttempt > 9 ? `~${s.perAttempt} tries` : `${s.perAttempt}x`}</div>
+          <div class="text-gold-bright font-mono font-semibold">${s.subtotal.toFixed(2)}c</div>
+          <div class="text-mute text-xs">~1 in ${s.attempts.toLocaleString()}</div>
         </div>
       </div>
-    `).join('');
+    `).join('') + (result.unmatched.length > 0 ? `
+      <div class="text-xs text-dim mt-2">${result.unmatched.length} mod(s) not matched: ${result.unmatched.join(', ').slice(0, 80)}</div>
+    ` : '');
   });
 </script>

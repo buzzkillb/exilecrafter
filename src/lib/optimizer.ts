@@ -1,48 +1,47 @@
-// src/lib/optimizer.ts
-// Finds the cheapest sequence of crafting operations to replicate a target item
-// from scratch using poe2db DropChance weights and live poe2scout prices.
+// src/lib/optimizer.ts — practical breakdown of expected costs per target mod
 
 import type { BaseItem, Mod as ModDef } from './types';
 import { buildPool } from './weights';
 
 export interface OptimizerStep {
-  operation: string;
-  description: string;
-  cost: number;        // chaos expected total
-  perAttempt: number;  // attempts expected
+  mod: string;
+  type: string;
+  tier: number;
+  poolWeight: number;
+  poolSize: number;
+  attempts: number;
+  costPerAttempt: number;
   subtotal: number;
 }
 
 export interface OptimizerResult {
-  steps: OptimizerStep[];
+  baseName: string;
+  matched: OptimizerStep[];
+  unmatched: string[];
   totalChaos: number;
   totalExalts: number;
   totalDivines: number;
 }
 
-// Match a pasted mod description to our mod database.
-// Returns the best matching mod, or null.
-function matchMod(text: string, mods: ModDef[], type: 'prefix' | 'suffix'): ModDef | null {
+function matchMod(text: string, mods: ModDef[]): { mod: ModDef; type: 'prefix' | 'suffix' } | null {
   const t = text.toLowerCase().replace(/[^a-z0-9%+\- ]/g, '').trim();
-  // Try exact match (after stripping ranges from both)
-  const candidates = mods.filter(m => m.type === type || m.type === 'any');
-  for (const m of candidates) {
-    const desc = m.description.toLowerCase().replace(/[^a-z0-9%+\- ]/g, '');
-    // Check if every meaningful word in the mod text appears in the description
-    const words = t.split(/\s+/).filter(w => w.length > 3 && !/^\d+$/.test(w));
-    const matches = words.filter(w => desc.includes(w));
-    if (matches.length >= Math.max(2, words.length * 0.6)) return m;
-  }
-  // Fallback: return first mod with any word overlap
-  const words = t.split(/\s+/).filter(w => w.length > 3);
+  const words = t.split(/\s+/).filter(w => w.length > 3 && !/^\d+$/.test(w));
+  if (words.length === 0) return null;
+
   let best: ModDef | null = null;
   let bestScore = 0;
-  for (const m of candidates) {
-    const desc = m.description.toLowerCase();
+  let bestType: 'prefix' | 'suffix' = 'prefix';
+
+  for (const m of mods) {
+    if (m.type !== 'prefix' && m.type !== 'suffix') continue;
+    const desc = m.description.toLowerCase().replace(/[^a-z0-9%+\- ]/g, '');
     const score = words.filter(w => desc.includes(w)).length;
-    if (score > bestScore) { bestScore = score; best = m; }
+    if (score > bestScore) { bestScore = score; best = m; bestType = m.type as 'prefix' | 'suffix'; }
   }
-  if (bestScore > 0) return best;
+
+  if (best && bestScore >= Math.max(2, words.length * 0.6)) {
+    return { mod: best, type: bestType };
+  }
   return null;
 }
 
@@ -53,104 +52,40 @@ export function optimize(
   prices: Record<string, number>,
   chaosPerDivine: number,
 ): OptimizerResult {
-  const steps: OptimizerStep[] = [];
-  const usedSlots = { prefix: 0, suffix: 0 };
-  const maxSlots = { ...base.affixSlots };
-  let rarity: 'normal' | 'magic' | 'rare' = 'normal';
-  let affixesAdded = 0;
+  const matched: OptimizerStep[] = [];
+  const unmatched: string[] = [];
+  const exaltPrice = prices['exalted_orb'] || 0.018;
 
-  // Classify target mods and match them to our database
-  const targets: Array<{ text: string; mod: ModDef | null; type: 'prefix' | 'suffix' }> = [];
   for (const name of targetModNames) {
-    const mod = matchMod(name, allMods, 'prefix') || matchMod(name, allMods, 'suffix');
-    if (mod) {
-      targets.push({ text: name, mod, type: mod.type === 'any' ? 'prefix' : mod.type as 'prefix' | 'suffix' });
-    }
+    const result = matchMod(name, allMods);
+    if (!result) { unmatched.push(name); continue; }
+
+    const pool = buildPool(allMods, result.type, base, [], { ilvl: 82 });
+    const modWeight = result.mod.weight || 1000;
+    const p = pool.totalWeight > 0 ? modWeight / pool.totalWeight : 0;
+    const attempts = p > 0 ? Math.round(1 / p) : 9999;
+
+    matched.push({
+      mod: result.mod.description.slice(0, 55),
+      type: result.type,
+      tier: result.mod.tier,
+      poolWeight: modWeight,
+      poolSize: pool.entries.length,
+      attempts,
+      costPerAttempt: exaltPrice,
+      subtotal: attempts * exaltPrice,
+    });
   }
 
-  if (targets.length === 0) {
-    return { steps: [], totalChaos: 0, totalExalts: 0, totalDivines: 0 };
-  }
+  // Sort by expected cost ascending
+  matched.sort((a, b) => a.subtotal - b.subtotal);
 
-  // Step 1: Buy base
-  steps.push({ operation: 'Buy base', description: base.name, cost: 0.5, perAttempt: 1, subtotal: 0.5 });
-
-  // Helper: get pool for operation type
-  function getPool(type: 'prefix' | 'suffix') {
-    return buildPool(allMods, type, base, [], { ilvl: 82 });
-  }
-
-  // Process prefix targets first, then suffix
-  for (const type of ['prefix', 'suffix'] as const) {
-    const typeTargets = targets.filter(t => t.type === type);
-    if (typeTargets.length === 0) continue;
-
-    for (const target of typeTargets) {
-      if (usedSlots[type] >= maxSlots[type]) continue;
-      const mod = target.mod;
-      if (!mod) continue;
-
-      // Compute probability for Exalted route
-      const pool = getPool(type);
-      const modWeight = mod.weight || 1000;
-      const poolTotal = pool.totalWeight;
-      const p = poolTotal > 0 ? modWeight / poolTotal : 0;
-      const expectedAttempts = p > 0 ? Math.round(1 / p) : 9999;
-
-      // Essence price estimate
-      const exaltPrice = prices['exalted_orb'] || 0.018;
-      const exaltCost = expectedAttempts * exaltPrice;
-
-      // Determine which operation to use
-      if (rarity === 'normal') {
-        // Need to upgrade to Rare first
-        steps.push({ operation: 'Orb of Alchemy', description: 'Normal → Rare (4 affixes)', cost: 1.0, perAttempt: 1, subtotal: 1.0 });
-        rarity = 'rare';
-        usedSlots.prefix = Math.min(usedSlots.prefix + 2, maxSlots.prefix);
-        usedSlots.suffix = Math.min(usedSlots.suffix + 2, maxSlots.suffix);
-        affixesAdded += 4;
-      }
-
-      if (rarity === 'magic') {
-        steps.push({ operation: 'Regal Orb', description: 'Magic → Rare', cost: 0.01, perAttempt: 1, subtotal: 0.01 });
-        rarity = 'rare';
-      }
-
-      // Check if we need Annul spam to clear space
-      if (usedSlots[type] >= maxSlots[type]) continue; // no room
-
-      // Try Essence first (cheaper than expected Exalted spam for expensive mods)
-      // In real PoE2, essence cost = average price for that essence type
-      const essencePrice = prices[`essence_of_${target.text.slice(0, 12).replace(/[^a-z]/g, '_')}`] || 0;
-
-      if (essencePrice > 0 && essencePrice < exaltCost && essencePrice < 15) {
-        if (affixesAdded === 0 && rarity === 'normal') {
-          // Essence on Normal → Magic → Rare
-          steps.push({ operation: 'Essence', description: `Guaranteed: ${mod.description.slice(0, 50)}`, cost: essencePrice, perAttempt: 1, subtotal: essencePrice });
-          rarity = 'rare';
-        } else if (affixesAdded > 0 && rarity === 'rare') {
-          // Essence on Rare: removes + replaces
-          steps.push({ operation: 'Essence (overwrite)', description: `Guaranteed: ${mod.description.slice(0, 45)}`, cost: essencePrice, perAttempt: 1, subtotal: essencePrice });
-        }
-        usedSlots[type]++;
-        affixesAdded++;
-      } else {
-        // Exalted slam
-        if (usedSlots.prefix + usedSlots.suffix >= maxSlots.prefix + maxSlots.suffix) {
-          steps.push({ operation: 'Annul + Exalted', description: `Annul bad mod, then try for: ${mod.description.slice(0, 35)}`, cost: (prices['orb_of_annulment'] || 3.73) + exaltPrice, perAttempt: expectedAttempts, subtotal: (expectedAttempts + 1) * (prices['orb_of_annulment'] || 3.73 + exaltPrice) });
-          continue;
-        }
-        steps.push({ operation: 'Exalted Orb', description: `${mod.description.slice(0, 40)} — ~1 in ${expectedAttempts} tries`, cost: exaltPrice, perAttempt: expectedAttempts, subtotal: exaltCost });
-        usedSlots[type]++;
-        affixesAdded++;
-      }
-    }
-  }
-
-  const totalChaos = steps.reduce((s, x) => s + x.subtotal, 0);
+  const totalChaos = matched.reduce((s, x) => s + x.subtotal, 0);
   const cpd = chaosPerDivine || 7.5;
   return {
-    steps,
+    baseName: base.name,
+    matched,
+    unmatched,
     totalChaos: Math.round(totalChaos * 100) / 100,
     totalExalts: Math.round((totalChaos / (cpd / 56)) * 100) / 100,
     totalDivines: Math.round((totalChaos / cpd) * 100) / 100,
