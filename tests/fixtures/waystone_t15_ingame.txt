@@ -1,0 +1,10 @@
+Rarity: Normal
+Waystone (Tier 15)
+--------
+Waystone Tier: 15
+--------
+Item Level: 78
+--------
++27% Monster Pack Size
++12% Rarity of Items found
++9% increased Quantity

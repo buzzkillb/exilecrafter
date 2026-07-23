@@ -1,0 +1,24 @@
+Item Class: Rings
+Rarity: Rare
+Torment Whorl
+Gold Ring
+--------
+Requires: Level 60
+--------
+Item Level: 82
+--------
+{ Implicit Modifier }
+15(6-15)% increased Rarity of Items found
+--------
+{ Prefix Modifier "Tempered" (Tier: 2) — Damage, Physical, Attack }
+Adds 13(10-15) to 23(18-26) Physical Damage to Attacks
+{ Desecrated Prefix Modifier "Entombing" (Tier: 1) — Damage, Elemental, Cold, Attack }
+Adds 23(21-24) to 32(32-37) Cold damage to Attacks
+{ Prefix Modifier "Sparking" (Tier: 5) — Damage, Elemental, Lightning, Attack }
+Adds 1 to 30(28-32) Lightning damage to Attacks
+{ Suffix Modifier "of the Rainbow" (Tier: 1) — Elemental, Fire, Cold, Lightning, Resistance }
++16(15-16)% to all Elemental Resistances
+{ Suffix Modifier "of the Remora" (Tier: 1) — Life, Physical, Attack }
+Leech 7.55(7-7.9)% of Physical Attack Damage as Life
+{ Crafted Suffix Modifier "of Archaeology" (Tier: 1) }
+17(15-18)% increased Rarity of Items found

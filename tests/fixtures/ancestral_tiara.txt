@@ -1,0 +1,36 @@
+Item Class: Helmets
+Rarity: Rare
+Cataclysm Ward
+Ancestral Tiara
+--------
+Quality: +20% (augmented)
+Energy Shield: 305 (augmented)
+--------
+Requires: Level 80, 115 Int
+--------
+Sockets: S 
+--------
+Item Level: 86
+--------
+{ Enhancement }
+Allocates Zarokh's Gift — Unscalable Value
+{ Corruption Enhancement — Attack }
++57(50-100) to Accuracy Rating
+--------
+Raven-Touched (rune)
+--------
+{ Prefix Modifier "Virile" (Tier: 3) — Life }
++118(100-119) to maximum Life
+{ Prefix Modifier "Unassailable" (Tier: 1) — Energy Shield }
+99(92-100)% increased Energy Shield
+{ Prefix Modifier "Exarch's" (Tier: 2) — Life, Energy Shield }
+34(33-38)% increased Energy Shield
++39(33-41) to maximum Life
+{ Suffix Modifier "of Bameth" (Tier: 1) — Chaos, Resistance }
++25(24-27)% to Chaos Resistance
+{ Suffix Modifier "of the Polar Bear" (Tier: 3) — Elemental, Cold, Resistance }
++33(31-35)% to Cold Resistance
+{ Suffix Modifier "of Tzteosh" (Tier: 1) — Elemental, Fire, Resistance }
++45(41-45)% to Fire Resistance
+--------
+Twice Corrupted

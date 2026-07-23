@@ -13,7 +13,8 @@
     "fetch": "node scripts/fetch-poe2db.mjs",
     "process": "node scripts/process-data.mjs && node scripts/download-images.mjs",
     "weights": "node scripts/fetch-weights.mjs",
-    "e2e": "node scripts/_e2e_paste.mjs"
+    "e2e": "node scripts/_e2e_paste.mjs",
+    "test": "node --experimental-strip-types --no-warnings tests/run.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
