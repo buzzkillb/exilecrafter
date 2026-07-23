@@ -36,27 +36,28 @@ import {
 interface WikiHeaderMatch {
   crafted: boolean;
   desecrated: boolean;
-  type: 'prefix' | 'suffix' | 'implicit';
+  type: 'prefix' | 'suffix' | 'implicit' | 'unique';
   descriptiveName: string | null;
   tier: number | null;
   tags: string[] | null;
 }
 function matchWikiHeader(line: string): WikiHeaderMatch | null {
-  // Allow 4 shapes:
+  // Allow 5 shapes:
   //   1. { Prefix Modifier "Tempered" (Tier: 2) — Tags }
   //   2. { Suffix Modifier "of Bameth" (Tier: 1) — Chaos, Resistance }
   //   3. { Crafted Suffix Modifier "of Archaeology" (Tier: 1) }
   //      (crafted/desecrated mods often omit the trailing tag list)
   //   4. { Implicit Modifier }  (no name, no tier)
+  //   5. { Unique Modifier — Tags }   (unique items; no descriptiveName, no Tier)
   const m = line.match(
-    /^\{?\s*(?:(Crafted)\s+)?(?:(Desecrated)\s+)?(Prefix|Suffix|Implicit)\s+Modifier(?:\s+"([^"]+)")?(?:\s+\(Tier:\s*(\d+)\))?(?:\s*[—\-]\s*([^}]*?))?\s*\}?\s*$/i,
+    /^\{?\s*(?:(Crafted)\s+)?(?:(Desecrated)\s+)?(Prefix|Suffix|Implicit|Unique)\s+Modifier(?:\s+"([^"]+)")?(?:\s+\(Tier:\s*(\d+)\))?(?:\s*[—\-]\s*([^}]*?))?\s*\}?\s*$/i,
   );
   if (!m) return null;
   const tagsRaw = (m[6] ?? '').trim();
   return {
     crafted: !!m[1],
     desecrated: !!m[2],
-    type: m[3].toLowerCase() as 'prefix' | 'suffix' | 'implicit',
+    type: m[3].toLowerCase() as 'prefix' | 'suffix' | 'implicit' | 'unique',
     descriptiveName: m[4] ?? null,
     tier: m[5] ? parseInt(m[5], 10) : null,
     tags: tagsRaw ? tagsRaw.split(/\s*,\s*/) : null,
@@ -66,15 +67,15 @@ function matchWikiHeader(line: string): WikiHeaderMatch | null {
 /** Match the in-game header line (no `{}`, no Tier or quote, just the modifier type). */
 function matchInGameHeader(
   line: string,
-): { crafted: boolean; desecrated: boolean; type: 'prefix' | 'suffix' | 'implicit' } | null {
+): { crafted: boolean; desecrated: boolean; type: 'prefix' | 'suffix' | 'implicit' | 'unique' } | null {
   const m = line.match(
-    /^\s*(?:(Crafted)\s+)?(?:(Desecrated)\s+)?(Prefix|Suffix|Implicit)\s+Modifier\s*$/i,
+    /^\s*(?:(Crafted)\s+)?(?:(Desecrated)\s+)?(Prefix|Suffix|Implicit|Unique)\s+Modifier\s*$/i,
   );
   if (!m) return null;
   return {
     crafted: !!m[1],
     desecrated: !!m[2],
-    type: m[3].toLowerCase() as 'prefix' | 'suffix' | 'implicit',
+    type: m[3].toLowerCase() as 'prefix' | 'suffix' | 'implicit' | 'unique',
   };
 }
 
@@ -113,7 +114,7 @@ function matchEnhancementHeader(
   const raw = m[1].trim();
   // Only treat as enhancement slot if it doesn't start with mod type keywords
   if (
-    /^(?:Crafted\s+)?(?:Desecrated\s+)?(?:Prefix|Suffix|Implicit)\s+Modifier/i.test(
+    /^(?:Crafted\s+)?(?:Desecrated\s+)?(?:Prefix|Suffix|Implicit|Unique)\s+Modifier/i.test(
       raw,
     )
   )
@@ -239,7 +240,7 @@ export function parsePaste(
   // ── Walk mod sections ──
   // Reset the line cursor to the top and parse mod headers + bodies.
   i = 0;
-  let currentSection: 'prefix' | 'suffix' | 'implicit' | null = null;
+  let currentSection: 'prefix' | 'suffix' | 'implicit' | 'unique' | null = null;
   let sectionCrafted = false;
   let sectionDesecrated = false;
   let sectionDescriptiveName: string | null = null;
@@ -247,7 +248,7 @@ export function parsePaste(
   let sectionTier: number | null = null;
 
   function pushAffix(
-    type: 'prefix' | 'suffix' | 'implicit',
+    type: 'prefix' | 'suffix' | 'implicit' | 'unique',
     tier: number | null,
     name: string,
     descriptiveName: string | null,
@@ -305,7 +306,7 @@ export function parsePaste(
         if (!nk) { k++; continue; }
         if (/^-+$/.test(nk)) break;
         if (ENHANCEMENT_RE.test(nk)) break;
-        if (/^(?:Crafted\s+)?(?:Desecrated\s+)?(?:Prefix|Suffix|Implicit)\s+Modifier/i.test(nk)) break;
+        if (/^(?:Crafted\s+)?(?:Desecrated\s+)?(?:Prefix|Suffix|Implicit|Unique)\s+Modifier/i.test(nk)) break;
         if (/^(Corrupted|Twice Corrupted)\b/i.test(nk)) break;
         body.push(nk);
         k++;

@@ -29,8 +29,11 @@ export type Rarity = 'Normal' | 'Magic' | 'Rare' | 'Unique';
  * the local mod DB has matched it.
  */
 export interface ParsedAffix {
-  /** Prefix/Suffix/Implicit — wiki headers and in-game headers share this. */
-  type: 'prefix' | 'suffix' | 'implicit';
+  /**
+   * Prefix/Suffix/Implicit/Unique — wiki headers and in-game headers share this.
+   * Unique appears only on items with unique modifiers (e.g. The Taming).
+   */
+  type: 'prefix' | 'suffix' | 'implicit' | 'unique';
   /** Tier 1 = best. Null for implicit. */
   tier: number | null;
   /** The rolled display text, e.g. "+118(100-119) to maximum Life". */

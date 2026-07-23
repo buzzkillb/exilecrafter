@@ -1,0 +1,35 @@
+Item Class: Rings
+Rarity: Unique
+The Taming
+Prismatic Ring
+--------
+Quality (Fire Modifiers): +20% (augmented)
+--------
+Requires: Level 42
+--------
+Item Level: 81
+--------
+{ Corruption Enhancement — Attribute }
++11(10-15) to Intelligence
+--------
+{ Implicit Modifier — Elemental, Fire, Cold, Lightning, Resistance — 20% Increased }
++9(7-10)% to all Elemental Resistances
+--------
+{ Unique Modifier — Elemental, Fire, Cold, Lightning, Resistance — 20% Increased }
++17(10-20)% to all Elemental Resistances
+{ Unique Modifier — Elemental, Fire, Cold, Lightning — 20% Increased }
+19(10-20)% increased Damage for each type of Elemental Ailment on Enemy
+{ Unique Modifier — Elemental }
+Wind Skills which can be boosted by Elemental Ground Surfaces can be boosted by multiple Elemental Ground Surfaces — Unscalable Value
+Wind Skills which can be boosted by Elemental Ground Surfaces count
+as being boosted by Ignited, Shocked, and Chilled Ground — Unscalable Value
+--------
+"Moon after moon did Berek make fools
+Of the great and Untamed Three
+Until malice for a Brother
+Slew the hatred of the Other
+And Berek did hunt
+Alone and free."
+- Berek and the Untamed
+--------
+Corrupted

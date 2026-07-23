@@ -51,10 +51,12 @@ function assertIncludes(arr, value, msg) {
 }
 
 const BASES = [
-  { id: 'ancestral_tiara', name: 'Ancestral Tiara', slot: 'helmet', level: 80 },
-  { id: 'gold_ring',        name: 'Gold Ring',       slot: 'ring',   level: 60 },
-  { id: 'two_stone_ring',   name: 'Two-Stone Ring',  slot: 'ring',   level: 24 },
-  { id: 'waystone_t15',     name: 'Waystone (Tier 15)', slot: 'waystone', level: 78 },
+  { id: 'ancestral_tiara',        name: 'Ancestral Tiara',        slot: 'helmet', level: 80 },
+  { id: 'gold_ring',               name: 'Gold Ring',              slot: 'ring',   level: 60 },
+  { id: 'two_stone_ring',          name: 'Two-Stone Ring',         slot: 'ring',   level: 24 },
+  { id: 'prismatic_ring',          name: 'Prismatic Ring',         slot: 'ring',   level: 42 },
+  { id: 'runeforged_war_wraps',    name: 'Runeforged War Wraps',   slot: 'gloves', level: 65 },
+  { id: 'waystone_t15',            name: 'Waystone (Tier 15)',     slot: 'waystone', level: 78 },
 ];
 
 async function loadFixture(name) {
@@ -255,6 +257,147 @@ console.log('\n[serialize roundtrip]');
   assertEq(parsed.itemLevel, 86, 'roundtrip preserves item level');
   assertEq(parsed.corruptionLevel, 1, 'roundtrip preserves corruption level');
   assertEq(parsed.rarity, 'Rare', 'roundtrip preserves rarity');
+}
+
+console.log('\n[parse-paste: Runeforged War Wraps (runes, hybrid, desecrated, crafted, tag-empty)]');
+{
+  const text = await loadFixture('runeforged_war_wraps.txt');
+  const parsed = itemsMod.parsePaste(text, BASES);
+
+  assertEq(parsed.itemClass, 'Gloves', 'itemClass');
+  assertEq(parsed.rarity, 'Rare', 'rarity');
+  assertEq(parsed.itemName, 'Woe Clutches', 'itemName (rolled)');
+  assertEq(parsed.baseName, 'Runeforged War Wraps', 'baseName resolved');
+  assertEq(parsed.itemLevel, 81, 'itemLevel');
+  assertEq(parsed.corruptionLevel, 0, 'not corrupted');
+
+  // Rune bonuses are *outside* the {} blocks.
+  assertEq(parsed.runes.length, 2, 'two rune bonuses parsed');
+  // The parser strips the `(rune)` suffix, leaving the full text of each bonus.
+  assert(parsed.runes[0]?.name.includes('Attack Speed'), 'Attack Speed rune captured');
+  assert(parsed.runes[1]?.name.includes('Marksman'), 'Marksman rune captured');
+
+  // Wiki header expectations
+  assertEq(parsed.affixes.length, 6, '6 affixes (3 prefix + 3 suffix)');
+  const prefixes = parsed.affixes.filter((a) => a.type === 'prefix');
+  const suffixes = parsed.affixes.filter((a) => a.type === 'suffix');
+  assertEq(prefixes.length, 3, '3 prefixes');
+  assertEq(suffixes.length, 3, '3 suffixes');
+
+  const names = parsed.affixes.map((a) => a.descriptiveName);
+  assertIncludes(names, "Kolr's", 'Kolr\'s descriptive name');
+  assertIncludes(names, 'Electrocuting', 'Electrocuting descriptive name');
+  assertIncludes(names, 'Razor-sharp', 'Razor-sharp descriptive name');
+  assertIncludes(names, 'of the Hunt', 'of the Hunt descriptive name');
+  assertIncludes(names, 'of the Lightning', 'of the Lightning descriptive name');
+  assertIncludes(names, 'of Fury', 'of Fury descriptive name');
+
+  // Desecrated + Crafted modifiers
+  const electrocuting = parsed.affixes.find((a) => a.descriptiveName === 'Electrocuting');
+  assertEq(electrocuting?.desecrated, true, 'Electrocuting is desecrated');
+  assertEq(electrocuting?.crafted, false, 'Electrocuting is not crafted');
+  assertEq(electrocuting?.tier, 1, 'Electrocuting tier');
+
+  const ofFury = parsed.affixes.find((a) => a.descriptiveName === 'of Fury');
+  assertEq(ofFury?.crafted, true, 'of Fury is crafted');
+  assertEq(ofFury?.desecrated, false, 'of Fury is not desecrated');
+  assertEq(ofFury?.tier, 2, 'of Fury tier');
+
+  // Header with no tags (of the Hunt (Tier: 1) — no em-dash tags)
+  const ofTheHunt = parsed.affixes.find((a) => a.descriptiveName === 'of the Hunt');
+  assert(ofTheHunt !== undefined, 'of the Hunt present');
+  assert(
+    !ofTheHunt.descriptiveTags || ofTheHunt.descriptiveTags.length === 0,
+    'of the Hunt has no descriptive tags',
+  );
+  assertEq(ofTheHunt?.rolled, 62, 'of the Hunt rolled 62');
+
+  // Numeric values
+  const kolrs = parsed.affixes.find((a) => a.descriptiveName === "Kolr's");
+  assertEq(kolrs?.rolled, 37, 'Kolr\'s rolled 37');
+  assertEq(kolrs?.range?.min, 31, 'Kolr\'s range.min');
+  assertEq(kolrs?.range?.max, 40, 'Kolr\'s range.max');
+
+  // Adds X(…)-Y(…) multi-numeric (parser keeps raw form)
+  const electrocutingName = electrocuting?.name ?? '';
+  assert(electrocutingName.includes('Adds 2(1-4)'),
+    'Electrocuting rolled text contains "Adds 2(1-4)" (raw form preserved)');
+  assert(electrocutingName.includes('60(60-71)'),
+    'Electrocuting rolled text contains "60(60-71)" (raw form preserved)');
+  assert(electrocutingName.toLowerCase().includes('lightning'),
+    'Electrocuting rolled text mentions Lightning');
+
+  // Tag groups (wiki headers carried them)
+  assertIncludes(electrocuting?.descriptiveTags ?? [], 'Damage', 'Electrocuting has Damage tag');
+  assertIncludes(electrocuting?.descriptiveTags ?? [], 'Lightning', 'Electrocuting has Lightning tag');
+
+  // of the Lightning (the second tier-2 suffix, NOT of the Hunt) has Elemental tag
+  const ofTheLightning = parsed.affixes.find((a) => a.descriptiveName === 'of the Lightning');
+  assert(ofTheLightning !== undefined, 'of the Lightning present');
+  assertIncludes(ofTheLightning?.descriptiveTags ?? [], 'Elemental', 'of the Lightning has Elemental tag');
+  assertIncludes(ofTheLightning?.descriptiveTags ?? [], 'Resistance', 'of the Lightning has Resistance tag');
+  assertEq(ofTheLightning?.rolled, 36, 'of the Lightning rolled 36');
+}
+
+console.log('\n[parse-paste: The Taming (unique, implicit, enhancement, corruption)]');
+{
+  const text = await loadFixture('the_taming.txt');
+  const parsed = itemsMod.parsePaste(text, BASES);
+
+  assertEq(parsed.itemClass, 'Rings', 'itemClass');
+  assertEq(parsed.rarity, 'Unique', 'rarity');
+  assertEq(parsed.itemName, 'The Taming', 'itemName (rolled)');
+  assertEq(parsed.baseName, 'Prismatic Ring', 'baseName resolved');
+  assertEq(parsed.itemLevel, 81, 'itemLevel');
+  assertEq(parsed.corruptionLevel, 1, 'Corrupted (single) detected');
+
+  // Implicit modifier block (no Tier, no descriptive name, has tags)
+  assert(parsed.implicit !== null && parsed.implicit.length > 0,
+    'implicit modifier parsed');
+  assert(parsed.implicit.includes('all Elemental Resistances'),
+    'implicit rolled text contains "all Elemental Resistances"');
+
+  // Corruption Enhancement block
+  assert(parsed.enhancementNames.length >= 1, 'enhancement blocks detected');
+  const corrupEnh = parsed.enhancementNames.find((n) => n.startsWith('Corruption Enhancement'));
+  assert(corrupEnh !== undefined, 'Corruption Enhancement — Attribute captured');
+  assertIncludes(parsed.enhancementNames, 'Corruption Enhancement — Attribute', 'Corruption Enhancement name');
+
+  // 3 unique mods captured as affixes (the Corruption Enhancement body is
+  // routed to enchantments[] separately, since "Corruption Enhancement" is
+  // a slot header, not a Unique/Prefix/Suffix/Implicit Modifier).
+  assertEq(parsed.affixes.length, 3, '3 unique-mod affixes parsed');
+
+  const allTypes = parsed.affixes.map((a) => a.type);
+  assert(allTypes.every((t) => t === 'unique'), 'all 3 affixes typed as unique');
+
+  const resistAffix = parsed.affixes.find((a) => a.name.includes('+17') && a.name.includes('Elemental Resistances'));
+  assert(resistAffix !== undefined, '+17% all Elemental Resistances affix captured');
+  assertEq(resistAffix?.descriptiveTags?.[0] ?? '', 'Elemental', 'first tag is Elemental');
+  assertIncludes(resistAffix?.descriptiveTags ?? [], 'Fire', 'resist affix has Fire tag');
+
+  // Corruption Enhancement body goes to enchantments[]
+  assertEq(parsed.enchantments.length, 1, 'one enhancement block');
+  const enhText = parsed.enchantments[0]?.raw ?? '';
+  assert(enhText.includes('+11(10-15)'), 'enhancement body has +11(10-15) roll');
+  assert(enhText.includes('Intelligence'), 'enhancement body mentions Intelligence');
+
+  // The first three unique mods are NOT prefix/suffix
+  assert(!allTypes.includes('prefix'), 'no spurious prefix classification on unique mods');
+  assert(!allTypes.includes('suffix'), 'no spurious suffix classification on unique mods');
+
+  // "Unscalable Value" lines (no numeric rolls) preserved as text
+  const unscalable = parsed.affixes.find((a) => a.name.includes('Unscalable Value'));
+  assert(unscalable !== undefined, 'Unscalable Value text captured in name');
+
+  // No spurious implicit classification
+  assert(!allTypes.includes('implicit'), 'no spurious implicit classification on unique mods');
+
+  // Unknown lines: lore block should not surface as unknown
+  assert(
+    !parsed.unknownLines.some((l) => l.includes('Berek')),
+    'lore not surfaced as unknown lines',
+  );
 }
 
 // ─────────────────────────────── SUMMARY ───────────────────────────────

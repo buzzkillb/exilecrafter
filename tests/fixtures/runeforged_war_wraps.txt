@@ -1,0 +1,31 @@
+Item Class: Gloves
+Rarity: Rare
+Woe Clutches
+Runeforged War Wraps
+--------
+Quality: +20% (augmented)
+Evasion Rating: 91 (augmented)
+Energy Shield: 28 (augmented)
+Runic Ward: 34 (augmented)
+--------
+Requires: Level 65, 44 Dex, 44 Int
+--------
+Sockets: S S
+--------
+Item Level: 81
+--------
+8% increased Attack Speed (rune)
+Can roll Marksman modifiers (rune)
+--------
+{ Prefix Modifier "Kolr's" (Tier: 1) — Damage }
+37(31-40)% increased Projectile Damage
+{ Desecrated Prefix Modifier "Electrocuting" (Tier: 1) — Damage, Elemental, Lightning, Attack }
+Adds 2(1-4) to 60(60-71) Lightning damage to Attacks
+{ Prefix Modifier "Razor-sharp" (Tier: 3) — Damage, Physical, Attack }
+Adds 10(7-11) to 16(14-20) Physical Damage to Attacks
+{ Suffix Modifier "of the Hunt" (Tier: 1) }
++62(51-66)% Surpassing chance to fire an additional Projectile
+{ Suffix Modifier "of the Lightning" (Tier: 2) — Elemental, Lightning, Resistance }
++36(36-40)% to Lightning Resistance
+{ Crafted Suffix Modifier "of Fury" (Tier: 2) — Damage, Critical }
+27(25-29)% increased Critical Damage Bonus
