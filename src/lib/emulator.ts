@@ -98,6 +98,9 @@ export interface CraftResult {
   message: string;
   item: ItemState;
   rolledAffixes?: Affix[];
+  /** When a craft operation changes the base (e.g. Vaal Orb upgrades waystone tier),
+   *  the simulator swaps currentBase to this ID. */
+  newBaseId?: string;
 }
 
 /* ============================================================
@@ -464,9 +467,15 @@ export function vaalOrb(ctx: EmulatorContext): CraftResult {
     const next = { ...item, corrupted: true, affixes: [], rarity: 'normal' as ItemRarity, desecrated: false, fractured: [], bonusPrefixSlots: 0, bonusSuffixSlots: 0, appliedLiquids: [], history: [...item.history, { action: 'Vaal Orb', detail: 'Destroyed' }] };
     return { ok: true, message: 'Vaal Orb destroyed the item â€” all affixes lost.', item: next };
   }
-  // 25% upgrade — adds corrupted implicit
+  // 25% upgrade — adds corrupted implicit. On waystones, this increases the tier.
   if (roll < 0.5) {
-    const implicits = ['(20–30)% increased Fire Damage', '(20–30)% increased Cold Damage', '(20–30)% increased Lightning Damage', '+1 to Level of Socketed Gems', '(5–10)% increased maximum Life'];
+    const tierMatch = item.slot === 'waystone' ? item.baseName.match(/Waystone \(Tier (\d+)\)/) || item.baseName.match(/tier (\d+)/i) : null;
+    if (tierMatch) {
+      const currentTier = parseInt(tierMatch[1]);
+      const newTier = Math.min(currentTier + 1 + Math.floor(Math.random() * 4), 16);
+      return { ok: true, message: `Vaal Orb upgraded waystone to Tier ${newTier}!`, item: { ...item, corrupted: true, history: [...item.history, { action: 'Vaal Orb', detail: `Upgraded to Tier ${newTier}` }] }, newBaseId: `waystone_tier_${newTier}` };
+    }
+    const implicits = ['(20\u201330)% increased Fire Damage', '(20\u201330)% increased Cold Damage', '(20\u201330)% increased Lightning Damage', '+1 to Level of Socketed Gems', '(5\u201310)% increased maximum Life'];
     const imp = implicits[Math.floor(Math.random() * implicits.length)];
     return { ok: true, message: 'Vaal Orb added corrupted implicit: ' + imp, item: { ...item, corrupted: true, implicit: (item.implicit ? item.implicit + ' | ' : '') + imp, history: [...item.history, { action: 'Vaal Orb', detail: 'Implicit: ' + imp }] } };
   }

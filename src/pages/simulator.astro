@@ -1434,6 +1434,16 @@ function getOpKey(opId: string): string {
       history.push(structuredClone(currentItem));
       const result = applyOperation(opId, ctx);
       currentItem = result.item;
+      if (result.newBaseId) {
+        const newBase = basesById?.get(result.newBaseId) ?? basesData.find((b: any) => b.id === result.newBaseId);
+        if (newBase) {
+          currentBase = newBase;
+          currentItem.baseId = newBase.id;
+          currentItem.baseName = newBase.name;
+          currentItem.slot = newBase.slot;
+          basePicker.value = newBase.id;
+        }
+      }
       if (!result.ok) flash(result.message); else flash(result.message, 'ok');
 
       const opName = currencyData.find((c: CurOpt) => c.id === opId)?.name || opId;
