@@ -70,19 +70,23 @@ import Base from '~/layouts/Base.astro';
   const exaltCost = document.getElementById('exalt-cost')!;
   const divineCost = document.getElementById('divine-cost')!;
 
+  function escapeHtml(s: string) { return s.replace(/[&<>"']/g, (c: string) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' } as any)[c]); }
+
   let parsed: any = null;
   let basesData: any[] = [];
   let modsData: any[] = [];
   let pricesData: Record<string, number> = {};
 
   // Load data
-  const [basesRes, modsRes, pricesRes] = await Promise.all([
+  const [basesRes, modsRes, currencyRes, pricesRes] = await Promise.all([
     fetch('/data/bases.json'),
     fetch('/data/mods.json'),
+    fetch('/data/currency.json'),
     fetch('/api/prices'),
   ]);
   basesData = await basesRes.json();
   modsData = await modsRes.json();
+  const allCurrency = await currencyRes.json();
   const pricesRaw = await pricesRes.json();
   const meta = pricesRaw._meta || {};
   for (const [k, v] of Object.entries(pricesRaw)) {
@@ -165,25 +169,33 @@ import Base from '~/layouts/Base.astro';
 
   optimizeBtn.addEventListener('click', () => {
     if (!parsed || !parsed.base) return;
-    const result = optimize(parsed.base, parsed.affixes, modsData, pricesData, chaosPerDivine);
+    const result = optimize(parsed.base, parsed.affixes, modsData, allCurrency, pricesData);
     results.classList.remove('hidden');
-    totalCost.textContent = `${result.totalChaos.toLocaleString()}c`;
-    exaltCost.textContent = result.totalExalts.toLocaleString();
-    divineCost.textContent = result.totalDivines.toLocaleString();
-
+    totalCost.textContent = `${result.totalCheapest.toLocaleString()}c`;
+    exaltCost.textContent = '—';
+    divineCost.textContent = '—';
+    
     const slotLabel = (t: string) => t === 'prefix' ? 'Prefix' : 'Suffix';
-    stepsEl.innerHTML = result.matched.map((s, i) => `
-      <div class="flex items-start gap-3 border border-border rounded p-3 text-sm">
-        <span class="text-xs text-mute w-6 shrink-0 pt-0.5">T${s.tier}</span>
-        <div class="flex-1 min-w-0">
-          <div class="text-fg">${s.mod}</div>
-          <div class="text-xs text-mute mt-0.5">
-            ${slotLabel(s.type)} · weight ${s.poolWeight} in pool of ${s.poolSize}
+    const showCurrency = (a: any) => allCurrency.find((c: any) => c.id === a?.method?.toLowerCase().replace(/\s+/g, '_'))?.imageUrl;
+
+    stepsEl.innerHTML = result.affixes.map((a) => `
+      <div class="border border-border rounded p-3 text-sm space-y-2">
+        <div class="flex items-start gap-3">
+          <span class="text-xs text-mute w-6 shrink-0 pt-0.5 font-mono">T${a.tier}</span>
+          <div class="flex-1 min-w-0">
+            <div class="text-fg">${escapeHtml(a.modText)}</div>
+            <div class="text-xs text-mute mt-0.5">
+              ${slotLabel(a.type)} · weight ${a.weight} in pool of ${a.poolSize} · ~1 in ${a.attempts.toLocaleString()}
+            </div>
           </div>
         </div>
-        <div class="text-right shrink-0">
-          <div class="text-gold-bright font-mono font-semibold">${s.subtotal.toFixed(2)}c</div>
-          <div class="text-mute text-xs">~1 in ${s.attempts.toLocaleString()}</div>
+        <div class="pl-9 space-y-1">
+          ${a.strategies.map((s, i) => `
+            <div class="flex items-center justify-between ${i === 0 ? 'text-gold-bright font-semibold' : 'text-dim'} text-xs">
+              <span>${s.method}</span>
+              <span class="font-mono">${s.expectedCost.toFixed(2)}c</span>
+            </div>
+          `).join('')}
         </div>
       </div>
     `).join('') + (result.unmatched.length > 0 ? `
