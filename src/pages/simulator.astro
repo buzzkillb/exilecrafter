@@ -376,47 +376,25 @@ Adds 3 to 6 Physical Damage to Attacks
     import { applyOperation, emptyItem, getCurrencyAvailability, OPERATIONS } from '~/lib/emulator';
     import { costTracker } from '~/lib/cost-tracker';
     import { guidanceFor, eligibleModCount } from '~/lib/expected-cost';
+    import {
+      RARITY_COLORS,
+      SLOT_DISPLAY as SLOT_LABELS,
+      tagColor,
+      capitalize,
+      escapeHtml,
+      findBaseByName as findBaseByNameImported,
+      parsePaste,
+      renderItemCardHTML,
+      renderPastePreviewHTML,
+      itemToText,
+    } from '~/lib/item';
 
     const basesData = JSON.parse(document.getElementById('base-data')!.textContent || '[]');
 
-    // Module-scope lookup tables — built once, reused on every render.
-    const RARITY_COLORS: Record<string, string> = {
-      normal: '#c8c8c8', magic: '#8888ff', rare: '#ffff77', unique: '#af6025',
-    };
-    const SLOT_LABELS: Record<string, string> = {
-      helmet: 'Helmet', body_armour: 'Body Armour', gloves: 'Gloves',
-      boots: 'Boots', belt: 'Belt', amulet: 'Amulet', ring: 'Ring',
-      shield: 'Shield', quiver: 'Quiver', focus: 'Focus',
-      weapon_1h: 'One Handed Weapon', weapon_2h: 'Two Handed Weapon',
-      flask: 'Flask', charm: 'Charm', jewel: 'Jewel',
-      waystone: 'Waystone', tablet: 'Tablet', relic: 'Relic',
-    };
-    // Map from mod tag → display color (checked in priority order).
-    const TAG_COLOR_RULES: Array<[string[], string]> = [
-      [['fire'], '#c44a2a'],
-      [['cold'], '#4a8fc4'],
-      [['lightning'], '#d4c84a'],
-      [['chaos'], '#a04ac4'],
-      [['physical'], '#c9a87a'],
-      [['life'], '#d44a4a'],
-      [['mana'], '#4a6fc4'],
-      [['energy_shield', 'ward'], '#6accc4'],
-      [['elemental', 'damage'], '#c9a14a'],
-      [['attack'], '#c97070'],
-      [['speed', 'critical'], '#d4c84a'],
-      [['caster'], '#8888ff'],
-      [['minion'], '#a08ac4'],
-    ];
-    const TAG_COLOR_DEFAULT = '#a89a7d';
-    function tagColor(tags: string[]): string {
-      for (const [needles, color] of TAG_COLOR_RULES) {
-        if (needles.some((n) => tags.includes(n))) return color;
-      }
-      return TAG_COLOR_DEFAULT;
-    }
-    function capitalize(s: string): string {
-      return s ? s.charAt(0).toUpperCase() + s.slice(1) : '';
-    }
+    // Pure helpers (RARITY_COLORS, SLOT_LABELS, tagColor, capitalize,
+    // escapeHtml, findBaseByName, parsePaste, renderItemCardHTML,
+    // renderPastePreviewHTML, itemToText) come from ~/lib/item.
+    // Tag color rules + defaults are folded into tagColor() there.
 
 // Populated by fetch
     let currencyData: any[] = [];
@@ -614,22 +592,12 @@ Adds 3 to 6 Physical Damage to Attacks
     const pasteCancel = document.getElementById('paste-cancel') as HTMLButtonElement;
     const closePasteModal = document.getElementById('close-paste-modal') as HTMLButtonElement;
 
-    /** Find the closest matching base by name (fuzzy match: exact > endsWith > includes) */
+    // findBaseByName is imported from ~/lib/item/find-base.ts and now returns
+    // { base, matchedOn } | null. The wrapper below restores the legacy shape
+    // (returns the base itself or null) so existing call sites stay happy
+    // while we incrementally migrate.
     function findBaseByName(name: string) {
-      const n = name.toLowerCase().trim();
-      // Exact match
-      let b = basesData.find((x: any) => x.name.toLowerCase() === n);
-      if (b) return b;
-      // Ends with (most common: "Wrath Eye Prismatic Ring" ends with "Prismatic Ring")
-      b = basesData.find((x: any) => n.endsWith(x.name.toLowerCase()));
-      if (b) return b;
-      // Base name is contained in the pasted name
-      b = basesData.find((x: any) => n.includes(x.name.toLowerCase()));
-      if (b) return b;
-      // Pasted name is contained in base name
-      b = basesData.find((x: any) => x.name.toLowerCase().includes(n));
-      if (b) return b;
-      return null;
+      return findBaseByNameImported(name, basesData)?.base ?? null;
     }
 
     let parsedPaste: any = null;
@@ -737,7 +705,7 @@ function openPasteModal() {
       // against the unique name.
       if (candidates.length >= 2) {
         // Try the second candidate directly as the base name
-        foundBase = findBaseByName(candidates[1]);
+        foundBase = findBaseByName(candidates[1]); /* bridge: imported fn returns {base,matchedOn} | null */
         if (foundBase) {
           name = candidates[0];
         }
@@ -745,7 +713,7 @@ function openPasteModal() {
       // Fallback: if we still don't have a base, try the full unique name
       // (handles edge cases where the unique name itself IS a base, e.g. unique items)
       if (!foundBase) {
-        foundBase = findBaseByName(name);
+        foundBase = findBaseByName(name); /* bridge: imported fn returns {base,matchedOn} | null */
       }
       // Try slot-based search
       if (!foundBase) {
