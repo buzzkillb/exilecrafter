@@ -798,43 +798,20 @@ function openPasteModal() {
           flash('No item to copy.', 'error');
           return;
         }
-        const slotToClass: Record<string, string> = {
-          amulet: 'Amulets', belt: 'Belts', body_armour: 'Body Armours',
-          boots: 'Boots', charm: 'Charms', focus: 'Focuses',
-          gloves: 'Gloves', helmet: 'Helmets', jewel: 'Jewels',
-          quiver: 'Quivers', ring: 'Rings', shield: 'Shields',
-          weapon_1h: 'One Handed Weapons', weapon_2h: 'Two Handed Weapons',
-          waystone: 'Waystones', tablet: 'Tablets', relic: 'Relics',
-          bracelet: 'Bracelets', flask: 'Flasks',
-        };
-        const itemClass = slotToClass[currentBase.slot] || currentBase.slot;
-        const rarity = ({ normal: 'Normal', magic: 'Magic', rare: 'Rare', unique: 'Unique' } as any)[currentItem.rarity] || 'Rare';
-        const lines: string[] = [
-          `Item Class: ${itemClass}`,
-          `Rarity: ${rarity}`,
-          currentBase.name,
-          '--------',
-          `Item Level: ${currentItem.itemLevel}`,
-          '--------',
-        ];
-        if (currentItem.implicit) {
-          lines.push(`${currentItem.implicit} (implicit)`);
-          lines.push('--------');
-        }
-        const prefixes = currentItem.affixes.filter((a: any) => a.type === 'prefix');
-        const suffixes = currentItem.affixes.filter((a: any) => a.type === 'suffix');
-        for (const a of prefixes) lines.push(a.name);
-        if (prefixes.length > 0 && suffixes.length > 0) lines.push('--------');
-        for (const a of suffixes) lines.push(a.name);
-        if (currentItem.corrupted) {
-          lines.push('--------');
-          lines.push('Corrupted');
-        }
-        if (currentItem.fractured && currentItem.fractured.length > 0) {
-          if (!currentItem.corrupted) lines.push('--------');
-          lines.push('Fractured');
-        }
-        const text = lines.join('\n');
+        // Use the imported itemToText() pure serializer. The Affix
+        // shape coming back is the legacy emulator field set, which
+        // itemToText already accepts.
+        const text = itemToText({
+          slot: currentBase.slot,
+          rarity: currentItem.rarity,
+          baseName: currentBase.name,
+          itemName: undefined,  // current item is always shown by its base
+          itemLevel: currentItem.itemLevel,
+          implicit: currentItem.implicit,
+          affixes: currentItem.affixes,
+          corrupted: !!currentItem.corrupted,
+          fractured: (currentItem.fractured?.length ?? 0) > 0,
+        });
 
         try {
           await navigator.clipboard.writeText(text);
