@@ -1,69 +1,98 @@
-// src/lib/optimizer.ts — per-affix cost breakdown with alternatives
+// src/lib/optimizer.ts — per-affix cost breakdown, numeric range matching
 
-import type { BaseItem, Mod as ModDef, Currency } from './types';
+import type { BaseItem, Mod as ModDef } from './types';
 import { buildPool } from './weights';
 
-export interface CostEstimate {
+export interface AffixStrategy {
   method: string;
   expectedCost: number;
-  description: string;
+  chaosPerTry: number;
+  attempts: number;
 }
 
 export interface AffixBreakdown {
-  modText: string;
+  inputText: string;
+  matchedMod: string;
   type: string;
   tier: number;
   weight: number;
   poolSize: number;
-  attempts: number;
-  strategies: CostEstimate[];
+  strategies: AffixStrategy[];
 }
 
 export interface OptimizerResult {
   baseName: string;
   affixes: AffixBreakdown[];
   unmatched: string[];
-  totalCheapest: number;
-  chaoticTotal: number;
+  totalChaos: number;
 }
 
-function matchMod(text: string, mods: ModDef[]): { mod: ModDef; type: 'prefix' | 'suffix' } | null {
-  const t = text.toLowerCase().replace(/[^a-z0-9%+\- ]/g, '').trim();
-  const words = t.split(/\s+/).filter(w => w.length > 3 && !/^\d+$/.test(w));
-  if (words.length === 0) return null;
-
-  let best: ModDef | null = null;
-  let bestScore = 0;
-  let bestType: 'prefix' | 'suffix' = 'prefix';
-
-  for (const m of mods) {
-    if (m.type !== 'prefix' && m.type !== 'suffix') continue;
-    const desc = m.description.toLowerCase().replace(/[^a-z0-9%+\- ]/g, '');
-    const score = words.filter(w => desc.includes(w)).length;
-    if (score > bestScore) { bestScore = score; best = m; bestType = m.type as 'prefix' | 'suffix'; }
+// Extract center values from a stat text like "(10—15)" or "(10—15)"
+function extractCenters(text: string): number[] {
+  const nums = text.match(/\d+/g)?.map(Number) || [];
+  const centers: number[] = [];
+  for (let i = 0; i + 1 < nums.length; i += 2) {
+    centers.push(Math.round((nums[i] + nums[i + 1]) / 2));
   }
-  if (best && bestScore >= Math.max(2, words.length * 0.6)) return { mod: best, type: bestType };
-  return null;
+  // Also extract standalone numbers after ranges
+  if (nums.length % 2 === 0 && nums.length > 2) {
+    // The last two numbers might be the final range
+    centers.push(Math.round((nums[nums.length - 2] + nums[nums.length - 1]) / 2));
+  }
+  return [...new Set(centers)];
 }
 
-// Check if an essence's guaranteed mod text is relevant to this base slot and mod type
-function essenceMatches(essence: any, base: BaseItem, modText: string): boolean {
-  const gm = (essence.guaranteedMod || '').toLowerCase();
-  if (!gm) return false;
-  // Slot check: the guaranteed mod text often starts with equipment condition like
-  // "One Handed Melee Weapon or Bow:" or "Armour, Belt or Jewellery:" or "Armour:"
-  const slot = base.slot;
-  const slotOk = slot.includes('weapon') ? /weapon/i.test(gm) :
-                 slot === 'body_armour' || slot === 'helmet' || slot === 'gloves' || slot === 'boots' ? /armour/i.test(gm) :
-                 slot === 'belt' || slot === 'ring' || slot === 'amulet' ? /belt|jewellery|jewel/i.test(gm) :
-                 slot === 'focus' || slot === 'wand' ? /focus|wand/i.test(gm) : true;
-  if (!slotOk) return false;
+// Parse a pasted mod description into structured data for matching
+function parsePastedMod(text: string): { centers: number[]; sum: number; clean: string } {
+  const centers = extractCenters(text);
+  const sum = centers.reduce((a, b) => a + b, 0);
+  // Remove parenthetical ranges and numbers for word matching
+  const clean = text.replace(/\(\d+[-–]\d+\)/g, '').replace(/\d+/g, '').replace(/[^a-z ]/gi, '').trim().toLowerCase();
+  return { centers, sum, clean };
+}
 
-  // Keyword overlap: check if the essence's mod text shares key words with the target mod
-  const modKeywords = modText.toLowerCase().split(/\s+/).filter(w => w.length > 3 && !/^\d+$/.test(w));
-  const essenceKeywords = gm.split(/\s+/).filter(w => w.length > 3 && !/^\d+$/.test(w));
-  const overlap = modKeywords.filter(w => essenceKeywords.includes(w)).length;
-  return overlap >= 2;
+function matchModToPastedPaste(text: string, mods: ModDef[], type: 'prefix' | 'suffix'): { mod: ModDef; score: number } | null {
+  const pasted = parsePastedMod(text);
+  if (pasted.centers.length === 0) return null;
+
+  const candidates = mods.filter(m => m.type === type || m.type === 'any');
+  let best: { mod: ModDef; score: number } | null = null;
+
+  for (const mod of candidates) {
+    const modDesc = mod.description.replace(/\(\d+[-–]\d+\)/g, '').replace(/\d+/g, '').replace(/[^a-z ]/gi, '').trim().toLowerCase();
+    
+    // Quick word rejection: mod description must share significant words with pasted text
+    const pastedWords = pasted.clean.split(/\s+/).filter(w => w.length > 3);
+    const modWords = modDesc.split(/\s+/).filter(w => w.length > 3);
+    const commonWords = pastedWords.filter(w => modWords.includes(w));
+    if (commonWords.length < Math.max(2, pastedWords.length * 0.4)) continue;
+
+    // Numeric range matching: compute how well the mod's statRanges fit the pasted values
+    if (!mod.statRanges || mod.statRanges.length === 0) continue;
+
+    let numericScore = 0;
+    for (const sr of mod.statRanges) {
+      const modMid = Math.round((sr.range.min + sr.range.max) / 2);
+      // Find closest pasted center
+      for (const pc of pasted.centers) {
+        const diff = Math.abs(pc - modMid);
+        if (diff <= 5) numericScore += 100 - diff * 10;
+        else if (diff <= 15) numericScore += 50 - diff * 3;
+      }
+      // Bonus if the pasted sum falls within the mod's total range
+      if (sr.range.min <= pasted.sum && pasted.sum <= sr.range.max) {
+        numericScore += 30;
+      }
+    }
+
+    if (numericScore > 0 && (!best || numericScore > best.score)) {
+      // Bonus for exact word match on base type
+      const baseScore = commonWords.length * 5;
+      best = { mod, score: numericScore + baseScore };
+    }
+  }
+
+  return best;
 }
 
 export function optimize(
@@ -80,81 +109,70 @@ export function optimize(
   const unmatched: string[] = [];
 
   for (const name of targetModNames) {
-    const result = matchMod(name, allMods);
+    // Try prefix first, then suffix
+    let result = matchModToPastedPaste(name, allMods, 'prefix');
+    if (!result) result = matchModToPastedPaste(name, allMods, 'suffix');
     if (!result) { unmatched.push(name); continue; }
 
-    const pool = buildPool(allMods, result.type, base, [], { ilvl: 82 });
-    const modWeight = result.mod.weight || 1000;
+    const mod = result.mod;
+    const modType = mod.type === 'any' ? 'prefix' : mod.type as 'prefix' | 'suffix';
+
+    const pool = buildPool(allMods, modType, base, [], { ilvl: 82 });
+    const modWeight = mod.weight || 1000;
     const p = pool.totalWeight > 0 ? modWeight / pool.totalWeight : 0;
     const attempts = p > 0 ? Math.round(1 / p) : 9999;
     const exaltCost = attempts * exaltPrice;
-    const strategies: CostEstimate[] = [];
+    const strategies: AffixStrategy[] = [];
 
     // Strategy 1: Exalted slam
     strategies.push({
       method: 'Exalted Orb',
-      expectedCost: exaltCost,
-      description: p > 0 ? `Weight ${modWeight} in pool of ${pool.entries.length} items — ~1 in ${attempts}` : 'Weight data unavailable',
+      expectedCost: Math.round(exaltCost * 100) / 100,
+      chaosPerTry: exaltPrice,
+      attempts,
     });
 
-    // Strategy 2: Essence (if available and applicable)
-    const matchingEssence = allCurrency.find((c: any) =>
-      c.category === 'essence' && essenceMatches(c, base, result.mod.description)
-    );
-    if (matchingEssence) {
-      const essencePrice = prices[matchingEssence.id] || 0;
-      if (essencePrice > 0 && essencePrice < exaltCost) {
+    // Strategy 2: Essence (check if any essence guarantees a similar mod)
+    const essence = allCurrency.find((c: any) => {
+      if (c.category !== 'essence' || !c.guaranteedMod) return false;
+      return matchModToPastedPaste(c.guaranteedMod, [mod], modType) !== null;
+    });
+    if (essence) {
+      const essencePrice = prices[essence.id] || 0;
+      if (essencePrice > 0) {
         strategies.push({
-          method: matchingEssence.name,
-          expectedCost: essencePrice,
-          description: `Guaranteed mod (check slot/mods match) — ${essencePrice.toFixed(2)}c fixed cost`,
+          method: essence.name,
+          expectedCost: Math.round(essencePrice * 100) / 100,
+          chaosPerTry: essencePrice,
+          attempts: 1,
         });
       }
     }
 
-    // Strategy 3: Fracture + Chaos (for expensive mods)
+    // Strategy 3: Fracture + Chaos (for expensive mods — lock it, then chaos reroll the rest)
     if (exaltCost > 50) {
       const chaosPrice = prices['chaos_orb'] || 1;
       const fractureChaosCost = fracturePrice + chaosPrice * attempts;
-      if (fractureChaosCost < exaltCost) {
-        strategies.push({
-          method: 'Fracture + Chaos',
-          expectedCost: fractureChaosCost,
-          description: `Lock mod with Fracturing Orb (${fracturePrice.toFixed(0)}c), then Chaos spam the rest`,
-        });
-      }
-    }
-
-    // Strategy 4: Omen-assisted Exalted (Sinistral/Dextral narrows pool by ~half)
-    const omenCost = prices['omen_of_sinistral_exaltation'] || 0;
-    if (omenCost > 0 && omenCost < 20) {
-      const omenPoolTotal = pool.totalWeight / 2; // rough: forcing type halves the pool
-      const omenP = omenPoolTotal > 0 ? modWeight / omenPoolTotal : 0;
-      const omenAttempts = omenP > 0 ? Math.round(1 / omenP) : 9999;
-      const omenTotalCost = omenCost + omenAttempts * exaltPrice;
-      if (omenTotalCost < exaltCost * 0.8) {
-        strategies.push({
-          method: 'Omen + Exalted',
-          expectedCost: omenTotalCost,
-          description: `Use Sinistral/Dextral Exaltation (${omenCost.toFixed(1)}c) to force type, then Exalted`,
-        });
-      }
+      strategies.push({
+        method: 'Fracture + Chaos Orb',
+        expectedCost: Math.round(fractureChaosCost * 100) / 100,
+        chaosPerTry: fracturePrice + chaosPrice,
+        attempts: 1,
+      });
     }
 
     affixes.push({
-      modText: result.mod.description.slice(0, 55),
-      type: result.type,
-      tier: result.mod.tier,
+      inputText: name.slice(0, 55),
+      matchedMod: mod.description.slice(0, 55),
+      type: modType,
+      tier: mod.tier,
       weight: modWeight,
       poolSize: pool.entries.length,
-      attempts,
       strategies,
     });
   }
 
-  const cheapestTotal = affixes.reduce((s, a) => s + (a.strategies[0]?.expectedCost || 0), 0);
-  // For "chaotic total" sum the second cheapest strategy to show the range
-  const chaoticTotal = affixes.reduce((s, a) => s + (a.strategies[a.strategies.length - 1]?.expectedCost || a.strategies[0]?.expectedCost || 0), 0);
-
-  return { baseName: base.name, affixes, unmatched, totalCheapest: Math.round(cheapestTotal * 100) / 100, chaoticTotal: Math.round(chaoticTotal * 100) / 100 };
+  // Total = cheapest strategy for each affix
+  const totalChaos = Math.round(affixes.reduce((s, a) => s + (a.strategies[0]?.expectedCost || 0), 0) * 100) / 100;
+  return { baseName: base.name, affixes, unmatched, totalChaos };
 }
