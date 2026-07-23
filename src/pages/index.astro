@@ -4,7 +4,7 @@ import { bases, season } from '~/lib/data';
 import { METHODS } from '~/lib/methods';
 import { useT } from '~/lib/i18n';
 
-const locale = (Astro.locals.locale as 'en' | 'pt') ?? 'en';
+const locale: 'en' | 'pt' = 'en';
 const t = useT(locale);
 
 const updated = new Date().toLocaleDateString(locale === 'pt' ? 'pt-BR' : 'en-US', {

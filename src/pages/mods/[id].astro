@@ -4,7 +4,7 @@ import BaseCard from '~/components/BaseCard.astro';
 import { mods, bases } from '~/lib/data';
 import { useT } from '~/lib/i18n';
 
-const locale = (Astro.locals.locale as 'en' | 'pt') ?? 'en';
+const locale: 'en' | 'pt' = 'en';
 const t = useT(locale);
 
 export function getStaticPaths() {
