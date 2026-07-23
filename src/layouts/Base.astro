@@ -2,13 +2,17 @@
 import '~/styles/global.css';
 import Header from '~/components/Header.astro';
 import Footer from '~/components/Footer.astro';
-import { season } from '~/lib/data';
 import { useT } from '~/lib/i18n';
+import { canonicalUrl } from '~/lib/seo';
+import { serializeJsonForScript } from '~/lib/safe-json.js';
 
 interface Props {
   title?: string;
   description?: string;
   bodyClass?: string;
+  canonical?: string | false;
+  robots?: string;
+  structuredData?: Record<string, unknown> | Record<string, unknown>[];
 }
 
 // Static site — no middleware, no request headers. All content builds in English.
@@ -20,7 +24,25 @@ const {
   title = `${t('site.title')} | Path of Exile 2 Crafting Companion`,
   description = t('site.description'),
   bodyClass = '',
+  canonical,
+  robots = 'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1',
+  structuredData,
 } = Astro.props;
+
+const site = Astro.site ?? new URL('https://exilecrafter.com/');
+const socialImage = new URL('/og-exile-crafter.jpg', site).toString();
+const socialImageAlt = 'Exile Crafter — Path of Exile 2 crafting companion';
+const resolvedCanonical = canonical === false
+  ? null
+  : canonical
+    ? new URL(canonical, site).toString()
+    : canonicalUrl(Astro.url.pathname, site);
+const schemaBlocks = structuredData
+  ? Array.isArray(structuredData)
+    ? structuredData
+    : [structuredData]
+  : [];
+const twitterCard = 'summary_large_image';
 ---
 
 <!doctype html>
@@ -29,8 +51,27 @@ const {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
+    <meta name="robots" content={robots} />
     <meta name="generator" content={Astro.generator} />
+    {resolvedCanonical && <link rel="canonical" href={resolvedCanonical} />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="theme-color" content="#0b0a08" />
+    <meta property="og:site_name" content="Exile Crafter" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    {resolvedCanonical && <meta property="og:url" content={resolvedCanonical} />}
+    <meta property="og:image" content={socialImage} />
+    <meta property="og:image:secure_url" content={socialImage} />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={socialImageAlt} />
+    <meta name="twitter:card" content={twitterCard} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImage} />
+    <meta name="twitter:image:alt" content={socialImageAlt} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -38,6 +79,12 @@ const {
       href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
     />
     <title>{title}</title>
+    {schemaBlocks.map((schema) => (
+      <script
+        type="application/ld+json"
+        set:html={serializeJsonForScript(schema)}
+      />
+    ))}
   </head>
   <body class={bodyClass}>
     <Header locale={locale} />

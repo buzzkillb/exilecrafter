@@ -7,7 +7,10 @@ const locale: 'en' | 'pt' = 'en';
 const t = useT(locale);
 ---
 
-<Base title={`${t('calculator.title')} | Exile Crafter`}>
+<Base
+  title="PoE 2 Crafting Probability Calculator | Exile Crafter"
+  description="Calculate Path of Exile 2 crafting probabilities by base item, item level, target modifier, currency operation, and weighting method."
+>
   <section class="relative overflow-hidden rounded-xl border border-border bg-gradient-to-b from-bg-card/80 to-bg p-6 md:p-8 mb-8 text-center">
     <div class="absolute -top-20 -left-20 w-48 h-48 bg-gold/5 rounded-full blur-3xl pointer-events-none"></div>
     <div class="absolute -bottom-12 -right-12 w-36 h-36 bg-gold/5 rounded-full blur-3xl pointer-events-none"></div>
@@ -75,7 +78,7 @@ const t = useT(locale);
 
     <section class="lg:col-span-2">
       <div class="parchment p-6">
-        <h3>{t('calculator.result')}</h3>
+        <h2>{t('calculator.result')}</h2>
         <div id="result-display" class="text-center py-12">
           <div class="text-6xl font-display text-mute">~</div>
           <div class="text-dim mt-2 text-sm">{t('calculator.result.empty')}</div>
@@ -86,7 +89,7 @@ const t = useT(locale);
       </div>
 
       <div class="parchment p-4 mt-4 text-sm text-dim leading-relaxed space-y-3">
-        <h4 class="!mt-0 text-fg font-semibold">{t('calculator.how.title')}</h4>
+        <h2 class="!mt-0 text-fg font-semibold">{t('calculator.how.title')}</h2>
         <p>{t('calculator.how.body1')}</p>
         <div class="p-3 rounded bg-bg-card/40 border border-border">
           <p class="text-xs text-fg font-semibold mb-1">{t('calculator.how.example')}</p>
@@ -106,6 +109,8 @@ const t = useT(locale);
 </Base>
 
 <script>
+  import { escapeHtml } from '~/lib/safe-html.js';
+
   (async () => {
     const baseSel = document.getElementById('base') as HTMLSelectElement;
     const ilvlInput = document.getElementById('ilvl') as HTMLInputElement;
@@ -154,7 +159,8 @@ const t = useT(locale);
       // Populate base dropdown grouped by slot
       populateBaseDropdown(bases);
     } catch (err) {
-      calcLoading.innerHTML = `<span class="text-corrupted">Failed to load data: ${(err as Error).message}</span>`;
+      calcLoading.textContent = `Failed to load data: ${(err as Error).message}`;
+      calcLoading.classList.add('text-corrupted');
       return;
     }
 
@@ -236,19 +242,20 @@ const t = useT(locale);
         return;
       }
 
-      modResults.innerHTML = matched.slice(0, 30).map((m: any) => {
-        const tierLabel = `T${m.tier}`;
+      modResults.innerHTML = matched.slice(0, 30).map((m: any, index: number) => {
+        const tierLabel = escapeHtml(`T${m.tier}`);
         const typeCls = m.type === 'prefix' ? 'text-prefix' : 'text-suffix';
         const checked = selectedModIds.has(m.id);
-        const attrId = `mod-chk-${CSS.escape(m.id)}`;
+        const attrId = `mod-chk-${index}`;
+        const safeModId = escapeHtml(String(m.id));
         const desc = (m.description || m.name || '').slice(0, 70);
         return `
-          <label class="mod-item flex items-start gap-2 p-1.5 rounded hover:bg-bg-card/60 cursor-pointer ${checked ? 'bg-bg-card border border-gold/30' : ''}" for="${attrId}" data-mod-id="${m.id}">
-            <input type="checkbox" id="${attrId}" class="mt-0.5 accent-gold mod-checkbox" data-mod-id="${m.id}" ${checked ? 'checked' : ''} />
+          <label class="mod-item flex items-start gap-2 p-1.5 rounded hover:bg-bg-card/60 cursor-pointer ${checked ? 'bg-bg-card border border-gold/30' : ''}" for="${attrId}" data-mod-id="${safeModId}">
+            <input type="checkbox" id="${attrId}" class="mt-0.5 accent-gold mod-checkbox" data-mod-id="${safeModId}" ${checked ? 'checked' : ''} />
             <div class="flex-1 min-w-0">
               <div class="${typeCls} text-xs leading-tight">
                 <span class="font-medium">${tierLabel}</span>
-                <span class="text-dim font-light">(${m.type})</span>
+                <span class="text-dim font-light">(${escapeHtml(String(m.type))})</span>
               </div>
               <div class="text-fg text-xs leading-relaxed">${escapeHtml(desc)}</div>
             </div>
@@ -272,10 +279,6 @@ const t = useT(locale);
     ilvlInput.addEventListener('input', () => {
       if (modSearch.value) renderModResults(modSearch.value);
     });
-
-    function escapeHtml(s: string): string {
-      return s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]!));
-    }
 
     function opToNPicks(op: string): number {
       return ({ transmute: 1, augment: 1, regal: 1, exalt: 1, alchemy: 4, chaos: 6 } as Record<string, number>)[op] || 1;

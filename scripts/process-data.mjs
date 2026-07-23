@@ -14,6 +14,14 @@ const RAW = path.join(ROOT, 'data', 'raw');
 const OUT = path.join(ROOT, 'data', 'processed');
 
 const CDN = 'https://cdn.poe2db.tw';
+export const DATASET_COUNT_FLOORS = Object.freeze({
+  bases: 500,
+  mods: 500,
+  currency: 50,
+  omens: 20,
+});
+export const MAX_DATASET_DROP_RATIO = 0.25;
+export const MAX_DATASET_GROWTH_RATIO = 0.50;
 
 const SLOT_MAP = {
   Helmets_str: 'helmet', Helmets_dex: 'helmet', Helmets_int: 'helmet',
@@ -803,12 +811,6 @@ function parseSeason($) {
     });
   }
 
-  // As a last resort, use the current known patch (accurate as of 2025).
-  // This gets updated when npm run fetch fetches the latest data.
-  if (!version || version === '0.0.0') {
-    version = '0.5.4b';
-  }
-
   return { id: slugify(name), name, version };
 }
 
@@ -1050,9 +1052,55 @@ async function processFile(filename) {
   return null;
 }
 
-async function main() {
+export function assertProcessedDataQuality({
+  season,
+  counts,
+  previousCounts = null,
+  parseFailures = [],
+}) {
+  if (!Array.isArray(parseFailures)) {
+    throw new TypeError('parseFailures must be an array');
+  }
+  if (parseFailures.length > 0) {
+    throw new AggregateError(
+      parseFailures.map(({ file, error }) => new Error(`${file}: ${error?.message ?? error}`)),
+      `Refusing partial processed data after ${parseFailures.length} parser failure(s)`,
+    );
+  }
+  if (
+    !season
+    || season.id === 'unknown'
+    || season.name === 'Unknown'
+    || !/^\d+\.\d+\.\d+[a-z]?$/i.test(season.version ?? '')
+  ) {
+    throw new Error('Refusing processed data with an unknown or invalid season');
+  }
+
+  for (const [key, floor] of Object.entries(DATASET_COUNT_FLOORS)) {
+    const count = counts?.[key];
+    if (!Number.isSafeInteger(count) || count < floor) {
+      throw new RangeError(`Processed ${key} count ${count} is below safety floor ${floor}`);
+    }
+    const previous = previousCounts?.[key];
+    if (!Number.isSafeInteger(previous) || previous < 1) continue;
+    const lowerBound = Math.floor(previous * (1 - MAX_DATASET_DROP_RATIO));
+    const upperBound = Math.ceil(previous * (1 + MAX_DATASET_GROWTH_RATIO));
+    if (count < lowerBound || count > upperBound) {
+      throw new RangeError(
+        `Processed ${key} count ${count} is outside reviewed drift range ${lowerBound}-${upperBound}`,
+      );
+    }
+  }
+}
+
+export async function main() {
   await mkdir(OUT, { recursive: true });
   const files = (await readdir(RAW)).filter((f) => f.endsWith('.html'));
+  let previousManifest = null;
+  const previousManifestPath = path.join(OUT, 'manifest.json');
+  if (existsSync(previousManifestPath)) {
+    previousManifest = JSON.parse(await readFile(previousManifestPath, 'utf8'));
+  }
 
   let season = { id: 'unknown', name: 'Unknown', version: '0.0.0', detectedAt: new Date().toISOString(), source: 'poe2db' };
   const bases = [];
@@ -1060,6 +1108,7 @@ async function main() {
   const currency = [];
   const omens = [];
   let essenceListingHtml = null;
+  const parseFailures = [];
 
   for (const file of files) {
     try {
@@ -1084,6 +1133,7 @@ async function main() {
       }
     } catch (err) {
       console.warn(`Failed ${file}: ${err.message}`);
+      parseFailures.push({ file, error: err });
     }
   }
 
@@ -1149,6 +1199,18 @@ async function main() {
     }
   }
   const modsFinal = [...modByDesc.values()].sort((a, b) => a.name.localeCompare(b.name));
+  const counts = {
+    bases: basesFinal.length,
+    mods: modsFinal.length,
+    currency: currency.length,
+    omens: omens.length,
+  };
+  assertProcessedDataQuality({
+    season,
+    counts,
+    previousCounts: previousManifest?.counts,
+    parseFailures,
+  });
 
   await writeFile(path.join(OUT, 'season.json'), JSON.stringify(season, null, 2), 'utf8');
   await writeFile(path.join(OUT, 'bases.json'), JSON.stringify(basesFinal, null, 2), 'utf8');
@@ -1159,12 +1221,7 @@ async function main() {
   const manifest = {
     generatedAt: new Date().toISOString(),
     season,
-    counts: {
-      bases: basesFinal.length,
-      mods: modsFinal.length,
-      currency: currency.length,
-      omens: omens.length,
-    },
+    counts,
   };
   await writeFile(path.join(OUT, 'manifest.json'), JSON.stringify(manifest, null, 2), 'utf8');
 
@@ -1203,7 +1260,14 @@ async function main() {
   }
 }
 
-main().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+export function isDirectExecution(metaUrl, argvEntry = process.argv[1]) {
+  if (!argvEntry) return false;
+  return pathToFileURL(path.resolve(argvEntry)).href === metaUrl;
+}
+
+if (isDirectExecution(import.meta.url)) {
+  main().catch((err) => {
+    console.error(err);
+    process.exitCode = 1;
+  });
+}

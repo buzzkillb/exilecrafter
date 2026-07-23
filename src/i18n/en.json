@@ -1,6 +1,6 @@
 {
   "site.title": "Exile Crafter",
-  "site.tagline": "A visual crafting companion for Path of Exile 2. See your affix slots fill in real time, browse every base and mod, and run live simulations without a single spreadsheet.",
+  "site.tagline": "A visual crafting companion for Path of Exile 2. See your affix slots fill in real time, browse base and modifier reference data, and run live simulations without a single spreadsheet.",
   "site.description": "A friendly visual companion for Path of Exile 2 crafting. Browse bases, mods, currency, and run live simulations.",
   "site.footer.disclaimer": "Exile Crafter · unaffiliated fan tool for Path of Exile 2.",
   "site.footer.data": "Data: poe2db.tw · Last updated {date}",
@@ -20,6 +20,7 @@
   "season.label": "Current season:",
   "season.version": "Version {version} · Data updated {date}",
   "home.featured": "Featured Bases",
+  "home.title": "Path of Exile 2 Crafting Simulator & Companion",
   "home.browse": "Browse by slot",
   "home.paths": "Starter Crafting Paths",
   "home.cta.simulator": "Open Simulator →",

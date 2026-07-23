@@ -8,14 +8,18 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   site: 'https://exilecrafter.com',
   output: 'static',
-  trailingSlash: 'ignore',
+  trailingSlash: 'always',
   vite: {
     plugins: [tailwindcss()],
     worker: {
       format: 'es',
     },
   },
-  integrations: [sitemap()],
+  integrations: [
+    sitemap({
+      filter: (page) => page !== 'https://exilecrafter.com/optimizer/',
+    }),
+  ],
   server: {
     port: 4321,
   },

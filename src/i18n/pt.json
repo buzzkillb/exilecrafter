@@ -1,6 +1,6 @@
 {
   "site.title": "Exile Crafter",
-  "site.tagline": "Um companheiro visual de crafting para Path of Exile 2. Veja seus espaços de afixos sendo preenchidos em tempo real, navegue por todas as bases e mods, e rode simulações ao vivo sem precisar de planilha.",
+  "site.tagline": "Um companheiro visual de crafting para Path of Exile 2. Veja seus espaços de afixos sendo preenchidos em tempo real, navegue por dados de referência de bases e mods, e rode simulações ao vivo sem precisar de planilha.",
   "site.description": "Um companheiro visual amigável para o crafting de Path of Exile 2. Navegue por bases, mods, currencies e rode simulações ao vivo.",
   "site.footer.disclaimer": "Exile Crafter · ferramenta de fã não afiliada a Path of Exile 2.",
   "site.footer.data": "Dados: poe2db.tw · Última atualização {date}",
@@ -20,6 +20,7 @@
   "season.label": "Temporada atual:",
   "season.version": "Versão {version} · Dados atualizados em {date}",
   "home.featured": "Bases em destaque",
+  "home.title": "Simulador e Companheiro de Crafting de Path of Exile 2",
   "home.browse": "Navegue por slot",
   "home.paths": "Caminhos iniciais de crafting",
   "home.cta.simulator": "Abrir Simulador →",

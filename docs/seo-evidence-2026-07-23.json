@@ -1,0 +1,217 @@
+{
+  "schemaVersion": 1,
+  "auditId": "exilecrafter-seo-2026-07-23",
+  "capturedAt": "2026-07-23",
+  "site": "https://exilecrafter.com",
+  "repository": "https://github.com/buzzkillb/exilecrafter",
+  "initialAuditBase": "b6964ec34635633ac3905f15fad5f6440fc4401e",
+  "baseCommit": "30ce69dee0ed941441dd2251f81433fccfeae273",
+  "sourceBinding": "The final head commit and SHA-256 of the canonical base-to-head patch are recorded in the draft pull-request body after commit creation; embedding that hash here would make the diff self-referential.",
+  "environment": {
+    "node": "v26.5.0",
+    "astro": "7.1.3",
+    "cheerio": "1.2.0",
+    "lighthouse": "13.4.1"
+  },
+  "renderedAudit": {
+    "tool": "scripts/audit-seo-output.mjs",
+    "hashDefinition": "SHA-256 over sorted relative path, NUL, file bytes, NUL for HTML, sitemap XML, robots.txt, the social preview asset, and the seven browser data payloads",
+    "reproduction": [
+      "git worktree add --detach ../exilecrafter-seo-baseline 30ce69dee0ed941441dd2251f81433fccfeae273",
+      "(cd ../exilecrafter-seo-baseline && npm ci && npm run build)",
+      "node scripts/audit-seo-output.mjs --dist=../exilecrafter-seo-baseline/dist",
+      "npm run build && node scripts/audit-seo-output.mjs"
+    ],
+    "metricSemantics": "errorPages and noindexPages are independent flags; the proposed 404 page is counted in both and the categories must not be summed.",
+    "localeDeterminism": {
+      "locales": [
+        "C",
+        "sv_SE.UTF-8"
+      ],
+      "matchingOutput": true,
+      "seoOutputSha256": "de78b672ef10a014620e7c944ad8f51523009e14fe99af12b98834162df58106"
+    },
+    "baseline": {
+      "seoOutputSha256": "540a4bc293566d3e80b3b4ea8d94ccfea865f14d4570afdc7016331980cd7da1",
+      "metrics": {
+        "htmlPages": 3764,
+        "indexablePages": 3763,
+        "noindexPages": 0,
+        "errorPages": 1,
+        "missingCanonicals": 3763,
+        "missingSharedSocialMetadata": 3763,
+        "jsonLdPages": 0,
+        "invalidJsonLdBlocks": 0,
+        "duplicateTitleGroups": 34,
+        "titlesOver60": 926,
+        "pagesUnder200Words": 2066,
+        "modPagesUnder300Words": 2064,
+        "imageOccurrences": 45522,
+        "imagesMissingDimensions": 45522,
+        "nonTrailingPageLinkOccurrences": 76704,
+        "zeroInlinkPages": 3429,
+        "sitemapUrls": 3763,
+        "duplicateSitemapUrls": 0
+      }
+    },
+    "proposed": {
+      "seoOutputSha256": "de78b672ef10a014620e7c944ad8f51523009e14fe99af12b98834162df58106",
+      "metrics": {
+        "htmlPages": 3764,
+        "indexablePages": 3762,
+        "noindexPages": 2,
+        "errorPages": 1,
+        "missingCanonicals": 0,
+        "missingSharedSocialMetadata": 0,
+        "jsonLdPages": 3755,
+        "invalidJsonLdBlocks": 0,
+        "duplicateTitleGroups": 0,
+        "titlesOver60": 1030,
+        "pagesUnder200Words": 2066,
+        "modPagesUnder300Words": 2064,
+        "imageOccurrences": 45534,
+        "imagesMissingDimensions": 0,
+        "nonTrailingPageLinkOccurrences": 0,
+        "zeroInlinkPages": 2823,
+        "sitemapUrls": 3762,
+        "duplicateSitemapUrls": 0
+      }
+    }
+  },
+  "rebaseReceipt": {
+    "initialAuditBase": "b6964ec34635633ac3905f15fad5f6440fc4401e",
+    "changesetParent": "30ce69dee0ed941441dd2251f81433fccfeae273",
+    "upstreamPureAssertions": 150,
+    "baselineMetricDelta": "Only imageOccurrences and imagesMissingDimensions changed, from 45534 to 45522, because the simulator component extraction omitted 12 quick-pick images.",
+    "builtAppRepairs": [
+      "restored main UI and omen-control DOM contracts",
+      "used the parser-resolved base record",
+      "passed the operation registry to currency mapping",
+      "restored visible paste results and quick-pick images",
+      "reserved initial simulator layout to prevent the loading-to-empty-state shift"
+    ]
+  },
+  "liveReceipt": {
+    "capturedAt": "2026-07-23",
+    "method": "Bounded curl checks for protocol, redirects, robots, sitemap, key routes, query variants, and 52 stratified sitemap URLs.",
+    "queryVariantBodies": [
+      {
+        "url": "https://exilecrafter.com/bases/",
+        "sha256": "d347cac94e5033c5c30e23b61e2db1ea40ed9b6539ceacd839bfc6c891c2cad8"
+      },
+      {
+        "url": "https://exilecrafter.com/bases/?slot=ring",
+        "sha256": "d347cac94e5033c5c30e23b61e2db1ea40ed9b6539ceacd839bfc6c891c2cad8"
+      },
+      {
+        "url": "https://exilecrafter.com/mods/",
+        "sha256": "ec33d5e269954d86218874b8cd0a9cb3d38f92762cf0a2d657a2dda2e83d99a3"
+      },
+      {
+        "url": "https://exilecrafter.com/mods/?type=prefix",
+        "sha256": "ec33d5e269954d86218874b8cd0a9cb3d38f92762cf0a2d657a2dda2e83d99a3"
+      }
+    ],
+    "sitemapSample": {
+      "requested": 52,
+      "successful": 52
+    },
+    "robots": {
+      "managedBy": "Cloudflare",
+      "searchSignal": "yes",
+      "aiTrainSignal": "no",
+      "useSignal": "reference",
+      "sitemapDeclarationPresent": false
+    }
+  },
+  "performanceReceipt": {
+    "capturedAt": "2026-07-23",
+    "tool": "Lighthouse 13.4.1",
+    "mode": "local production build, mobile emulation",
+    "baselineMetrics": {
+      "homeClsRuns": [
+        0.37,
+        0.378
+      ],
+      "basesCls": 0.259,
+      "simulatorCls": 0.579
+    },
+    "proposedRuns": [
+      {
+        "route": "/",
+        "treeScope": "pre-rebase proposal diagnostic; not the final changeset tree",
+        "performanceScore": 90,
+        "seoScore": 100,
+        "lcpMilliseconds": 2883.8197500000006,
+        "cls": 0.030754560828536857,
+        "totalBytes": 167470,
+        "rawReportSha256": "06a27c7042faf46329246f265dc04933f640e4043fe4481701099123754a86ee"
+      },
+      {
+        "route": "/bases/",
+        "treeScope": "pre-rebase proposal diagnostic; not the final changeset tree",
+        "performanceScore": 84,
+        "seoScore": 100,
+        "lcpMilliseconds": 3694.22195,
+        "cls": 0.004686827630065536,
+        "totalBytes": 1165614,
+        "rawReportSha256": "c42d94156e969363dec707bf0b2d916ed5ab8a6980a1582196ed925ef35e2641"
+      },
+      {
+        "route": "/simulator/",
+        "treeScope": "final rebased proposed tree",
+        "performanceScore": 88,
+        "seoScore": 100,
+        "lcpMilliseconds": 3796.1335499999996,
+        "cls": 0.0059927590257546045,
+        "totalBytes": 428347,
+        "rawReportSha256": "3e21ae9ade8382914d51cf966df03f555263fa107d0ee664ee531960c5489221"
+      }
+    ],
+    "rawArtifactRetained": false,
+    "limitation": "Normalized lab receipt only; no target-scoped CrUX field data and no retained Lighthouse trace."
+  },
+  "accessReceipt": {
+    "googleSearchConsole": "target authorization unavailable",
+    "ga4": "target authorization unavailable",
+    "crux": "target field data unavailable",
+    "semrush": "insufficient API units",
+    "dataforseo": "connector unavailable",
+    "firecrawl": "connector unavailable",
+    "backlinks": "bounded free-source check inconclusive",
+    "releasePreviewUrl": "unavailable",
+    "searchOpsSiteUuid": "unavailable"
+  },
+  "repositoryControls": {
+    "capturedAt": "2026-07-23",
+    "viewerPermission": "READ",
+    "pushAllowed": false,
+    "repositoryRulesets": 0,
+    "mainProtection": "not found",
+    "productionEnvironment": "not found",
+    "requiredOwnerAction": "Before merge, require PRs and the Quality check on main, block direct and force pushes, dismiss stale approvals, create a protected production environment restricted to main with a required reviewer, and move Cloudflare credentials to environment-scoped secrets."
+  },
+  "verificationControls": {
+    "workflowParsing": "structural YAML validation with an echo-decoy negative fixture",
+    "productionDeploy": "disabled unless PRODUCTION_RELEASE_GUARD_CONFIGURED=true; push to main only; exact npm run check before publish; no live refresh; named production environment",
+    "weeklyRefresh": "schedule only; bounded external refresh; exact npm run check; bot PR instead of direct main push",
+    "externalData": "HTTPS origin allowlists, contained paths, finite redirects, deadlines, byte/item bounds, fail-closed parser and season validation, and 25% drop/50% growth drift ceilings",
+    "clientData": "seven processed and public JSON payloads must be byte-identical",
+    "maliciousRenderFixtures": [
+      "simulator",
+      "calculator",
+      "optimizer"
+    ]
+  },
+  "dependencyAudit": {
+    "capturedAt": "2026-07-23",
+    "command": "npm audit --json",
+    "critical": 0,
+    "high": 1,
+    "package": "sharp",
+    "affectedRange": "<0.35.0",
+    "advisory": "https://github.com/advisories/GHSA-f88m-g3jw-g9cj",
+    "fixAvailable": true,
+    "changesetAction": "reported, not automatically upgraded in the SEO changeset"
+  }
+}

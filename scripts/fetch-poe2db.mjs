@@ -3,18 +3,30 @@
 // poe2db's own listing pages (Currency / Essence / Omen) plus a known-good base
 // item subcategory list. Output: data/raw/*.html + data/raw/index.json.
 
-import { mkdir, writeFile, readFile } from 'node:fs/promises';
+import { mkdir, writeFile, readFile, stat } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import * as cheerio from 'cheerio';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 const RAW = path.join(ROOT, 'data', 'raw');
 
-const BASE_URL = 'https://poe2db.tw/us';
+export const POE2DB_PAGE_ORIGIN = 'https://poe2db.tw';
+export const BASE_URL = `${POE2DB_PAGE_ORIGIN}/us`;
+export const REQUEST_TIMEOUT_MS = 15_000;
+export const MAX_RESPONSE_BYTES = 8 * 1024 * 1024;
+export const MAX_REDIRECTS = 3;
+export const MAX_FETCH_ATTEMPTS = 3;
+export const MAX_DISCOVERED_ITEMS = 500;
+export const MAX_GROUP_ITEMS = 1_000;
+export const MAX_SLUG_LENGTH = 128;
+
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) CraftClassBot/0.1 (+local)';
+const SAFE_SLUG_RE = new RegExp(`^[A-Za-z0-9][A-Za-z0-9_-]{0,${MAX_SLUG_LENGTH - 1}}$`);
+const SAFE_RAW_LABELS = new Set(['base', 'currency', 'guide', 'omen']);
+const REDIRECT_STATUSES = new Set([301, 302, 303, 307, 308]);
 
 // Base item subcategory pages. These are the index pages for each slot on poe2db
 // (e.g. /us/Helmets_str). poe2db doesn't have a single "all bases" listing, so
@@ -94,13 +106,217 @@ const EXTRA_OMEN_PAGES = [
   'Omen_of_Abyssal_Echoes', // Cranium re-roll
 ];
 
-async function fetchPage(url) {
-  const res = await fetch(url, { headers: { 'User-Agent': UA, 'Accept': 'text/html,application/xhtml+xml' } });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  return await res.text();
+export function validatePageUrl(value, base = `${BASE_URL}/`) {
+  let url;
+  try {
+    url = new URL(value, base);
+  } catch {
+    throw new Error(`Invalid poe2db page URL: ${String(value)}`);
+  }
+
+  if (
+    url.protocol !== 'https:'
+    || url.origin !== POE2DB_PAGE_ORIGIN
+    || url.username
+    || url.password
+    || (url.pathname !== '/us' && !url.pathname.startsWith('/us/'))
+  ) {
+    throw new Error(`Refusing non-allowlisted poe2db page URL: ${url.href}`);
+  }
+  if (url.search) {
+    throw new Error(`Refusing poe2db page URL with query parameters: ${url.href}`);
+  }
+
+  url.hash = '';
+  return url;
 }
 
-async function fetchWithRetry(url, attempts = 3) {
+export function normalizeListingSlug(value) {
+  if (typeof value !== 'string') return null;
+  const raw = value.trim();
+  if (!raw || raw === '#' || raw.includes('\\') || raw.includes('?')) return null;
+
+  // Listing links are expected to be a single slug, /us/<slug>, or the
+  // equivalent absolute allowlisted URL. Reject path-relative traversal even
+  // when URL normalization would happen to bring it back under /us/.
+  const hashless = raw.split('#', 1)[0];
+  if (
+    !SAFE_SLUG_RE.test(hashless)
+    && !hashless.startsWith('/us/')
+    && !hashless.startsWith(`${POE2DB_PAGE_ORIGIN}/us/`)
+  ) {
+    return null;
+  }
+
+  let url;
+  try {
+    url = validatePageUrl(hashless);
+  } catch {
+    return null;
+  }
+
+  const encodedSlug = url.pathname.slice('/us/'.length);
+  if (!encodedSlug || encodedSlug.includes('/')) return null;
+
+  let slug;
+  try {
+    slug = decodeURIComponent(encodedSlug);
+  } catch {
+    return null;
+  }
+  return SAFE_SLUG_RE.test(slug) ? slug : null;
+}
+
+export function boundedUniqueSlugs(values, maxItems = MAX_GROUP_ITEMS) {
+  if (!Array.isArray(values)) throw new TypeError('Expected an array of poe2db slugs');
+  if (!Number.isSafeInteger(maxItems) || maxItems < 1 || maxItems > MAX_GROUP_ITEMS) {
+    throw new RangeError(`Slug limit must be between 1 and ${MAX_GROUP_ITEMS}`);
+  }
+  if (values.length > maxItems) {
+    throw new RangeError(`Refusing ${values.length} poe2db slugs; limit is ${maxItems}`);
+  }
+
+  const unique = [];
+  const seen = new Set();
+  for (const value of values) {
+    const slug = normalizeListingSlug(value);
+    if (!slug) throw new Error(`Unsafe poe2db slug: ${String(value)}`);
+    if (!seen.has(slug)) {
+      seen.add(slug);
+      unique.push(slug);
+    }
+  }
+  return unique;
+}
+
+export function resolveRawFile(filename) {
+  if (
+    typeof filename !== 'string'
+    || !/^[A-Za-z0-9_][A-Za-z0-9_.-]{0,191}$/.test(filename)
+    || filename === '.'
+    || filename === '..'
+  ) {
+    throw new Error(`Unsafe raw filename: ${String(filename)}`);
+  }
+  const resolved = path.resolve(RAW, filename);
+  if (path.dirname(resolved) !== RAW) {
+    throw new Error(`Raw output path escapes data/raw: ${filename}`);
+  }
+  return resolved;
+}
+
+export function resolveRawGroupFile(label, slug) {
+  if (!SAFE_RAW_LABELS.has(label)) throw new Error(`Unsafe raw group label: ${String(label)}`);
+  const normalized = normalizeListingSlug(slug);
+  if (!normalized) throw new Error(`Unsafe poe2db slug: ${String(slug)}`);
+  return resolveRawFile(`${label}_${normalized}.html`);
+}
+
+async function readBoundedTextFile(filename, maxBytes = MAX_RESPONSE_BYTES) {
+  const file = resolveRawFile(filename);
+  const info = await stat(file);
+  if (info.size > maxBytes) {
+    throw new RangeError(`Refusing oversized cached HTML ${filename}: ${info.size} bytes`);
+  }
+  return await readFile(file, 'utf8');
+}
+
+async function responseTextWithinLimit(response, maxBytes) {
+  const declaredLength = Number(response.headers.get('content-length'));
+  if (Number.isFinite(declaredLength) && declaredLength > maxBytes) {
+    await response.body?.cancel();
+    throw new RangeError(`Response exceeds ${maxBytes} bytes`);
+  }
+  if (!response.body) return '';
+
+  const reader = response.body.getReader();
+  const chunks = [];
+  let total = 0;
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      total += value.byteLength;
+      if (total > maxBytes) {
+        await reader.cancel();
+        throw new RangeError(`Response exceeds ${maxBytes} bytes`);
+      }
+      chunks.push(Buffer.from(value));
+    }
+  } finally {
+    reader.releaseLock();
+  }
+  return Buffer.concat(chunks, total).toString('utf8');
+}
+
+export async function fetchPage(
+  value,
+  {
+    fetchImpl = fetch,
+    timeoutMs = REQUEST_TIMEOUT_MS,
+    maxBytes = MAX_RESPONSE_BYTES,
+    maxRedirects = MAX_REDIRECTS,
+  } = {},
+) {
+  if (!Number.isSafeInteger(timeoutMs) || timeoutMs < 1 || timeoutMs > REQUEST_TIMEOUT_MS) {
+    throw new RangeError(`Timeout must be between 1 and ${REQUEST_TIMEOUT_MS}ms`);
+  }
+  if (!Number.isSafeInteger(maxBytes) || maxBytes < 1 || maxBytes > MAX_RESPONSE_BYTES) {
+    throw new RangeError(`Response limit must be between 1 and ${MAX_RESPONSE_BYTES} bytes`);
+  }
+  if (!Number.isSafeInteger(maxRedirects) || maxRedirects < 0 || maxRedirects > MAX_REDIRECTS) {
+    throw new RangeError(`Redirect limit must be between 0 and ${MAX_REDIRECTS}`);
+  }
+
+  let url = validatePageUrl(value);
+  for (let redirectCount = 0; ; redirectCount++) {
+    const controller = new AbortController();
+    let timer;
+    const deadline = new Promise((_, reject) => {
+      timer = setTimeout(() => {
+        controller.abort();
+        reject(new Error(`Timeout fetching ${url.href} after ${timeoutMs}ms`));
+      }, timeoutMs);
+    });
+    try {
+      const operation = (async () => {
+        const response = await fetchImpl(url, {
+          headers: { 'User-Agent': UA, 'Accept': 'text/html,application/xhtml+xml' },
+          redirect: 'manual',
+          signal: controller.signal,
+        });
+
+        if (REDIRECT_STATUSES.has(response.status)) {
+          await response.body?.cancel();
+          return { redirect: response.headers.get('location') };
+        }
+        if (!response.ok) {
+          await response.body?.cancel();
+          throw new Error(`HTTP ${response.status}`);
+        }
+        return { html: await responseTextWithinLimit(response, maxBytes) };
+      })();
+
+      const result = await Promise.race([operation, deadline]);
+      if ('redirect' in result) {
+        if (redirectCount >= maxRedirects) {
+          throw new Error(`Too many redirects fetching ${url.href}`);
+        }
+        if (!result.redirect) throw new Error(`Redirect with no Location: ${url.href}`);
+        url = validatePageUrl(result.redirect, url);
+        continue;
+      }
+      return result.html;
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+}
+
+async function fetchWithRetry(url, attempts = MAX_FETCH_ATTEMPTS) {
+  if (!Number.isSafeInteger(attempts) || attempts < 1 || attempts > MAX_FETCH_ATTEMPTS) {
+    throw new RangeError(`Fetch attempts must be between 1 and ${MAX_FETCH_ATTEMPTS}`);
+  }
   for (let i = 0; i < attempts; i++) {
     try { return await fetchPage(url); }
     catch (err) {
@@ -114,7 +330,25 @@ async function fetchWithRetry(url, attempts = 3) {
 
 // Discover item slugs from a listing page (e.g. /Currency, /Essence, /Omen).
 // poe2db uses both <img> (some tabs) and SVG <image> (Currency Tab /37) formats.
-async function discoverFromListing(html) {
+function assertListingHtml(html) {
+  if (typeof html !== 'string') throw new TypeError('Listing HTML must be a string');
+  const bytes = Buffer.byteLength(html, 'utf8');
+  if (bytes > MAX_RESPONSE_BYTES) {
+    throw new RangeError(`Listing HTML exceeds ${MAX_RESPONSE_BYTES} bytes`);
+  }
+}
+
+function addDiscoveredSlug(slugs, value) {
+  const slug = normalizeListingSlug(value);
+  if (!slug) return;
+  slugs.add(slug);
+  if (slugs.size > MAX_DISCOVERED_ITEMS) {
+    throw new RangeError(`Listing exceeds ${MAX_DISCOVERED_ITEMS} discovered items`);
+  }
+}
+
+export function discoverFromListing(html) {
+  assertListingHtml(html);
   const $ = cheerio.load(html);
   const slugs = new Set();
   
@@ -127,8 +361,7 @@ async function discoverFromListing(html) {
     if (!/\/2DItems\/Currency\//.test(src)) return;
     const href = $a.attr('href') || '';
     if (!href || href === '#') return;
-    const slug = href.replace(/^\/us\//, '').split('#')[0];
-    if (slug) slugs.add(slug);
+    addDiscoveredSlug(slugs, href);
   });
   
   // Check for SVG <image> elements with xlink:href (used in Currency Tab /37 SVG grid)
@@ -140,8 +373,7 @@ async function discoverFromListing(html) {
     if (!/\/2DItems\/Currency\//.test(src)) return;
     const href = $a.attr('xlink:href') || '';
     if (!href || href === '#') return;
-    const slug = href.replace(/^\/us\//, '').split('#')[0];
-    if (slug) slugs.add(slug);
+    addDiscoveredSlug(slugs, href);
   });
   
   return [...slugs];
@@ -149,24 +381,46 @@ async function discoverFromListing(html) {
 
 // Discover item slugs from the Liquid Emotions listing page.
 // This page uses a card-based layout with plain <a> links to individual pages.
-async function discoverFromLiquidListing(html) {
+export function discoverPlainListing(html, requiredName) {
+  assertListingHtml(html);
+  if (!(requiredName instanceof RegExp)) {
+    throw new TypeError('Plain-listing name matcher must be a RegExp');
+  }
+  const nameMatcher = new RegExp(requiredName.source, requiredName.flags.replace(/[gy]/g, ''));
   const $ = cheerio.load(html);
   const slugs = new Set();
   $('a[href]').each((_, a) => {
     const href = $(a).attr('href') || '';
-    // Liquid emotion pages have slugs like "Diluted_Liquid_Ire", "Liquid_Paranoia", etc.
-    // They don't start with / or # and don't contain /
-    if (/^[A-Z][a-zA-Z_]+$/.test(href) && /Liquid/i.test(href)) {
-      slugs.add(href);
-    }
+    const slug = normalizeListingSlug(href);
+    if (slug && nameMatcher.test(slug)) addDiscoveredSlug(slugs, slug);
   });
   return [...slugs];
 }
 
+export function discoverFromLiquidListing(html) {
+  // Liquid emotion pages have slugs like "Diluted_Liquid_Ire" and
+  // "Liquid_Paranoia".
+  return discoverPlainListing(html, /Liquid/i);
+}
+
+export function assertNoFetchFailures(label, results) {
+  if (typeof label !== 'string' || !label) throw new TypeError('Fetch group label is required');
+  if (!Array.isArray(results)) throw new TypeError('Fetch results must be an array');
+  const failures = results.filter(({ error }) => error);
+  if (failures.length > 0) {
+    throw new AggregateError(
+      failures.map(({ slug, error }) => new Error(`${label}/${slug}: ${error}`)),
+      `Required poe2db group ${label} failed for ${failures.length} page(s)`,
+    );
+  }
+  return results;
+}
+
 async function fetchGroup(label, pages) {
+  const safePages = boundedUniqueSlugs(pages, MAX_GROUP_ITEMS);
   const out = [];
-  for (const slug of pages) {
-    const file = path.join(RAW, `${label}_${slug}.html`);
+  for (const slug of safePages) {
+    const file = resolveRawGroupFile(label, slug);
     if (existsSync(file)) {
       console.log(`  [cached] ${label}/${slug}`);
       out.push({ slug, file, cached: true });
@@ -184,16 +438,16 @@ async function fetchGroup(label, pages) {
     }
     await new Promise((r) => setTimeout(r, 250));
   }
-  return out;
+  return assertNoFetchFailures(label, out);
 }
 
-async function main() {
+export async function main() {
   await mkdir(RAW, { recursive: true });
 
   // Step 1: fetch listing pages so we can discover current item slugs
   console.log('Fetching listing pages (for slug discovery)...');
   for (const lp of LISTING_PAGES) {
-    const file = path.join(RAW, lp.saveAs);
+    const file = resolveRawFile(lp.saveAs);
     if (existsSync(file)) {
       console.log(`  [cached] ${lp.saveAs}`);
       continue;
@@ -205,16 +459,17 @@ async function main() {
       console.log('ok');
     } catch (err) {
       console.log(`FAIL (${err.message})`);
+      throw new Error(`Required poe2db listing failed: ${lp.url}`, { cause: err });
     }
   }
 
   // Step 2: discover item slugs from each listing
   const discovered = {};
   for (const lp of LISTING_PAGES) {
-    const file = path.join(RAW, lp.saveAs);
+    const file = resolveRawFile(lp.saveAs);
     if (!existsSync(file)) continue;
-    const html = await readFile(file, 'utf8');
-    const slugs = await discoverFromListing(html);
+    const html = await readBoundedTextFile(lp.saveAs);
+    const slugs = discoverFromListing(html);
     discovered[lp.saveAs] = slugs;
     console.log(`  discovered ${slugs.length} slugs from ${lp.saveAs}`);
   }
@@ -230,10 +485,10 @@ async function main() {
     liquidSlugs = discovered['_listing_liquid.html'];
   } else {
     // Fallback: try discovering from the raw liquid listing page
-    const liquidFile = path.join(RAW, '_listing_liquid.html');
+    const liquidFile = resolveRawFile('_listing_liquid.html');
     if (existsSync(liquidFile)) {
-      const html = await readFile(liquidFile, 'utf8');
-      liquidSlugs = await discoverFromLiquidListing(html);
+      const html = await readBoundedTextFile('_listing_liquid.html');
+      liquidSlugs = discoverFromLiquidListing(html);
       discovered['_listing_liquid.html'] = liquidSlugs;
       console.log(`  discovered ${liquidSlugs.length} slugs from _listing_liquid.html (fallback)`);
     }
@@ -263,17 +518,10 @@ async function main() {
   if (discovered['_listing_catalyst.html']) {
     catalystSlugs = discovered['_listing_catalyst.html'];
   } else {
-    const catalystFile = path.join(RAW, '_listing_catalyst.html');
+    const catalystFile = resolveRawFile('_listing_catalyst.html');
     if (existsSync(catalystFile)) {
-      const html = await readFile(catalystFile, 'utf8');
-      const $ = cheerio.load(html);
-      catalystSlugs = [];
-      $('a[href]').each((_, a) => {
-        const href = $(a).attr('href') || '';
-        if (/^[A-Z][a-zA-Z_]+$/.test(href) && /Catalyst/i.test(href)) {
-          catalystSlugs.push(href);
-        }
-      });
+      const html = await readBoundedTextFile('_listing_catalyst.html');
+      catalystSlugs = discoverPlainListing(html, /Catalyst/i);
       console.log(`  discovered ${catalystSlugs.length} catalyst slugs`);
     }
   }
@@ -288,7 +536,7 @@ async function main() {
   await fetchGroup('guide', GUIDE_PAGES);
 
   console.log('\nFetching home (season detection)...');
-  const homeFile = path.join(RAW, 'home.html');
+  const homeFile = resolveRawFile('home.html');
   if (!existsSync(homeFile)) {
     try {
       const html = await fetchWithRetry(BASE_URL);
@@ -296,6 +544,7 @@ async function main() {
       console.log('  ok');
     } catch (err) {
       console.log(`  FAIL (${err.message})`);
+      throw new Error('Required poe2db home page failed', { cause: err });
     }
   } else {
     console.log('  [cached] home');
@@ -304,5 +553,14 @@ async function main() {
   console.log('\nDone. Run `npm run process` next.');
 }
 
-main().catch((err) => { console.error(err); process.exit(1); });
+export function isDirectExecution(metaUrl, argvEntry = process.argv[1]) {
+  if (!argvEntry) return false;
+  return pathToFileURL(path.resolve(argvEntry)).href === metaUrl;
+}
 
+if (isDirectExecution(import.meta.url)) {
+  main().catch((err) => {
+    console.error(err);
+    process.exitCode = 1;
+  });
+}

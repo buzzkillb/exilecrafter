@@ -1,14 +1,14 @@
 ---
 import Base from '~/layouts/Base.astro';
-import { bases, season } from '~/lib/data';
+import { bases, manifest, season } from '~/lib/data';
 import { METHODS } from '~/lib/methods';
 import { useT } from '~/lib/i18n';
 
 const locale: 'en' | 'pt' = 'en';
 const t = useT(locale);
 
-const updated = new Date().toLocaleDateString(locale === 'pt' ? 'pt-BR' : 'en-US', {
-  year: 'numeric', month: 'short', day: 'numeric',
+const updated = new Date(manifest.generatedAt).toLocaleDateString(locale === 'pt' ? 'pt-BR' : 'en-US', {
+  year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC',
 });
 
 // Curated quick-pick bases — each links directly into the simulator.
@@ -21,9 +21,20 @@ const featured = [
 ].filter((b) => !!b.id);
 
 const beginnerMethods = METHODS.filter((m) => m.difficulty === 'beginner').slice(0, 3);
+
+const websiteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  '@id': 'https://exilecrafter.com/#website',
+  url: 'https://exilecrafter.com/',
+  name: 'Exile Crafter',
+  alternateName: 'ExileCrafter',
+  description: 'Plan Path of Exile 2 crafting with a live simulator, probability calculator, base and modifier reference data, currency, omens, and practical guides.',
+  inLanguage: 'en',
+};
 ---
 
-<Base>
+<Base structuredData={websiteSchema}>
   <!-- Hero: tagline + one dominant CTA. Everything else is one scroll away. -->
   <section class="relative overflow-hidden rounded-xl border border-border bg-gradient-to-b from-bg-card/80 to-bg p-8 md:p-12 mb-8 text-center">
     <div class="absolute -top-24 -left-24 w-64 h-64 bg-gold/5 rounded-full blur-3xl pointer-events-none"></div>
@@ -32,8 +43,11 @@ const beginnerMethods = METHODS.filter((m) => m.difficulty === 'beginner').slice
     <div class="relative">
       <div class="text-5xl mb-4" aria-hidden="true">⚒️</div>
       <h1 class="font-display font-bold bg-gradient-to-r from-gold-bright via-gold to-yellow-300 bg-clip-text text-transparent mb-4 text-3xl md:text-4xl leading-tight max-w-3xl mx-auto">
-        {t('site.tagline')}
+        {t('home.title')}
       </h1>
+      <p class="text-sm md:text-base text-dim leading-relaxed max-w-3xl mx-auto">
+        {t('site.tagline')}
+      </p>
       <div class="mt-2 text-xs text-mute">
         <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-border bg-bg-card">
           <span class="w-2 h-2 rounded-full bg-emerald-500" aria-hidden="true"></span>
@@ -43,10 +57,10 @@ const beginnerMethods = METHODS.filter((m) => m.difficulty === 'beginner').slice
       </div>
 
       <div class="mt-8 flex flex-wrap gap-3 justify-center">
-        <a href="/simulator" class="btn btn-gold px-6 py-3 text-base font-semibold">
+        <a href="/simulator/" class="btn btn-gold px-6 py-3 text-base font-semibold">
           {t('home.cta.simulator')}
         </a>
-        <a href="/bases" class="btn px-6 py-3 text-base">
+        <a href="/bases/" class="btn px-6 py-3 text-base">
           {t('home.cta.bases')}
         </a>
       </div>
@@ -57,16 +71,24 @@ const beginnerMethods = METHODS.filter((m) => m.difficulty === 'beginner').slice
   <section class="mb-8">
     <div class="flex items-baseline justify-between mb-4">
       <h2 class="text-xl font-display font-semibold">{t('home.featured')}</h2>
-      <a href="/bases" class="text-xs text-gold-bright hover:text-gold">{t('home.cta.bases')} →</a>
+      <a href="/bases/" class="text-xs text-gold-bright hover:text-gold">{t('home.cta.bases')} →</a>
     </div>
     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
       {featured.map((b) => {
         const baseData = bases.find((x) => x.id === b.id);
         return (
-          <a href={`/simulator?base=${b.id}`} class="block parchment p-3 hover:border-gold/50 hover:-translate-y-0.5 transition-all no-underline group">
+          <a href={`/simulator/?base=${b.id}`} class="block parchment p-3 hover:border-gold/50 hover:-translate-y-0.5 transition-all no-underline group">
             <div class="icon-frame w-12 h-12 mx-auto mb-2">
               {baseData?.imageUrl && (
-                <img src={baseData.imageUrl} alt="" class="w-full h-full object-contain" loading="lazy" />
+                <img
+                  src={baseData.imageUrl}
+                  alt=""
+                  width="48"
+                  height="48"
+                  loading="lazy"
+                  decoding="async"
+                  class="w-full h-full object-contain"
+                />
               )}
             </div>
             <div class="text-sm font-semibold text-center truncate group-hover:text-gold-bright transition-colors">{b.name}</div>
@@ -82,11 +104,11 @@ const beginnerMethods = METHODS.filter((m) => m.difficulty === 'beginner').slice
   <section class="mb-8">
     <div class="flex items-baseline justify-between mb-4">
       <h2 class="text-xl font-display font-semibold">{t('home.paths')}</h2>
-      <a href="/guides" class="text-xs text-gold-bright hover:text-gold">{t('home.cta.guides')} →</a>
+      <a href="/guides/" class="text-xs text-gold-bright hover:text-gold">{t('home.cta.guides')} →</a>
     </div>
     <div class="grid md:grid-cols-3 gap-3">
       {beginnerMethods.map((m) => (
-        <a href={`/guides#${m.id}`} class="block parchment p-4 hover:border-gold/50 hover:-translate-y-0.5 transition-all no-underline group">
+        <a href={`/guides/#${m.id}`} class="block parchment p-4 hover:border-gold/50 hover:-translate-y-0.5 transition-all no-underline group">
           <div class="flex items-baseline justify-between mb-1.5">
             <h3 class="font-display font-semibold text-base group-hover:text-gold-bright transition-colors">{m.name}</h3>
             <span class="text-[10px] uppercase tracking-wider text-mute">Beginner</span>
@@ -97,4 +119,3 @@ const beginnerMethods = METHODS.filter((m) => m.difficulty === 'beginner').slice
     </div>
   </section>
 </Base>
-

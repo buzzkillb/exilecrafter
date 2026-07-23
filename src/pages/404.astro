@@ -2,7 +2,12 @@
 import Base from '~/layouts/Base.astro';
 ---
 
-<Base title="Not Found | Exile Crafter">
+<Base
+  title="Not Found | Exile Crafter"
+  description="The requested Exile Crafter page could not be found."
+  canonical={false}
+  robots="noindex,follow"
+>
   <section class="relative overflow-hidden rounded-xl border border-border bg-gradient-to-b from-bg-card/80 to-bg p-8 md:p-12 mb-8 text-center max-w-xl mx-auto mt-16">
     <div class="absolute -top-24 -left-24 w-64 h-64 bg-gold/5 rounded-full blur-3xl pointer-events-none"></div>
     <div class="absolute -bottom-16 -right-16 w-48 h-48 bg-gold/5 rounded-full blur-3xl pointer-events-none"></div>

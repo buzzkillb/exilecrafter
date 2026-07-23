@@ -4,14 +4,22 @@ import type { Mod } from '~/lib/types';
 interface Props {
   mod: Mod;
   showTier?: boolean;
+  href?: string;
 }
-const { mod, showTier = true } = Astro.props;
+const { mod, showTier = true, href } = Astro.props;
 
 const tierDigits = mod.tier === 1 ? '111' : mod.tier === 2 ? '11' : mod.tier === 3 ? '1' : mod.tier.toString();
 const typeClass = `tag-${mod.type}`;
+const Tag = href ? 'a' : 'div';
 ---
 
-<div class="parchment p-3 flex items-start gap-3">
+<Tag
+  href={href}
+  class:list={[
+    'parchment p-3 flex items-start gap-3',
+    href && 'no-underline hover:border-gold/50 transition-colors',
+  ]}
+>
   <div class="tier-marker pt-0.5 w-8 text-right">{showTier ? tierDigits : ''}</div>
   <div class="flex-1 min-w-0">
     <div class="text-sm">{mod.description}</div>
@@ -26,4 +34,4 @@ const typeClass = `tag-${mod.type}`;
       </div>
     )}
   </div>
-</div>
+</Tag>
