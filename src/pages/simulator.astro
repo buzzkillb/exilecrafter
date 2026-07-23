@@ -632,206 +632,47 @@ function openPasteModal() {
         parsedPaste = null;
         return;
       }
-      // Parse the clipboard text. Two formats supported:
-      //   Wiki/poe2db format: starts with "Item Class:" then "Rarity:" then mod headers
-      //     like "{ Prefix Modifier "Tempered" (Tier: 2) — Damage, Physical, Attack }"
-      //   In-game format (advanced descriptions ON): starts with "Rarity:" and uses
-      //     simple mod headers like "Prefix Modifier" with tier indicators on
-      //     their own lines ("T1", "T2", etc.) between mods.
-      const lines = text.split(/\r?\n/);
-      let idx = 0;
-      function nextLine() {
-        while (idx < lines.length) {
-          const l = lines[idx++].trim();
-          if (l.length > 0) return l;
-        }
-        return null;
-      }
-      // Validate header — either "Item Class:" (wiki) or "Rarity:" (in-game) is accepted
-      let line = nextLine();
-      if (!line) {
-        pasteError.classList.remove('hidden');
-        pastePreview.classList.add('hidden');
-        pasteImport.disabled = true;
-        parsedPaste = null;
-        return;
-      }
       pasteError.classList.add('hidden');
 
-      let itemClass = '';
-      if (line.startsWith('Item Class:')) {
-        itemClass = line.slice('Item Class:'.length).trim();
-        line = nextLine();
-      }
-      let rarity = 'rare';
-      if (line && line.startsWith('Rarity:')) {
-        rarity = line.slice('Rarity:'.length).trim().toLowerCase();
-        line = nextLine();
-      } else if (!line) {
-        // No Rarity: header found at all — give up
-        pasteError.classList.remove('hidden');
-        pastePreview.classList.add('hidden');
-        pasteImport.disabled = true;
-        parsedPaste = null;
-        return;
-      }
-      // In in-game format (no Item Class), the unique name and base are on
-      // consecutive lines. The base line is usually a known base name. Read
-      // both candidates and let findBaseByName disambiguate.
-      const candidateName = line || 'Unknown';
-      const nextCandidate = nextLine();
-      const candidates = [candidateName];
-      if (nextCandidate && !/^-{3,}$/.test(nextCandidate.trim()) && !/^Rarity:/i.test(nextCandidate)) {
-        candidates.push(nextCandidate);
-      }
-      let name = candidateName;
-      let itemLevel = 80;
-      for (let i = idx; i < lines.length; i++) {
-        const l = lines[i].trim();
-        if (/^Item\s*Level:\s*\d+/i.test(l)) {
-          itemLevel = parseInt(l.replace(/^Item\s*Level:\s*/i, ''));
-          break;
-        }
-      }
+      // ── Use the imported parsePaste() ──
+      // Returns a structured ParsedPaste with corruption level, runes,
+      // enhancement block names, descriptive mod names + tags, and the
+      // numeric range captured from rolled-text parens.
+      const parsed = parsePaste(text, basesData);
 
-      // Find matching base
-      const baseNameParts = name.split(' ');
-      let foundBase = null;
-      // Explicit base resolution — no guessing. Both formats put the unique
-      // name on one line and the base name on the next line:
-      //   Wiki:  "Torment Whorl\nGold Ring"
-      //   In-game: "Runeforged Whorl\nFocus"
-      // The base is always on a separate line — we don't need fuzzy matching
-      // against the unique name.
-      if (candidates.length >= 2) {
-        // Try the second candidate directly as the base name
-        foundBase = findBaseByName(candidates[1]); /* bridge: imported fn returns {base,matchedOn} | null */
-        if (foundBase) {
-          name = candidates[0];
-        }
+      // Bridge to the legacy parsedPaste shape so the existing preview
+      // and importPastedItem keep working. New fields are surfaced as
+      // extra keys (corruptionLevel, runes, enchantments, unknownLines).
+      const name = parsed.itemName || 'Unknown';
+      const rarity = parsed.rarity.toLowerCase();
+      const itemLevel = parsed.itemLevel || 80;
+
+      // Re-resolve the base record (legacy fields want baseId, slot, etc.).
+      let foundBase = findBaseByName(parsed.baseName, basesData)?.base ?? null;
+      if (!foundBase && parsed.baseName) {
+        foundBase = findBaseByName(name, basesData)?.base ?? null;
       }
-      // Fallback: if we still don't have a base, try the full unique name
-      // (handles edge cases where the unique name itself IS a base, e.g. unique items)
-      if (!foundBase) {
-        foundBase = findBaseByName(name); /* bridge: imported fn returns {base,matchedOn} | null */
-      }
-      // Try slot-based search
-      if (!foundBase) {
-        const slotMap: Record<string, string> = {
-          'amulets': 'amulet', 'belts': 'belt', 'body armours': 'body_armour',
-          'boots': 'boots', 'bows': 'weapon_2h', 'charms': 'charm',
-          'chest armours': 'body_armour', 'crossbows': 'weapon_2h',
-          'flasks': 'flask', 'focus': 'focus', 'gloves': 'gloves',
-          'helmets': 'helmet', 'jewels': 'jewel', 'quivers': 'quiver',
-          'rings': 'ring', 'shields': 'shield', 'spears': 'weapon_1h',
-          'staves': 'weapon_2h', 'wands': 'weapon_1h', 'waystones': 'waystone',
-          'tablets': 'tablet', 'relics': 'relic',
-          'one handed weapons': 'weapon_1h', 'two handed weapons': 'weapon_2h',
-        };
-        const slot = slotMap[itemClass.toLowerCase()] || null;
+      if (!foundBase && parsed.itemClass) {
+        const slot = slotFromLabel(parsed.itemClass);
         if (slot) {
-          // Try to find any base with this slot whose name appears in the item name
           foundBase = basesData.find((b: any) =>
             b.slot === slot && name.toLowerCase().includes(b.name.toLowerCase())
-          );
+          ) ?? null;
         }
       }
 
-// Parse modifier sections from the text. Supports two formats:
-//   Wiki: "{ Prefix Modifier "Name" (Tier: N) — Tags }" + mod text on next line
-//   In-game: "Prefix Modifier" header + tier (T1/T2) on its own line + mod text on next line
-//          (in-game format has alternating T#/text lines for each affix)
-      const affixes: any[] = [];
-      let implicit = '';
-      for (let i = 0; i < lines.length; i++) {
-        const l = lines[i].trim();
-        // Match wiki header OR in-game header
-        const headerMatch = l.match(/^(\{\s*)?(Crafted\s+)?(Desecrated\s+)?(Prefix|Suffix|Implicit)\s+Modifier/i);
-        if (!headerMatch) continue;
-        const isCrafted = !!headerMatch[3];
-        const isDesecrated = !!headerMatch[2];
-        const modType = headerMatch[4].toLowerCase();
-        // Get current section type — only emit affixes matching it
-        let currentType = modType;
-
-        // Walk subsequent lines, collecting mod blocks. Each block is either:
-        //   Wiki: tier from header, then mod text, ends at separator/next header
-        //   In-game: "T#" tier line, then mod text, then "T#" resets tier for next mod
-        let j = i + 1;
-        while (j < lines.length) {
-          const nl = lines[j].trim();
-          if (!nl) { j++; continue; }
-          if (/^-{3,}$/.test(nl)) break;
-          if (/^\{?\s*(Crafted\s+)?(Desecrated\s+)?(Prefix|Suffix|Implicit)\s+Modifier/i.test(nl)) break;
-
-          // In-game format: "T1", "T2", etc. starts a new mod block
-          const tierMatch = nl.match(/^T(\d+)$/);
-          if (tierMatch) {
-            const newTier = parseInt(tierMatch[1]);
-            // Find the mod text that follows this tier line
-            let modText = '';
-            for (let k = j + 1; k < lines.length; k++) {
-              const kk = lines[k].trim();
-              if (!kk) continue;
-              if (/^-{3,}$/.test(kk)) break;
-              if (/^T\d+$/.test(kk)) break;
-              if (/^\{?\s*(Crafted\s+)?(Desecrated\s+)?(Prefix|Suffix|Implicit)\s+Modifier/i.test(kk)) break;
-              modText = kk;
-              j = k; // skip past the mod text
-              break;
-            }
-            if (modText && currentType !== 'implicit') {
-              affixes.push({
-                type: currentType,
-                tier: newTier,
-                crafted: isCrafted,
-                desecrated: isDesecrated,
-                name: modText,
-              });
-            }
-            j++;
-            continue;
-          }
-
-          // Wiki format: this is the mod text line (only when currentType is the
-          // section header type, which is set on entry to this for iteration)
-          if (currentType === 'implicit') {
-            // Implicit has no tier — collect all lines until next header
-            let text = nl;
-            let k = j + 1;
-            while (k < lines.length) {
-              const kk = lines[k].trim();
-              if (!kk) { k++; continue; }
-              if (/^-{3,}$/.test(kk)) break;
-              if (/^\{?\s*(Crafted\s+)?(Desecrated\s+)?(Prefix|Suffix|Implicit)\s+Modifier/i.test(kk)) break;
-              if (/^T\d+$/.test(kk)) break;
-              text += ' ' + kk;
-              k++;
-            }
-            implicit = text.trim();
-            j = k;
-            continue;
-          }
-
-          // Wiki prefix/suffix: tier was on the header line (if any), text is here
-          // Get tier from wiki header (for first mod of section)
-          let tier = 1;
-          const headerTier = l.match(/Tier\s*[\:\s]*(\d+)/i);
-          if (headerTier) tier = parseInt(headerTier[1]);
-          if (nl) {
-            affixes.push({
-              type: currentType,
-              tier,
-              crafted: isCrafted,
-              desecrated: isDesecrated,
-              name: nl,
-            });
-          }
-          j++;
-          break; // wiki format: one mod per section, move to next section
-        }
-        i = j - 1; // outer for loop increments i
-      }
+      const affixes = parsed.affixes.map((a) => ({
+        type: a.type,
+        tier: a.tier,
+        crafted: a.crafted,
+        desecrated: a.desecrated,
+        name: a.name,
+        descriptiveName: a.descriptiveName,
+        descriptiveTags: a.descriptiveTags,
+        rolled: a.rolled,
+        range: a.range,
+      }));
+      const implicit = parsed.implicit || '';
 
       // Build preview
       parsedPaste = {
@@ -840,6 +681,14 @@ function openPasteModal() {
         itemLevel,
         implicit,
         affixes,
+        // New fields surfaced for the activity log + future UI use:
+        itemClass: parsed.itemClass,
+        baseName: parsed.baseName,
+        corruptionLevel: parsed.corruptionLevel,
+        runes: parsed.runes,
+        enchantments: parsed.enchantments,
+        enhancementNames: parsed.enhancementNames,
+        unknownLines: parsed.unknownLines,
       };
 
       pastePreview.classList.remove('hidden');
@@ -858,6 +707,8 @@ function openPasteModal() {
         <div class="flex items-center gap-2"><span class="text-dim">Rarity:</span> <span class="text-fg">${escapeHtml(rarity)}</span></div>
         <div class="flex items-center gap-2"><span class="text-dim">Item Level:</span> <span class="text-fg">${itemLevel}</span></div>
         <div class="flex items-center gap-2"><span class="text-dim">Mods:</span> <span class="text-fg">${affixes.length}${implicit ? ' + 1 implicit' : ''}</span></div>
+        <div class="flex items-center gap-2"><span class="text-dim">Corruption:</span> <span class="text-fg">${parsed.corruptionLevel === 2 ? 'Twice' : parsed.corruptionLevel === 1 ? 'Yes' : 'No'}</span></div>
+        <div class="flex items-center gap-2"><span class="text-dim">Runes:</span> <span class="text-fg">${parsed.runes.length}</span></div>
         <div class="flex items-center gap-2"><span class="text-dim">Match:</span> <span class="${foundBase ? 'text-green-400' : 'text-corrupted'}">${found}</span></div>
       `;
       pasteImport.disabled = !foundBase;
