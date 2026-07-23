@@ -1222,7 +1222,7 @@ export function getCurrencyAvailability(item: ItemState, base: BaseItem): Record
   };
   result.essence = {
     valid: (rarity === 'magic' || rarity === 'rare') && !item.mirrored,
-    reason: rarity !== 'magic' && rarity !== 'rare' ? 'Essence requires a Magic or Rare item.' : 'Apply a guaranteed-mod essence.',
+    reason: rarity !== 'magic' && rarity !== 'rare' ? 'Essence requires a Magic or Rare item.' : 'Apply a guaranteed-mod essence. (Waystone compatibility unverified — operation will fail gracefully if essence has no matching mod for this slot.)',
   };
   result.alloy = {
     valid: rarity === 'rare' && !item.mirrored,
