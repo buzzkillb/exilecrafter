@@ -5,6 +5,7 @@ import ModBadge from '~/components/ModBadge.astro';
 import { bases, getModsForBase } from '~/lib/data';
 import { getMethod } from '~/lib/methods';
 import { useT } from '~/lib/i18n';
+import { seoDescription } from '~/lib/seo';
 
 const locale: 'en' | 'pt' = 'en';
 const t = useT(locale);
@@ -24,11 +25,40 @@ const slotLabel = t(`slots.${base.slot}` as 'slots.helmet');
 const suggestedMethods = ['transmute_aug_regal', 'al_then_exalt', 'essence_crafting', 'alt_regal_until']
   .map((id) => getMethod(id))
   .filter(Boolean);
+const pageTitle = `${base.name} · PoE 2 Base | Exile Crafter`;
+const pageDescription = seoDescription(
+  `Explore ${base.name}, a ${slotLabel.toLowerCase()} base item in Path of Exile 2. Check its requirements, ${allMods.length} compatible modifiers, affix slots, and crafting paths.`,
+);
+const canonical = `https://exilecrafter.com/bases/${base.id}/`;
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  '@id': `${canonical}#breadcrumb`,
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Base Items',
+      item: 'https://exilecrafter.com/bases/',
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: base.name,
+      item: canonical,
+    },
+  ],
+};
 ---
 
-<Base title={`${base.name} | Exile Crafter`}>
+<Base
+  title={pageTitle}
+  description={pageDescription}
+  canonical={canonical}
+  structuredData={breadcrumbSchema}
+>
   <nav class="text-sm text-mute mb-4">
-    <a href="/bases">Bases</a> / <span class="text-fg">{base.name}</span>
+    <a href="/bases/">Bases</a> / <span class="text-fg">{base.name}</span>
   </nav>
 
   <div class="grid lg:grid-cols-3 gap-6">
@@ -36,7 +66,17 @@ const suggestedMethods = ['transmute_aug_regal', 'al_then_exalt', 'essence_craft
       <div class="parchment p-6 sticky top-24">
         <div class="text-center mb-4">
           <div class="icon-frame mx-auto mb-3 w-24 h-24">
-            {base.imageUrl && <img src={base.imageUrl} alt={base.name} class="w-full h-full object-contain" />}
+            {base.imageUrl && (
+              <img
+                src={base.imageUrl}
+                alt={base.name}
+                width="96"
+                height="96"
+                loading="lazy"
+                decoding="async"
+                class="w-full h-full object-contain"
+              />
+            )}
           </div>
           <h1 class="text-2xl bg-gradient-to-r from-gold-bright via-gold to-yellow-300 bg-clip-text text-transparent">{base.name}</h1>
           <div class="text-sm text-mute mt-1">{slotLabel}</div>
@@ -88,13 +128,13 @@ const suggestedMethods = ['transmute_aug_regal', 'al_then_exalt', 'essence_craft
 
         <div class="divider-ornate"></div>
 
-        <a href={`/simulator?base=${base.id}`} class="btn btn-gold w-full justify-center">
+        <a href={`/simulator/?base=${base.id}`} class="btn btn-gold w-full justify-center">
           {t('bases.detail.simulator')}
         </a>
       </div>
     </aside>
 
-    <main class="lg:col-span-2">
+    <div class="lg:col-span-2">
       <section class="mb-6">
         <h2>{t('bases.detail.slots.title')}</h2>
         <p class="text-dim text-sm mb-4">
@@ -111,7 +151,7 @@ const suggestedMethods = ['transmute_aug_regal', 'al_then_exalt', 'essence_craft
         {allMods.length > 0 ? (
           <div class="grid gap-2">
             {allMods.slice(0, 50).map((mod) => (
-              <ModBadge mod={mod} />
+              <ModBadge mod={mod} href={`/mods/${mod.id}/`} />
             ))}
           </div>
         ) : (
@@ -131,13 +171,13 @@ const suggestedMethods = ['transmute_aug_regal', 'al_then_exalt', 'essence_craft
         </p>
         <div class="grid md:grid-cols-2 gap-3">
           {suggestedMethods.map((method) => method && (
-            <a href={`/guides#${method.id}`} class="parchment p-4 hover:border-gold transition-colors block no-underline">
+            <a href={`/guides/#${method.id}`} class="parchment p-4 hover:border-gold transition-colors block no-underline">
               <div class="font-display text-gold-bright">{method!.name}</div>
               <p class="text-xs text-dim mt-2">{method!.description}</p>
             </a>
           ))}
         </div>
       </section>
-    </main>
+    </div>
   </div>
 </Base>

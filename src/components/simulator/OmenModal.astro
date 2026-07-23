@@ -5,9 +5,9 @@ export interface Props {}
 <div id="omen-modal" class="hidden fixed inset-0 z-[100] flex items-start justify-center pt-12 bg-black/60 backdrop-blur-sm">
   <div class="bg-bg-card border border-border-strong rounded-lg shadow-2xl w-full max-w-2xl mx-4 max-h-[80vh] flex flex-col">
     <div class="flex items-center justify-between px-4 py-3 border-b border-border shrink-0">
-      <span class="text-sm font-semibold">Select Omens</span>
+      <h2 class="!m-0 text-sm font-semibold">Select Omens</h2>
       <div class="flex items-center gap-2">
-        <input id="omen-search" type="text" placeholder="Search omens…" class="bg-bg border border-border-strong rounded px-2 py-1 text-xs focus:outline-none focus:border-gold w-40" />
+        <input id="omen-search" type="search" placeholder="Search omens…" class="bg-bg border border-border-strong rounded px-2 py-1 text-xs focus:outline-none focus:border-gold w-40" />
         <button id="omen-clear-all" class="text-xs text-mute hover:text-corrupted" aria-label="Clear all">Clear all</button>
         <button id="close-omen-modal" class="text-mute hover:text-fg text-lg leading-none" aria-label="Close">&times;</button>
       </div>

@@ -1,7 +1,7 @@
 ---
 import Base from '~/layouts/Base.astro';
 import BaseCard from '~/components/BaseCard.astro';
-import { searchBases, SLOTS } from '~/lib/data';
+import { bases, searchBases, SLOTS } from '~/lib/data';
 import { useT } from '~/lib/i18n';
 
 const locale: 'en' | 'pt' = 'en';
@@ -11,9 +11,13 @@ const url = new URL(Astro.request.url);
 const slot = url.searchParams.get('slot') || undefined;
 const q = url.searchParams.get('q') || '';
 const results = searchBases(q, slot).slice(0, 200);
+const baseCount = bases.length.toLocaleString('en-US');
 ---
 
-<Base title={`${t('bases.title')} | Exile Crafter`}>
+<Base
+  title="Path of Exile 2 Base Items | Exile Crafter"
+  description={`Browse ${baseCount} Path of Exile 2 base items by equipment slot, item level, attributes, affix capacity, and compatible modifier pool.`}
+>
   <section class="relative overflow-hidden rounded-xl border border-border bg-gradient-to-b from-bg-card/80 to-bg p-6 md:p-8 mb-8 text-center">
     <div class="absolute -top-20 -left-20 w-48 h-48 bg-gold/5 rounded-full blur-3xl pointer-events-none"></div>
     <div class="absolute -bottom-12 -right-12 w-36 h-36 bg-gold/5 rounded-full blur-3xl pointer-events-none"></div>
@@ -50,14 +54,14 @@ const results = searchBases(q, slot).slice(0, 200);
       </select>
     </div>
     <button type="submit" class="btn btn-gold">{t('bases.filter')}</button>
-    {(q || slot) && <a href="/bases" class="btn">{t('bases.clear')}</a>}
+    {(q || slot) && <a href="/bases/" class="btn">{t('bases.clear')}</a>}
   </form>
 
   <div class="text-sm text-mute mb-3">{t('bases.results', { count: results.length })}</div>
 
   <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
     {results.map((base) => (
-      <BaseCard base={base} href={`/bases/${base.id}`} />
+      <BaseCard base={base} href={`/bases/${base.id}/`} />
     ))}
   </div>
 </Base>

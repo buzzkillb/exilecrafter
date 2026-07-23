@@ -1,0 +1,177 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "version": 1,
+  "site": "https://exilecrafter.com",
+  "auditDate": "2026-07-23",
+  "baseCommit": "30ce69dee0ed941441dd2251f81433fccfeae273",
+  "coverage": [
+    {
+      "skill": "seo-audit",
+      "classification": "required",
+      "reason": "Coordinates the repository, rendered-output, live-site, and specialist evidence.",
+      "evidence": "docs/seo-audit-2026-07-23.md#skill-coverage"
+    },
+    {
+      "skill": "seo-page",
+      "classification": "required",
+      "reason": "Representative home, catalogue, detail, guide, and tool pages were reviewed.",
+      "evidence": "docs/seo-audit-2026-07-23.md#on-page-and-content"
+    },
+    {
+      "skill": "seo-technical",
+      "classification": "required",
+      "reason": "Crawlability, indexability, canonicals, redirects, rendering, and internal links were tested.",
+      "evidence": "docs/seo-audit-2026-07-23.md#technical-seo"
+    },
+    {
+      "skill": "seo-content",
+      "classification": "required",
+      "reason": "Quality, trust, thin-page risk, readability, and citation readiness were reviewed.",
+      "evidence": "docs/seo-audit-2026-07-23.md#on-page-and-content"
+    },
+    {
+      "skill": "seo-schema",
+      "classification": "required",
+      "reason": "Existing and proposed structured data were checked against page-visible facts.",
+      "evidence": "docs/seo-audit-2026-07-23.md#structured-data"
+    },
+    {
+      "skill": "seo-images",
+      "classification": "required",
+      "reason": "Formats, dimensions, loading behavior, and layout-shift exposure were reviewed.",
+      "evidence": "docs/seo-audit-2026-07-23.md#images-and-performance"
+    },
+    {
+      "skill": "seo-sitemap",
+      "classification": "required",
+      "reason": "Sitemap syntax, uniqueness, protocol, canonical alignment, and noindex exclusions were tested.",
+      "evidence": "docs/seo-audit-2026-07-23.md#technical-seo"
+    },
+    {
+      "skill": "seo-geo",
+      "classification": "required",
+      "reason": "AI crawler access, answerability, entity consistency, and passage-level citability were reviewed.",
+      "evidence": "docs/seo-audit-2026-07-23.md#geo-and-ai-search"
+    },
+    {
+      "skill": "seo-performance",
+      "classification": "required",
+      "reason": "Repeatable Lighthouse lab runs were collected for representative templates.",
+      "evidence": "docs/seo-audit-2026-07-23.md#images-and-performance"
+    },
+    {
+      "skill": "seo-visual",
+      "classification": "required",
+      "reason": "Desktop and mobile above-the-fold layouts were inspected.",
+      "evidence": "docs/seo-audit-2026-07-23.md#images-and-performance"
+    },
+    {
+      "skill": "seo-plan",
+      "classification": "required",
+      "reason": "Findings are sequenced into immediate, validation, and measurement phases.",
+      "evidence": "docs/seo-audit-2026-07-23.md#prioritized-follow-up"
+    },
+    {
+      "skill": "seo-programmatic",
+      "classification": "required",
+      "reason": "Thousands of generated base and modifier pages require explicit quality and indexation controls.",
+      "evidence": "docs/seo-audit-2026-07-23.md#programmatic-page-risk"
+    },
+    {
+      "skill": "seo-competitor-pages",
+      "classification": "not_applicable",
+      "reason": "No comparison or alternatives page is present or proposed in this changeset.",
+      "evidence": "docs/seo-audit-2026-07-23.md#skill-coverage"
+    },
+    {
+      "skill": "seo-hreflang",
+      "classification": "conditional",
+      "reason": "The current static site exposes only English URLs; run before publishing locale-specific routes.",
+      "evidence": "docs/seo-audit-2026-07-23.md#internationalization"
+    },
+    {
+      "skill": "seo-local",
+      "classification": "not_applicable",
+      "reason": "Exile Crafter is not a local business and has no location-intent acquisition model.",
+      "evidence": "docs/seo-audit-2026-07-23.md#skill-coverage"
+    },
+    {
+      "skill": "seo-maps",
+      "classification": "not_applicable",
+      "reason": "The site has no physical locations or map-pack ranking objective.",
+      "evidence": "docs/seo-audit-2026-07-23.md#skill-coverage"
+    },
+    {
+      "skill": "seo-google",
+      "classification": "conditional",
+      "reason": "Target-scoped Search Console, GA4, URL Inspection, and CrUX access was not available.",
+      "evidence": "docs/seo-audit-2026-07-23.md#evidence-limitations"
+    },
+    {
+      "skill": "seo-backlinks",
+      "classification": "conditional",
+      "reason": "No target-authorized first-party backlink source was available; free-source discovery was inconclusive.",
+      "evidence": "docs/seo-audit-2026-07-23.md#evidence-limitations"
+    },
+    {
+      "skill": "seo-cluster",
+      "classification": "conditional",
+      "reason": "Run SERP-overlap clustering after a target keyword set and regional market are approved.",
+      "evidence": "docs/seo-audit-2026-07-23.md#prioritized-follow-up"
+    },
+    {
+      "skill": "seo-sxo",
+      "classification": "required",
+      "reason": "Search-intent fit, navigation, catalogue controls, and conversion paths were reviewed.",
+      "evidence": "docs/seo-audit-2026-07-23.md#search-experience"
+    },
+    {
+      "skill": "seo-drift",
+      "classification": "conditional",
+      "reason": "No prior immutable SEO baseline existed; this changeset adds deterministic checks for future drift.",
+      "evidence": "docs/seo-audit-2026-07-23.md#verification-and-drift-control"
+    },
+    {
+      "skill": "seo-ecommerce",
+      "classification": "not_applicable",
+      "reason": "The game-item catalogue has no checkout, merchant feed, purchasable product, or marketplace scope.",
+      "evidence": "docs/seo-audit-2026-07-23.md#skill-coverage"
+    },
+    {
+      "skill": "seo-firecrawl",
+      "classification": "conditional",
+      "reason": "The Firecrawl connector was unavailable; complete local rendered-output crawling and sampled live requests were used.",
+      "evidence": "docs/seo-audit-2026-07-23.md#evidence-limitations"
+    },
+    {
+      "skill": "seo-dataforseo",
+      "classification": "conditional",
+      "reason": "The DataForSEO connector was unavailable; no paid metrics were inferred.",
+      "evidence": "docs/seo-audit-2026-07-23.md#evidence-limitations"
+    },
+    {
+      "skill": "seo-image-gen",
+      "classification": "required",
+      "reason": "A verified 1200 by 630 social preview image closes the required Open Graph image gap.",
+      "evidence": "docs/seo-audit-2026-07-23.md#e-imagegen-001"
+    },
+    {
+      "skill": "seo-flow",
+      "classification": "required",
+      "reason": "The audit uses the Find, Leverage, Optimize, Win sequence for evidence and prioritization.",
+      "evidence": "docs/seo-audit-2026-07-23.md#flow-decision"
+    },
+    {
+      "skill": "seo-intel",
+      "classification": "required",
+      "reason": "A free-first SERP sample and repository-native market signals informed advisory opportunities.",
+      "evidence": "docs/seo-audit-2026-07-23.md#search-intelligence"
+    },
+    {
+      "skill": "seo-release-guard",
+      "classification": "conditional",
+      "reason": "Run the production-versus-preview guard when the PR has a preview URL and a Search Ops site UUID.",
+      "evidence": "docs/seo-audit-2026-07-23.md#release-decision"
+    }
+  ]
+}

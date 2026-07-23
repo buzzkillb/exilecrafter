@@ -19,7 +19,16 @@ const suffixSlots = Array.from({ length: base.affixSlots.suffix }, (_, i) => {
 <div class="parchment p-4">
   <div class="flex items-center gap-3 mb-4 pb-3 border-b border-border">
     <div class="icon-frame">
-      {base.imageUrl && <img src={base.imageUrl} alt={base.name} />}
+      {base.imageUrl && (
+        <img
+          src={base.imageUrl}
+          alt={base.name}
+          width="36"
+          height="36"
+          loading="lazy"
+          decoding="async"
+        />
+      )}
     </div>
     <div class="flex-1 min-w-0">
       <div class="text-base font-display text-gold-bright">{title}</div>

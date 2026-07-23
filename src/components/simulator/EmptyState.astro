@@ -6,6 +6,7 @@ export interface CraftingExample {
   description: string;
   goal: string;
   difficulty: string;
+  imageUrl: string;
 }
 
 export interface Props {
@@ -22,7 +23,7 @@ const difficultyColors: Record<string, string> = {
 };
 ---
 
-<div id="empty-state" class="hidden parchment p-6 text-center">
+<div id="empty-state" class="invisible parchment p-6 text-center" aria-hidden="true" inert>
   <div class="text-3xl mb-2">⚒️</div>
   <div class="font-display text-xl text-fg mb-1">Pick a base to start crafting</div>
   <p class="text-sm text-dim mb-4">Or try one of these popular starters:</p>
@@ -37,6 +38,17 @@ const difficultyColors: Record<string, string> = {
       return (
         <button class="flex flex-col items-start gap-1 p-3 border rounded-lg text-left transition-all hover:border-gold hover:bg-bg-card/60 cursor-pointer w-full quick-pick-btn" data-base={ex.id} data-name={ex.name}>
           <div class="flex items-center gap-2 w-full">
+            {ex.imageUrl && (
+              <img
+                src={ex.imageUrl}
+                alt=""
+                width="28"
+                height="28"
+                loading="lazy"
+                decoding="async"
+                class="w-7 h-7 shrink-0"
+              />
+            )}
             <span class="font-semibold text-sm text-fg leading-tight">{ex.name}</span>
             <span class="ml-auto text-[10px] font-medium uppercase tracking-wide px-1.5 py-0.5 rounded border {diffCls}">{ex.tag}</span>
           </div>

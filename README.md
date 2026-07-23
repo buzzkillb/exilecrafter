@@ -1,20 +1,20 @@
 # Exile Crafter
 
-A visual crafting companion for **Path of Exile 2**. Browse every base, modifier, currency, and omen, then run live crafting simulations with keyboard shortcuts, in-game style item tooltips, and probability calculations.
+A visual crafting companion for **Path of Exile 2**. Browse base, modifier, currency, and omen reference data, then run live crafting simulations with keyboard shortcuts, in-game style item tooltips, and probability calculations.
 
 Hosted at [exilecrafter.com](https://exilecrafter.com). Built as a fully static site for [Cloudflare Pages](https://pages.cloudflare.com/). Zero server runtime.
 
 ## Features
 
-- **368 base items** across 17 equipment slots (helmets, body armours, gloves, boots, belts, amulets, rings, shields, weapons, foci, quivers, waystones, jewels, tablets, relics, charms, flasks) — each with stat attributes and affix slot counts
-- **97 modifiers** with tier, level gate, tag classification, and stat ranges scraped from poe2db
-- **135 currency items** — all standard orbs (lesser/normal/greater/perfect tiers), essences (all 4 tiers × 14 families), liquid emotions, catalysts, desecration bones, alloys, breachstones — all with real poe2db icons
+- **1,690 base items** across 17 equipment slots (helmets, body armours, gloves, boots, belts, amulets, rings, shields, weapons, foci, quivers, waystones, jewels, tablets, relics, charms, flasks) — each with stat attributes and affix slot counts
+- **2,064 modifiers** with tier, level gate, tag classification, and stat ranges scraped from poe2db
+- **200 currency items** — all standard orbs (lesser/normal/greater/perfect tiers), essences (all 4 tiers × 14 families), liquid emotions, catalysts, desecration bones, alloys, breachstones — all with real poe2db icons
 - **50 omens** with effect descriptions, grouped by category (Alchemy, Exaltation, Annulment, Coronation, Erasure, etc.)
 - **Interactive Simulator** with keyboard shortcuts (`T` Transmute, `A` Alchemy, `R` Regal, `E` Exalt, `X` Annul, `C` Chaos, `D` Divine, `Z` Undo), only-valid-currency display, omen toggles via popover, full activity log, mod pool summary, cost tracking
 - **Probability Calculator** using a Web Worker for mod pool math (UI never freezes)
 - **Paste Import** — copy an item from PoE2 (Ctrl+C) and paste it into the simulator to load its exact state, including implicit, prefix, suffix, desecrated, and crafted mods
 - **In-game style item tooltip** — rarity-colored name, tier indicators (111/11/1), mod tags colored by damage type, gold separators, implicit/prefix/suffix sections
-- **Crafting guides** — 7 curated step-by-step paths for common goals
+- **Crafting guides** — 8 curated step-by-step paths for common goals
 - **i18n-ready** — easy to add languages by dropping a JSON file
 
 ## Quick start
@@ -25,6 +25,8 @@ npm run refresh   # scrape poe2db.tw, produce data/processed/*.json
 npm run weights   # optional: bake in community weight data
 npm run dev       # local dev server at http://localhost:4321
 npm run build     # static build → dist/
+npm run seo:audit # machine-readable rendered SEO snapshot
+npm run check     # build + deterministic SEO validation
 npm run preview   # preview the built site
 npm run e2e       # end-to-end paste import test
 ```
@@ -122,7 +124,7 @@ CRAFTCLASS_WEIGHTS_URL=https://example.com/poe2-weights.json npm run weights
 
 ## Tech
 
-- **Astro 5** — static site generator with island architecture
+- **Astro 7** — static site generator with island architecture
 - **Tailwind 4** (via Vite plugin)
 - **TypeScript** strict
 - **Cheerio** for HTML parsing in build scripts

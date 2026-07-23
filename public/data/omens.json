@@ -7,7 +7,7 @@
     ],
     "description": "While this item is active in your inventory your next Logbook adds special modifiers to revealed Grand Expedition areas",
     "effect": "While this item is active in your inventory your next Logbook adds special modifiers to revealed Grand Expedition areas",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Expedition2/SpecialExpeditionPage5.webp"
+    "imageUrl": "/images/omen/aldurs_saga.webp"
   },
   {
     "id": "medveds_saga",
@@ -15,7 +15,7 @@
     "appliesTo": [],
     "description": "While this item is active in your inventory your next Logbook guarantees a Medved encounter in the revealed Biome",
     "effect": "While this item is active in your inventory your next Logbook guarantees a Medved encounter in the revealed Biome",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Expedition2/SpecialExpeditionPage3.webp"
+    "imageUrl": "/images/omen/medveds_saga.webp"
   },
   {
     "id": "olroths_saga",
@@ -23,7 +23,7 @@
     "appliesTo": [],
     "description": "While this item is active in your inventory your next Logbook guarantees an Olroth encounter in the revealed Biome",
     "effect": "While this item is active in your inventory your next Logbook guarantees an Olroth encounter in the revealed Biome",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Expedition2/SpecialExpeditionPage1.webp"
+    "imageUrl": "/images/omen/olroths_saga.webp"
   },
   {
     "id": "omen_of_abyssal_echoes",
@@ -31,7 +31,7 @@
     "appliesTo": [],
     "description": "While this item is active in your inventory the next time you reveal Desecrated modifiers you can reroll the options once",
     "effect": "While this item is active in your inventory the next time you reveal Desecrated modifiers you can reroll the options once",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/OmenOnAbyssRerollOptions.webp"
+    "imageUrl": "/images/omen/omen_of_abyssal_echoes.webp"
   },
   {
     "id": "omen_of_amelioration",
@@ -39,7 +39,7 @@
     "appliesTo": [],
     "description": "While this item is active in your inventory will prevent 75% of Experience loss when you die",
     "effect": "While this item is active in your inventory will prevent 75% of Experience loss when you die",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/VoodooOmens3Blue.webp"
+    "imageUrl": "/images/omen/omen_of_amelioration.webp"
   },
   {
     "id": "omen_of_answered_prayers",
@@ -49,7 +49,7 @@
     ],
     "description": "While this item is active in your inventory the next Shrine you click on will grant an additional Effect",
     "effect": "While this item is active in your inventory the next Shrine you click on will grant an additional Effect",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/VoodooOmens4Blue.webp"
+    "imageUrl": "/images/omen/omen_of_answered_prayers.webp"
   },
   {
     "id": "omen_of_bartering",
@@ -59,7 +59,7 @@
     ],
     "description": "While this item is active in your inventory your next sold item's Gold value will be incorrectly assessed by the Vendor",
     "effect": "While this item is active in your inventory your next sold item's Gold value will be incorrectly assessed by the Vendor",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/OmenSellVendorRandomise.webp"
+    "imageUrl": "/images/omen/omen_of_bartering.webp"
   },
   {
     "id": "omen_of_catalysing_exaltation",
@@ -69,7 +69,7 @@
     ],
     "description": "While this item is active in your inventory your next Exalted Orb will consume all Catalyst Quality to increase the chance of the corresponding type of Modifier",
     "effect": "While this item is active in your inventory your next Exalted Orb will consume all Catalyst Quality to increase the chance of the corresponding type of Modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/OmenOnExaltConsumeQuality.webp"
+    "imageUrl": "/images/omen/omen_of_catalysing_exaltation.webp"
   },
   {
     "id": "omen_of_chance",
@@ -79,7 +79,7 @@
     ],
     "description": "While this item is active in your inventory your next Orb of Chance will not destroy the Item",
     "effect": "While this item is active in your inventory your next Orb of Chance will not destroy the Item",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/OmenOnChanceNotDestroy.webp"
+    "imageUrl": "/images/omen/omen_of_chance.webp"
   },
   {
     "id": "omen_of_chaotic_effectiveness",
@@ -89,7 +89,7 @@
     ],
     "description": "While this item is active in your inventory your next Chaos Orb will replace all Modifiers on a Waystone with Modifiers that do not grant Monster Effectiveness",
     "effect": "While this item is active in your inventory your next Chaos Orb will replace all Modifiers on a Waystone with Modifiers that do not grant Monster Effectiveness",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/OmenOnChaosMapMonsterEffectiveness.webp"
+    "imageUrl": "/images/omen/omen_of_chaotic_effectiveness.webp"
   },
   {
     "id": "omen_of_chaotic_monsters",
@@ -99,7 +99,7 @@
     ],
     "description": "While this item is active in your inventory your next Chaos Orb will replace all Modifiers on a Waystone with Modifiers that do not grant Monster Rarity",
     "effect": "While this item is active in your inventory your next Chaos Orb will replace all Modifiers on a Waystone with Modifiers that do not grant Monster Rarity",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/OmenOnChaosMapItemQuantity.webp"
+    "imageUrl": "/images/omen/omen_of_chaotic_monsters.webp"
   },
   {
     "id": "omen_of_chaotic_quantity",
@@ -109,7 +109,7 @@
     ],
     "description": "While this item is active in your inventory your next Chaos Orb will replace all Modifiers on a Waystone with Modifiers that do not grant Pack Size",
     "effect": "While this item is active in your inventory your next Chaos Orb will replace all Modifiers on a Waystone with Modifiers that do not grant Pack Size",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/OmenOnChaosMapPackSize.webp"
+    "imageUrl": "/images/omen/omen_of_chaotic_quantity.webp"
   },
   {
     "id": "omen_of_chaotic_rarity",
@@ -119,7 +119,7 @@
     ],
     "description": "While this item is active in your inventory your next Chaos Orb will replace all Modifiers on a Waystone with Modifiers that do not grant Item Rarity",
     "effect": "While this item is active in your inventory your next Chaos Orb will replace all Modifiers on a Waystone with Modifiers that do not grant Item Rarity",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/OmenOnChaosMapItemRarity.webp"
+    "imageUrl": "/images/omen/omen_of_chaotic_rarity.webp"
   },
   {
     "id": "omen_of_corruption",
@@ -129,7 +129,7 @@
     ],
     "description": "While this item is active in your inventory your next Vaal Orb will always result in change",
     "effect": "While this item is active in your inventory your next Vaal Orb will always result in change",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/VoodooOmens3Red.webp"
+    "imageUrl": "/images/omen/omen_of_corruption.webp"
   },
   {
     "id": "omen_of_dextral_alchemy",
@@ -139,7 +139,7 @@
     ],
     "description": "While this item is active in your inventory your next Orb of Alchemy will result in the maximum number of suffix modifiers",
     "effect": "While this item is active in your inventory your next Orb of Alchemy will result in the maximum number of suffix modifiers",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/VoodooOmens2Green.webp"
+    "imageUrl": "/images/omen/omen_of_dextral_alchemy.webp"
   },
   {
     "id": "omen_of_dextral_annulment",
@@ -149,7 +149,7 @@
     ],
     "description": "While this item is active in your inventory your next Orb of Annulment will remove only suffix modifiers",
     "effect": "While this item is active in your inventory your next Orb of Annulment will remove only suffix modifiers",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/VoodooOmens3Purple.webp"
+    "imageUrl": "/images/omen/omen_of_dextral_annulment.webp"
   },
   {
     "id": "omen_of_dextral_coronation",
@@ -159,7 +159,7 @@
     ],
     "description": "While this item is active in your inventory your next Regal Orb will add only suffix modifiers",
     "effect": "While this item is active in your inventory your next Regal Orb will add only suffix modifiers",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/VoodooOmens2Red.webp"
+    "imageUrl": "/images/omen/omen_of_dextral_coronation.webp"
   },
   {
     "id": "omen_of_dextral_crystallisation",
@@ -169,7 +169,7 @@
     ],
     "description": "While this item is active in your inventory your next Perfect or Corrupted Essence will remove only Suffix modifiers",
     "effect": "While this item is active in your inventory your next Perfect or Corrupted Essence will remove only Suffix modifiers",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/OmenOnPerfectEssenceSuffix.webp"
+    "imageUrl": "/images/omen/omen_of_dextral_crystallisation.webp"
   },
   {
     "id": "omen_of_dextral_erasure",
@@ -179,7 +179,7 @@
     ],
     "description": "While this item is active in your inventory your next Chaos Orb will remove only suffix modifiers",
     "effect": "While this item is active in your inventory your next Chaos Orb will remove only suffix modifiers",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/VoodooOmens3Dark.webp"
+    "imageUrl": "/images/omen/omen_of_dextral_erasure.webp"
   },
   {
     "id": "omen_of_dextral_exaltation",
@@ -189,7 +189,7 @@
     ],
     "description": "While this item is active in your inventory your next Exalted Orb will add only suffix modifiers",
     "effect": "While this item is active in your inventory your next Exalted Orb will add only suffix modifiers",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/VoodooOmens3Yellow.webp"
+    "imageUrl": "/images/omen/omen_of_dextral_exaltation.webp"
   },
   {
     "id": "omen_of_dextral_necromancy",
@@ -199,7 +199,7 @@
     ],
     "description": "While this item is active in your inventory your next Desecration attempt will add only suffix modifiers",
     "effect": "While this item is active in your inventory your next Desecration attempt will add only suffix modifiers",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/OmenOnAbyssAddSuffixes.webp"
+    "imageUrl": "/images/omen/omen_of_dextral_necromancy.webp"
   },
   {
     "id": "omen_of_gambling",
@@ -209,7 +209,7 @@
     ],
     "description": "While this item is active in your inventory your next Gamble purchase will have a 50% chance of costing no Gold and not consuming this Omen",
     "effect": "While this item is active in your inventory your next Gamble purchase will have a 50% chance of costing no Gold and not consuming this Omen",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/OmenGambleNoGoldCost.webp"
+    "imageUrl": "/images/omen/omen_of_gambling.webp"
   },
   {
     "id": "omen_of_greater_annulment",
@@ -219,7 +219,7 @@
     ],
     "description": "While this item is active in your inventory your next Orb of Annulment will remove two modifiers",
     "effect": "While this item is active in your inventory your next Orb of Annulment will remove two modifiers",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/VoodooOmens1Purple.webp"
+    "imageUrl": "/images/omen/omen_of_greater_annulment.webp"
   },
   {
     "id": "omen_of_greater_exaltation",
@@ -229,7 +229,7 @@
     ],
     "description": "While this item is active in your inventory your next Exalted Orb will add two random modifiers",
     "effect": "While this item is active in your inventory your next Exalted Orb will add two random modifiers",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/VoodooOmens1Yellow.webp"
+    "imageUrl": "/images/omen/omen_of_greater_exaltation.webp"
   },
   {
     "id": "omen_of_homogenising_coronation",
@@ -239,7 +239,7 @@
     ],
     "description": "While this item is active in your inventory your next Regal Orb will add a Modifier of the same type as an existing Modifier on the Item",
     "effect": "While this item is active in your inventory your next Regal Orb will add a Modifier of the same type as an existing Modifier on the Item",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/OmenOnRegalAddExistingModType.webp"
+    "imageUrl": "/images/omen/omen_of_homogenising_coronation.webp"
   },
   {
     "id": "omen_of_homogenising_exaltation",
@@ -249,7 +249,7 @@
     ],
     "description": "While this item is active in your inventory your next Exalted Orb will add a Modifier of the same type as an existing Modifier on the Item",
     "effect": "While this item is active in your inventory your next Exalted Orb will add a Modifier of the same type as an existing Modifier on the Item",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/OmenOnExaltAddExistingModType.webp"
+    "imageUrl": "/images/omen/omen_of_homogenising_exaltation.webp"
   },
   {
     "id": "omen_of_light",
@@ -259,7 +259,7 @@
     ],
     "description": "While this item is active in your inventory your next Orb of Annulment will remove only Desecrated modifiers",
     "effect": "While this item is active in your inventory your next Orb of Annulment will remove only Desecrated modifiers",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/OmenOnAnnulRemoveAbyssMod.webp"
+    "imageUrl": "/images/omen/omen_of_light.webp"
   },
   {
     "id": "omen_of_putrefaction",
@@ -269,7 +269,7 @@
     ],
     "description": "While this item is active in your inventory your next Desecration attempt will replace all modifiers on the item creating an item with up to 6 Unrevealed modifiers and Corrupting the item",
     "effect": "While this item is active in your inventory your next Desecration attempt will replace all modifiers on the item creating an item with up to 6 Unrevealed modifiers and Corrupting the item",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/OmenOnAbyssVeilAllAndCorrupt.webp"
+    "imageUrl": "/images/omen/omen_of_putrefaction.webp"
   },
   {
     "id": "omen_of_recombination",
@@ -277,7 +277,7 @@
     "appliesTo": [],
     "description": "",
     "effect": "",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/OmenSellVendorRandomise.webp"
+    "imageUrl": "/images/omen/omen_of_recombination.webp"
   },
   {
     "id": "omen_of_refreshment",
@@ -285,7 +285,7 @@
     "appliesTo": [],
     "description": "While this item is active in your inventory will fully recover your flask and charm charges when you reach Low Life",
     "effect": "While this item is active in your inventory will fully recover your flask and charm charges when you reach Low Life",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/VoodooOmens1Blue.webp"
+    "imageUrl": "/images/omen/omen_of_refreshment.webp"
   },
   {
     "id": "omen_of_reinforcements",
@@ -295,7 +295,7 @@
     ],
     "description": "While this item is active in your inventory the next Rogue Exile you encounter will summon an ally",
     "effect": "While this item is active in your inventory the next Rogue Exile you encounter will summon an ally",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/VoodooOmens4Purple.webp"
+    "imageUrl": "/images/omen/omen_of_reinforcements.webp"
   },
   {
     "id": "omen_of_resurgence",
@@ -303,7 +303,7 @@
     "appliesTo": [],
     "description": "While this item is active in your inventory fully recover your Life, Mana and Energy Shield when you reach Low Life",
     "effect": "While this item is active in your inventory fully recover your Life, Mana and Energy Shield when you reach Low Life",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/VoodooOmens2Blue.webp"
+    "imageUrl": "/images/omen/omen_of_resurgence.webp"
   },
   {
     "id": "omen_of_sanctification",
@@ -313,7 +313,7 @@
     ],
     "description": "While this item is active in your inventory your next Divine Orb used on a Rare item will Sanctify it",
     "effect": "While this item is active in your inventory your next Divine Orb used on a Rare item will Sanctify it",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/OmenOnDivineSanctify.webp"
+    "imageUrl": "/images/omen/omen_of_sanctification.webp"
   },
   {
     "id": "omen_of_secret_compartments",
@@ -323,7 +323,7 @@
     ],
     "description": "While this item is active in your inventory the next Strongbox you click on will be reopenable",
     "effect": "While this item is active in your inventory the next Strongbox you click on will be reopenable",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/VoodooOmens4Dark.webp"
+    "imageUrl": "/images/omen/omen_of_secret_compartments.webp"
   },
   {
     "id": "omen_of_sinistral_alchemy",
@@ -333,7 +333,7 @@
     ],
     "description": "While this item is active in your inventory your next Orb of Alchemy will result in the maximum number of prefix modifiers",
     "effect": "While this item is active in your inventory your next Orb of Alchemy will result in the maximum number of prefix modifiers",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/VoodooOmens1Green.webp"
+    "imageUrl": "/images/omen/omen_of_sinistral_alchemy.webp"
   },
   {
     "id": "omen_of_sinistral_annulment",
@@ -343,7 +343,7 @@
     ],
     "description": "While this item is active in your inventory your next Orb of Annulment will remove only prefix modifiers",
     "effect": "While this item is active in your inventory your next Orb of Annulment will remove only prefix modifiers",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/VoodooOmens2Purple.webp"
+    "imageUrl": "/images/omen/omen_of_sinistral_annulment.webp"
   },
   {
     "id": "omen_of_sinistral_coronation",
@@ -353,7 +353,7 @@
     ],
     "description": "While this item is active in your inventory your next Regal Orb will add only prefix modifiers",
     "effect": "While this item is active in your inventory your next Regal Orb will add only prefix modifiers",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/VoodooOmens1Red.webp"
+    "imageUrl": "/images/omen/omen_of_sinistral_coronation.webp"
   },
   {
     "id": "omen_of_sinistral_crystallisation",
@@ -363,7 +363,7 @@
     ],
     "description": "While this item is active in your inventory your next Perfect or Corrupted Essence will remove only Prefix modifiers",
     "effect": "While this item is active in your inventory your next Perfect or Corrupted Essence will remove only Prefix modifiers",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/OmenOnPerfectEssencePrefix.webp"
+    "imageUrl": "/images/omen/omen_of_sinistral_crystallisation.webp"
   },
   {
     "id": "omen_of_sinistral_erasure",
@@ -373,7 +373,7 @@
     ],
     "description": "While this item is active in your inventory your next Chaos Orb will remove only prefix modifiers",
     "effect": "While this item is active in your inventory your next Chaos Orb will remove only prefix modifiers",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/VoodooOmens2Dark.webp"
+    "imageUrl": "/images/omen/omen_of_sinistral_erasure.webp"
   },
   {
     "id": "omen_of_sinistral_exaltation",
@@ -383,7 +383,7 @@
     ],
     "description": "While this item is active in your inventory your next Exalted Orb will add only prefix modifiers",
     "effect": "While this item is active in your inventory your next Exalted Orb will add only prefix modifiers",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/VoodooOmens2Yellow.webp"
+    "imageUrl": "/images/omen/omen_of_sinistral_exaltation.webp"
   },
   {
     "id": "omen_of_sinistral_necromancy",
@@ -393,7 +393,7 @@
     ],
     "description": "While this item is active in your inventory your next Desecration attempt will add only prefix modifiers",
     "effect": "While this item is active in your inventory your next Desecration attempt will add only prefix modifiers",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/OmenOnAbyssAddPrefixes.webp"
+    "imageUrl": "/images/omen/omen_of_sinistral_necromancy.webp"
   },
   {
     "id": "omen_of_the_ancients",
@@ -403,7 +403,7 @@
     ],
     "description": "While this item is active in your inventory your next Orb of Chance will upgrade the Item to a random Unique of the same Item Class",
     "effect": "While this item is active in your inventory your next Orb of Chance will upgrade the Item to a random Unique of the same Item Class",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/OmenOnChanceAncientOrb.webp"
+    "imageUrl": "/images/omen/omen_of_the_ancients.webp"
   },
   {
     "id": "omen_of_the_blackblooded",
@@ -413,7 +413,7 @@
     ],
     "description": "While this item is active in your inventory your next Weapon or Jewellery Desecration attempt will guarantee a random Kurgal modifier",
     "effect": "While this item is active in your inventory your next Weapon or Jewellery Desecration attempt will guarantee a random Kurgal modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/OmenOnAbyssGuarenteedLichTypeMod3.webp"
+    "imageUrl": "/images/omen/omen_of_the_blackblooded.webp"
   },
   {
     "id": "omen_of_the_blessed",
@@ -423,7 +423,7 @@
     ],
     "description": "While this item is active in your inventory your next Divine Orb will only reroll Implicit Modifiers",
     "effect": "While this item is active in your inventory your next Divine Orb will only reroll Implicit Modifiers",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/OmenOnDivineRerollImplicits.webp"
+    "imageUrl": "/images/omen/omen_of_the_blessed.webp"
   },
   {
     "id": "omen_of_the_hunt",
@@ -433,7 +433,7 @@
     ],
     "description": "While this item is active in your inventory the next Possessed monster you kill will release its Azmeri Spirit",
     "effect": "While this item is active in your inventory the next Possessed monster you kill will release its Azmeri Spirit",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/VoodooOmens4Green.webp"
+    "imageUrl": "/images/omen/omen_of_the_hunt.webp"
   },
   {
     "id": "omen_of_the_liege",
@@ -443,7 +443,7 @@
     ],
     "description": "While this item is active in your inventory your next Weapon or Jewellery Desecration attempt will guarantee a random Amanamu modifier",
     "effect": "While this item is active in your inventory your next Weapon or Jewellery Desecration attempt will guarantee a random Amanamu modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/OmenOnAbyssGuarenteedLichTypeMod2.webp"
+    "imageUrl": "/images/omen/omen_of_the_liege.webp"
   },
   {
     "id": "omen_of_the_sovereign",
@@ -453,7 +453,7 @@
     ],
     "description": "While this item is active in your inventory your next Weapon or Jewellery Desecration attempt will guarantee a random Ulaman modifier",
     "effect": "While this item is active in your inventory your next Weapon or Jewellery Desecration attempt will guarantee a random Ulaman modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/OmenOnAbyssGuarenteedLichTypeMod1.webp"
+    "imageUrl": "/images/omen/omen_of_the_sovereign.webp"
   },
   {
     "id": "omen_of_whittling",
@@ -463,7 +463,7 @@
     ],
     "description": "While this item is active in your inventory your next Chaos Orb will remove the lowest level modifier",
     "effect": "While this item is active in your inventory your next Chaos Orb will remove the lowest level modifier",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Omens/VoodooOmens1Dark.webp"
+    "imageUrl": "/images/omen/omen_of_whittling.webp"
   },
   {
     "id": "uhtreds_saga",
@@ -471,7 +471,7 @@
     "appliesTo": [],
     "description": "While this item is active in your inventory your next Logbook guarantees an Uhtred encounter in the revealed Biome",
     "effect": "While this item is active in your inventory your next Logbook guarantees an Uhtred encounter in the revealed Biome",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Expedition2/SpecialExpeditionPage4.webp"
+    "imageUrl": "/images/omen/uhtreds_saga.webp"
   },
   {
     "id": "voranas_saga",
@@ -479,6 +479,6 @@
     "appliesTo": [],
     "description": "While this item is active in your inventory your next Logbook guarantees a Vorana encounter in the revealed Biome",
     "effect": "While this item is active in your inventory your next Logbook guarantees a Vorana encounter in the revealed Biome",
-    "imageUrl": "https://cdn.poe2db.tw/image/Art/2DItems/Currency/Expedition2/SpecialExpeditionPage2.webp"
+    "imageUrl": "/images/omen/voranas_saga.webp"
   }
 ]

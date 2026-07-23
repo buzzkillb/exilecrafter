@@ -15,7 +15,14 @@ const Tag = href ? 'a' : 'div';
 >
   <div class="icon-frame">
     {base.imageUrl ? (
-      <img src={base.imageUrl} alt={base.name} loading="lazy" />
+      <img
+        src={base.imageUrl}
+        alt={base.name}
+        width="36"
+        height="36"
+        loading="lazy"
+        decoding="async"
+      />
     ) : (
       <span class="text-xs text-mute">?</span>
     )}

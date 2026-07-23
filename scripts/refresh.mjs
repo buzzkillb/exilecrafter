@@ -15,10 +15,13 @@ function run(cmd, args) {
   });
 }
 
-console.log('==> Step 1/2: fetch-poe2db');
+console.log('==> Step 1/3: fetch-poe2db');
 await run('node', ['scripts/fetch-poe2db.mjs']);
 
-console.log('\n==> Step 2/2: process-data');
+console.log('\n==> Step 2/3: process-data');
 await run('node', ['scripts/process-data.mjs']);
 
-console.log('\nRefresh complete. Run `npm run build` to bake JSON into the static site.');
+console.log('\n==> Step 3/3: download-images');
+await run('node', ['scripts/download-images.mjs']);
+
+console.log('\nRefresh complete. Run `npm run check` to verify the static site.');

@@ -14,9 +14,13 @@ for (const c of currency) {
 }
 
 const groupOrder = ['upgrade_rarity', 'augment', 'reroll', 'annul', 'divine', 'corrupt', 'essence', 'catalyst', 'liquid_affector', 'desecrate', 'omen', 'refinement', 'currency_other', 'special'];
+const currencyCount = currency.length.toLocaleString('en-US');
 ---
 
-<Base title={`${t('currency.title')} | Exile Crafter`}>
+<Base
+  title="Path of Exile 2 Crafting Currency | Exile Crafter"
+  description={`Browse ${currencyCount} Path of Exile 2 crafting currency items, grouped by effect, with stack sizes, descriptions, and visual references.`}
+>
   <section class="relative overflow-hidden rounded-xl border border-border bg-gradient-to-b from-bg-card/80 to-bg p-6 md:p-8 mb-8 text-center">
     <div class="absolute -top-20 -left-20 w-48 h-48 bg-gold/5 rounded-full blur-3xl pointer-events-none"></div>
     <div class="absolute -bottom-12 -right-12 w-36 h-36 bg-gold/5 rounded-full blur-3xl pointer-events-none"></div>
@@ -40,7 +44,16 @@ const groupOrder = ['upgrade_rarity', 'augment', 'reroll', 'annul', 'divine', 'c
           {items.map((c) => (
             <div class="parchment p-4 flex gap-3">
               <div class="icon-frame">
-                {c.imageUrl && <img src={c.imageUrl} alt={c.name} />}
+                {c.imageUrl && (
+                  <img
+                    src={c.imageUrl}
+                    alt={c.name}
+                    width="36"
+                    height="36"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                )}
               </div>
               <div class="flex-1 min-w-0">
                 <div class="font-display text-gold-bright">{c.name}</div>

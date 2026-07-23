@@ -6,6 +6,7 @@ node_modules/
 # Build output
 dist/
 dist.zip
+.seo-cache/
 
 # Astro/Vite cache (auto-generated, safe to delete)
 .astro/

@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": ">=22.13.0"
+  },
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
@@ -15,7 +18,11 @@
     "process": "node scripts/process-data.mjs && node scripts/download-images.mjs",
     "weights": "node scripts/fetch-weights.mjs",
     "e2e": "node scripts/_e2e_paste.mjs",
-    "test": "node --experimental-strip-types --no-warnings tests/run.mjs"
+    "test": "node --experimental-strip-types --no-warnings tests/run.mjs",
+    "seo:audit": "node scripts/audit-seo-output.mjs",
+    "seo:skills": "node scripts/verify-seo.mjs --policy-only",
+    "seo:check": "node scripts/verify-seo.mjs",
+    "check": "npm run build && npm run seo:check && npm run e2e"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
@@ -27,6 +34,7 @@
   },
   "devDependencies": {
     "@types/node": "^26.1.1",
+    "js-yaml": "^4.3.0",
     "jsdom": "^29.1.1",
     "typescript": "^7.0.2"
   }

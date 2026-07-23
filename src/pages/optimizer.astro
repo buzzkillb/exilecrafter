@@ -2,7 +2,11 @@
 import Base from '~/layouts/Base.astro';
 ---
 
-<Base title="Craft Optimizer — Exile Crafter">
+<Base
+  title="Craft Optimizer | Exile Crafter"
+  description="Analyze a pasted Path of Exile 2 item and estimate crafting costs for its affixes with Exalted Orbs and alternative methods."
+  robots="noindex,follow"
+>
   <h1>Craft Optimizer</h1>
   <p class="text-sm text-dim mb-4">
     Paste a finished item to see expected costs for each affix using real poe2db weights and live prices.
@@ -29,7 +33,7 @@ import Base from '~/layouts/Base.astro';
     </div>
 
     <div class="parchment p-4 text-sm text-dim space-y-3">
-      <h4 class="!mt-0">How it works</h4>
+      <h2 class="!mt-0">How it works</h2>
       <p>For each affix, it matches the pasted text to the correct mod using numeric range matching, then computes the expected number of Exalted slams using the real poe2db DropChance weight.</p>
       <p>If a matching essence exists at a lower cost, it's shown as an alternative.</p>
     </div>
@@ -38,6 +42,7 @@ import Base from '~/layouts/Base.astro';
 
 <script>
   import { optimize } from '~/lib/optimizer';
+  import { escapeHtml } from '~/lib/safe-html.js';
 
   const pasteArea = document.getElementById('paste-area') as HTMLTextAreaElement;
   const optimizeBtn = document.getElementById('optimize-btn') as HTMLButtonElement;
@@ -102,7 +107,7 @@ import Base from '~/layouts/Base.astro';
     if (text.length < 30) { optimizeBtn.disabled = true; detectedBase.textContent = 'No item pasted'; parsed = null; return; }
     parsed = parseClipboard(text);
     if (!parsed?.base) { optimizeBtn.disabled = true; detectedBase.textContent = 'Could not detect base'; return; }
-    detectedBase.innerHTML = `<span class="text-gold">${parsed.base.name}</span> — ${parsed.affixes.length} affixes`;
+    detectedBase.textContent = `${parsed.base.name} — ${parsed.affixes.length} affixes`;
     optimizeBtn.disabled = false;
   });
 
@@ -117,7 +122,7 @@ import Base from '~/layouts/Base.astro';
           <span class="text-xs font-mono text-mute shrink-0 pt-0.5">T${a.tier}</span>
           <div class="flex-1 min-w-0">
             <div class="text-fg truncate" title="${escapeHtml(a.matchedMod)}">${escapeHtml(a.matchedMod)}</div>
-            <div class="text-xs text-mute mt-0.5">${a.type} \u00b7 weight ${a.weight} in pool of ${a.poolSize}</div>
+            <div class="text-xs text-mute mt-0.5">${escapeHtml(a.type)} \u00b7 weight ${a.weight} in pool of ${a.poolSize}</div>
           </div>
           <div class="text-right shrink-0">
             <div class="text-gold-bright font-mono font-semibold">${a.strategies[0]?.expectedCost.toFixed(2) || '?'}c</div>
@@ -133,6 +138,4 @@ import Base from '~/layouts/Base.astro';
       </div>
     `).join('') + (result.unmatched.length > 0 ? `<div class="text-xs text-dim">${result.unmatched.length} affixes not matched</div>` : '');
   });
-
-  function escapeHtml(s: string) { return s.replace(/[&<>"']/g, (c: string) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' } as any)[c]); }
 </script>

@@ -7,7 +7,10 @@ const locale: 'en' | 'pt' = 'en';
 const t = useT(locale);
 ---
 
-<Base title={`${t('guides.title')} - Exile Crafter`}>
+<Base
+  title="Path of Exile 2 Crafting Guides | Exile Crafter"
+  description="Follow step-by-step Path of Exile 2 crafting paths for beginners and advanced players, then test each method in the simulator."
+>
   <section class="relative overflow-hidden rounded-xl border border-border bg-gradient-to-b from-bg-card/80 to-bg p-6 md:p-8 mb-8 text-center">
     <div class="absolute -top-20 -left-20 w-48 h-48 bg-gold/5 rounded-full blur-3xl pointer-events-none"></div>
     <div class="absolute -bottom-12 -right-12 w-36 h-36 bg-gold/5 rounded-full blur-3xl pointer-events-none"></div>
@@ -31,13 +34,13 @@ const t = useT(locale);
 
         <div class="grid md:grid-cols-2 gap-6 mt-4">
           <div>
-            <h4>{t('guides.steps')}</h4>
+            <h3>{t('guides.steps')}</h3>
             <ol class="space-y-2 text-sm list-decimal list-inside text-fg">
               {method.steps.map((s) => <li class="leading-relaxed">{s}</li>)}
             </ol>
           </div>
           <div>
-            <h4>{t('guides.bestFor')}</h4>
+            <h3>{t('guides.bestFor')}</h3>
             <ul class="space-y-1 text-sm">
               {method.bestFor.map((b) => (
                 <li class="text-fg">
@@ -47,8 +50,8 @@ const t = useT(locale);
             </ul>
 
             <div class="mt-6 flex gap-2">
-              <a href="/simulator" class="btn">{t('guides.simulator')}</a>
-              <a href="/calculator" class="btn">{t('guides.calculator')}</a>
+              <a href="/simulator/" class="btn">{t('guides.simulator')}</a>
+              <a href="/calculator/" class="btn">{t('guides.calculator')}</a>
             </div>
           </div>
         </div>
