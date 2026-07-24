@@ -2,9 +2,9 @@
 // PoE2 crafting emulator. Drives the interactive simulator + simulator worker.
 // Models item state, applies currency operations, and produces mod rolls.
 
-import type { Mod, BaseItem, Currency, Omen, WeightEntry } from './types';
-import { CORRUPTED_IMPLICITS } from './corrupted-implicits';
-import { buildPool, pickN, type PoolResult } from './weights';
+import type { Mod, BaseItem, Currency, Omen, WeightEntry } from './types.ts';
+import { CORRUPTED_IMPLICITS } from './corrupted-implicits.ts';
+import { buildPool, pickN, type PoolResult } from './weights.ts';
 
 export type ItemRarity = 'normal' | 'magic' | 'rare' | 'unique';
 
@@ -296,6 +296,9 @@ export function orbOfAlchemy(ctx: EmulatorContext): CraftResult {
 
 export function exaltedOrb(ctx: EmulatorContext): CraftResult {
   const { item, base } = ctx;
+  if (item.corrupted) {
+    return { ok: false, message: 'Cannot Exalted Orb a corrupted item.', item };
+  }
   if (item.rarity !== 'rare') {
     return { ok: false, message: 'Exalted only works on Rare items.', item };
   }
@@ -399,6 +402,9 @@ export function orbOfAnnulment(ctx: EmulatorContext): CraftResult {
 
 export function chaosOrb(ctx: EmulatorContext): CraftResult {
   const { item, base } = ctx;
+  if (item.corrupted) {
+    return { ok: false, message: 'Cannot Chaos Orb a corrupted item.', item };
+  }
   if (item.rarity !== 'rare') {
     return { ok: false, message: 'Chaos only works on Rare items.', item };
   }
@@ -434,6 +440,9 @@ export function chaosOrb(ctx: EmulatorContext): CraftResult {
 export function divineOrb(ctx: EmulatorContext): CraftResult {
   // Reroll numeric values on existing affixes.
   const { item } = ctx;
+  if (item.corrupted) {
+    return { ok: false, message: 'Cannot Divine Orb a corrupted item.', item };
+  }
   if (item.affixes.length === 0) return { ok: false, message: 'No affixes to divine.', item };
 
   const implicitOnly = omenOf(ctx.activeOmens, 'divine_implicit_only');   // Omen of the Blessed
@@ -602,13 +611,16 @@ export function mirrorOfKalandra(ctx: EmulatorContext): CraftResult {
 }
 
 export function fracturingOrb(ctx: EmulatorContext): CraftResult {
-  // Fracturing Orb: locks in a random modifier on a Rare item with â‰¥4 mods.
+    // Fracturing Orb: locks in a random modifier on a Magic or Rare item.
   const { item } = ctx;
-  if (item.rarity !== 'rare') {
-    return { ok: false, message: 'Fracturing Orb only works on Rare items.', item };
+  if (item.corrupted) {
+    return { ok: false, message: 'Cannot fracture a corrupted item.', item };
   }
-  if (item.affixes.length < 4) {
-    return { ok: false, message: 'Fracturing Orb requires at least 4 modifiers.', item };
+  if (item.rarity !== 'magic' && item.rarity !== 'rare') {
+    return { ok: false, message: 'Fracturing Orb only works on Magic or Rare items.', item };
+  }
+  if (item.affixes.length === 0) {
+    return { ok: false, message: 'No modifiers to fracture.', item };
   }
   if (item.fractured.length > 0) {
     return { ok: false, message: 'Item already has a fractured modifier.', item };
@@ -1114,6 +1126,9 @@ export function glassblowersBauble(ctx: EmulatorContext): CraftResult {
 /** Perfect Exalted Orb — adds a new T1 affix (highest tier) to a Rare item */
 export function perfectExaltedOrb(ctx: EmulatorContext): CraftResult {
   const { item, base } = ctx;
+  if (item.corrupted) {
+    return { ok: false, message: 'Cannot Perfect Exalt a corrupted item.', item };
+  }
   if (item.rarity !== 'rare') {
     return { ok: false, message: 'Perfect Exalted Orb only works on Rare items.', item };
   }
