@@ -425,6 +425,7 @@ function openPasteModal() {
         defenses: parsed.defenses,
         requirements: parsed.requirements,
         sockets: parsed.sockets,
+        grantedSkills: parsed.grantedSkills,
       };
 
       pastePreview.classList.remove('hidden');
@@ -484,6 +485,7 @@ function openPasteModal() {
       (currentItem as any).combatStats = parsedPaste.combatStats || [];
       (currentItem as any).requirements = parsedPaste.requirements || { level: null, str: null, dex: null, int: null };
       (currentItem as any).sockets = parsedPaste.sockets || null;
+      (currentItem as any).grantedSkills = parsedPaste.grantedSkills || [];
       (currentItem as any).runeEffects = parsedPaste.runeEffects || [];
       const affixes: any[] = (parsedPaste.affixes || []).map((a: any) => ({
         modId: `imported_${a.type}_${a.name.slice(0, 20).replace(/\W+/g, '_').toLowerCase()}`,
@@ -609,6 +611,7 @@ function openPasteModal() {
         combatStats: (currentItem as any).combatStats || [],
         requirements: (currentItem as any).requirements || { level: null, str: null, dex: null, int: null },
         sockets: (currentItem as any).sockets || null,
+        grantedSkills: (currentItem as any).grantedSkills || [],
         runeEffects: (currentItem as any).runeEffects || [],
       };
       itemDisplay.innerHTML = renderItemCardHTML(currentBase, item);
@@ -708,6 +711,12 @@ function openPasteModal() {
               ${item.sockets.split(/\s+/).filter(Boolean).map((s: string) => `<span class="socket-gem">${s}</span>`).join(' ')}
             </div>
           ` : ''}
+          ${item.grantedSkills && item.grantedSkills.length > 0 ? item.grantedSkills.map((s: string) => `
+            <div class="item-granted-skill-row">
+              <span class="item-stat-label">Grants Skill:</span>
+              <span class="item-stat-value" style="color:#a0d4a0">${escapeHtml(s)}</span>
+            </div>
+          `).join('') : ''}
           ${separatorHTML(true)}
           ${item.runeEffects && item.runeEffects.length > 0 ? `
             <div class="item-section">
@@ -1076,6 +1085,7 @@ function openPasteModal() {
         delete (currentItem as any).itemName;
         delete (currentItem as any).defenses;
         delete (currentItem as any).requirements;
+        delete (currentItem as any).grantedSkills;
       }
       if (result.newBaseId) {
         const newBase = basesById?.get(result.newBaseId) ?? basesData.find((b: any) => b.id === result.newBaseId);

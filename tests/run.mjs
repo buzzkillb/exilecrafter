@@ -628,6 +628,23 @@ console.log('\n[parse-paste: Thunder Talisman (sockets, combat stats, multi-elem
   assert(p.implicit !== null && p.implicit.includes('Magnitude of Shock'), 'implicit Shock mod');
 }
 
+// ──────────────── parse-paste: Guardian Spear (combat + granted skill) ────────────────
+
+console.log('\n[parse-paste: Guardian Spear (combat + granted skill)]');
+{
+  const text = await loadFixture('guardian_spear.txt');
+  const p = itemsMod.parsePaste(text, BASES);
+  assert(p.rarity === 'Rare', 'rarity Rare');
+  assert(p.combatStats.length === 4, '4 combat stats');
+  assert(p.combatStats[0].label === 'Physical Damage', 'Physical Damage');
+  assert(p.combatStats[1].label === 'Lightning Damage', 'Lightning Damage');
+  assert(p.combatStats[1].element === 'lightning', 'Lightning element');
+  assert(p.combatStats[2].label === 'Critical Hit Chance', 'Critical Hit Chance');
+  assert(p.combatStats[3].label === 'Attacks per Second', 'Attacks per Second');
+  assert(p.grantedSkills.length === 1, '1 granted skill');
+  assert(p.grantedSkills[0] === 'Spear Throw', `granted skill '${p.grantedSkills[0]}' === 'Spear Throw'`);
+}
+
 // ──────────────── SUMMARY ────────────────
 
 console.log('\n────────────────────────────────────────────');

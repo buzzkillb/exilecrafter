@@ -251,6 +251,13 @@ function scanItemProperties(
       out.runeEffects.push(rn.effect);
       continue;
     }
+
+    // Granted skills
+    if (/^Grants Skill:/i.test(l)) {
+      const skillName = l.slice('Grants Skill:'.length).trim();
+      out.grantedSkills.push(skillName);
+      continue;
+    }
   }
 }
 
@@ -293,6 +300,7 @@ export function parsePaste(
     enhancementNames: [],
     base: null,
     flavorText: null,
+    grantedSkills: [],
   };
   if (!text || !text.trim()) return out;
 
@@ -459,6 +467,13 @@ export function parsePaste(
     }
     if (/^Energy Shield:/i.test(raw)) continue;
     if (/^Item Class:/i.test(raw)) continue;
+
+    // ── Granted Skills ──
+    if (/^Grants Skill:/i.test(raw)) {
+      const skillName = raw.slice('Grants Skill:'.length).trim();
+      out.grantedSkills.push(skillName);
+      continue;
+    }
 
     // ── Corruption detection ──
     if (/^Twice Corrupted\s*$/i.test(raw)) {

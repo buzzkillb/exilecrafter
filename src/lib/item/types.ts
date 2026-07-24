@@ -140,6 +140,8 @@ export interface ParsedPaste {
   base: BaseLike | null;
   /** Flavour/lore text block (unique items only). e.g. "Moon after moon did Berek make fools…" */
   flavorText: string | null;
+  /** Skill(s) granted by the item, e.g. "Spear Throw" from "Grants Skill: Spear Throw". */
+  grantedSkills: string[];
 }
 
 /** Subset of BaseItem fields used by pure functions. Mirrors the minimum the simulator passes in. */

@@ -1,0 +1,28 @@
+Item Class: Spears
+Rarity: Rare
+Empyrean Edge
+Guardian Spear
+--------
+Quality: +5% (augmented)
+Physical Damage: 40-83 (augmented)
+Lightning Damage: 3-70 (lightning)
+Critical Hit Chance: 5.00%
+Attacks per Second: 1.55
+--------
+Requires: Level 75, 50 Str, 127 Dex
+--------
+Item Level: 82
+--------
+{ Implicit Modifier }
+Prevent +3(3-7)% of Damage from Deflected Hits
+--------
+Grants Skill: Spear Throw
+--------
+{ Prefix Modifier "Arcing" (Tier: 5) — Damage, Elemental, Lightning, Attack }
+Adds 3(1-4) to 70(63-82) Lightning Damage
+{ Suffix Modifier "of Assimilation" (Tier: 1) — Mana }
+Gain 39(36-45) Mana per enemy killed
+{ Suffix Modifier "of the Concussion" (Tier: 1) }
+30(27-30)% increased Stun Duration
+{ Suffix Modifier "of Nourishment" (Tier: 1) — Life, Attack }
+Grants 5 Life per Enemy Hit
