@@ -1,6 +1,7 @@
 ---
 // SimulateWidget.astro — Monte Carlo craft simulation for guide pages
 // Runs client-side, loads real poe2db data from public/data/
+// Shows success rate, items destroyed, and materials breakdown
 ---
 <div class="simulate-widget parchment p-6 mb-6" id="simulate-widget">
   <div class="flex items-center justify-between mb-3">
@@ -11,7 +12,7 @@
   </div>
   <p class="text-xs text-dim mb-3">
     Runs <span id="sim-trials-display">200</span> trials using real poe2db mod weights.
-    Shows expected Divine Orb cost and success probability.
+    Shows success rate, items destroyed, and material costs.
   </p>
   <div class="flex gap-3 mb-3">
     <label class="text-xs text-dim">Trials:
@@ -24,7 +25,7 @@
     </label>
   </div>
   <div id="sim-results" class="hidden">
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-3">
+    <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-3">
       <div class="parchment p-3 text-center">
         <div class="text-xs text-dim">Success Rate</div>
         <div class="text-xl font-bold text-gold" id="sim-success">-</div>
@@ -41,6 +42,14 @@
         <div class="text-xs text-dim">P10 – P90</div>
         <div class="text-sm font-bold text-gold" id="sim-range">-</div>
       </div>
+      <div class="parchment p-3 text-center">
+        <div class="text-xs text-dim">Items Destroyed</div>
+        <div class="text-xl font-bold text-corrupted" id="sim-destroyed">-</div>
+      </div>
+    </div>
+    <div class="parchment p-3 mb-3" id="sim-materials" style="display:none">
+      <div class="text-xs text-dim mb-2">Avg Materials Per Success</div>
+      <div class="grid grid-cols-3 sm:grid-cols-4 gap-x-4 gap-y-1 text-xs font-mono" id="sim-mats-grid"></div>
     </div>
     <div id="sim-log" class="text-xs text-dim font-mono max-h-32 overflow-y-auto"></div>
   </div>
@@ -55,11 +64,12 @@
   const avgEl = document.getElementById('sim-avg')!;
   const medianEl = document.getElementById('sim-median')!;
   const rangeEl = document.getElementById('sim-range')!;
+  const destroyedEl = document.getElementById('sim-destroyed')!;
+  const materialsDiv = document.getElementById('sim-materials')!;
+  const matsGrid = document.getElementById('sim-mats-grid')!;
   const logEl = document.getElementById('sim-log')!;
 
-  trialsSelect.addEventListener('change', () => {
-    trialsDisplay.textContent = trialsSelect.value;
-  });
+  trialsSelect.addEventListener('change', () => { trialsDisplay.textContent = trialsSelect.value; });
 
   let running = false;
   let dataLoaded = false;
@@ -68,23 +78,21 @@
 
   async function loadData() {
     if (dataLoaded) return;
-    const [modsRes, basesRes] = await Promise.all([
-      fetch('/data/mods.json'), fetch('/data/bases.json'),
-    ]);
+    const [modsRes, basesRes] = await Promise.all([fetch('/data/mods.json'), fetch('/data/bases.json')]);
     mods = await modsRes.json();
     bases = await basesRes.json();
     dataLoaded = true;
   }
 
-  function buildPool(mods: any[], type: string, slot: string, ilvl: number) {
-    return mods.filter((m: any) => {
+  function buildPool(allMods: any[], type: string, slot: string, ilvl: number) {
+    return allMods.filter((m: any) => {
       if (m.type !== type && m.type !== 'any') return false;
       if (m.domain?.length > 0 && !m.domain.includes(slot)) return false;
       if (m.level > ilvl) return false;
       return true;
     }).map((m: any) => ({
       id: m.id, name: m.name, tier: m.tier, type: m.type,
-      weight: (m.weight > 0) ? m.weight : Math.pow(2, 10 - m.tier) * 10,
+      weight: m.weight > 0 ? m.weight : Math.pow(2, 10 - m.tier) * 10,
     }));
   }
 
@@ -99,80 +107,162 @@
     return pool[pool.length - 1];
   }
 
-  function simBootCraft(): { cost: number; log: string[]; success: boolean } {
-    const log: string[] = [];
+  const BOOT_PRICES: Record<string, number> = {
+    base_ilvl82: 1.0, orb_of_transmutation: 0.001, orb_of_augmentation: 0.002,
+    regal_orb: 0.02, exalted_orb: 0.15, greater_exalted_orb: 0.5,
+    perfect_exalted_orb: 3.0, chaos_orb: 0.01, orb_of_annulment: 0.15,
+    fracturing_orb: 1.5, divine_orb: 1.0,
+    omen_of_greater_exaltation: 2.0, omen_of_dextral_exaltation: 0.5,
+    omen_of_sinistral_exaltation: 0.5, omen_of_crystallisation: 1.0,
+    preserved_rib: 1.5,
+  };
+
+  function simBootCraft(): { cost: number; destroyed: boolean; materials: Record<string, number> } {
+    const mats: Record<string, number> = {};
+    const add = (k: string, v = 1) => { mats[k] = (mats[k] || 0) + v; };
     let cost = 0;
-    const PRICES: Record<string, number> = {
-      base_ilvl82: 1.0, orb_of_transmutation: 0.001, orb_of_augmentation: 0.002,
-      regal_orb: 0.02, orb_of_alchemy: 0.05, exalted_orb: 0.15,
-      greater_exalted_orb: 0.5, perfect_exalted_orb: 3.0,
-      chaos_orb: 0.01, orb_of_annulment: 0.15, fracturing_orb: 1.5,
-      vaal_orb: 0.02, divine_orb: 1.0,
-      omen_of_greater_exaltation: 2.0, omen_of_dextral_exaltation: 0.5,
-      omen_of_sinistral_exaltation: 0.5, omen_of_crystallisation: 1.0,
-      preserved_rib: 1.5, ancient_rib: 1.0, gnawed_rib: 0.5,
-    };
 
     const base = bases.find((b: any) => b.name === 'Sekhema Sandals');
-    if (!base) return { cost: 0, log: ['Base not found in data'], success: false };
+    if (!base) return { cost: 0, destroyed: false, materials: mats };
 
-    cost += PRICES.base_ilvl82;
-    const item: any = { base, ilvl: 82, rarity: 'normal', affixes: [] };
+    cost += BOOT_PRICES.base_ilvl82; add('base');
 
-    // Step 1: Transmute + Alt until T1 movement speed
+    // Step 1: Transmute + Augment until T1 movement speed
+    let hit = false;
     for (let attempt = 0; attempt < 50; attempt++) {
-      cost += PRICES.orb_of_transmutation + PRICES.orb_of_augmentation;
-      item.rarity = 'magic';
+      cost += BOOT_PRICES.orb_of_transmutation + BOOT_PRICES.orb_of_augmentation;
+      add('transmute'); add('augment');
       const prefixPool = buildPool(mods, 'prefix', base.slot, 82);
       const p = pickFromPool(prefixPool);
-      if (p && p.name.toLowerCase().includes('movement speed') && p.tier === 1) {
-        log.push(`Hit T1 MS on attempt ${attempt + 1}`); break;
-      }
-      if (attempt === 49) return { cost, log: [...log, 'Failed to find T1 MS'], success: false };
+      if (p && p.name.toLowerCase().includes('movement speed') && p.tier === 1) { hit = true; break; }
+      if (attempt === 49) return { cost, destroyed: true, materials: mats };
     }
 
-    // Step 2: Fracture the MS
-    cost += PRICES.fracturing_orb;
+    // Step 2: Fracture MS
+    cost += BOOT_PRICES.fracturing_orb; add('fracturing');
 
-    // Step 3: Regal + Chaos until T1 resist
-    let hitRes = false;
+    // Step 3: Regal + Chaos until T1 resistance
+    hit = false;
     for (let attempt = 0; attempt < 50; attempt++) {
-      cost += PRICES.regal_orb;
-      if (attempt > 0) cost += PRICES.chaos_orb + PRICES.orb_of_annulment;
+      cost += BOOT_PRICES.regal_orb; add('regal');
+      if (attempt > 0) { cost += BOOT_PRICES.chaos_orb + BOOT_PRICES.orb_of_annulment; add('chaos'); add('annul'); }
       const suffixPool = buildPool(mods, 'suffix', base.slot, 82);
       const s = pickFromPool(suffixPool);
-      if (s && s.name.includes('resistance') && s.tier === 1) { hitRes = true; break; }
+      if (s && s.name.toLowerCase().includes('resistance') && s.tier === 1) { hit = true; break; }
     }
-    if (!hitRes) return { cost, log: [...log, 'Failed to find T1 resist'], success: false };
-    log.push('T1 resist after chaos spam');
+    if (!hit) return { cost, destroyed: true, materials: mats };
 
-    // Step 4-6: Dextral + Greater + Perfect Exalt
-    cost += PRICES.omen_of_dextral_exaltation + PRICES.omen_of_greater_exaltation
-          + PRICES.perfect_exalted_orb * 2;
-    log.push('Dextral + Greater + 2x Perfect Exalt');
+    // Step 4-6: Dextral + Greater + 2x Perfect Exalt
+    cost += BOOT_PRICES.omen_of_dextral_exaltation + BOOT_PRICES.omen_of_greater_exaltation;
+    cost += BOOT_PRICES.perfect_exalted_orb * 2;
+    add('omen_dextral'); add('omen_greater'); add('perfect_exalt', 2);
 
     // Step 7: Preserved Rib
-    cost += PRICES.preserved_rib;
+    cost += BOOT_PRICES.preserved_rib; add('preserved_rib');
 
     // Step 8: Perfect Exalt for last prefix
-    cost += PRICES.perfect_exalted_orb;
+    cost += BOOT_PRICES.perfect_exalted_orb; add('perfect_exalt');
 
-    return { cost, log, success: true };
+    return { cost, destroyed: false, materials: mats };
   }
 
-  function simJewelCraft(): { cost: number; log: string[]; success: boolean } {
-    const PRICES: Record<string, number> = {
-      diamond_base: 0.1, orb_of_transmutation: 0.001, orb_of_augmentation: 0.002,
-      regal_orb: 0.02, exalted_orb: 0.15, potent_liquid_contempt: 0.5,
-      potent_liquid_ferocity: 0.5, preserved_cranium: 1.0,
-    };
-    let cost = PRICES.diamond_base;
-    cost += PRICES.orb_of_transmutation + PRICES.orb_of_augmentation + PRICES.regal_orb;
-    cost += PRICES.exalted_orb * 3;
-    cost += PRICES.potent_liquid_contempt + PRICES.exalted_orb;
-    cost += PRICES.potent_liquid_ferocity;
-    cost += PRICES.preserved_cranium;
-    return { cost, log: ['Jewel craft completed'], success: true };
+  const JEWEL_PRICES: Record<string, number> = {
+    diamond_base: 0.1, orb_of_transmutation: 0.001, orb_of_augmentation: 0.002,
+    regal_orb: 0.02, exalted_orb: 0.15, potent_liquid_contempt: 0.5,
+    potent_liquid_ferocity: 0.5, preserved_cranium: 1.0,
+    chaos_orb: 0.01, orb_of_annulment: 0.15, fracturing_orb: 1.5,
+  };
+
+  function simJewelCraft(): { cost: number; destroyed: boolean; materials: Record<string, number> } {
+    const mats: Record<string, number> = {};
+    const add = (k: string, v = 1) => { mats[k] = (mats[k] || 0) + v; };
+    let cost = 0;
+    let prefixCount = 0;
+    let suffixCount = 0;
+
+    const base = bases.find((b: any) => b.name === 'Diamond');
+    if (!base) {
+      // Fallback: any jewel base with ilvl >= 80
+      const jewelBase = bases.find((b: any) => b.slot === 'jewel' && (b.level || 0) <= 80);
+      if (!jewelBase) return { cost: 0, destroyed: false, materials: mats };
+    }
+    const ilvl = 82;
+
+    cost += JEWEL_PRICES.diamond_base; add('base');
+
+    // Step 1: Transmute → 1 random prefix
+    cost += JEWEL_PRICES.orb_of_transmutation; add('transmute');
+    const pfxPool = buildPool(mods, 'prefix', 'jewel', ilvl);
+    const p1 = pickFromPool(pfxPool);
+    if (!p1) return { cost, destroyed: true, materials: mats };
+    prefixCount = 1;
+
+    // Step 2: Augment → adds suffix
+    cost += JEWEL_PRICES.orb_of_augmentation; add('augment');
+    const sfxPool = buildPool(mods, 'suffix', 'jewel', ilvl);
+    const s1 = pickFromPool(sfxPool);
+    if (!s1) return { cost, destroyed: true, materials: mats };
+    suffixCount = 1;
+
+    // Step 3: Regal → rare (random type)
+    cost += JEWEL_PRICES.regal_orb; add('regal');
+    if (Math.random() < 0.5) {
+      const p2 = pickFromPool(pfxPool); if (!p2) return { cost, destroyed: true, materials: mats };
+      prefixCount++;
+    } else {
+      const s2 = pickFromPool(sfxPool); if (!s2) return { cost, destroyed: true, materials: mats };
+      suffixCount++;
+    }
+
+    // Step 4: Exalt × 3 → fill to 6 affixes
+    for (let i = 0; i < 3; i++) {
+      cost += JEWEL_PRICES.exalted_orb; add('exalt');
+      // Random type (prefer the one with fewer)
+      if (prefixCount < 3 && (suffixCount >= 3 || Math.random() < 0.5)) {
+        const p = pickFromPool(pfxPool); if (p) prefixCount++;
+      } else if (suffixCount < 3) {
+        const s = pickFromPool(sfxPool); if (s) suffixCount++;
+      }
+    }
+
+    // Step 5: Potent Liquid Contempt
+    // 50% chance it removes the "right" type (making room for bonus mod)
+    // If it removes a prefix when we want suffix space → brick chance
+    cost += JEWEL_PRICES.potent_liquid_contempt; add('liquid_contempt');
+
+    // Simulate: random removal + slot addition
+    const removePref = Math.random() < 0.5;
+    if (removePref) {
+      prefixCount = Math.max(0, prefixCount - 1);
+    } else {
+      suffixCount = Math.max(0, suffixCount - 1);
+    }
+
+    // Bonus slot: +1 suffix allowed (Contempt adds suffix slot)
+    // Exalt into new slot
+    cost += JEWEL_PRICES.exalted_orb; add('exalt');
+    if (suffixCount < 4) {
+      const s = pickFromPool(sfxPool); if (s) suffixCount++;
+    } else if (prefixCount < 4) {
+      const p = pickFromPool(pfxPool); if (p) prefixCount++;
+    }
+
+    // Step 6: Potent Liquid Ferocity (optional, 80% of crafters use it)
+    if (Math.random() < 0.8) {
+      cost += JEWEL_PRICES.potent_liquid_ferocity; add('liquid_ferocity');
+      if (Math.random() < 0.5) prefixCount = Math.max(0, prefixCount - 1);
+      else suffixCount = Math.max(0, suffixCount - 1);
+    }
+
+    // Step 7: Preserved Cranium (optional, 60% use)
+    if (Math.random() < 0.6) {
+      cost += JEWEL_PRICES.preserved_cranium; add('preserved_cranium');
+    }
+
+    const totalAffixes = prefixCount + suffixCount;
+    const destroyed = totalAffixes < 5; // < 5 useful mods = brick
+
+    return { cost, destroyed, materials: mats };
   }
 
   runBtn.addEventListener('click', async () => {
@@ -191,16 +281,22 @@
 
       const costs: number[] = [];
       let successes = 0;
+      let destroyed = 0;
+      const totalMats: Record<string, number> = {};
       const batchSize = Math.min(trials, 50);
       const startTime = performance.now();
 
       for (let i = 0; i < trials; i++) {
         const result = simFn();
-        if (result.success) { successes++; costs.push(result.cost); }
+        if (result.destroyed) { destroyed++; }
+        else if (result.cost > 0) { successes++; costs.push(result.cost); }
+        for (const [k, v] of Object.entries(result.materials)) {
+          totalMats[k] = (totalMats[k] || 0) + v;
+        }
         if ((i + 1) % batchSize === 0) {
           const elapsed = ((performance.now() - startTime) / 1000).toFixed(1);
-          logEl.innerHTML += `<div>Batch ${(i+1)/batchSize}: ${i+1}/${trials} trials (${elapsed}s)... ${successes} successes so far</div>`;
-          await new Promise(r => setTimeout(r, 0)); // yield to keep UI responsive
+          logEl.innerHTML += `<div>Batch ${(i+1)/batchSize}: ${i+1}/${trials} trials (${elapsed}s)... ${successes} successes, ${destroyed} destroyed</div>`;
+          await new Promise(r => setTimeout(r, 0));
         }
       }
 
@@ -216,7 +312,22 @@
       avgEl.textContent = `${avg.toFixed(1)} div`;
       medianEl.textContent = `${median.toFixed(1)} div`;
       rangeEl.textContent = `${p10.toFixed(1)} — ${p90.toFixed(1)} div`;
-      logEl.innerHTML += `<div class="text-gold mt-1">✅ ${trials} trials in ${elapsed}s — ${successes} successes (${rate}%)</div>`;
+      destroyedEl.textContent = `${destroyed} / ${trials}`;
+
+      // Material breakdown
+      if (successes > 0 && Object.keys(totalMats).length > 0) {
+        materialsDiv.style.display = 'block';
+        const entries = Object.entries(totalMats)
+          .sort((a, b) => b[1] - a[1])
+          .map(([k, v]) => {
+            const perSuccess = (v / successes).toFixed(1);
+            const label = k.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+            return `<span class="text-dim">${label}: <span class="text-fg">${perSuccess}</span></span>`;
+          });
+        matsGrid.innerHTML = entries.join('');
+      }
+
+      logEl.innerHTML += `<div class="text-gold mt-1">✅ ${trials} trials in ${elapsed}s — ${successes} successes (${rate}%), ${destroyed} destroyed</div>`;
     } catch (err: any) {
       logEl.innerHTML += `<div class="text-corrupted">Error: ${err.message || err}</div>`;
     } finally {
