@@ -57,6 +57,7 @@ const BASES = [
   { id: 'prismatic_ring',          name: 'Prismatic Ring',         slot: 'ring',   level: 42 },
   { id: 'runeforged_war_wraps',    name: 'Runeforged War Wraps',   slot: 'gloves', level: 65 },
   { id: 'waystone_t15',            name: 'Waystone (Tier 15)',     slot: 'waystone', level: 78 },
+  { id: 'lazuli_ring',             name: 'Lazuli Ring',            slot: 'ring',   level: 39 },
 ];
 
 async function loadFixture(name) {
@@ -549,6 +550,31 @@ console.log('\n[parse-paste: Quarterstaff (augmented phys, fire damage)]');
   assert(p.requirements && p.requirements.level === 75, 'level req 75');
   assert(p.requirements && p.requirements.dex === 127, '127 Dex');
   assert(p.requirements && p.requirements.int === 50, '50 Int');
+}
+
+// ──────────────── parse-paste: Seed of Cataclysm (flavor text, unique) ────────────────
+
+console.log('\n[parse-paste: Seed of Cataclysm (flavor text, unique)]');
+{
+  const text = await loadFixture('seed_of_cataclysm.txt');
+  const p = itemsMod.parsePaste(text, BASES);
+  assert(p !== null, 'parsed ok');
+  assertEq(p.itemName, 'Seed of Cataclysm', 'itemName');
+  assertEq(p.baseName, 'Lazuli Ring', 'baseName Lazuli Ring');
+  assertEq(p.rarity, 'Unique', 'rarity Unique');
+  assertEq(p.itemLevel, 80, 'itemLevel 80');
+  assert(p.implicit !== null && p.implicit.includes('+27'), 'implicit mana captured');
+  assertEq(p.affixes.length, 5, '5 unique mods');
+  // All unique mods
+  assert(p.affixes.some(a => a.name.includes('Critical Hit Chance for Spells')), 'crit chance mod');
+  assert(p.affixes.some(a => a.name.includes('Critical Spell Damage Bonus')), 'crit dmg bonus mod');
+  assert(p.affixes.some(a => a.name.includes('Chaos Resistance')), 'chaos res mod');
+  assert(p.affixes.some(a => a.name.includes('Mana Cost')), 'mana cost mod');
+  assert(p.affixes.some(a => a.name.includes('Lucky')), 'lucky mod');
+  // Flavor text — non-quoted single line at end
+  assert(p.flavorText !== null && p.flavorText.length > 0, 'flavor text captured');
+  assert(p.flavorText.includes('dawn of a new era'), 'flavor text content');
+  assertEq(p.corruptionLevel, 0, 'not corrupted');
 }
 
 // ──────────────── SUMMARY ────────────────

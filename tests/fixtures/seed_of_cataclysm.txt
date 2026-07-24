@@ -1,0 +1,22 @@
+Item Class: Rings
+Rarity: Unique
+Seed of Cataclysm
+Lazuli Ring
+--------
+Item Level: 80
+--------
+{ Implicit Modifier — Mana }
++27(20-30) to maximum Mana
+--------
+{ Unique Modifier — Caster, Critical }
+47(30-50)% increased Critical Hit Chance for Spells
+{ Unique Modifier — Caster, Critical }
+5% reduced Critical Spell Damage Bonus per Critical Hit you've dealt with Spells Recently
+{ Unique Modifier — Chaos, Resistance }
++17(13-17)% to Chaos Resistance
+{ Unique Modifier — Mana }
+10% increased Mana Cost of Skills
+{ Unique Modifier — Caster, Critical }
+15(15-30)% chance for Spell Damage with Critical Hits to be Lucky
+--------
+The dawn of a new era is set into motion

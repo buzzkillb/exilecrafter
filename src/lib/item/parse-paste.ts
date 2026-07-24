@@ -654,5 +654,45 @@ export function parsePaste(
     }
   }
 
+  // ── Non-quoted flavour text (single/multi line at end of paste) ──
+  // Catches unique-item lore that doesn't use quotation marks, e.g.
+  //   "The dawn of a new era is set into motion"
+  if (!out.flavorText) {
+    // Build a set of patterns that are definitely NOT flavor text
+    const isDefinitelyNotFlavor = (line: string): boolean => {
+      const t = line.trim();
+      if (!t) return true;
+      if (/^-+$/.test(t)) return true;
+      if (/^(Corrupted|Twice Corrupted)\s*$/i.test(t)) return true;
+      if (/^(Item Class|Rarity):/i.test(t)) return true;
+      if (/^Item Level:/i.test(t)) return true;
+      if (/^Requires:/i.test(t)) return true;
+      if (/^Sockets:/i.test(t)) return true;
+      if (/^Quality/i.test(t)) return true;
+      if (/^(?:Physical Damage|Lightning Damage|Fire Damage|Cold Damage|Chaos Damage|Elemental Damage|Critical Hit Chance|Attacks per Second|Energy Shield|Evasion Rating|Armour|Runic Ward):/i.test(t)) return true;
+      if (/^{.*}$/.test(t)) return true;
+      if (/^(?:Crafted\s+)?(?:Desecrated\s+)?(?:Prefix|Suffix|Implicit|Unique)\s+Modifier/i.test(t)) return true;
+      if (ENHANCEMENT_RE.test(t)) return true;
+      if (/^Grants Skill:/i.test(t)) return true;
+      // Lines that look like mod bodies (start with +, digit, or Adds)
+      if (/^[+\d]/.test(t) && (t.includes('%') || t.includes(' to '))) return true;
+      if (/^(Adds|Leeches?|Gain|Causes)\s/i.test(t)) return true;
+      return false;
+    };
+    // Walk backward from end, collecting consecutive non-separator lines
+    const flavorLines: string[] = [];
+    for (let fi = lines.length - 1; fi >= 0; fi--) {
+      const t = lines[fi].trim();
+      if (isDefinitelyNotFlavor(t)) {
+        if (flavorLines.length > 0) break; // stop at first separator/metadata line
+        continue;
+      }
+      flavorLines.unshift(t);
+    }
+    if (flavorLines.length > 0) {
+      out.flavorText = flavorLines.join('\n');
+    }
+  }
+
   return out;
 }
