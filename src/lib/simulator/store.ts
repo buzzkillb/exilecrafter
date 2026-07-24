@@ -22,12 +22,6 @@ export let weightsData: any[] = [];
 
 // ── Setters ──
 
-export function setCurrentBase(b: any) { currentBase = b; }
-export function setCurrentItem(i: any) { currentItem = i; }
-export function setHistory(h: any[]) { history = h; }
-export function pushHistory(item: any) { history.push(item); }
-export function resetHistory() { history = []; }
-
 export function addActivityLogEntry(entry: { ts: number; msg: string; kind: 'ok' | 'error' | 'info' }) {
   activityLog.push(entry);
   if (activityLog.length > 200) activityLog.splice(0, activityLog.length - 200);
