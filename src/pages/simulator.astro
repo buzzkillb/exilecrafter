@@ -729,6 +729,19 @@ function openPasteModal() {
       });
     }
 
+    // ── Currency tier sort helper ──
+    const TIER_PREFIX_RE = /^(lesser|greater|perfect|refined|corrupted)_(.*)/;
+    const TIER_ORDER: Record<string, number> = {
+      lesser: 0, '': 1, greater: 2, perfect: 3, refined: 4, corrupted: 5,
+    };
+    function tierGroup(name: string): [string, number] {
+      const m = name.match(TIER_PREFIX_RE);
+      const stem = m ? m[2] : name;
+      const base = stem.replace(/^(orb_of|essence_of|^)/, '').replace(/^[^a-z]/, '');
+      const tier = m ? TIER_ORDER[m[1]] ?? 1 : 1;
+      return [base || stem, tier];
+    }
+
     function renderCurrencyStrip() {
       if (!currentBase) return;
       const availability = getCurrencyAvailability(currentItem, currentBase);
@@ -741,6 +754,16 @@ function openPasteModal() {
         if (!avail) continue;
         if (!grouped[c.category]) grouped[c.category] = [];
         grouped[c.category].push({ ...c, opId } as any);
+      }
+
+      // Sort within each category: group by stem, then by tier
+      for (const cat of Object.keys(grouped)) {
+        grouped[cat].sort((a: any, b: any) => {
+          const [stemA, tierA] = tierGroup(a.id);
+          const [stemB, tierB] = tierGroup(b.id);
+          if (stemA !== stemB) return stemA.localeCompare(stemB);
+          return tierA - tierB;
+        });
       }
 
       let html = '';
@@ -792,10 +815,14 @@ function openPasteModal() {
           const cls = valid
             ? 'border-border-strong bg-bg hover:border-gold hover:bg-bg-hover cursor-pointer focus-visible:ring-2 focus-visible:ring-gold'
             : 'border-border bg-bg opacity-30 cursor-not-allowed';
+          // Tier badge (Lesser → L, Greater → G, Perfect → P, Refined → R)
+          const tierPrefix = c.id.match(/^(lesser|greater|perfect|refined)_/);
+          const tierBadgeLetter = tierPrefix ? tierPrefix[1][0].toUpperCase() : '';
           return `
             <button class="currency-btn relative flex flex-col items-center justify-center p-0.5 border ${cls} rounded transition-all w-14 h-14 shrink-0" data-op="${escapeHtml(c.opId)}" data-original-id="${escapeHtml(c.id)}" ${valid ? '' : 'disabled aria-disabled="true"'} aria-label="${escapeHtml(c.name)}${key ? ' [' + key + ']' : ''}${valid ? '' : ' (' + escapeHtml(overriddenReason) + ')'}" data-tooltip-html="${escapeHtml(tooltipHtml)}">
               ${c.imageUrl ? `<img src="${c.imageUrl}" alt="" class="w-full h-full object-contain" loading="lazy" />` : `<div class="flex-1 flex items-center justify-center text-[10px] text-mute">${escapeHtml(c.name.slice(0,3))}</div>`}
               ${key ? `<span class="absolute top-0.5 right-1 text-[10px] text-gold-bright font-mono drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">${key}</span>` : ''}
+              ${tierBadgeLetter ? `<span class="absolute bottom-0.5 right-1 text-[10px] font-bold text-white bg-black/60 px-0.5 rounded-sm leading-none drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">${tierBadgeLetter}</span>` : ''}
             </button>
           `;
         }).join('');
