@@ -1136,13 +1136,19 @@ export function perfectExaltedOrb(ctx: EmulatorContext): CraftResult {
     else rollType = Math.random() < 0.5 ? 'prefix' : 'suffix';
   }
 
-  // Perfect Exalted Orb forces T1 — we achieve this by setting minModLevel high
+  // Perfect Exalted Orb forces T1 — filter pool to only tier-1 mods
   const pool = buildPool(ctx.mods, rollType, base, ctx.weights, {
     ilvl: item.itemLevel,
     blockedModIds: new Set(item.affixes.map((a) => a.modId)),
-    minModLevel: 999, // Forces only highest-tier mods
   });
-  const a = pickAffix(pool, rollType, new Set(item.affixes.map((a) => a.modId)), ctx.weights, base);
+  // Keep only T1 (lowest tier number = highest power)
+  const t1Pool = {
+    ...pool,
+    entries: pool.entries.filter((e) => e.mod.tier === 1),
+    totalWeight: 0,
+  };
+  t1Pool.totalWeight = t1Pool.entries.reduce((s, e) => s + e.weight, 0);
+  const a = pickAffix(t1Pool, rollType, new Set(item.affixes.map((a) => a.modId)), ctx.weights, base);
   if (!a) return { ok: false, message: 'No valid T1 mod could roll.', item };
 
   const next = {
