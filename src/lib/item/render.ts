@@ -34,7 +34,7 @@ const PREVIEW_SLOT_LABELS: Record<string, string> = {
  *  Uses PoE2 in-game tooltip coloring:
  *    - normal affixes → bright blue (#7fb5ff)
  *    - crafted affixes → paler whitish-blue (#b0d8ff)
- *    - desecrated/bonded → dimmed grey (#667788) + strikethrough
+ *    - desecrated affixes → bright blue (same as normal — corruption outcomes are real affixes)
  */
 export function rowHTML(affix: ParsedAffix): string {
   const tier = affix.tier != null ? `T${affix.tier}` : '-';
@@ -42,10 +42,9 @@ export function rowHTML(affix: ParsedAffix): string {
   let deco = 'none';
   if (affix.crafted) {
     color = '#b0d8ff';
-  } else if (affix.desecrated) {
-    color = '#667788';
-    deco = 'line-through';
   }
+  // Desecrated affixes (corruption outcomes) display as normal — no strikethrough.
+  // Strikethrough is reserved for empty/inactive bonded rune slots only.
   const label =
     affix.descriptiveName && affix.descriptiveName.length > 0
       ? `${affix.descriptiveName}: ${affix.name}`
