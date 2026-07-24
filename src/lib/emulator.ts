@@ -1090,6 +1090,107 @@ export function glassblowersBauble(ctx: EmulatorContext): CraftResult {
   };
 }
 
+/** Perfect Exalted Orb — adds a new T1 affix (highest tier) to a Rare item */
+export function perfectExaltedOrb(ctx: EmulatorContext): CraftResult {
+  const { item, base } = ctx;
+  if (item.rarity !== 'rare') {
+    return { ok: false, message: 'Perfect Exalted Orb only works on Rare items.', item };
+  }
+  const slots = effectiveSlots(item, base);
+  const usedPrefix = item.affixes.filter((a) => a.type === 'prefix').length;
+  const usedSuffix = item.affixes.filter((a) => a.type === 'suffix').length;
+  const hasOpenPrefix = usedPrefix < slots.prefix;
+  const hasOpenSuffix = usedSuffix < slots.suffix;
+  if (!hasOpenPrefix && !hasOpenSuffix) {
+    return { ok: false, message: 'No open affix slots.', item };
+  }
+
+  const forceType = omenOf(ctx.activeOmens, 'force_type');
+  let rollType: 'prefix' | 'suffix';
+  if (forceType?.effect.kind === 'force_type') {
+    rollType = forceType.effect.value;
+  } else {
+    if (hasOpenPrefix && !hasOpenSuffix) rollType = 'prefix';
+    else if (!hasOpenPrefix && hasOpenSuffix) rollType = 'suffix';
+    else rollType = Math.random() < 0.5 ? 'prefix' : 'suffix';
+  }
+
+  // Perfect Exalted Orb forces T1 — we achieve this by setting minModLevel high
+  const pool = buildPool(ctx.mods, rollType, base, ctx.weights, {
+    ilvl: item.itemLevel,
+    blockedModIds: new Set(item.affixes.map((a) => a.modId)),
+    minModLevel: 999, // Forces only highest-tier mods
+  });
+  const a = pickAffix(pool, rollType, new Set(item.affixes.map((a) => a.modId)), ctx.weights, base);
+  if (!a) return { ok: false, message: 'No valid T1 mod could roll.', item };
+
+  const next = {
+    ...item,
+    affixes: [...item.affixes, a],
+    history: [...item.history, { action: 'Perfect Exalted Orb', detail: `Added T1 ${a.name}` }],
+  };
+  return { ok: true, message: `Added T1 prefix: ${a.name}`, item: next, rolledAffixes: [a] };
+}
+
+/** Preserved Rib — desecrates a Rare Armour, adding a desecrated prefix */
+export function preservedRib(ctx: EmulatorContext): CraftResult {
+  const { item, base } = ctx;
+  const armourSlots = ['helmet', 'body_armour', 'gloves', 'boots', 'shield'];
+  if (!armourSlots.includes(base.slot)) {
+    return { ok: false, message: 'Preserved Rib only works on armour items (helmet, body, gloves, boots, shield).', item };
+  }
+  if (item.rarity !== 'rare') {
+    return { ok: false, message: 'Preserved Rib only works on Rare items.', item };
+  }
+
+  const factionOmen = omenOf(ctx.activeOmens, 'desecrate_faction');
+  const faction = factionOmen?.effect.kind === 'desecrate_faction'
+    ? factionOmen.effect.value
+    : (['ulaman', 'amanamu', 'kurgal'] as const)[Math.floor(Math.random() * 3)];
+
+  // Preserved Rib adds a desecrated prefix — replaces a random prefix if full, or adds to an open prefix slot
+  const prefixSlots = effectiveSlots(item, base).prefix;
+  const usedPrefixes = item.affixes.filter((a) => a.type === 'prefix');
+  const hasOpenPrefix = usedPrefixes.length < prefixSlots;
+
+  const desecrated: Affix = {
+    modId: `preserved_${faction}_${Date.now()}`,
+    type: 'prefix',
+    tier: 1,
+    name: `Desecrated (${faction}) Prefix`,
+    tags: ['desecrated'],
+  };
+
+  let next: ItemState;
+  if (hasOpenPrefix) {
+    // Add to an open prefix slot
+    next = {
+      ...item,
+      affixes: [...item.affixes, desecrated],
+      history: [...item.history, { action: 'Preserved Rib', detail: `Added ${faction} desecrated prefix` }],
+    };
+  } else {
+    // Replace a random non-fractured prefix
+    const fracturedIds = new Set(item.fractured.map((f: any) => f.modId));
+    const prefixCandidates = item.affixes
+      .map((a, i) => ({ affix: a, index: i }))
+      .filter(({ affix }) => affix.type === 'prefix' && !fracturedIds.has(affix.modId));
+    if (prefixCandidates.length === 0) {
+      return { ok: false, message: 'No non-fractured prefixes to replace.', item };
+    }
+    const target = prefixCandidates[Math.floor(Math.random() * prefixCandidates.length)];
+    const newAffixes = [...item.affixes];
+    newAffixes[target.index] = desecrated;
+    next = {
+      ...item,
+      affixes: newAffixes,
+      history: [...item.history, { action: 'Preserved Rib', detail: `Replaced ${target.affix.name} with ${faction} desecrated prefix` }],
+    };
+  }
+
+  return { ok: true, message: `Preserved Rib applied — desecrated with ${faction}.`, item: next, rolledAffixes: [desecrated] };
+}
+
 export const OPERATIONS: Record<string, (c: any) => any> = {
   orb_of_transmutation: orbOfTransmutation,
   orb_of_augmentation: orbOfAugmentation,
@@ -1114,6 +1215,8 @@ export const OPERATIONS: Record<string, (c: any) => any> = {
   armourers_scrap: armourersScrap,
   blacksmiths_whetstone: blacksmithsWhetstone,
   glassblowers_bauble: glassblowersBauble,
+  perfect_exalted_orb: perfectExaltedOrb,
+  preserved_rib: preservedRib,
 };
 
 function orbOfChance(ctx: EmulatorContext): CraftResult {
@@ -1213,6 +1316,10 @@ export function getCurrencyAvailability(item: ItemState, base: BaseItem): Record
     valid: rarity === 'rare' && affixes.length < maxSlots && !item.mirrored,
     reason: rarity !== 'rare' ? 'Exalted only works on Rare items.' : 'Rare item is full (all affix slots filled).',
   };
+  result.perfect_exalted_orb = {
+    valid: rarity === 'rare' && affixes.length < maxSlots && !item.mirrored,
+    reason: rarity !== 'rare' ? 'Perfect Exalted Orb only works on Rare items.' : 'Adds a T1 affix (highest tier).',
+  };
   result.chaos_orb = {
     valid: rarity === 'rare' && affixes.length > 0 && !item.mirrored,
     reason: rarity !== 'rare' ? 'Chaos only works on Rare items.' : 'Rare item has no affixes to reroll.',
@@ -1262,6 +1369,10 @@ export function getCurrencyAvailability(item: ItemState, base: BaseItem): Record
   result.preserved_cranium = {
     valid: item.slot === 'jewel' && rarity === 'rare' && !item.mirrored,
     reason: item.slot !== 'jewel' ? 'Preserved Cranium only works on Jewels.' : 'Requires a Rare Jewel.',
+  };
+  result.preserved_rib = {
+    valid: ['helmet', 'body_armour', 'gloves', 'boots', 'shield'].includes(item.slot) && rarity === 'rare' && !item.mirrored,
+    reason: !['helmet', 'body_armour', 'gloves', 'boots', 'shield'].includes(item.slot) ? 'Preserved Rib only works on armour items.' : 'Requires a Rare armour item.',
   };
   result.liquid_emotion = {
     valid: item.slot === 'jewel' && rarity === 'rare' && !item.mirrored,

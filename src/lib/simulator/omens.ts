@@ -12,10 +12,10 @@ export interface OmenOpt {
 
 /** Rules: regex → omen effect descriptor */
 export const OMEN_EFFECT_RULES: Array<[RegExp, () => any]> = [
+  // Greater Exaltation (double add) must be checked before generic dextral/sinistral patterns
+  [/greater.*exaltation/, () => ({ kind: 'double_add' })],
   [/sinistral/, () => ({ kind: 'force_type', value: 'prefix' })],
   [/dextral/, () => ({ kind: 'force_type', value: 'suffix' })],
-  [/greater.*sinistral/, () => ({ kind: 'force_exalt', value: 'prefix' })],
-  [/greater.*dextral/, () => ({ kind: 'force_exalt', value: 'suffix' })],
   [/whittling/, () => ({ kind: 'force_annul' })],
   [/erasure/, () => ({ kind: 'force_annul_fraction' })],
   [/same type as an existing modifier/, () => ({ kind: 'force_homogenise' })],
