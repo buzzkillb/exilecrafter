@@ -6,7 +6,7 @@
 export const RARITY_COLORS: Record<string, string> = {
   normal: '#c8c8c8',
   magic: '#8888ff',
-  rare: '#c8c8c8',
+  rare: '#ffff77',
   unique: '#af6025',
 };
 
