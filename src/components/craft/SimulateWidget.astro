@@ -179,10 +179,12 @@
     let cost = 0;
     let prefixCount = 0;
     let suffixCount = 0;
+    // Diamond base: 3 prefix + 3 suffix natural cap
+    const MAX_P = 3, MAX_S = 3;
+    let bonusPrefixSlots = 0, bonusSuffixSlots = 0;
 
     const base = bases.find((b: any) => b.name === 'Diamond');
     if (!base) {
-      // Fallback: any jewel base with ilvl >= 80
       const jewelBase = bases.find((b: any) => b.slot === 'jewel' && (b.level || 0) <= 80);
       if (!jewelBase) return { cost: 0, destroyed: false, materials: mats };
     }
@@ -193,18 +195,18 @@
     // Step 1: Transmute → 1 random prefix
     cost += JEWEL_PRICES.orb_of_transmutation; add('transmute');
     const pfxPool = buildPool(mods, 'prefix', 'jewel', ilvl);
+    const sfxPool = buildPool(mods, 'suffix', 'jewel', ilvl);
     const p1 = pickFromPool(pfxPool);
     if (!p1) return { cost, destroyed: true, materials: mats };
     prefixCount = 1;
 
-    // Step 2: Augment → adds suffix
+    // Step 2: Augment → fills the MISSING type (suffix, since we have prefix)
     cost += JEWEL_PRICES.orb_of_augmentation; add('augment');
-    const sfxPool = buildPool(mods, 'suffix', 'jewel', ilvl);
     const s1 = pickFromPool(sfxPool);
     if (!s1) return { cost, destroyed: true, materials: mats };
     suffixCount = 1;
 
-    // Step 3: Regal → rare (random type)
+    // Step 3: Regal → Rare (random type, 50/50)
     cost += JEWEL_PRICES.regal_orb; add('regal');
     if (Math.random() < 0.5) {
       const p2 = pickFromPool(pfxPool); if (!p2) return { cost, destroyed: true, materials: mats };
@@ -214,53 +216,67 @@
       suffixCount++;
     }
 
-    // Step 4: Exalt × 3 → fill to 6 affixes
-    for (let i = 0; i < 3; i++) {
+    // Step 4: Exalt to fill remaining slots to 3P+3S (at most 3 exalts needed)
+    while (prefixCount < MAX_P || suffixCount < MAX_S) {
       cost += JEWEL_PRICES.exalted_orb; add('exalt');
-      // Random type (prefer the one with fewer)
-      if (prefixCount < 3 && (suffixCount >= 3 || Math.random() < 0.5)) {
+      if (prefixCount < MAX_P && (suffixCount >= MAX_S || prefixCount <= suffixCount)) {
         const p = pickFromPool(pfxPool); if (p) prefixCount++;
-      } else if (suffixCount < 3) {
+      } else if (suffixCount < MAX_S) {
         const s = pickFromPool(sfxPool); if (s) suffixCount++;
       }
     }
 
     // Step 5: Potent Liquid Contempt
-    // 50% chance it removes the "right" type (making room for bonus mod)
-    // If it removes a prefix when we want suffix space → brick chance
+    // Removes a RANDOM affix (proportional to counts), then adds a random bonus slot (50/50 P/S)
     cost += JEWEL_PRICES.potent_liquid_contempt; add('liquid_contempt');
 
-    // Simulate: random removal + slot addition
-    const removePref = Math.random() < 0.5;
-    if (removePref) {
-      prefixCount = Math.max(0, prefixCount - 1);
-    } else {
-      suffixCount = Math.max(0, suffixCount - 1);
+    const totalBefore = prefixCount + suffixCount;
+    if (totalBefore > 0) {
+      // Remove random mod: probability of prefix = prefixCount / totalBefore
+      if (Math.random() < prefixCount / totalBefore) {
+        prefixCount--;
+      } else {
+        suffixCount--;
+      }
     }
 
-    // Bonus slot: +1 suffix allowed (Contempt adds suffix slot)
-    // Exalt into new slot
+    // Bonus slot: 50% prefix, 50% suffix
+    const isPrefixBonus = Math.random() < 0.5;
+    if (isPrefixBonus) bonusPrefixSlots++; else bonusSuffixSlots++;
+
+    // Exalt into the new bonus slot
     cost += JEWEL_PRICES.exalted_orb; add('exalt');
-    if (suffixCount < 4) {
-      const s = pickFromPool(sfxPool); if (s) suffixCount++;
-    } else if (prefixCount < 4) {
+    if (isPrefixBonus) {
       const p = pickFromPool(pfxPool); if (p) prefixCount++;
+    } else {
+      const s = pickFromPool(sfxPool); if (s) suffixCount++;
     }
 
     // Step 6: Potent Liquid Ferocity (optional, 80% of crafters use it)
+    // Removes a random mod, adds (40-60)% increased Effect of Suffixes
     if (Math.random() < 0.8) {
       cost += JEWEL_PRICES.potent_liquid_ferocity; add('liquid_ferocity');
-      if (Math.random() < 0.5) prefixCount = Math.max(0, prefixCount - 1);
-      else suffixCount = Math.max(0, suffixCount - 1);
+      const t = prefixCount + suffixCount;
+      if (t > 0) {
+        if (Math.random() < prefixCount / t) prefixCount--;
+        else suffixCount--;
+      }
+      // Effect bonus doesn't change affix count, just adds cost + effect record
+      add('ferocity_effect');
     }
 
-    // Step 7: Preserved Cranium (optional, 60% use)
+    // Step 7: Preserved Cranium (optional, 60% use) — desecrates a prefix
     if (Math.random() < 0.6) {
       cost += JEWEL_PRICES.preserved_cranium; add('preserved_cranium');
+      // Swap a random prefix with a fresh desecrated one from the pool
+      if (prefixCount > 0) {
+        const p = pickFromPool(pfxPool);
+        if (p) { /* prefix replaced — same count */ }
+      }
     }
 
     const totalAffixes = prefixCount + suffixCount;
-    const destroyed = totalAffixes < 5; // < 5 useful mods = brick
+    const destroyed = totalAffixes < 5;
 
     return { cost, destroyed, materials: mats };
   }
