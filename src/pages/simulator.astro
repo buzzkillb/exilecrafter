@@ -352,6 +352,7 @@ function openPasteModal() {
         enchantments: parsed.enchantments,
         enhancementNames: parsed.enhancementNames,
         unknownLines: parsed.unknownLines,
+        flavorText: parsed.flavorText || '',
       };
 
       pastePreview.classList.remove('hidden');
@@ -404,6 +405,8 @@ function openPasteModal() {
       // Quality — store parsed quality so item card can display it
       (currentItem as any).qualityParsed = parsedPaste.qualityParsed || null;
       (currentItem as any).quality = parsedPaste.quality || null;
+      // Flavor text — lore block from unique items
+      (currentItem as any).flavorText = parsedPaste.flavorText || '';
       const affixes: any[] = (parsedPaste.affixes || []).map((a: any) => ({
         modId: `imported_${a.type}_${a.name.slice(0, 20).replace(/\W+/g, '_').toLowerCase()}`,
         type: a.type, tier: a.tier || 1, name: a.name,
@@ -517,6 +520,8 @@ function openPasteModal() {
         implicit: currentBase.implicit || currentItem.implicit,
         enchantments: currentItem.enchantments || [],
         qualityParsed: (currentItem as any).qualityParsed || null,
+        flavorText: (currentItem as any).flavorText || '',
+        imageUrl: currentBase.imageUrl || '',
       };
       itemDisplay.innerHTML = renderItemCardHTML(currentBase, item);
     }
@@ -545,9 +550,17 @@ function openPasteModal() {
         ? `<div class="separator"><span class="separator-line"></span><span class="separator-icon">+</span><span class="separator-line"></span></div>`
         : `<div class="separator plain"><span class="separator-line full"></span></div>`;
 
+      const rarityBorder = RARITY_COLORS[item.rarity] || '#7a7a7a';
+      const rarityBg = ({
+        normal: 'rgba(200,200,200,0.08)',
+        magic: 'rgba(136,136,255,0.12)',
+        rare: 'rgba(255,255,119,0.12)',
+        unique: 'rgba(175,96,37,0.20)',
+      } as Record<string, string>)[item.rarity] || 'transparent';
+
       return `
-        <div class="item-tooltip">
-          <div class="item-header" style="color: ${RARITY_COLORS[item.rarity] || RARITY_COLORS.normal}">
+        <div class="item-tooltip" style="border-color: ${rarityBorder}">
+          <div class="item-header" style="color: ${RARITY_COLORS[item.rarity] || RARITY_COLORS.normal}; background: ${rarityBg}; padding: 0.625rem; border-radius: 3px;">
             ${item.itemName && item.itemName !== base.name ? `<div class="item-name">${escapeHtml(item.itemName)}</div>` : ''}
             <div class="item-base">${escapeHtml(base.name)}</div>
             <div class="item-type">${slotTypeLabel}</div>
@@ -600,11 +613,23 @@ function openPasteModal() {
             </div>
           ` : ''}
           ${prefixes.length === 0 && suffixes.length === 0 && uniques.length === 0 ? `<div class="item-empty">Empty item</div>` : ''}
+          ${item.flavorText ? `
+            <div class="item-flavor-separator"></div>
+            <div class="item-flavor-text">
+              ${escapeHtml(item.flavorText)}
+            </div>
+          ` : ''}
           ${separatorHTML(false)}
           <div class="item-footer">
             <div class="item-rarity">${capitalize(item.rarity)} · Item Level: ${item.itemLevel}</div>
             ${item.corruptionLevel === 2 ? `<div class="corrupted-indicator">Twice Corrupted</div>` : item.corrupted ? `<div class="corrupted-indicator">Corrupted</div>` : ''}
           </div>
+          ${item.imageUrl ? `
+            <div class="item-image-section">
+              <div class="item-image-sep"></div>
+              <img src="${item.imageUrl}" alt="${escapeHtml(item.itemName || base.name)}" class="item-icon" />
+            </div>
+          ` : ''}
         </div>
       `;
     }

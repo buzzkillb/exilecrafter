@@ -95,6 +95,8 @@ export interface ParsedPaste {
   /** Resolved base record (if found). Same lookup logic as findBaseByName — exposed here
    *  so call sites don't have to redo the work after parsePaste() returns. */
   base: BaseLike | null;
+  /** Flavour/lore text block (unique items only). e.g. "Moon after moon did Berek make fools…" */
+  flavorText: string | null;
 }
 
 /** Subset of BaseItem fields used by pure functions. Mirrors the minimum the simulator passes in. */

@@ -160,6 +160,7 @@ export function parsePaste(
     unknownLines: [],
     enhancementNames: [],
     base: null,
+    flavorText: null,
   };
   if (!text || !text.trim()) return out;
 
@@ -468,6 +469,29 @@ export function parsePaste(
 
   // Expose the resolved base record so callers don't have to re-resolve.
   out.base = foundBase;
+
+  // ── Flavour/lore text detection ──
+  // Scan raw lines after the main loop for a quote block (starts with ")
+  for (let fi = 0; fi < lines.length; fi++) {
+    const fl = lines[fi].trim();
+    if (!fl.startsWith('"')) continue;
+    // Found a quote start — collect until separator or end
+    const flavorLines: string[] = [fl];
+    let fj = fi + 1;
+    while (fj < lines.length) {
+      const nf = lines[fj].trim();
+      if (!nf) { fj++; continue; }
+      if (/^-+$/.test(nf)) break;
+      if (/^(Corrupted|Twice Corrupted)\s*$/i.test(nf)) break;
+      if (/^{.*}$/.test(nf) && !nf.startsWith('"')) break;
+      flavorLines.push(nf);
+      fj++;
+    }
+    if (flavorLines.length >= 2) {
+      out.flavorText = flavorLines.join('\n');
+      break;
+    }
+  }
 
   return out;
 }
