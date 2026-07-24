@@ -649,9 +649,6 @@ function openPasteModal() {
         let deco = 'none';
         if (a.crafted) {
           color = '#b0d8ff'; // paler whitish-blue for crafted mods
-        } else if (a.desecrated) {
-          color = '#667788'; // dimmed for desecrated/bonded
-          deco = 'line-through';
         }
         return `
           <div class="item-row">
