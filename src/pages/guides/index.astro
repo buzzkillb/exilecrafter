@@ -20,6 +20,45 @@ const t = useT(locale);
     </div>
   </section>
 
+  <!-- Preview Card Grid -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-10">
+    {METHODS.map((method) => (
+      <a
+        href={`#${method.id}`}
+        class="group block rounded-xl border border-border bg-gradient-to-b from-bg-card/90 to-bg-card/50 p-5 transition-all duration-200 hover:border-gold/50 hover:shadow-lg hover:shadow-gold/5 hover:-translate-y-0.5"
+      >
+        <div class="flex items-start justify-between gap-2 mb-2">
+          <h3 class="font-display font-bold text-base text-fg group-hover:text-gold transition-colors leading-tight">
+            {method.name}
+          </h3>
+          <span class={`shrink-0 text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full ${
+            method.difficulty === 'beginner' ? 'bg-green-900/40 text-green-400' :
+            method.difficulty === 'intermediate' ? 'bg-yellow-900/40 text-yellow-400' :
+            method.difficulty === 'advanced' ? 'bg-orange-900/40 text-orange-400' :
+            'bg-red-900/40 text-red-400'
+          }`}>
+            {method.difficulty}
+          </span>
+        </div>
+        <p class="text-xs text-dim leading-relaxed line-clamp-2 mb-3">
+          {method.description}
+        </p>
+        <div class="flex flex-wrap gap-1.5">
+          {method.bestFor.slice(0, 3).map((b) => (
+            <span class="text-[10px] px-2 py-0.5 rounded-full bg-bg border border-border text-dim">
+              {b}
+            </span>
+          ))}
+          {method.steps.length > 0 && (
+            <span class="text-[10px] px-2 py-0.5 rounded-full bg-bg border border-border text-dim">
+              {method.steps.length} step{method.steps.length > 1 ? 's' : ''}
+            </span>
+          )}
+        </div>
+      </a>
+    ))}
+  </div>
+
   <div class="space-y-8">
     {METHODS.map((method) => (
       <article id={method.id} class="parchment p-6 scroll-mt-24">
