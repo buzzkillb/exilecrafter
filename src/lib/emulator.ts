@@ -1233,6 +1233,39 @@ export function preservedRib(ctx: EmulatorContext): CraftResult {
   return { ok: true, message: `Preserved Rib applied — desecrated with ${faction}.`, item: next, rolledAffixes: [desecrated] };
 }
 
+/**
+ * Maximum rune sockets for an item slot (PoE2).
+ * Body armour + two-handed weapons: 2 sockets.
+ * Other armour + one-handed weapons: 1 socket.
+ * Jewelry, quivers, waystones, tablets: 0 (Artificer's Orb can't be used).
+ */
+export function maxSocketsForSlot(slot: string): number {
+  switch (slot) {
+    case 'body_armour': return 2;
+    case 'weapon_2h': return 2;
+    case 'helmet': case 'gloves': case 'boots': case 'shield':
+    case 'focus': case 'weapon_1h': case 'talisman': return 1;
+    default: return 0;
+  }
+}
+
+export function artificersOrb(ctx: EmulatorContext): CraftResult {
+  const { item } = ctx;
+  const max = maxSocketsForSlot(item.slot);
+  if (max === 0) return { ok: false, message: 'Artificer\'s Orb cannot be used on this item type.', item };
+  if (item.corrupted) return { ok: false, message: 'Cannot apply to a corrupted item.', item };
+  if (item.sockets >= max) return { ok: false, message: `Already at maximum sockets (${max}).`, item };
+  return {
+    ok: true,
+    message: `Added a rune socket (${item.sockets + 1}/${max}).`,
+    item: {
+      ...item,
+      sockets: item.sockets + 1,
+      history: [...item.history, { action: 'Artificer\'s Orb', detail: `${item.sockets + 1}/${max} sockets` }],
+    },
+  };
+}
+
 export const OPERATIONS: Record<string, (c: any) => any> = {
   orb_of_transmutation: orbOfTransmutation,
   orb_of_augmentation: orbOfAugmentation,
@@ -1435,7 +1468,7 @@ export function getCurrencyAvailability(item: ItemState, base: BaseItem): Record
 
   // Utility / bench items — always available, no item-state gate
   const utilityOps = [
-    'arcanists_etcher', 'armourers_scrap', 'artificers_orb', 'artificers_shard',
+    'arcanists_etcher', 'armourers_scrap', 'artificers_shard',
     'blacksmiths_whetstone', 'gemcutters_prism', 'glassblowers_bauble',
     'jewellers_orb', 'mystery_leaguestone', 'scroll_of_wisdom',
   ];

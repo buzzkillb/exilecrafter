@@ -626,6 +626,66 @@ console.log('\n[19] Tablet crafting path');
   }
 }
 
+
+// ════════════════════ Socket Crafting (Artificer's Orb) ════════════════════
+
+console.log('\n[Socket Crafting — Artificer\'s Orb]');
+{
+  // Helper: create a helmet with no sockets
+  const helmBase = bases.find(b => b.id === 'ancestral_tiara') || { id: 'test_helm', name: 'Test Helmet', slot: 'helmet', level: 80 };
+  const helmItem = makeItem(helmBase, { rarity: 'rare', itemLevel: 80, sockets: 0, corrupted: false, affixes: [
+    { modId: 'p1', type: 'prefix', tier: 1, name: 'Life', tags: ['life'] },
+    { modId: 's1', type: 'suffix', tier: 1, name: 'Res', tags: ['resistance'] },
+  ] });
+
+  // 1. Add first socket to helmet (max 1 for helmets)
+  const s1 = emu.artificersOrb(ctx(helmItem));
+  assertOk(s1, 's1: Add socket to helmet');
+  assertEq(s1.item.sockets, 1, 'helmet now has 1 socket');
+  assert(s1.message.includes('1/1'), 'message shows 1/1');
+
+  // 2. Try adding second socket (should fail — max 1)
+  const s2 = emu.artificersOrb(ctx(s1.item));
+  assert(!s2.ok, 's2: Should fail — already at max');
+  assertEq(s2.item.sockets, 1, 'socket count unchanged');
+
+  // 3. Body armour — can have 2 sockets
+  const bodyBase = { id: 'test_body', name: 'Test Body', slot: 'body_armour', level: 80 };
+  const bodyItem = makeItem(bodyBase, { rarity: 'rare', itemLevel: 80, sockets: 0, corrupted: false, affixes: [] });
+  const s3 = emu.artificersOrb(ctx(bodyItem));
+  assertOk(s3, 's3: Add 1st socket to body armour');
+  assertEq(s3.item.sockets, 1, 'body has 1 socket');
+  const s4 = emu.artificersOrb(ctx(s3.item));
+  assertOk(s4, 's4: Add 2nd socket to body armour');
+  assertEq(s4.item.sockets, 2, 'body has 2 sockets');
+  const s5 = emu.artificersOrb(ctx(s4.item));
+  assert(!s5.ok, 's5: Should fail — body at max (2)');
+
+  // 4. Ring — cannot be socketed
+  const ringBase = { id: 'test_ring', name: 'Test Ring', slot: 'ring', level: 80 };
+  const ringItem = makeItem(ringBase, { rarity: 'rare', itemLevel: 80, sockets: 0, corrupted: false, affixes: [] });
+  const s6 = emu.artificersOrb(ctx(ringItem));
+  assert(!s6.ok, 's6: Ring cannot be socketed');
+  assert(s6.message.includes('cannot be used'), 'proper error message');
+
+  // 5. Corrupted helmet — cannot add socket
+  const corrHelm = makeItem(helmBase, { rarity: 'rare', itemLevel: 80, sockets: 0, corrupted: true, affixes: [] });
+  const s7 = emu.artificersOrb(ctx(corrHelm));
+  assert(!s7.ok, 's7: Corrupted item cannot be socketed');
+
+  // 6. maxSocketsForSlot on talisman
+  const talismanBase = bases.find(b => b.id === 'thunder_talisman') || { id: 'test_tali', name: 'Test Talisman', slot: 'talisman', level: 80 };
+  const taliItem = makeItem(talismanBase, { rarity: 'rare', itemLevel: 80, sockets: 0, corrupted: false, affixes: [] });
+  const s8 = emu.artificersOrb(ctx(taliItem));
+  if (talismanBase.slot === 'talisman') {
+    // Talisman is weapon_1h internally → 1 socket
+    assertOk(s8, 's8: Talisman (weapon_1h) can have 1 socket');
+    assertEq(s8.item.sockets, 1, 'talisman has 1 socket');
+  } else {
+    console.log('  SKIP: talisman base has unexpected slot:', talismanBase.slot);
+  }
+}
+
 // ==================== Results ====================
 console.log(`\n${'='.repeat(60)}`);
 console.log(`Passed: ${passed}    Failed: ${failed}`);

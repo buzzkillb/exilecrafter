@@ -484,7 +484,10 @@ function openPasteModal() {
       (currentItem as any).defenses = parsedPaste.defenses || [];
       (currentItem as any).combatStats = parsedPaste.combatStats || [];
       (currentItem as any).requirements = parsedPaste.requirements || { level: null, str: null, dex: null, int: null };
-      (currentItem as any).sockets = parsedPaste.sockets || null;
+      // Convert parsed sockets string to count (e.g. "S S" → 2)
+      const socketCount = parsedPaste.sockets ? (parsedPaste.sockets.match(/S/g) || []).length : 0;
+      (currentItem as any).sockets = socketCount;
+      (currentItem as any).socketsRaw = parsedPaste.sockets || '';  // keep raw "S S" for display
       (currentItem as any).grantedSkills = parsedPaste.grantedSkills || [];
       (currentItem as any).runeEffects = parsedPaste.runeEffects || [];
       const affixes: any[] = (parsedPaste.affixes || []).map((a: any) => ({
