@@ -1,0 +1,12 @@
+{
+  "date": "2026-07-24T03:10:37.013Z",
+  "craft": "Sekhema Sandals (ilvl 82) - 35% MS / T1 Cold + Fire Res / T1 ES + Flat ES",
+  "trials": 500,
+  "successRate": "14.8%",
+  "averageCost_diV": 29.9,
+  "medianCost_ida": 27.8,
+  "p10_di": 12.6,
+  "p90_di": 49.4,
+  "priceFixedListedPrice_div": 2500,
+  "note": "Simulation uses real poe2db weights. The 2,500 div listing is price-fixing. Real cost ~30 div."
+}
