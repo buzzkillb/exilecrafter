@@ -26,6 +26,7 @@ export const OMEN_EFFECT_RULES: Array<[RegExp, () => any]> = [
   [/implicit/, () => ({ kind: 'divine_implicit_only' })],
   [/sanctif/, () => ({ kind: 'divine_upgrade' })],
   [/catalysing|catalyst/, () => ({ kind: 'exalted_consumes_catalyst' })],
+  [/abyssal/, () => ({ kind: 'replace_all_desecrate' })],
   [/putrefaction/, () => ({ kind: 'desecrate_reroll' })],
   [/sinistral.*necromancy/, () => ({ kind: 'desecrate_minion', value: 'prefix' })],
   [/dextral.*necromancy/, () => ({ kind: 'desecrate_minion', value: 'suffix' })],

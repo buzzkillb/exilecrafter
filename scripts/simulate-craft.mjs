@@ -94,6 +94,10 @@ const PRICES = {
   'liquid_of_sorrow': 0.3,   // elemental/defence
   'liquid_of_greed': 0.3,    // life/mana
   'liquid_of_fear': 0.3,     // speed/resistance
+  // Liquid Emotions (jewel-specific)
+  'potent_liquid_contempt': 0.5,
+  'potent_liquid_ferocity': 0.5,
+  'preserved_cranium': 1.0,
   // Desecrated bones
   'preserved_rib': 1.5,
   'ancient_rib': 1.0,
@@ -375,8 +379,187 @@ function simulateBootCraft() {
   return { success: true, costs, log: log.join('\n'), item };
 }
 
+// ── Jewel Craft Simulator ─────────────────────────────────────────────
+// Follows the Endgame Jewel Crafting guide:
+//   1. Transmute → Augment → Regal
+//   2. Exalt ×3 (fill to 6 affixes)
+//   3. Potent Liquid Contempt (+1 suffix slot)
+//   4. Exalt into new slot (7 affixes)
+//   5. Optional: Potent Liquid Ferocity, Preserved Cranium, Omen of Abyssal Echoes
+// Success = 6+ affixes on a Diamond jewel
+
+function simulateJewelCraft(depth = 0) {
+  if (depth > 10) return { error: 'Max depth exceeded', costs: { div: 0 }, log: 'DEPTH EXCEEDED', success: false };
+
+  const costs = { div: 0 };
+  const log = [];
+
+  // ── Find a Diamond base ──
+  const diamond = bases.find(b =>
+    b.name?.toLowerCase().includes('diamond') &&
+    b.slot === 'jewel'
+  );
+  if (!diamond) {
+    log.push('FAILED: No Diamond jewel base found in data');
+    return { error: 'No Diamond base', costs, log: log.join('\n'), success: false };
+  }
+
+  // Build item
+  const item = {
+    baseName: diamond.name,
+    slot: diamond.slot,
+    rarity: 'normal',
+    itemLevel: 82,
+    affixes: [],
+    fractured: [],
+    bonusPrefixSlots: 0,
+    bonusSuffixSlots: 0,
+    appliedLiquids: [],
+    corrupted: false,
+    desecrated: false,
+  };
+
+  log.push(`Base: ${diamond.name} (ilvl 82)`);
+  log.push(`Slots: ${diamond.affixSlots.prefix}P + ${diamond.affixSlots.suffix}S`);
+
+  // ── Step 1: Transmute → Augment → Regal ──
+  // Transmute (1 random prefix)
+  costs.div += cost('orb_of_transmutation');
+  item.rarity = 'magic';
+  const transPool = buildPool(mods, 'prefix', item.slot, item.itemLevel);
+  const transMod = pickModFromPool(transPool);
+  if (transMod) {
+    addAffix(item, makeAffix(transMod, item.slot, item.itemLevel));
+    log.push(`Transmute → ${transMod.name} (T${transMod.tier})`);
+  } else {
+    log.push('Transmute failed (no mods available)');
+    return { error: 'Transmute failed', costs, log: log.join('\n'), success: false };
+  }
+
+  // Augment (adds the missing prefix or suffix)
+  costs.div += cost('orb_of_augmentation');
+  const hasPrefix = item.affixes.some(a => a.type === 'prefix');
+  const augType = hasPrefix ? 'suffix' : 'prefix';
+  const augPool = buildPool(mods, augType, item.slot, item.itemLevel, new Set(item.affixes.map(a => a.modId)));
+  const augMod = pickModFromPool(augPool);
+  if (augMod) {
+    addAffix(item, makeAffix(augMod, item.slot, item.itemLevel));
+    log.push(`Augment → ${augMod.name} (T${augMod.tier})`);
+  }
+
+  // Regal → Rare (adds a 3rd affix)
+  costs.div += cost('regal_orb');
+  item.rarity = 'rare';
+  // Determine which type is missing
+  const pCount = item.affixes.filter(a => a.type === 'prefix').length;
+  const sCount = item.affixes.filter(a => a.type === 'suffix').length;
+  const availP = diamond.affixSlots.prefix - pCount;
+  const availS = diamond.affixSlots.suffix - sCount;
+  const regalType = availP >= availS ? 'suffix' : 'prefix'; // fill the less-crowded slot
+  const regalPool = buildPool(mods, regalType, item.slot, item.itemLevel, new Set(item.affixes.map(a => a.modId)));
+  const regalMod = pickModFromPool(regalPool);
+  if (regalMod) {
+    addAffix(item, makeAffix(regalMod, item.slot, item.itemLevel));
+    log.push(`Regal → ${regalMod.name} (T${regalMod.tier})`);
+  }
+
+  // ── Step 2: Exalt ×3 to fill 6 affixes ──
+  for (let e = 0; e < 3; e++) {
+    const pUsed = item.affixes.filter(a => a.type === 'prefix').length;
+    const sUsed = item.affixes.filter(a => a.type === 'suffix').length;
+    const totalP = diamond.affixSlots.prefix + item.bonusPrefixSlots;
+    const totalS = diamond.affixSlots.suffix + item.bonusSuffixSlots;
+
+    if (pUsed >= totalP && sUsed >= totalS) {
+      log.push(`Item full at ${pUsed}P + ${sUsed}S after ${e} exalts.`);
+      break;
+    }
+
+    const exType = pUsed < totalP ? 'prefix' : 'suffix';
+    costs.div += cost('exalted_orb');
+    const exPool = buildPool(mods, exType, item.slot, item.itemLevel, new Set(item.affixes.map(a => a.modId)));
+    const exMod = pickModFromPool(exPool);
+    if (exMod) {
+      addAffix(item, makeAffix(exMod, item.slot, item.itemLevel));
+      log.push(`Exalt ${e+1} → ${exMod.name} (T${exMod.tier})`);
+    }
+  }
+
+  // ── Step 3: Potent Liquid Contempt (+1 suffix slot) ──
+  costs.div += cost('potent_liquid_contempt');
+  // Simulate: removes a random mod then adds +1 suffix slot
+  // Check if there's at least one mod to remove
+  if (item.affixes.length > 0) {
+    const removeIdx = Math.floor(Math.random() * item.affixes.length);
+    const removed = item.affixes.splice(removeIdx, 1)[0];
+    item.bonusSuffixSlots += 1;
+    log.push(`Potent Liquid Contempt → removed ${removed.name.slice(0,40)}, +1 suffix slot (now ${diamond.affixSlots.suffix + item.bonusSuffixSlots})`);
+  } else {
+    log.push('Potent Liquid Contempt but no mods to remove — still applied');
+    item.bonusSuffixSlots += 1;
+  }
+
+  // Step 4: Exalt into the new suffix slot (7th affix)
+  const sUsedNow = item.affixes.filter(a => a.type === 'suffix').length;
+  const totalSNow = diamond.affixSlots.suffix + item.bonusSuffixSlots;
+  if (sUsedNow < totalSNow) {
+    costs.div += cost('exalted_orb');
+    const exPool = buildPool(mods, 'suffix', item.slot, item.itemLevel, new Set(item.affixes.map(a => a.modId)));
+    const exMod = pickModFromPool(exPool);
+    if (exMod) {
+      addAffix(item, makeAffix(exMod, item.slot, item.itemLevel));
+      log.push(`Exalt (bonus slot) → ${exMod.name} (T${exMod.tier})`);
+    }
+  }
+
+  // ── Step 5 (optional): Potent Liquid Ferocity ──
+  // Adds Increased Effect of Suffixes, doesn't add a slot but makes suffixes better
+  if (Math.random() < 0.7) { // 70% chance to do this optional step
+    costs.div += cost('potent_liquid_ferocity');
+    if (item.affixes.length > 0) {
+      const removeIdx = Math.floor(Math.random() * item.affixes.length);
+      const removed = item.affixes.splice(removeIdx, 1)[0];
+      log.push(`Potent Liquid Ferocity → removed ${removed.name.slice(0,40)} (increased effect of suffixes)`);
+    }
+  }
+
+  // ── Step 6 (optional): Preserved Cranium ──
+  if (Math.random() < 0.5) { // 50% chance
+    costs.div += cost('preserved_cranium');
+    // Adds a desecrated mod (suffix)
+    const desecratedMod = {
+      modId: 'sim_desecrated_suffix',
+      type: 'suffix',
+      tier: 1,
+      name: 'Simulated Desecrated Mod (10-15)% increased Damage',
+      tags: ['damage'],
+    };
+    addAffix(item, desecratedMod);
+    log.push(`Preserved Cranium → Desecrated suffix added (simulated)`);
+  }
+
+  // ── Results ──
+  const totalAffixes = item.affixes.length + item.fractured.length;
+  const totalDiv = costs.div;
+
+  log.push(`\n═══════════════════════════════════════`);
+  log.push(`CRAFT RESULT — ${totalDiv.toFixed(1)} div total`);
+  log.push(`Affixes: ${totalAffixes} (${item.affixes.filter(a => a.type === 'prefix').length}P + ${item.affixes.filter(a => a.type === 'suffix').length}S)`);
+  log.push(`Prefixes:`);
+  item.affixes.filter(a => a.type === 'prefix').forEach(a => {
+    log.push(`  T${a.tier} ${a.name.slice(0,70)}`);
+  });
+  log.push(`Suffixes:`);
+  item.affixes.filter(a => a.type === 'suffix').forEach(a => {
+    log.push(`  T${a.tier} ${a.name.slice(0,70)}`);
+  });
+
+  const success = totalAffixes >= 6;
+  return { success, costs, log: log.join('\n'), item };
+}
+
 // ── Monte Carlo ──────────────────────────────────────────────────────
-function runMonteCarlo(trials) {
+function runBootMonteCarlo(trials) {
   console.log(`\n╔══════════════════════════════════════════════════╗`);
   console.log(`║   POE2 BOOT CRAFT SIMULATOR (Monte Carlo)       ║`);
   console.log(`║   ${trials.toLocaleString()} trials                         ║`);
@@ -418,16 +601,78 @@ function runMonteCarlo(trials) {
   return { avg, median, p10, p90, successRate: rate, successes, failures: trials - successes };
 }
 
+function runJewelMonteCarlo(trials) {
+  console.log(`\n╔══════════════════════════════════════════════════╗`);
+  console.log(`║   POE2 JEWEL CRAFT SIMULATOR (Monte Carlo)     ║`);
+  console.log(`║   ${trials.toLocaleString()} trials                         ║`);
+  console.log(`╚══════════════════════════════════════════════════╝\n`);
+
+  let totalDiv = 0;
+  let successes = 0;
+  let attempts = 0;
+  const costs = [];
+
+  for (let i = 0; i < trials; i++) {
+    const result = simulateJewelCraft();
+    attempts++;
+    if (result.success) {
+      successes++;
+      totalDiv += result.costs.div;
+      costs.push(result.costs.div);
+    }
+  }
+
+  if (costs.length > 0) costs.sort((a, b) => a - b);
+  const avg = successes > 0 ? totalDiv / successes : 0;
+  const median = costs.length > 0 ? costs[Math.floor(costs.length / 2)] : 0;
+  const p10 = costs.length > 0 ? costs[Math.floor(costs.length * 0.1)] : 0;
+  const p90 = costs.length > 0 ? costs[Math.floor(costs.length * 0.9)] : 0;
+  const rate = trials > 0 ? (successes / trials * 100) : 0;
+
+  console.log(`╔══════════════════════════════════════════════╗`);
+  console.log(`║              RESULTS                          ║`);
+  console.log(`╠══════════════════════════════════════════════╣`);
+  console.log(`║  Success rate:    ${(rate).toFixed(1).padStart(6)}%  (${successes}/${trials})   ║`);
+  console.log(`║  Average cost:    ${avg.toFixed(1).padStart(6)} div             ║`);
+  console.log(`║  Median cost:     ${median.toFixed(1).padStart(6)} div             ║`);
+  console.log(`║  10th percentile: ${p10.toFixed(1).padStart(6)} div             ║`);
+  console.log(`║  90th percentile: ${p90.toFixed(1).padStart(6)} div             ║`);
+  console.log(`║  Total attempts:  ${attempts}                  ║`);
+  console.log(`╚══════════════════════════════════════════════╝\n`);
+
+  return { avg, median, p10, p90, successRate: rate, successes, failures: trials - successes };
+}
+
 // ── Run ──────────────────────────────────────────────────────────────
 const trials = parseInt(process.argv[2] || '100');
 
-// Print one example first
-console.log(`\n── Example craft attempt ──`);
-const example = simulateBootCraft();
-console.log(example.log);
+// Run boot craft simulation
+console.log(`\n\n═══════════════════════════════════════`);
+console.log(`  BOOT CRAFT: T1 Triple-Suffix ES Boots`);
+console.log(`═══════════════════════════════════════\n`);
+
+console.log(`\n── Example boot craft attempt ──`);
+const bootExample = simulateBootCraft();
+console.log(bootExample.log);
 
 console.log(`\n────────────────────────────────────────────────`);
-console.log(`Running ${trials} Monte Carlo trials...`);
+console.log(`Running ${trials} Monte Carlo boot trials...`);
 console.log(`────────────────────────────────────────────────\n`);
 
-const results = runMonteCarlo(trials);
+const bootResults = runBootMonteCarlo(trials);
+
+// ── Now run jewel crafting simulation ──
+
+console.log(`\n\n═══════════════════════════════════════`);
+console.log(`  JEWEL CRAFT: 5+ Mod Diamond Jewel`);
+console.log(`═══════════════════════════════════════\n`);
+
+console.log(`\n── Example jewel craft attempt ──`);
+const jewelExample = simulateJewelCraft();
+console.log(jewelExample.log);
+
+console.log(`\n────────────────────────────────────────────────`);
+console.log(`Running ${trials} Monte Carlo jewel trials...`);
+console.log(`────────────────────────────────────────────────\n`);
+
+const jewelResults = runJewelMonteCarlo(trials);
