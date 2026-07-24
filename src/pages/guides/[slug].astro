@@ -1,0 +1,92 @@
+---
+import Base from '~/layouts/Base.astro';
+import { METHODS, getMethod } from '~/lib/methods';
+import { useT } from '~/lib/i18n';
+import type { GetStaticPathsResult } from 'astro';
+
+export function getStaticPaths(): GetStaticPathsResult {
+  return METHODS.map((method) => ({
+    params: { slug: method.id },
+    props: { method },
+  }));
+}
+
+const { method } = Astro.props;
+const locale: 'en' | 'pt' = 'en';
+const t = useT(locale);
+const ogTitle = `Exile Crafter — ${method.name}`;
+const ogDesc = method.description.slice(0, 200);
+const siteUrl = 'https://exilecrafter.com';
+const pageUrl = `${siteUrl}/guides/${method.id}`;
+---
+
+
+<Base title={ogTitle}>
+  <meta name="description" content={ogDesc} />
+
+  <!-- OpenGraph / Social preview -->
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content={pageUrl} />
+  <meta property="og:title" content={ogTitle} />
+  <meta property="og:description" content={ogDesc} />
+  <meta property="og:site_name" content="Exile Crafter" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={ogTitle} />
+  <meta name="twitter:description" content={ogDesc} />
+
+  <!-- Breadcrumb -->
+  <nav class="text-xs text-dim mb-4">
+    <a href="/guides" class="hover:text-gold transition-colors">Guides</a>
+    <span class="mx-2">/</span>
+    <span>{method.name}</span>
+  </nav>
+
+  <section class="relative overflow-hidden rounded-xl border border-border bg-gradient-to-b from-bg-card/80 to-bg p-6 md:p-8 mb-8">
+    <div class="absolute -top-20 -left-20 w-48 h-48 bg-gold/5 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute -bottom-12 -right-12 w-36 h-36 bg-gold/5 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="relative">
+      <h1 class="text-3xl font-display font-bold text-fg mb-2">{method.name}</h1>
+      <span class={`text-xs font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full ${
+        method.difficulty === 'beginner' ? 'bg-green-900/40 text-green-400' :
+        method.difficulty === 'intermediate' ? 'bg-yellow-900/40 text-yellow-400' :
+        method.difficulty === 'advanced' ? 'bg-orange-900/40 text-orange-400' :
+        'bg-red-900/40 text-red-400'
+      }`}>
+        {method.difficulty}
+      </span>
+      <p class="text-dim mt-3">{method.description}</p>
+    </div>
+  </section>
+
+  <!-- Steps -->
+  <div class="parchment p-6 mb-6">
+    <h2 class="!mt-0">{t('guides.steps')}</h2>
+    <ol class="space-y-3 text-sm list-decimal list-inside text-fg">
+      {method.steps.map((s) => <li class="leading-relaxed">{s}</li>)}
+    </ol>
+  </div>
+
+  <!-- Best for -->
+  <div class="parchment p-6 mb-6 text-left">
+    <h2 class="!mt-0">{t('guides.bestFor')}</h2>
+    <ul class="space-y-1 text-sm">
+      {method.bestFor.map((b) => (
+        <li class="text-fg"><span class="text-gold mr-2">✦</span>{b}</li>
+      ))}
+    </ul>
+  </div>
+
+  <!-- Action links -->
+  <div class="flex gap-3 flex-wrap">
+    <a href="/simulator" class="btn">{t('guides.simulator')}</a>
+    <a href="/calculator" class="btn">{t('guides.calculator')}</a>
+    <button
+      class="btn"
+      id="copy-link-btn"
+      data-url={pageUrl}
+      onclick="navigator.clipboard.writeText(this.dataset.url).then(()=>{const t=this.textContent;this.textContent='Copied!';setTimeout(()=>this.textContent=t,1500)})"
+    >
+      📋 Copy Link
+    </button>
+  </div>
+</Base>

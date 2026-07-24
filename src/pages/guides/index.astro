@@ -22,15 +22,15 @@ const t = useT(locale);
 
   <!-- Preview Card Grid -->
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-10">
-    {METHODS.map((method) => (
-      <a
-        href={`#${method.id}`}
-        class="group block rounded-xl border border-border bg-gradient-to-b from-bg-card/90 to-bg-card/50 p-5 transition-all duration-200 hover:border-gold/50 hover:shadow-lg hover:shadow-gold/5 hover:-translate-y-0.5"
-      >
+    {METHODS.map((method) => {
+      const slug = method.id;
+      const guideUrl = `https://exilecrafter.com/guides/${slug}`;
+      return (
+      <div class="group block rounded-xl border border-border bg-gradient-to-b from-bg-card/90 to-bg-card/50 p-5 transition-all duration-200 hover:border-gold/50 hover:shadow-lg hover:shadow-gold/5 hover:-translate-y-0.5">
         <div class="flex items-start justify-between gap-2 mb-2">
-          <h3 class="font-display font-bold text-base text-fg group-hover:text-gold transition-colors leading-tight">
+          <a href={`/guides/${slug}`} class="font-display font-bold text-base text-fg hover:text-gold transition-colors leading-tight">
             {method.name}
-          </h3>
+          </a>
           <span class={`shrink-0 text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full ${
             method.difficulty === 'beginner' ? 'bg-green-900/40 text-green-400' :
             method.difficulty === 'intermediate' ? 'bg-yellow-900/40 text-yellow-400' :
@@ -44,7 +44,14 @@ const t = useT(locale);
           {method.description}
         </p>
         <div class="flex flex-wrap gap-1.5">
-          {method.bestFor.slice(0, 3).map((b) => (
+          <button
+            class="text-[10px] px-2 py-0.5 rounded-full bg-bg border border-border text-dim hover:text-gold hover:border-gold/50 transition-colors cursor-pointer"
+            data-url={guideUrl}
+            onclick="event.preventDefault();navigator.clipboard.writeText(this.dataset.url).then(()=>{const t=this.textContent;this.textContent='📋 Copied!';setTimeout(()=>this.textContent='📋 Copy Link',2000)})"
+          >
+            📋 Copy Link
+          </button>
+          {method.bestFor.slice(0, 2).map((b) => (
             <span class="text-[10px] px-2 py-0.5 rounded-full bg-bg border border-border text-dim">
               {b}
             </span>
@@ -55,8 +62,9 @@ const t = useT(locale);
             </span>
           )}
         </div>
-      </a>
-    ))}
+      </div>
+      );
+    })}
   </div>
 
   <div class="space-y-8">
@@ -85,9 +93,16 @@ const t = useT(locale);
               ))}
             </ul>
 
-            <div class="mt-6 flex gap-2">
+            <div class="mt-6 flex gap-2 flex-wrap">
               <a href="/simulator" class="btn">{t('guides.simulator')}</a>
               <a href="/calculator" class="btn">{t('guides.calculator')}</a>
+              <button
+                class="btn"
+                data-url={`https://exilecrafter.com/guides/${method.id}`}
+                onclick="navigator.clipboard.writeText(this.dataset.url).then(()=>{const t=this.textContent;this.textContent='📋 Copied!';setTimeout(()=>this.textContent='📋 Copy Link',2000)})"
+              >
+                📋 Copy Link
+              </button>
             </div>
           </div>
         </div>
