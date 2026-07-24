@@ -162,14 +162,6 @@
       return;
     }
 
-    // Check for duplicates
-    const unique = new Set(targetLegacies);
-    if (unique.size !== 4) {
-      logEl.innerHTML = '<div class="text-corrupted">⚠️ All 4 target legacies must be different.</div>';
-      resultsDiv.classList.remove('hidden');
-      return;
-    }
-
     const minPct = parseInt(pctMin.value);
     const maxPct = parseInt(pctMax.value);
 
