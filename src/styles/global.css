@@ -421,6 +421,21 @@ table.poe-table tr:hover td { background: var(--color-bg-hover); }
   font-weight: 600;
 }
 
+/* Stat line (Item Level, Requirements — in-game style) */
+.item-level-row {
+  text-align: center;
+  font-size: 0.8125rem;
+  padding: 0.15rem 0;
+  color: #888;
+  line-height: 1.4;
+}
+.item-stat-label {
+  color: #888;
+}
+.item-stat-value {
+  color: #4fc3f7;
+}
+
 .item-footer {
   text-align: center;
   font-size: 0.7rem;

@@ -570,8 +570,12 @@ function openPasteModal() {
               <span class="quality-label">Quality${item.qualityParsed.category ? ` (${escapeHtml(item.qualityParsed.category)})` : ''}:</span>
               <span class="quality-value">+${item.qualityParsed.value}%</span>
             </div>
-            ${separatorHTML(true)}
           ` : ''}
+          <div class="item-level-row">
+            <span class="item-stat-label">Item Level:</span>
+            <span class="item-stat-value">${item.itemLevel}</span>
+          </div>
+          ${separatorHTML(true)}
           ${item.implicit ? `
             <div class="item-section">
               <div class="item-row">
