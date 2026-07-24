@@ -83,6 +83,8 @@ export interface ParsedPaste {
   qualityParsed: { text: string; category: string | null; value: number } | null;
   /** Implicit mod text if a separate implicit modifier block existed. */
   implicit: string | null;
+  /** Tags from the implicit modifier header (used for quality-boost matching). */
+  implicitTags: string[] | null;
   affixes: ParsedAffix[];
   runes: ParsedRune[];
   enchantments: ParsedEnchantment[];

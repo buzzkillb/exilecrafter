@@ -153,6 +153,7 @@ export function parsePaste(
     quality: null,
     qualityParsed: null,
     implicit: null,
+    implicitTags: null,
     affixes: [],
     runes: [],
     enchantments: [],
@@ -274,6 +275,10 @@ export function parsePaste(
     if (!name) return;
     if (type === 'implicit') {
       out.implicit = (out.implicit ? out.implicit + '\n' : '') + name;
+      // Store the tags from the implicit header so quality matching can check them
+      if (descriptiveTags && descriptiveTags.length > 0 && !out.implicitTags) {
+        out.implicitTags = descriptiveTags;
+      }
       return;
     }
     const { rolled, range } = extractNumericRange(name);

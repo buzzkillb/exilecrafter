@@ -82,6 +82,8 @@ import OmenModal from '~/components/simulator/OmenModal.astro';
       renderPastePreviewHTML,
       itemToText,
       applyQualityToPaste,
+      qualityMatchesAffixTags,
+      boostFirstValue,
     } from '~/lib/item';
     import {
       CURRENCY_NAME_TO_OP,
@@ -322,6 +324,13 @@ function openPasteModal() {
         for (let ai = 0; ai < boosted.affixes.length; ai++) {
           if (ai < parsed.affixes.length) {
             (parsed.affixes as any)[ai].name = boosted.affixes[ai].name;
+          }
+        }
+        // Also boost the implicit if its tags match the quality category
+        if (parsed.implicit && parsed.implicitTags && parsed.implicitTags.length > 0) {
+          if (qualityMatchesAffixTags(parsed.implicitTags, parsed.qualityParsed.category)) {
+            const mult = 1 + parsed.qualityParsed.value / 100;
+            parsed.implicit = boostFirstValue(parsed.implicit, mult);
           }
         }
       }
