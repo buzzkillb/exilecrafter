@@ -421,7 +421,7 @@ function openPasteModal() {
       // Build item directly — bypass selectBase to avoid change-event clash
       currentBase = baseRecord;
       currentItem = emptyItem(makeBaseRecord(baseRecord, 'rare'), parsedPaste.itemLevel);
-      currentItem.rarity = ['magic', 'rare', 'unique'].includes(parsedPaste.rarity) ? parsedPaste.rarity : 'rare';
+      currentItem.rarity = ['magic', 'rare', 'unique', 'normal'].includes(parsedPaste.rarity?.toLowerCase()) ? parsedPaste.rarity?.toLowerCase() : 'rare';
       currentItem.implicit = parsedPaste.implicit || '';
       currentItem.itemName = parsedPaste.name || '';
       currentItem.corruptionLevel = parsedPaste.corruptionLevel || 0;

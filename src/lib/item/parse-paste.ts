@@ -298,7 +298,21 @@ export function parsePaste(
     if (/^Item Level:/i.test(raw)) continue;
     if (/^Requires:/i.test(raw)) continue;
     if (/^Sockets:/i.test(raw)) continue;
-    if (/^Quality:/i.test(raw)) continue;
+    if (/^Quality(\s*\([^)]*\))?\s*:/i.test(raw)) {
+      out.quality = raw;
+      const qMatch = raw.match(/^Quality\s*(?:\(([^)]*)\))?:\s*\+?(\d+)%/i);
+      if (qMatch) {
+        const cat = (qMatch[1] || '').trim();
+        out.qualityParsed = {
+          text: (qMatch[1] || qMatch[0]).trim(),
+          category: cat || null,
+          value: parseInt(qMatch[2], 10),
+        };
+      } else {
+        out.qualityParsed = { text: raw, category: null, value: 0 };
+      }
+      continue;
+    }
     if (/^Energy Shield:/i.test(raw)) continue;
     if (/^Item Class:/i.test(raw)) continue;
 
