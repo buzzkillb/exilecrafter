@@ -6,6 +6,7 @@ import type { Mod, BaseItem, Currency, Omen, WeightEntry } from './types.ts';
 import { CORRUPTED_IMPLICITS } from './corrupted-implicits.ts';
 import { buildPool, pickN, type PoolResult } from './weights.ts';
 import { divineAffixName, divineVariantAnnotation } from './divine-affix.ts';
+import { pickUnique } from './orb-of-chance-pools.ts';
 
 export type ItemRarity = 'normal' | 'magic' | 'rare' | 'unique';
 
@@ -1326,7 +1327,9 @@ function orbOfChance(ctx: EmulatorContext): CraftResult {
   // Unique rarity or destroys it" — two outcomes only.
   const roll = Math.random();
   if (roll < 0.01) {
-    return { ok: true, message: 'Transformed into a Unique item!', item: { ...item, rarity: 'unique' as const, history: [...item.history, { action: 'Orb of Chance', detail: 'Upgraded to Unique' }] } };
+    const unique = pickUnique(item.baseName);
+    const uniqueName = unique?.name ?? 'Unknown Unique';
+    return { ok: true, message: 'Transformed into ' + uniqueName + '!', item: { ...item, rarity: 'unique' as const, history: [...item.history, { action: 'Orb of Chance', detail: 'Upgraded to ' + uniqueName }] } };
   }
 
   // Destroyed — item reverts to a blank normal (same as Vaal Orb destroy)

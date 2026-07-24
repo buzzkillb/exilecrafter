@@ -6,6 +6,22 @@ import type { CraftingMethod } from './types';
 
 export const METHODS: CraftingMethod[] = [
   {
+    id: 'orb_of_chance_fishing',
+    name: 'Orb of Chance — White Belt Fishing (Headhunter & Mageblood)',
+    description:
+      'How many Orb of Chance attempts does it take to hit Headhunter or Mageblood? Select your belt base (Heavy Belt → Headhunter, or Utility Belt → Mageblood), pick your target unique, and run the Monte Carlo. See how many go POOF (destroyed), how many trash uniques you create along the way, and how many divine orbs it costs on average. Warning: at ~1% unique rate with 1/3 chance of the right unique, you\'re looking at ~300 attempts on average.',
+    steps: [
+      'Buy a Normal Heavy Belt (ilvl 50+) or Utility Belt (ilvl 55+) from trade or pick one up.',
+      'Select your belt base and target unique below.',
+      'Click Orb of Chance repeatedly — each use either destroys the item (99%) or upgrades it to a random unique for that base (1%).',
+      'For Heavy Belt: 3 possible uniques (Waistgate, Headhunter, Zerphi\'s Genesis) — Headhunter is the jackpot.',
+      'For Utility Belt: 3 possible uniques (Cat O\' Nine Tails, Ingenuity, Mageblood) — Mageblood is the jackpot.',
+      'Run the Monte Carlo below to see expected costs, POOF count, and trash uniques created.',
+    ],
+    bestFor: ['Headhunter chasing', 'Mageblood fishing', 'Orb of Chance bulk buying', 'SSF unique hunting', 'economic lotto simulation'],
+    difficulty: 'intermediate',
+  },
+  {
     id: 'mageblood_legacy_fishing',
     name: 'Mageblood — Legacy Variant Divine Fishing',
     description:
