@@ -1303,16 +1303,26 @@ function orbOfChance(ctx: EmulatorContext): CraftResult {
     return { ok: true, message: 'Omen of the Ancients — upgraded to a Unique!', item: { ...item, rarity: 'unique' as const, history: [...item.history, { action: 'Orb of Chance (Ancients)', detail: 'Upgraded to Unique' }] } };
   }
 
+  // PoE2 mechanics (poe2db): "Unpredictably either upgrades a Normal item to
+  // Unique rarity or destroys it" — two outcomes only.
   const roll = Math.random();
   if (roll < 0.01) {
     return { ok: true, message: 'Transformed into a Unique item!', item: { ...item, rarity: 'unique' as const, history: [...item.history, { action: 'Orb of Chance', detail: 'Upgraded to Unique' }] } };
-  } else if (roll < 0.11) {
-    return { ok: true, message: 'Upgraded to Rare!', item: { ...item, rarity: 'rare' as const, history: [...item.history, { action: 'Orb of Chance', detail: 'Upgraded to Rare' }] } };
-  } else if (roll < 0.26) {
-    return { ok: true, message: 'Upgraded to Magic!', item: { ...item, rarity: 'magic' as const, history: [...item.history, { action: 'Orb of Chance', detail: 'Upgraded to Magic' }] } };
-  } else {
-    return { ok: true, message: (omenOf(ctx.activeOmens, 'no_destroy') ? 'Chance missed — Omen preserved the item.' : 'Chance missed — item unchanged.'), item };
   }
+
+  // Destroyed — item reverts to a blank normal (same as Vaal Orb destroy)
+  return {
+    ok: true,
+    message: 'POOF! Item was destroyed.',
+    item: {
+      ...item,
+      rarity: 'normal' as const,
+      affixes: [],
+      fractured: [],
+      corrupted: true,
+      history: [...item.history, { action: 'Orb of Chance', detail: 'Item destroyed' }],
+    },
+  };
 }
 
 function hinekoraLock(ctx: EmulatorContext): CraftResult {
@@ -1372,7 +1382,7 @@ export function getCurrencyAvailability(item: ItemState, base: BaseItem): Record
   };
   result.orb_of_chance = {
     valid: rarity === 'normal' && !item.mirrored,
-    reason: rarity === 'normal' ? 'Gamble Normal → random outcome (magic/rare/unique/nothing).' : 'Chance only works on Normal items.',
+    reason: rarity === 'normal' ? 'Gamble Normal → Unique (~1%) or destroyed (99%).' : 'Chance only works on Normal items.',
   };
 
   // Magic-only
