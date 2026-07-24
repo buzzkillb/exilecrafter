@@ -67,46 +67,5 @@ const t = useT(locale);
     })}
   </div>
 
-  <div class="space-y-8">
-    {METHODS.map((method) => (
-      <article id={method.id} class="parchment p-6 scroll-mt-24">
-        <div class="flex items-baseline gap-3 mb-3 flex-wrap">
-          <h2 class="!m-0">{method.name}</h2>
-          <span class="tag text-fg-dim capitalize">{t(`guides.difficulty.${method.difficulty}` as 'guides.difficulty.beginner')}</span>
-        </div>
-        <p class="text-dim">{method.description}</p>
-
-        <div class="grid md:grid-cols-2 gap-6 mt-4">
-          <div>
-            <h4>{t('guides.steps')}</h4>
-            <ol class="space-y-2 text-sm list-decimal list-inside text-fg">
-              {method.steps.map((s) => <li class="leading-relaxed">{s}</li>)}
-            </ol>
-          </div>
-          <div>
-            <h4>{t('guides.bestFor')}</h4>
-            <ul class="space-y-1 text-sm">
-              {method.bestFor.map((b) => (
-                <li class="text-fg">
-                  <span class="text-gold mr-2">✦</span>{b}
-                </li>
-              ))}
-            </ul>
-
-            <div class="mt-6 flex gap-2 flex-wrap">
-              <a href="/simulator" class="btn">{t('guides.simulator')}</a>
-              <a href="/calculator" class="btn">{t('guides.calculator')}</a>
-              <button
-                class="btn"
-                data-url={`https://exilecrafter.com/guides/${method.id}`}
-                onclick="navigator.clipboard.writeText(this.dataset.url).then(()=>{const t=this.textContent;this.textContent='📋 Copied!';setTimeout(()=>this.textContent='📋 Copy Link',2000)})"
-              >
-                📋 Copy Link
-              </button>
-            </div>
-          </div>
-        </div>
-      </article>
-    ))}
-  </div>
+  <!-- Full articles are on individual /guides/[slug] pages -->
 </Base>
