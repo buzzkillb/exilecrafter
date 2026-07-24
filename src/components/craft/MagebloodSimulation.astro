@@ -83,7 +83,7 @@
         <div class="text-lg font-bold text-gold" id="mb-p90">-</div>
       </div>
       <div class="parchment p-3 text-center">
-        <div class="text-xs text-dim">Total Cost</div>
+        <div class="text-xs text-dim">Avg Cost Per Success</div>
         <div class="text-xl font-bold text-corrupted" id="mb-cost">-</div>
       </div>
     </div>
@@ -180,8 +180,7 @@
     resultsDiv.classList.remove('hidden');
     logEl.innerHTML = '<div>Running ' + trials + ' trials...</div>';
 
-    // Calculate theoretical odds
-    // Each legacy: 1/15 chance to hit target. All 4 independent: (1/15)^4 = 1/50625
+    // Calculate theoretical odds — each Legacy: 1/11 chance to hit target
     const legacyOdds = Math.pow(1 / LEGACY_POOL.length, 4);
     const pctValues = 26; // 25-50 inclusive = 26 values
     const pctInRange = (maxPct - minPct + 1) / pctValues;

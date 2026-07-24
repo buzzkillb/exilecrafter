@@ -15,28 +15,16 @@
   <p class="text-xs text-dim mb-4">
     Simulates Orb of Chance on Normal white belts until the target unique hits.
     Each Orb of Chance: ~1% chance to upgrade to a random unique, ~99% chance to destroy (POOF).
-    This simulation keeps chancing until YOUR target unique drops — counting every POOF and
-    trash unique along the way. Select your base and target below.
+    This simulation keeps chancing until the target unique drops — counting every POOF and
+    trash unique along the way. Pick your belt base below.
   </p>
 
-  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-    <!-- Belt base -->
-    <div>
-      <div class="text-xs text-dim mb-2 font-semibold">Belt Base</div>
-      <select id="chance-base" class="bg-bg border border-border rounded px-2 py-1.5 text-xs w-full">
-        <option value="heavy_belt" selected>Heavy Belt (→ Headhunter)</option>
-        <option value="utility_belt">Utility Belt (→ Mageblood)</option>
-      </select>
-    </div>
-
-    <!-- Target unique -->
-    <div>
-      <div class="text-xs text-dim mb-2 font-semibold">Target Unique</div>
-      <select id="chance-target" class="bg-bg border border-border rounded px-2 py-1.5 text-xs w-full">
-        <option value="Headhunter" selected>Headhunter</option>
-        <option value="Mageblood">Mageblood</option>
-      </select>
-    </div>
+  <div class="mb-4">
+    <div class="text-xs text-dim mb-2 font-semibold">Belt Base</div>
+    <select id="chance-base" class="bg-bg border border-border rounded px-2 py-1.5 text-xs w-full max-w-xs">
+      <option value="heavy_belt" selected>Heavy Belt → Headhunter (target)</option>
+      <option value="utility_belt">Utility Belt → Mageblood (target)</option>
+    </select>
   </div>
 
   <div class="flex gap-3 mb-3">
@@ -95,34 +83,26 @@
 <script>
   (function() {
     var BASE = document.getElementById('chance-base');
-    var TARGET = document.getElementById('chance-target');
     var CRAFTS = document.getElementById('chance-crafts');
     var RUN = document.getElementById('chance-sim-run-btn');
     var RESULTS = document.getElementById('chance-results');
     var LOG = document.getElementById('chance-log');
 
-    // Unique pools (must match src/lib/orb-of-chance-pools.ts)
+    // Unique pools + target (must match src/lib/orb-of-chance-pools.ts)
     var POOLS = {
-      heavy_belt: ['Waistgate', 'Headhunter', "Zerphi's Genesis"],
-      utility_belt: ["Cat O' Nine Tales", 'Ingenuity', 'Mageblood'],
+      heavy_belt: { pool: ['Waistgate', 'Headhunter', "Zerphi's Genesis"], target: 'Headhunter' },
+      utility_belt: { pool: ["Cat O' Nine Tails", 'Ingenuity', 'Mageblood'], target: 'Mageblood' },
     };
 
     var ORB_PRICE = 0.01; // div per Orb of Chance
-
-    // Sync target dropdown when base changes
-    BASE.addEventListener('change', function() {
-      if (BASE.value === 'heavy_belt') {
-        TARGET.value = 'Headhunter';
-      } else {
-        TARGET.value = 'Mageblood';
-      }
-    });
 
     var running = false;
     RUN.addEventListener('click', function() {
       if (running) return;
       var baseKey = BASE.value;
-      var targetName = TARGET.value;
+      var poolEntry = POOLS[baseKey];
+      var pool = poolEntry.pool;
+      var targetName = poolEntry.target;
       var craftCount = parseInt(CRAFTS.value, 10);
       var pool = POOLS[baseKey];
       if (!pool || pool.length === 0) return;
