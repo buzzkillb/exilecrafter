@@ -1,0 +1,27 @@
+Item Class: Talismans
+Rarity: Rare
+Tranquil Skin
+Thunder Talisman
+--------
+Physical Damage: 23-130
+Elemental Damage: 67-98 (fire), 42-61 (cold), 9-56 (lightning)
+Critical Hit Chance: 8.00%
+Attacks per Second: 1.30
+--------
+Requires: Level 77, 71 (augmented) Str, 50 (augmented) Int
+--------
+Sockets: S S 
+--------
+Item Level: 81
+--------
+{ Implicit Modifier — Elemental, Lightning, Ailment }
+22(20-30)% increased Magnitude of Shock you inflict
+--------
+{ Prefix Modifier "Incinerating" (Tier: 4) — Damage, Elemental, Fire, Attack }
+Adds 67(56-70) to 98(84-107) Fire Damage
+{ Prefix Modifier "Frozen" (Tier: 5) — Damage, Elemental, Cold, Attack }
+Adds 42(32-43) to 61(49-66) Cold Damage
+{ Suffix Modifier "of the Drought" (Tier: 2) — Mana, Physical, Attack }
+Leeches 7.04(7-7.9)% of Physical Damage as Mana
+{ Suffix Modifier "of the Skilled" (Tier: 2) }
+30% reduced Attribute Requirements

@@ -58,6 +58,7 @@ const BASES = [
   { id: 'runeforged_war_wraps',    name: 'Runeforged War Wraps',   slot: 'gloves', level: 65 },
   { id: 'waystone_t15',            name: 'Waystone (Tier 15)',     slot: 'waystone', level: 78 },
   { id: 'lazuli_ring',             name: 'Lazuli Ring',            slot: 'ring',   level: 39 },
+  { id: 'thunder_talisman',        name: 'Thunder Talisman',       slot: 'talisman', level: 77 },
 ];
 
 async function loadFixture(name) {
@@ -111,6 +112,9 @@ console.log('\n[parse-paste: Ancestral Tiara]');
   // No implicit modifier block is present in this item.
   assertEq(parsed.affixes.length, 6, '6 affixes');
   assertEq(parsed.implicit, null, 'no implicit (no implicit block in paste)');
+
+  // Sockets
+  assertEq(parsed.sockets, 'S', 'sockets parsed (1 socket)');
 
   // Rune
   assertEq(parsed.runes.length, 1, 'rune detected');
@@ -271,6 +275,7 @@ console.log('\n[parse-paste: Runeforged War Wraps (runes, hybrid, desecrated, cr
   assertEq(parsed.baseName, 'Runeforged War Wraps', 'baseName resolved');
   assertEq(parsed.itemLevel, 81, 'itemLevel');
   assertEq(parsed.corruptionLevel, 0, 'not corrupted');
+  assertEq(parsed.sockets, 'S S', 'sockets parsed (2 sockets)');
 
   // Rune bonuses are *outside* the {} blocks.
   assertEq(parsed.runes.length, 2, 'two rune bonuses parsed');
@@ -575,6 +580,52 @@ console.log('\n[parse-paste: Seed of Cataclysm (flavor text, unique)]');
   assert(p.flavorText !== null && p.flavorText.length > 0, 'flavor text captured');
   assert(p.flavorText.includes('dawn of a new era'), 'flavor text content');
   assertEq(p.corruptionLevel, 0, 'not corrupted');
+}
+
+// ──────────────── parse-paste: Thunder Talisman (sockets, combat stats, multi-element) ────────────────
+
+console.log('\n[parse-paste: Thunder Talisman (sockets, combat stats, multi-element)]');
+{
+  const text = await loadFixture('thunder_talisman.txt');
+  const p = itemsMod.parsePaste(text, BASES);
+  assert(p !== null, 'parsed ok');
+  assertEq(p.itemName, 'Tranquil Skin', 'itemName');
+  assertEq(p.baseName, 'Thunder Talisman', 'baseName Thunder Talisman');
+  assertEq(p.rarity, 'Rare', 'rarity Rare');
+  assertEq(p.itemLevel, 81, 'itemLevel 81');
+
+  // Sockets
+  assertEq(p.sockets, 'S S', 'sockets parsed (2 sockets)');
+
+  // Combat stats
+  assert(p.combatStats.length === 4, '4 combat stats');
+  const phy = p.combatStats.find(c => c.label === 'Physical Damage');
+  assert(!!phy, 'Physical Damage found');
+  assertEq(phy.text, '23-130', 'Physical text');
+
+  const ele = p.combatStats.find(c => c.label === 'Elemental Damage');
+  assert(!!ele, 'Elemental Damage found');
+  assert(ele.segments && ele.segments.length === 3, '3 elemental segments');
+  if (ele.segments) {
+    assert(ele.segments[0].text === '67-98' && ele.segments[0].element === 'fire', 'fire 67-98');
+    assert(ele.segments[1].text === '42-61' && ele.segments[1].element === 'cold', 'cold 42-61');
+    assert(ele.segments[2].text === '9-56' && ele.segments[2].element === 'lightning', 'lightning 9-56');
+  }
+
+  // Requirements with (augmented) annotations
+  assert(p.requirements && p.requirements.level === 77, 'level 77');
+  assert(p.requirements && p.requirements.str === 71, '71 Str');
+  assert(p.requirements && p.requirements.int === 50, '50 Int');
+
+  // 4 affixes (2 prefix + 2 suffix)
+  assertEq(p.affixes.length, 4, '4 affixes (2P+2S)');
+  assert(p.affixes.some(a => a.descriptiveName === 'Incinerating'), 'Incinerating prefix');
+  assert(p.affixes.some(a => a.descriptiveName === 'Frozen'), 'Frozen prefix');
+  assert(p.affixes.some(a => a.descriptiveName === 'of the Drought'), 'of the Drought suffix');
+  assert(p.affixes.some(a => a.descriptiveName === 'of the Skilled'), 'of the Skilled suffix');
+
+  // Implicit
+  assert(p.implicit !== null && p.implicit.includes('Magnitude of Shock'), 'implicit Shock mod');
 }
 
 // ──────────────── SUMMARY ────────────────
