@@ -45,23 +45,33 @@ export function divineAffixName(name: string): { name: string; changed: boolean 
 /**
  * Known variant sets for unique mods whose wiki annotations carry
  * descriptive type-tags that Divine Orbs can reroll.
- * Each entry maps a wiki descriptiveName (or body-text keyword) to the
- * pool of possible variant tokens that may appear as `(Foo-Bar)` in the
- * rolled name.
+ *
+ * For mageslegacy: the pool contains the full "Legacy of X" base names.
+ * The parenthetical annotation (e.g. Amethyst-Topaz) is regenerated from
+ * a separate annotation pool — both the legacy type AND the annotation
+ * reroll independently, matching poe2db's Divine Orb behaviour where
+ * each Legacy of… modifier is a distinct mod that can change to any
+ * other Legacy on a Divine.
  */
 const UNSCALABLE_VARIANT_POOLS: Record<string, string[]> = {
-  // Mageblood "Legacy of…" mods — the hidden 1-14 internal range
-  // maps to these flask-type combinations reported by the wiki.
   mageslegacy: [
-    'Diamond', 'Gold', 'Jade', 'Quicksilver', 'Ruby', 'Sapphire',
-    'Silver', 'Stibnite', 'Sulphur', 'Topaz', 'Amethyst',
-    'Amethyst-Topaz', 'Ruby-Sapphire', 'Sulphur-Silver', 'Gold-Diamond',
+    'Legacy of Diamond', 'Legacy of Gold', 'Legacy of Jade',
+    'Legacy of Quicksilver', 'Legacy of Ruby', 'Legacy of Sapphire',
+    'Legacy of Silver', 'Legacy of Stibnite', 'Legacy of Sulphur',
+    'Legacy of Topaz', 'Legacy of Amethyst',
   ],
 };
 
+const MAGESLEGACY_ANNOTATIONS = [
+  'Amethyst-Topaz', 'Ruby-Sapphire', 'Sulphur-Silver', 'Gold-Diamond',
+  'Amethyst', 'Topaz', 'Ruby', 'Sapphire', 'Sulphur', 'Silver',
+  'Gold', 'Diamond', 'Jade', 'Quicksilver', 'Stibnite',
+];
+
 /**
- * Pick a random different variant from the pool. If the name has no
- * recognised `(Variant)` annotation the name is unchanged.
+ * For mageslegacy-style mods: rerolls the entire "Legacy of X" base name
+ * AND regenerates the parenthetical annotation.  If the name doesn't match
+ * the expected `Legacy of <Type>(<Annotation>)` pattern the name is unchanged.
  */
 export function divineVariantAnnotation(
   name: string,
@@ -70,16 +80,25 @@ export function divineVariantAnnotation(
   const pool = UNSCALABLE_VARIANT_POOLS[poolKey];
   if (!pool || pool.length < 2) return { name, changed: false };
 
-  const m = name.match(/\(([^)]+)\)$/);
+  // Match "Legacy of Diamond(Amethyst-Topaz)" → base="Legacy of Diamond", annot="Amethyst-Topaz"
+  const m = name.match(/^(Legacy of \w+)(\([^)]+\))$/);
   if (!m) return { name, changed: false };
-  const current = m[1];
+  const currentBase = m[1];
+  const currentAnnot = m[2].slice(1, -1); // strip parens
 
-  // Pick a different variant if possible; if the pool is tiny just cycle.
-  const others = pool.filter(v => v !== current);
-  if (others.length === 0) return { name, changed: false };
-  const pick = others[Math.floor(Math.random() * others.length)];
+  // Pick a different legacy type
+  const otherBases = pool.filter(v => v !== currentBase);
+  if (otherBases.length === 0) return { name, changed: false };
+  const newBase = otherBases[Math.floor(Math.random() * otherBases.length)];
+
+  // Generate a new annotation (may be same as old — that's fine)
+  const newAnnot = MAGESLEGACY_ANNOTATIONS[
+    Math.floor(Math.random() * MAGESLEGACY_ANNOTATIONS.length)
+  ];
+
+  const changed = newBase !== currentBase || newAnnot !== currentAnnot;
   return {
-    name: name.replace(m[0], '(' + pick + ')'),
-    changed: true,
+    name: newBase + '(' + newAnnot + ')',
+    changed,
   };
 }

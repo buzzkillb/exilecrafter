@@ -364,19 +364,30 @@ console.log('\n[9b] Divine Orb — unscalable variant reroll');
   const changed = !numeric.name.includes('39(25-50)');
   assert(changed, `numeric mod rerolled (was "39(25-50)%", now "${numeric.name}")`);
 
-  // At least one Legacy variant should have changed
+  // At least one Legacy variant should have changed (BOTH base name and annotation reroll)
   const v1 = res.item.affixes.find(a => a.modId === 'u1');
   const v2 = res.item.affixes.find(a => a.modId === 'u2');
-  const anyVariantChanged =
-    (v1 && !v1.name.includes('(Amethyst-Topaz)')) ||
-    (v2 && !v2.name.includes('(Amethyst-Topaz)'));
-  // Note: it's possible (though unlikely) that both stay same if random picks same variant
-  // We'll just verify they're valid variant names
-  assert(v1 && /\([^)]+\)$/.test(v1.name), `variant1 has annotation: ${v1?.name}`);
-  assert(v2 && /\([^)]+\)$/.test(v2.name), `variant2 has annotation: ${v2?.name}`);
-  // With 15 variants and 4 being rerolled, at least ONE should change most of the time
-  // But to avoid flaky tests, we just check format is still valid
-  // The important thing: unscalable mods didn't break anything
+  // Divine Orb on Mageblood rerolls the entire Legacy type AND the annotation.
+  // "Legacy of Diamond(Amethyst-Topaz)" → "Legacy of Quicksilver(Ruby-Sapphire)" etc.
+  const v1Changed = v1 && v1.name !== 'Legacy of Diamond(Amethyst-Topaz)';
+  const v2Changed = v2 && v2.name !== 'Legacy of Jade(Amethyst-Topaz)';
+  // With 11 legacy types and 15 annotations, there's only a ~0.8% chance neither changes.
+  // Accept that at least one changed (99.2% reliable, non-flaky for CI).
+  const anyVariantChanged = v1Changed || v2Changed;
+  assert(anyVariantChanged,
+    `At least one Legacy variant should reroll (v1: "${v1?.name}", v2: "${v2?.name}")`);
+
+  // Verify that the base legacy name changed, not just the annotation.
+  // The old bug: only annotation changed (e.g. "(Amethyst-Topaz)" → "(Quicksilver)")
+  // Fixed: the entire "Legacy of Diamond" base also changes
+  if (v1Changed) {
+    assert(!v1.name.startsWith('Legacy of Diamond'),
+      `variant1 base name changed: "${v1.name}" (should NOT start with "Legacy of Diamond")`);
+  }
+  if (v2Changed) {
+    assert(!v2.name.startsWith('Legacy of Jade'),
+      `variant2 base name changed: "${v2.name}" (should NOT start with "Legacy of Jade")`);
+  }
   console.log(`  variant1: ${v1?.name}  variant2: ${v2?.name}  numeric: ${numeric?.name}`);
 }
 
