@@ -394,8 +394,10 @@ function openPasteModal() {
       currentItem = emptyItem(makeBaseRecord(baseRecord, 'rare'), parsedPaste.itemLevel);
       currentItem.rarity = ['magic', 'rare', 'unique'].includes(parsedPaste.rarity) ? parsedPaste.rarity : 'rare';
       currentItem.implicit = parsedPaste.implicit || '';
+      currentItem.itemName = parsedPaste.name || '';
       currentItem.corruptionLevel = parsedPaste.corruptionLevel || 0;
       currentItem.corrupted = currentItem.corruptionLevel > 0;
+      currentItem.enchantments = parsedPaste.enchantments || [];
       const affixes: any[] = (parsedPaste.affixes || []).map((a: any) => ({
         modId: `imported_${a.type}_${a.name.slice(0, 20).replace(/\W+/g, '_').toLowerCase()}`,
         type: a.type, tier: a.tier || 1, name: a.name,
@@ -501,11 +503,13 @@ function openPasteModal() {
       if (!currentBase || !currentItem) return;
       const item = {
         rarity: currentItem.rarity,
+        itemName: currentItem.itemName || '',
         itemLevel: currentItem.itemLevel,
         affixes: currentItem.affixes,
         corrupted: currentItem.corrupted,
         corruptionLevel: currentItem.corruptionLevel,
         implicit: currentBase.implicit || currentItem.implicit,
+        enchantments: currentItem.enchantments || [],
       };
       itemDisplay.innerHTML = renderItemCardHTML(currentBase, item);
     }
@@ -547,6 +551,18 @@ function openPasteModal() {
                 <span class="mod-tier">-</span>
                 <span class="mod-text implicit">${escapeHtml(item.implicit)}</span>
               </div>
+            </div>
+            ${separatorHTML(true)}
+          ` : ''}
+          ${item.enchantments && item.enchantments.length > 0 ? `
+            <div class="item-section">
+              <div class="section-label">Enchantments</div>
+              ${item.enchantments.map((e) => `
+                <div class="item-row">
+                  <span class="mod-tier">-</span>
+                  <span class="mod-text" style="color: #7fb5ff">${escapeHtml(e.raw)}</span>
+                </div>
+              `).join('')}
             </div>
             ${separatorHTML(true)}
           ` : ''}
