@@ -405,6 +405,13 @@ table.poe-table tr:hover td { background: var(--color-bg-hover); }
   font-style: italic;
 }
 
+.item-destroyed {
+  color: var(--color-corrupted);
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
 /* Quality line (in-game style) */
 .item-quality {
   text-align: center;

@@ -139,7 +139,7 @@ export function renderItemCardHTML(item: {
               ${uniques.map(rowHTML).join('')}
             </div>
           ` : ''}
-    ${prefixes.length === 0 && suffixes.length === 0 && uniques.length === 0 ? `<div class="item-empty">Empty item</div>` : ''}
+    ${prefixes.length === 0 && suffixes.length === 0 && uniques.length === 0 ? (item.corrupted ? `<div class="item-empty item-destroyed">POOF! Item destroyed</div>` : `<div class="item-empty">Empty item</div>`) : ''}
     ${separatorHTML(false)}
     <div class="item-footer">
       <div class="item-rarity">${capitalize(item.rarity)} · Item Level: ${item.itemLevel}</div>

@@ -119,7 +119,7 @@ const slotTypeLabel = (() => {
   )}
 
   {(prefixes.length === 0 && suffixes.length === 0) && (
-    <div class="item-empty">Empty item</div>
+    item.corrupted ? <div class="item-empty item-destroyed">POOF! Item destroyed</div> : <div class="item-empty">Empty item</div>
   )}
 
   <div class="separator plain">

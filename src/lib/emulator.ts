@@ -482,8 +482,17 @@ export function vaalOrb(ctx: EmulatorContext): CraftResult {
   // Equipment: 4 equally-likely outcomes per poe2db
   const roll = Math.random();
   if (roll < 0.25) {
-    const next = { ...item, corrupted: true, affixes: [], rarity: 'normal', desecrated: false, fractured: [], bonusPrefixSlots: 0, bonusSuffixSlots: 0, appliedLiquids: [], history: [...item.history, { action: 'Vaal Orb', detail: 'Destroyed' }] };
-    return { ok: true, message: 'Vaal Orb destroyed the item - all affixes lost.', item: next };
+    // Destroy: reset to a plain normal base. Build from scratch to avoid
+    // leaking simulator-specific fields (combatStats, itemName, etc.)
+    const next: ItemState = {
+      baseId: item.baseId, baseName: item.baseName, slot: item.slot,
+      rarity: 'normal', itemLevel: item.itemLevel, affixes: [],
+      implicit: item.implicit, corrupted: true, desecrated: false,
+      fractured: [], bonusPrefixSlots: 0, bonusSuffixSlots: 0,
+      appliedLiquids: [], foresight: false, mirrored: false,
+      history: [...item.history, { action: 'Vaal Orb', detail: 'Destroyed' }],
+    };
+    return { ok: true, message: 'POOF! Vaal Orb destroyed the item \u2014 all affixes lost.', item: next };
   }
   if (roll < 0.5) {
     const imp = CORRUPTED_IMPLICITS[Math.floor(Math.random() * CORRUPTED_IMPLICITS.length)];

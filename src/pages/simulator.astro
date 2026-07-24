@@ -755,7 +755,7 @@ function openPasteModal() {
               ${uniques.map(rowHTML).join('')}
             </div>
           ` : ''}
-          ${prefixes.length === 0 && suffixes.length === 0 && uniques.length === 0 ? `<div class="item-empty">Empty item</div>` : ''}
+          ${prefixes.length === 0 && suffixes.length === 0 && uniques.length === 0 ? (item.corrupted ? `<div class="item-empty item-destroyed">POOF! Item destroyed</div>` : `<div class="item-empty">Empty item</div>`) : ''}
           ${item.flavorText ? `
             <div class="item-flavor-separator"></div>
             <div class="item-flavor-text">
@@ -1065,6 +1065,13 @@ function openPasteModal() {
       history.push(structuredClone(currentItem));
       const result = applyOperation(opId, ctx);
       currentItem = result.item;
+      // Belt-and-suspenders: Vaal Orb destroy cleanup
+      if (currentItem.rarity === 'normal' && currentItem.affixes.length === 0 && currentItem.corrupted) {
+        delete (currentItem as any).combatStats;
+        delete (currentItem as any).itemName;
+        delete (currentItem as any).defenses;
+        delete (currentItem as any).requirements;
+      }
       if (result.newBaseId) {
         const newBase = basesById?.get(result.newBaseId) ?? basesData.find((b: any) => b.id === result.newBaseId);
         if (newBase) {
