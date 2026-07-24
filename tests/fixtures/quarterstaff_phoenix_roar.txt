@@ -1,0 +1,27 @@
+Item Class: Quarterstaves
+Rarity: Rare
+Phoenix Roar
+Skullcrusher Quarterstaff
+--------
+Physical Damage: 110-213 (augmented)
+Fire Damage: 84-113 (fire)
+Critical Hit Chance: 10.00%
+Attacks per Second: 1.30
+--------
+Requires: Level 75, 127 Dex, 50 Int
+--------
+Item Level: 82
+--------
+{ Implicit Modifier }
+26(20-50)% chance to Daze on Hit
+--------
+{ Prefix Modifier "Flaring" (Tier: 1) — Damage, Physical, Attack }
+Adds 51(37-55) to 91(63-94) Physical Damage
+{ Prefix Modifier "Blasting" (Tier: 3) — Damage, Elemental, Fire, Attack }
+Adds 84(73-97) to 113(112-149) Fire Damage
+{ Suffix Modifier "of the Vampire" (Tier: 1) — Life, Physical, Attack }
+Leeches 9.56(9-9.9)% of Physical Damage as Life
+{ Suffix Modifier "of the Gladiator" (Tier: 2) }
+Causes 65(61-70)% increased Stun Buildup
+{ Suffix Modifier "of Valour" (Tier: 3) — Life }
+Gain 50(41-53) Life per enemy killed

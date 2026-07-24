@@ -164,7 +164,8 @@ function parseCombatStatLine(line: string): import('./types.ts').CombatStat | nu
   //   Lightning Damage: 8-135 (lightning)
   const m = line.match(/^(Physical Damage|Lightning Damage|Fire Damage|Cold Damage|Chaos Damage|Elemental Damage|Critical Hit Chance|Attacks per Second):\s*([\d.,]+(?:[%-][\d.]*)?(?:\s*-\s*[\d.,]+(?:[%-][\d.]*)?)?)\s*(?:\((\w+)\))?\s*$/i);
   if (!m) return null;
-  const element = m[3] ? m[3].toLowerCase() : undefined;
+  const raw = m[3] ? m[3].toLowerCase() : undefined;
+  const element = raw && raw !== 'augmented' ? raw : undefined;
   return { label: m[1], text: m[2], element };
 }
 

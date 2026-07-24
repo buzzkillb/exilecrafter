@@ -1,0 +1,24 @@
+Item Class: Talismans
+Rarity: Rare
+Sacred Cloak
+Jade Talisman
+--------
+Physical Damage: 101-151
+Elemental Damage: 51-71 (fire), 69-111 (cold), 9-210 (lightning)
+Critical Hit Chance: 5.00%
+Attacks per Second: 1.10
+--------
+Requires: Level 78, 109 Str, 65 Int
+--------
+Item Level: 82
+--------
+{ Prefix Modifier "Discharging" (Tier: 3) — Damage, Elemental, Lightning, Attack }
+Adds 9(1-13) to 210(168-231) Lightning Damage
+{ Prefix Modifier "Polar" (Tier: 3) — Damage, Elemental, Cold, Attack }
+Adds 69(60-80) to 111(92-121) Cold Damage
+{ Prefix Modifier "Scorching" (Tier: 5) — Damage, Elemental, Fire, Attack }
+Adds 51(39-53) to 71(59-80) Fire Damage
+{ Suffix Modifier "of Ferocity" (Tier: 2) — Damage, Attack, Critical }
++21(20-22)% to Critical Damage Bonus
+{ Suffix Modifier "of War" (Tier: 1) — Attack }
++5 to Level of all Melee Skills

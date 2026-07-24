@@ -472,6 +472,85 @@ console.log('\n[parse-paste: Spear Magic (combat stats)]');
   assert(prefix.tier === 3, "prefix tier 3");
 }
 
+// ──────────────── parse-paste: Jade Talisman (multi-element damage) ────────────────
+
+console.log('\n[parse-paste: Jade Talisman (multi-element damage)]');
+{
+  const text = await loadFixture('jade_talisman.txt');
+  const p = itemsMod.parsePaste(text, BASES);
+  assert(p.rarity === 'Rare', 'rarity Rare');
+  assert(p.baseName === 'Jade Talisman', 'baseName Jade Talisman');
+
+  // 4 combat stats: Physical, Elemental (multi), Crit, APS
+  assert(p.combatStats.length === 4, '4 combat stats');
+  const phy = p.combatStats.find(c => c.label === 'Physical Damage');
+  assert(!!phy, 'Physical Damage found');
+  assert(phy.text === '101-151', 'Physical text 101-151');
+
+  const ele = p.combatStats.find(c => c.label === 'Elemental Damage');
+  assert(!!ele, 'Elemental Damage found');
+  assert(ele.segments && ele.segments.length === 3, 'Elemental Damage has 3 segments');
+  if (ele.segments) {
+    assert(ele.segments[0].text === '51-71' && ele.segments[0].element === 'fire', 'segment 0: fire 51-71');
+    assert(ele.segments[1].text === '69-111' && ele.segments[1].element === 'cold', 'segment 1: cold 69-111');
+    assert(ele.segments[2].text === '9-210' && ele.segments[2].element === 'lightning', 'segment 2: lightning 9-210');
+  }
+
+  const crit = p.combatStats.find(c => c.label === 'Critical Hit Chance');
+  assert(!!crit, 'Critical Hit Chance found');
+  assert(crit.text === '5.00%', 'Crit text 5.00%');
+
+  const aps = p.combatStats.find(c => c.label === 'Attacks per Second');
+  assert(!!aps, 'APS found');
+  assert(aps.text === '1.10', 'APS text 1.10');
+
+  // 5 affixes in the paste (3 prefix + 2 suffix)
+  assert(p.affixes.length === 5, '5 affixes');
+  assert(p.defenses.length === 0, 'no defense stats on talisman');
+  assert(p.requirements && p.requirements.level === 78, 'level req 78');
+}
+
+// ──────────────── parse-paste: Quarterstaff (augmented phys, fire damage) ────────────────
+
+console.log('\n[parse-paste: Quarterstaff (augmented phys, fire damage)]');
+{
+  const text = await loadFixture('quarterstaff_phoenix_roar.txt');
+  const p = itemsMod.parsePaste(text, BASES);
+  assert(p.rarity === 'Rare', 'rarity Rare');
+  assert(p.itemName === 'Phoenix Roar', 'item name Phoenix Roar');
+  assert(p.baseName === 'Skullcrusher Quarterstaff', 'baseName Skullcrusher');
+
+  // 4 combat stats
+  assert(p.combatStats.length === 4, '4 combat stats');
+
+  // Physical Damage: 110-213 (augmented) — should NOT store 'augmented' as element
+  const phy = p.combatStats.find(c => c.label === 'Physical Damage');
+  assert(!!phy, 'Physical Damage found');
+  assert(phy.text === '110-213', 'Physical text 110-213');
+  assert(phy.element === undefined, 'augmented tag NOT stored as element');
+
+  // Fire Damage: 84-113 (fire)
+  const fire = p.combatStats.find(c => c.label === 'Fire Damage');
+  assert(!!fire, 'Fire Damage found');
+  assert(fire.text === '84-113', 'Fire text 84-113');
+  assert(fire.element === 'fire', 'Fire element = fire');
+
+  const crit = p.combatStats.find(c => c.label === 'Critical Hit Chance');
+  assert(!!crit, 'Crit found');
+  assert(crit.text === '10.00%', 'Crit 10.00%');
+
+  const aps = p.combatStats.find(c => c.label === 'Attacks per Second');
+  assert(!!aps, 'APS found');
+  assert(aps.text === '1.30', 'APS 1.30');
+
+  // 1 implicit + 2 prefixes + 3 suffixes = 6 affixes total
+  assert(p.affixes.length === 5, '5 affixes (2P+3S) — implicit is separate');
+  assert(p.implicit !== null && p.implicit.length > 0, 'implicit mod captured');
+  assert(p.requirements && p.requirements.level === 75, 'level req 75');
+  assert(p.requirements && p.requirements.dex === 127, '127 Dex');
+  assert(p.requirements && p.requirements.int === 50, '50 Int');
+}
+
 // ──────────────── SUMMARY ────────────────
 
 console.log('\n────────────────────────────────────────────');
