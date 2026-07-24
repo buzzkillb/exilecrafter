@@ -1,8 +1,7 @@
 /**
  * Keyboard shortcuts for the simulator page.
- * Built from OP_KEYBOARD_HINTS. Accepts dependencies as a parameter
- * object so the event handler doesn't close over simulator.astro's
- * local variables.
+ * Built from OP_KEYBOARD_HINTS once at module load.
+ * Returns a dispose() function for clean teardown.
  */
 import { OP_KEYBOARD_HINTS } from './operations';
 
@@ -14,13 +13,14 @@ export interface KeyboardDeps {
   getCurrencyAvailability: (item: any) => Record<string, { valid: boolean; reason?: string }>;
 }
 
-export function setupKeyboardShortcuts(deps: KeyboardDeps): void {
-  const KEY_MAP: Record<string, string> = {};
-  for (const [op, key] of Object.entries(OP_KEYBOARD_HINTS)) {
-    if (key) KEY_MAP[key.toLowerCase()] = op;
-  }
+// Build once at module scope — not per call
+const KEY_MAP: Record<string, string> = {};
+for (const [op, key] of Object.entries(OP_KEYBOARD_HINTS)) {
+  if (key) KEY_MAP[key.toLowerCase()] = op;
+}
 
-  document.addEventListener('keydown', (e) => {
+export function setupKeyboardShortcuts(deps: KeyboardDeps): () => void {
+  const handler = (e: KeyboardEvent) => {
     const item = deps.currentItem();
     if (!item) return;
     const tag = (e.target as HTMLElement)?.tagName;
@@ -39,5 +39,10 @@ export function setupKeyboardShortcuts(deps: KeyboardDeps): void {
       if (!avail?.valid) { deps.flash(avail?.reason || 'Not available.', 'error'); return; }
       deps.applyCraft(opId);
     }
-  });
+  };
+
+  document.addEventListener('keydown', handler);
+
+  // Return a dispose function for HMR-safe teardown
+  return () => document.removeEventListener('keydown', handler);
 }
