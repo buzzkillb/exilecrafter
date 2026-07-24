@@ -287,6 +287,16 @@ export function parsePaste(
     if (/^Quality:/i.test(raw)) continue;
     if (/^Energy Shield:/i.test(raw)) continue;
     if (/^Item Class:/i.test(raw)) continue;
+
+    // ── Corruption detection ──
+    if (/^Twice Corrupted\s*$/i.test(raw)) {
+      out.corruptionLevel = 2;
+      continue;
+    }
+    if (/^Corrupted\s*$/i.test(raw)) {
+      out.corruptionLevel = 1;
+      continue;
+    }
     if (/^Rarity:/i.test(raw)) continue;
 
     // ── Rune detection (must be tried before generic text handling) ──

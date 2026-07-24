@@ -636,6 +636,7 @@ function openPasteModal() {
         itemLevel: currentItem.itemLevel,
         affixes: currentItem.affixes,
         corrupted: currentItem.corrupted,
+        corruptionLevel: currentItem.corruptionLevel,
         implicit: currentBase.implicit || currentItem.implicit,
       };
       itemDisplay.innerHTML = renderItemCardHTML(currentBase, item);
