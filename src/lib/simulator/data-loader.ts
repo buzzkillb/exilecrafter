@@ -55,6 +55,5 @@ export function finishLoad(deps: DataLoaderDeps) {
   deps.loadingState.classList.add('hidden');
   // Show the empty state only if no base is selected and main UI isn't visible
   if (currentBase) return;
-  if (deps.emptyState.classList.contains('hidden')) return;
   deps.emptyState.classList.remove('hidden');
 }
