@@ -400,7 +400,50 @@ console.log('\n[parse-paste: The Taming (unique, implicit, enhancement, corrupti
   );
 }
 
-// ─────────────────────────────── SUMMARY ───────────────────────────────
+console.log('\n[quality: tag matching + value boost]');
+{
+  // qualityMatchesAffixTags
+  assert(itemsMod.qualityMatchesAffixTags(['fire', 'elemental'], 'Fire Modifiers'), 'fire tag matches Fire Modifiers');
+  assert(itemsMod.qualityMatchesAffixTags(['cold'], 'Cold Modifiers'), 'cold tag matches Cold Modifiers');
+  assert(!itemsMod.qualityMatchesAffixTags(['life'], 'Fire Modifiers'), 'life tag does NOT match Fire Modifiers');
+  assert(!itemsMod.qualityMatchesAffixTags(['attack'], null), 'null category returns false');
+  assert(!itemsMod.qualityMatchesAffixTags([], 'Fire Modifiers'), 'empty tags returns false');
+
+  // qualityPercentToMultiplier
+  assertEq(itemsMod.qualityPercentToMultiplier(20), 1.2, '20% to 1.2');
+  assertEq(itemsMod.qualityPercentToMultiplier(0), 1.0, '0% to 1.0');
+
+  // boostFirstValue
+  assertEq(itemsMod.boostFirstValue('+17(10-20)% to all Elemental Resistances', 1.2),
+    '+20(10-20)% to all Elemental Resistances', 'boost 17 by 20% to 20');
+  assertEq(itemsMod.boostFirstValue('+9(7-10)% to all Elemental Resistances', 1.2),
+    '+10(7-10)% to all Elemental Resistances', 'boost 9 by 20% to 10');
+  assertEq(itemsMod.boostFirstValue('+37(31-40)% increased Projectile Damage', 1.0),
+    '+37(31-40)% increased Projectile Damage', '1.0 multiplier leaves value unchanged');
+  assertEq(itemsMod.boostFirstValue('+10 to Strength', 1.2),
+    '+12 to Strength', 'boost 10 by 20% to 12');
+
+  // applyQualityToPaste — The Taming (Fire Modifiers +20%)
+  const fireModsQual = { category: 'Fire Modifiers', value: 20 };
+  const firePaste = {
+    affixes: [
+      { name: '+17(10-20)% to all Elemental Resistances', descriptiveTags: ['elemental', 'fire', 'cold', 'lightning', 'resistance'], type: 'unique', tier: null },
+      { name: '+9(7-10)% to all Elemental Resistances', descriptiveTags: ['elemental', 'fire', 'cold', 'lightning', 'resistance'], type: 'implicit', tier: null },
+      { name: '19(10-20)% increased Damage', descriptiveTags: ['elemental', 'fire', 'cold', 'lightning'], type: 'unique', tier: null },
+      { name: '+36% to Lightning Resistance', descriptiveTags: ['elemental', 'lightning', 'resistance'], type: 'suffix', tier: 2 },
+    ],
+    qualityParsed: fireModsQual,
+  };
+  const boosted = itemsMod.applyQualityToPaste(firePaste);
+  assertEq(boosted.affixes[0].name, '+20(10-20)% to all Elemental Resistances', 'fire quality boosts 17 to 20');
+  assertEq(boosted.affixes[1].name, '+10(7-10)% to all Elemental Resistances', 'fire quality boosts 9 to 10');
+  assertEq(boosted.affixes[2].name, '22(10-20)% increased Damage', 'fire quality boosts 19 to 22');
+  // Lightning mod DOES have 'lightning' tag but Fire Modifiers only boosts 'fire' tag
+  // Since descriptiveTags has 'lightning' not 'fire', this mod is NOT boosted
+  assertEq(boosted.affixes[3].name, '+36% to Lightning Resistance', 'lightning mod NOT boosted by Fire Modifiers');
+}
+
+// ──────────────── SUMMARY ────────────────
 
 console.log('\n────────────────────────────────────────────');
 console.log(`Passed: ${passed}    Failed: ${failed}`);

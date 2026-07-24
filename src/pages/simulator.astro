@@ -74,6 +74,7 @@ import OmenModal from '~/components/simulator/OmenModal.astro';
       renderItemCardHTML,
       renderPastePreviewHTML,
       itemToText,
+      applyQualityToPaste,
     } from '~/lib/item';
     import {
       CURRENCY_NAME_TO_OP,
@@ -300,6 +301,20 @@ function openPasteModal() {
       // enhancement block names, descriptive mod names + tags, and the
       // numeric range captured from rolled-text parens.
       const parsed = parsePaste(text, basesData);
+
+      // Apply quality boost to mod values (quality on rings/amulets boosts matching mod families)
+      if (parsed.qualityParsed && parsed.qualityParsed.value > 0) {
+        const boosted = applyQualityToPaste({
+          affixes: parsed.affixes,
+          qualityParsed: parsed.qualityParsed,
+        });
+        // Only update the name field on each affix — preserve all other ParsedAffix fields
+        for (let ai = 0; ai < boosted.affixes.length; ai++) {
+          if (ai < parsed.affixes.length) {
+            (parsed.affixes as any)[ai].name = boosted.affixes[ai].name;
+          }
+        }
+      }
 
       // Bridge to the legacy parsedPaste shape so the existing preview
       // and importPastedItem keep working. New fields are surfaced as

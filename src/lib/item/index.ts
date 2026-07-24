@@ -10,3 +10,4 @@ export * from './find-base.ts';
 export * from './parse-paste.ts';
 export * from './render.ts';
 export * from './serialize.ts';
+export * from './quality.ts';
