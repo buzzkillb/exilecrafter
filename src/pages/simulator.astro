@@ -392,7 +392,7 @@ function openPasteModal() {
       // Build item directly — bypass selectBase to avoid change-event clash
       currentBase = baseRecord;
       currentItem = emptyItem(makeBaseRecord(baseRecord, 'rare'), parsedPaste.itemLevel);
-      currentItem.rarity = parsedPaste.rarity === 'magic' ? 'magic' : 'rare';
+      currentItem.rarity = ['magic', 'rare', 'unique'].includes(parsedPaste.rarity) ? parsedPaste.rarity : 'rare';
       currentItem.implicit = parsedPaste.implicit || '';
       currentItem.corruptionLevel = parsedPaste.corruptionLevel || 0;
       currentItem.corrupted = currentItem.corruptionLevel > 0;
@@ -513,6 +513,7 @@ function openPasteModal() {
     function renderItemCardHTML(base: any, item: any): string {
       const prefixes = item.affixes.filter((a: any) => a.type === 'prefix');
       const suffixes = item.affixes.filter((a: any) => a.type === 'suffix');
+      const uniques = item.affixes.filter((a: any) => a.type === 'unique');
       const slotTypeLabel = SLOT_LABELS[base.slot] || base.slot;
 
       const rowHTML = (a: any) => {
@@ -561,7 +562,13 @@ function openPasteModal() {
               ${suffixes.map(rowHTML).join('')}
             </div>
           ` : ''}
-          ${prefixes.length === 0 && suffixes.length === 0 ? `<div class="item-empty">Empty item</div>` : ''}
+          ${uniques.length > 0 ? `
+            <div class="item-section">
+              <div class="section-label">Unique Modifier</div>
+              ${uniques.map(rowHTML).join('')}
+            </div>
+          ` : ''}
+          ${prefixes.length === 0 && suffixes.length === 0 && uniques.length === 0 ? `<div class="item-empty">Empty item</div>` : ''}
           ${separatorHTML(false)}
           <div class="item-footer">
             <div class="item-rarity">${capitalize(item.rarity)} · Item Level: ${item.itemLevel}</div>

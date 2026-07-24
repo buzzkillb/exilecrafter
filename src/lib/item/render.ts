@@ -85,6 +85,8 @@ export function renderItemCardHTML(item: {
 }): string {
   const prefixes = item.affixes.filter((a) => a.type === 'prefix');
   const suffixes = item.affixes.filter((a) => a.type === 'suffix');
+  // Unique-type affixes (from unique items like The Taming) rendered in their own section
+  const uniques = item.affixes.filter((a) => a.type === 'unique');
   const rarityColor = RARITY_COLORS[item.rarity.toLowerCase()] ?? '#c8c8c8';
   const corruptionLevel =
     typeof item.corruptionLevel === 'number'
@@ -122,7 +124,13 @@ export function renderItemCardHTML(item: {
               ${suffixes.map(rowHTML).join('')}
             </div>
           ` : ''}
-    ${prefixes.length === 0 && suffixes.length === 0 ? `<div class="item-empty">Empty item</div>` : ''}
+    ${uniques.length > 0 ? `
+            <div class="item-section">
+              <div class="section-label">Unique Modifier</div>
+              ${uniques.map(rowHTML).join('')}
+            </div>
+          ` : ''}
+    ${prefixes.length === 0 && suffixes.length === 0 && uniques.length === 0 ? `<div class="item-empty">Empty item</div>` : ''}
     ${separatorHTML(false)}
     <div class="item-footer">
       <div class="item-rarity">${capitalize(item.rarity)} · Item Level: ${item.itemLevel}</div>
