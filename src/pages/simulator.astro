@@ -383,10 +383,15 @@ function openPasteModal() {
         qualityParsed: parsed.qualityParsed,
         corruptionLevel: parsed.corruptionLevel,
         runes: parsed.runes,
+        runeEffects: parsed.runeEffects,
         enchantments: parsed.enchantments,
         enhancementNames: parsed.enhancementNames,
         unknownLines: parsed.unknownLines,
         flavorText: parsed.flavorText || '',
+        // New item property fields
+        defenses: parsed.defenses,
+        requirements: parsed.requirements,
+        sockets: parsed.sockets,
       };
 
       pastePreview.classList.remove('hidden');
@@ -441,6 +446,11 @@ function openPasteModal() {
       (currentItem as any).quality = parsedPaste.quality || null;
       // Flavor text — lore block from unique items
       (currentItem as any).flavorText = parsedPaste.flavorText || '';
+      // Item properties — defenses, requirements, sockets, rune effects
+      (currentItem as any).defenses = parsedPaste.defenses || [];
+      (currentItem as any).requirements = parsedPaste.requirements || { level: null, str: null, dex: null, int: null };
+      (currentItem as any).sockets = parsedPaste.sockets || null;
+      (currentItem as any).runeEffects = parsedPaste.runeEffects || [];
       const affixes: any[] = (parsedPaste.affixes || []).map((a: any) => ({
         modId: `imported_${a.type}_${a.name.slice(0, 20).replace(/\W+/g, '_').toLowerCase()}`,
         type: a.type, tier: a.tier || 1, name: a.name,
@@ -559,6 +569,11 @@ function openPasteModal() {
         qualityParsed: (currentItem as any).qualityParsed || null,
         flavorText: (currentItem as any).flavorText || '',
         imageUrl: uniqueImage || currentBase.imageUrl || '',
+        // Item property fields
+        defenses: (currentItem as any).defenses || [],
+        requirements: (currentItem as any).requirements || { level: null, str: null, dex: null, int: null },
+        sockets: (currentItem as any).sockets || null,
+        runeEffects: (currentItem as any).runeEffects || [],
       };
       itemDisplay.innerHTML = renderItemCardHTML(currentBase, item);
     }
@@ -622,7 +637,30 @@ function openPasteModal() {
             <span class="item-stat-label">Item Level:</span>
             <span class="item-stat-value">${item.itemLevel}</span>
           </div>
+          ${item.defenses && item.defenses.length > 0 ? item.defenses.map((d: any) => `
+            <div class="item-level-row">
+              <span class="item-stat-label">${escapeHtml(d.name)}:</span>
+              <span class="item-stat-value">${d.value}</span>
+            </div>
+          `).join('') : ''}
+          ${item.requirements && item.requirements.level ? `
+            <div class="item-requirements-row">
+              <span class="item-stat-label">Requires:</span>
+              <span class="item-stat-value">Level ${item.requirements.level}${item.requirements.str ? `, ${item.requirements.str} Str` : ''}${item.requirements.dex ? `, ${item.requirements.dex} Dex` : ''}${item.requirements.int ? `, ${item.requirements.int} Int` : ''}</span>
+            </div>
+          ` : ''}
           ${separatorHTML(true)}
+          ${item.runeEffects && item.runeEffects.length > 0 ? `
+            <div class="item-section">
+              ${item.runeEffects.map((r: string) => `
+                <div class="item-row">
+                  <span class="mod-tier">-</span>
+                  <span class="mod-text" style="color: #7fb5ff">${escapeHtml(r.replace(/\s*\(rune\)\s*$/, ''))}</span>
+                </div>
+              `).join('')}
+            </div>
+            ${separatorHTML(true)}
+          ` : ''}
           ${item.implicit ? `
             <div class="item-section">
               <div class="item-row">

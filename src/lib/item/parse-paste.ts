@@ -125,7 +125,94 @@ function matchEnhancementHeader(
 /** Rune line, e.g. "Raven-Touched (rune)" */
 function matchRune(line: string): ParsedRune | null {
   const m = line.match(/^(.+?)\s+\(rune\)\s*$/);
-  return m ? { name: m[1].trim() } : null;
+  if (!m) return null;
+  return { name: m[1].trim(), effect: line.trim() };
+}
+
+/** Defense stat names we recognise as item properties (not mods). */
+const DEFENSE_NAMES = new Set([
+  'energy shield', 'evasion rating', 'armour', 'runic ward', 'ward',
+]);
+
+/**
+ * Parse a line like "Energy Shield: 305 (augmented)" or "Evasion Rating: 91 (augmented)".
+ * Returns the DefenseStat or null if the line doesn't match.
+ */
+function parseDefenseLine(line: string): { name: string; value: number; augmented: boolean } | null {
+  const m = line.match(/^(Energy Shield|Evasion Rating|Armour|Runic Ward|Ward):\s*(\d+)\s*(?:\((\w+)\))?\s*$/i);
+  if (!m) return null;
+  return {
+    name: m[1],
+    value: parseInt(m[2], 10),
+    augmented: (m[3] ?? '').toLowerCase() === 'augmented',
+  };
+}
+
+/**
+ * Parse a line like "Requires: Level 80, 115 Int" or "Requires: Level 65, 44 Dex, 44 Int".
+ * Returns level and attribute requirements.
+ */
+function parseRequirementsLine(line: string): { level: number | null; str: number | null; dex: number | null; int: number | null } {
+  const out = { level: null as number | null, str: null as number | null, dex: null as number | null, int: null as number | null };
+  const m = line.match(/^Requires:\s*(.+)$/i);
+  if (!m) return out;
+  const parts = m[1].split(',').map(s => s.trim());
+  for (const part of parts) {
+    const lvl = part.match(/^Level\s+(\d+)$/i);
+    if (lvl) { out.level = parseInt(lvl[1], 10); continue; }
+    const attr = part.match(/^(\d+)\s+(Str|Dex|Int)/i);
+    if (attr) {
+      const val = parseInt(attr[1], 10);
+      const key = attr[2].toLowerCase() as 'str' | 'dex' | 'int';
+      out[key] = val;
+    }
+  }
+  return out;
+}
+
+/**
+ * Scan lines between the header and mod sections for item properties:
+ * defense stats, requirements, sockets, and rune effects.
+ * Mutates `out` in place.
+ */
+function scanItemProperties(
+  lines: string[],
+  startIndex: number,
+  endIndex: number,
+  out: ParsedPaste,
+): void {
+  for (let si = startIndex; si < endIndex && si < lines.length; si++) {
+    const l = lines[si].trim();
+    if (!l) continue;
+
+    // Defense stats
+    const def = parseDefenseLine(l);
+    if (def) {
+      out.defenses.push(def);
+      continue;
+    }
+
+    // Requirements
+    if (/^Requires:/i.test(l)) {
+      out.requirements = parseRequirementsLine(l);
+      continue;
+    }
+
+    // Sockets
+    const sock = l.match(/^Sockets:\s*(.+)$/i);
+    if (sock) {
+      out.sockets = sock[1].trim();
+      continue;
+    }
+
+    // Rune lines (outside {} blocks)
+    const rn = matchRune(l);
+    if (rn) {
+      out.runes.push(rn);
+      out.runeEffects.push(rn.effect);
+      continue;
+    }
+  }
 }
 
 /**
@@ -150,12 +237,16 @@ export function parsePaste(
     itemName: '',
     baseName: '',
     itemLevel: 80,
+    defenses: [],
+    requirements: { level: null, str: null, dex: null, int: null },
+    sockets: null,
     quality: null,
     qualityParsed: null,
     implicit: null,
     implicitTags: null,
     affixes: [],
     runes: [],
+    runeEffects: [],
     enchantments: [],
     corruptionLevel: 0,
     unknownLines: [],
@@ -244,13 +335,21 @@ export function parsePaste(
 
   // Continue scanning for "Item Level: N" and mod sections, starting from
   // wherever the cursor is now. The base name may already have been consumed.
+  // Before jumping to Item Level, scan the intermediate lines for item properties
+  // (defenses, requirements, sockets, rune effects).
+  let itemLevelIndex = -1;
   for (let k = i; k < lines.length; k++) {
     const l = lines[k].trim();
     const il = l.match(/^Item\s*Level:\s*(\d+)/i);
     if (il) {
       out.itemLevel = parseInt(il[1], 10);
+      itemLevelIndex = k;
       break;
     }
+  }
+  // Scan intermediate lines for defenses, requirements, sockets, runes
+  if (itemLevelIndex > i) {
+    scanItemProperties(lines, i, itemLevelIndex, out);
   }
 
   // ── Walk mod sections ──
@@ -335,7 +434,11 @@ export function parsePaste(
     // ── Rune detection (must be tried before generic text handling) ──
     if (raw.endsWith('(rune)')) {
       const r = matchRune(raw);
-      if (r) { out.runes.push(r); continue; }
+      if (r) {
+        out.runes.push(r);
+        out.runeEffects.push(r.effect);
+        continue;
+      }
     }
 
     // ── Enhancement block header ──

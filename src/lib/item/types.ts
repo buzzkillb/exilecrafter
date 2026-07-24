@@ -22,6 +22,19 @@ export type GenerationType =
 
 export type Rarity = 'Normal' | 'Magic' | 'Rare' | 'Unique';
 
+export interface DefenseStat {
+  name: string;      // e.g. "Energy Shield", "Evasion Rating", "Armour", "Runic Ward"
+  value: number;
+  augmented: boolean; // true if line has "(augmented)" suffix
+}
+
+export interface Requirements {
+  level: number | null;
+  str: number | null;
+  dex: number | null;
+  int: number | null;
+}
+
 /**
  * An affix as parsed from a pasted item.
  * After the simulator imports it, this shape can upgrade to the
@@ -53,6 +66,8 @@ export interface ParsedAffix {
 export interface ParsedRune {
   /** Rune name, e.g. "Raven-Touched". */
   name: string;
+  /** Full rune line text, e.g. "8% increased Attack Speed (rune)". */
+  effect: string;
 }
 
 export interface ParsedEnchantment {
@@ -77,6 +92,12 @@ export interface ParsedPaste {
   /** The base item name. e.g. "Ancestral Tiara". */
   baseName: string;
   itemLevel: number;
+  /** Defense stats parsed from the item header block. */
+  defenses: DefenseStat[];
+  /** Requirements parsed from the item (level + attributes). */
+  requirements: Requirements;
+  /** Raw socket description, e.g. "S S" or "S". */
+  sockets: string | null;
   /** Quality line if present, e.g. "+20%". Raw text from clipboard. */
   quality: string | null;
   /** Structured quality info (parsed from quality line). null if no quality line. */
@@ -87,6 +108,8 @@ export interface ParsedPaste {
   implicitTags: string[] | null;
   affixes: ParsedAffix[];
   runes: ParsedRune[];
+  /** Full text of rune lines outside {} blocks (e.g. "8% increased Attack Speed (rune)"). */
+  runeEffects: string[];
   enchantments: ParsedEnchantment[];
   /** 0 = clean, 1 = "Corrupted", 2 = "Twice Corrupted". */
   corruptionLevel: 0 | 1 | 2;
