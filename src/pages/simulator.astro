@@ -187,6 +187,37 @@ import OmenModal from '~/components/simulator/OmenModal.astro';
     const activeOmens = storeActiveOmens;
     let activityLog = storeActivityLog;
 
+    // ── Persistence: save/restore simulator state via localStorage ──
+    const SIM_STORAGE_KEY = "exilecrafter_sim_state";
+
+    function saveState() {
+      try {
+        const st = {
+          timestamp: Date.now(),
+          currentBase: currentBase ? { id: currentBase.id, name: currentBase.name, slot: currentBase.slot, level: currentBase.level, imageUrl: currentBase.imageUrl, affixSlots: currentBase.affixSlots, variant: currentBase.variant } : null,
+          currentItem, history: history.slice(-50),
+          activeOmens: [...activeOmens], activityLog: activityLog.slice(-50),
+        };
+        localStorage.setItem(SIM_STORAGE_KEY, JSON.stringify(st));
+      } catch (_) { /* ignore quota/parse errors */ }
+    }
+
+    function restoreState() {
+      try {
+        const raw = localStorage.getItem(SIM_STORAGE_KEY);
+        if (!raw) return false;
+        const st = JSON.parse(raw);
+        if (!st || !st.currentBase || !st.currentItem) return false;
+        if (Date.now() - st.timestamp > 86400000) { localStorage.removeItem(SIM_STORAGE_KEY); return false; }
+        currentBase = st.currentBase; currentItem = st.currentItem;
+        history = st.history || []; activeOmens.clear();
+        (st.activeOmens || []).forEach(function(id) { activeOmens.add(id); });
+        activityLog = st.activityLog || []; return true;
+      } catch (_) { return false; }
+    }
+
+    function clearSavedState() {
+      try { localStorage.removeItem(SIM_STORAGE_KEY); } catch (_) {} }
 
     function logActivity(msg: string, kind: 'ok' | 'error' | 'info' = 'info') {
       activityLog.push({ ts: Date.now(), msg, kind });
@@ -467,6 +498,7 @@ function openPasteModal() {
       costTracker.reset();
       activeOmens.clear();
       renderAll();
+      saveState();
 
       closePasteModalFn();
       flash(`Imported ${parsedPaste.name} (${baseRecord.name}) — ${affixes.length} mods`, 'ok');
@@ -1043,6 +1075,7 @@ function openPasteModal() {
 
       activeOmens.clear();
       renderAll();
+      saveState();
     }
 
     // Omen effect patterns, ordered from most-specific to most-generic. Each
@@ -1109,6 +1142,7 @@ function openPasteModal() {
       emptyState.classList.add('hidden');
       mainUi.classList.remove('hidden');
       renderAll();
+      saveState();
     }
 
     // Build O(1) lookup maps once after data is loaded
@@ -1152,7 +1186,7 @@ function openPasteModal() {
     });
     undoBtn.addEventListener('click', () => {
       const prev = history.pop();
-      if (prev) { currentItem = prev; costTracker.popStep(); renderAll(); flash('Undone.', 'ok'); }
+      if (prev) { currentItem = prev; costTracker.popStep(); renderAll(); flash('Undone.', 'ok'); saveState(); }
     });
     clearOmensBtn.addEventListener('click', () => { activeOmens.clear(); renderAll(); });
 
@@ -1191,7 +1225,13 @@ function openPasteModal() {
     // Initial URL param
     const params = new URLSearchParams(location.search);
     const initialBase = params.get('base');
-    if (initialBase) {
+    // Restore persisted craft from localStorage (24h expiry)
+    const restored = restoreState();
+    if (restored) {
+      emptyState.classList.add("hidden"); mainUi.classList.remove("hidden");
+      renderAll(); logActivity("Previous craft restored from browser storage.", "info");
+    }
+    if (initialBase && !restored) {
       basePicker.value = initialBase;
       selectBase(initialBase);
     }
