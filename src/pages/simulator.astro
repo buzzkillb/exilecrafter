@@ -523,6 +523,8 @@ function openPasteModal() {
       currentItem = emptyItem(makeBaseRecord(baseRecord, 'rare'), parsedPaste.itemLevel);
       currentItem.rarity = parsedPaste.rarity === 'magic' ? 'magic' : 'rare';
       currentItem.implicit = parsedPaste.implicit || '';
+      currentItem.corruptionLevel = parsedPaste.corruptionLevel || 0;
+      currentItem.corrupted = currentItem.corruptionLevel > 0;
       const affixes: any[] = (parsedPaste.affixes || []).map((a: any) => ({
         modId: `imported_${a.type}_${a.name.slice(0, 20).replace(/\W+/g, '_').toLowerCase()}`,
         type: a.type, tier: a.tier || 1, name: a.name,
@@ -694,7 +696,7 @@ function openPasteModal() {
           ${separatorHTML(false)}
           <div class="item-footer">
             <div class="item-rarity">${capitalize(item.rarity)} · Item Level: ${item.itemLevel}</div>
-            ${item.corrupted ? `<div class="corrupted-indicator">Corrupted</div>` : ''}
+            ${item.corruptionLevel === 2 ? `<div class="corrupted-indicator">Twice Corrupted</div>` : item.corrupted ? `<div class="corrupted-indicator">Corrupted</div>` : ''}
           </div>
         </div>
       `;
