@@ -22,12 +22,6 @@ export let weightsData: any[] = [];
 
 // ── Setters ──
 
-export function addActivityLogEntry(entry: { ts: number; msg: string; kind: 'ok' | 'error' | 'info' }) {
-  activityLog.push(entry);
-  if (activityLog.length > 200) activityLog.splice(0, activityLog.length - 200);
-}
-export function clearActivityLog() { activityLog = []; }
-
 export function setCurrencyData(d: any[]) { currencyData = d; }
 export function setOmensData(d: any[]) { omensData = d; }
 export function setModsData(d: any[]) { modsData = d; }
