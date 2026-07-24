@@ -223,6 +223,9 @@ export function regalOrb(ctx: EmulatorContext): CraftResult {
     (rollType === 'prefix' && usedPrefix < slots.prefix) ||
     (rollType === 'suffix' && usedSuffix < slots.suffix);
   if (!hasRoom) {
+    if (slots.prefix === 1 && slots.suffix === 1) {
+      return { ok: false, message: `${base.name} only has 1 prefix + 1 suffix slot (both full).`, item };
+    }
     return { ok: false, message: `No open ${rollType} slot to fill.`, item };
   }
 
@@ -465,6 +468,15 @@ export function vaalOrb(ctx: EmulatorContext): CraftResult {
       return { ok: true, message: newTier > currentTier ? 'Vaal Orb upgraded waystone to Tier ' + newTier + '!' : newTier < currentTier ? 'Vaal Orb downgraded waystone to Tier ' + newTier + '.' : 'Vaal Orb corrupted the waystone (no tier change).', item: { ...item, corrupted: true, history: [...item.history, { action: 'Vaal Orb', detail: 'Tier ' + newTier }] }, newBaseId: 'waystone_tier_' + newTier };
     }
     return { ok: true, message: 'Vaal Orb corrupted the waystone (no tier change).', item: { ...item, corrupted: true, history: [...item.history, { action: 'Vaal Orb', detail: 'Corrupted' }] } };
+  }
+
+  // Tablets: corrupts but never destroys (map device items, same class as waystones)
+  if (item.slot === 'tablet') {
+    if (Math.random() < 0.5) {
+      const imp = CORRUPTED_IMPLICITS[Math.floor(Math.random() * CORRUPTED_IMPLICITS.length)];
+      return { ok: true, message: 'Vaal Orb added corrupted implicit: ' + imp, item: { ...item, corrupted: true, implicit: (item.implicit ? item.implicit + ' | ' : '') + imp, history: [...item.history, { action: 'Vaal Orb', detail: 'Implicit: ' + imp }] } };
+    }
+    return { ok: true, message: 'Vaal Orb corrupted the tablet (no other effect).', item: { ...item, corrupted: true, history: [...item.history, { action: 'Vaal Orb', detail: 'Corrupted' }] } };
   }
 
   // Equipment: 4 equally-likely outcomes per poe2db
