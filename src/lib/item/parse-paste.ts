@@ -428,15 +428,28 @@ export function parsePaste(
       }
       return;
     }
-    const { rolled, range } = extractNumericRange(name);
+    // Strip wiki " — Unscalable Value" annotation from the name so Divine Orb
+    // can find the hidden range. The flag is preserved on the affix so
+    // the emulator knows to try variant rerolls.
+    let unscalable = false;
+    let cleanName = name;
+    if (cleanName.includes(' — Unscalable Value')) {
+      cleanName = cleanName.replace(' — Unscalable Value', '');
+      unscalable = true;
+    } else if (cleanName.includes(' - Unscalable Value')) {
+      cleanName = cleanName.replace(' - Unscalable Value', '');
+      unscalable = true;
+    }
+    const { rolled, range } = extractNumericRange(cleanName);
     const affix: ParsedAffix = {
       type,
       tier,
-      name,
+      name: cleanName,
       descriptiveName,
       descriptiveTags,
       crafted,
       desecrated,
+      unscalable: unscalable || undefined,
       rolled,
       range,
     };

@@ -5,7 +5,7 @@
  * Returns the original string unchanged if no numeric range is present.
  */
 export function divineAffixName(name: string): { name: string; changed: boolean } {
-  var R1 = new RegExp('(\\+?\\d+(?:\\.\\d+)?)\\s*\\(\\s*(\\d+(?:\\.\\d+)?)\\s*[-\u2014]\\s*(\\d+(?:\\.\\d+)?)\\s*\\)');
+  var R1 = new RegExp('(\\+?\\d+(?:\\.\\d+)?)\\s*\\(\\s*(\\d+(?:\\.\\d+)?)\\s*[-\\u2014]\\s*(\\d+(?:\\.\\d+)?)\\s*\\)');
   var m = name.match(R1);
   if (m) {
     var min = parseFloat(m[2]);
@@ -21,7 +21,7 @@ export function divineAffixName(name: string): { name: string; changed: boolean 
     };
   }
 
-  var R2 = new RegExp('\\(\\s*(\\d+(?:\\.\\d+)?)\\s*[-\u2014]\\s*(\\d+(?:\\.\\d+)?)\\s*\\)');
+  var R2 = new RegExp('\\(\\s*(\\d+(?:\\.\\d+)?)\\s*[-\\u2014]\\s*(\\d+(?:\\.\\d+)?)\\s*\\)');
   var tm = name.match(R2);
   if (tm) {
     var min2 = parseFloat(tm[1]);
@@ -40,4 +40,46 @@ export function divineAffixName(name: string): { name: string; changed: boolean 
   }
 
   return { name: name, changed: false };
+}
+
+/**
+ * Known variant sets for unique mods whose wiki annotations carry
+ * descriptive type-tags that Divine Orbs can reroll.
+ * Each entry maps a wiki descriptiveName (or body-text keyword) to the
+ * pool of possible variant tokens that may appear as `(Foo-Bar)` in the
+ * rolled name.
+ */
+const UNSCALABLE_VARIANT_POOLS: Record<string, string[]> = {
+  // Mageblood "Legacy of…" mods — the hidden 1-14 internal range
+  // maps to these flask-type combinations reported by the wiki.
+  mageslegacy: [
+    'Diamond', 'Gold', 'Jade', 'Quicksilver', 'Ruby', 'Sapphire',
+    'Silver', 'Stibnite', 'Sulphur', 'Topaz', 'Amethyst',
+    'Amethyst-Topaz', 'Ruby-Sapphire', 'Sulphur-Silver', 'Gold-Diamond',
+  ],
+};
+
+/**
+ * Pick a random different variant from the pool. If the name has no
+ * recognised `(Variant)` annotation the name is unchanged.
+ */
+export function divineVariantAnnotation(
+  name: string,
+  poolKey: string,
+): { name: string; changed: boolean } {
+  const pool = UNSCALABLE_VARIANT_POOLS[poolKey];
+  if (!pool || pool.length < 2) return { name, changed: false };
+
+  const m = name.match(/\(([^)]+)\)$/);
+  if (!m) return { name, changed: false };
+  const current = m[1];
+
+  // Pick a different variant if possible; if the pool is tiny just cycle.
+  const others = pool.filter(v => v !== current);
+  if (others.length === 0) return { name, changed: false };
+  const pick = others[Math.floor(Math.random() * others.length)];
+  return {
+    name: name.replace(m[0], '(' + pick + ')'),
+    changed: true,
+  };
 }

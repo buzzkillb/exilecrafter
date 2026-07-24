@@ -5,7 +5,7 @@
 import type { Mod, BaseItem, Currency, Omen, WeightEntry } from './types.ts';
 import { CORRUPTED_IMPLICITS } from './corrupted-implicits.ts';
 import { buildPool, pickN, type PoolResult } from './weights.ts';
-import { divineAffixName } from './divine-affix.ts';
+import { divineAffixName, divineVariantAnnotation } from './divine-affix.ts';
 
 export type ItemRarity = 'normal' | 'magic' | 'rare' | 'unique';
 
@@ -450,10 +450,18 @@ export function divineOrb(ctx: EmulatorContext): CraftResult {
   const upgrade = omenOf(ctx.activeOmens, 'divine_upgrade');              // Omen of Sanctification
 
   let rerolled = 0;
-const divined = item.affixes.map((a) => {
+const divined = item.affixes.map((a: any) => {
   const { name, changed } = divineAffixName(a.name);
-  if (changed) rerolled++;
-  return { ...a, name };
+  if (changed) { rerolled++; return { ...a, name }; }
+  // Try unscalable variant reroll for wiki-annotated unique mods
+  if (a.unscalable) {
+    const poolKey = a.descriptiveName
+      ? a.descriptiveName.toLowerCase().replace(/\s+/g, '')
+      : '';
+    const vr = divineVariantAnnotation(a.name, poolKey || 'mageslegacy');
+    if (vr.changed) { rerolled++; return { ...a, name: vr.name }; }
+  }
+  return a;
 });
 
 let detail;

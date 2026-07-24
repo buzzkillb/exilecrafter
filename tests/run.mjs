@@ -392,9 +392,13 @@ console.log('\n[parse-paste: The Taming (unique, implicit, enhancement, corrupti
   assert(!allTypes.includes('prefix'), 'no spurious prefix classification on unique mods');
   assert(!allTypes.includes('suffix'), 'no spurious suffix classification on unique mods');
 
-  // "Unscalable Value" lines (no numeric rolls) preserved as text
-  const unscalable = parsed.affixes.find((a) => a.name.includes('Unscalable Value'));
-  assert(unscalable !== undefined, 'Unscalable Value text captured in name');
+  // "Unscalable Value" lines — text is stripped from name but flag is preserved
+  const unscalableMods = parsed.affixes.filter((a) => a.unscalable === true);
+  assert(unscalableMods.length > 0, 'Unscalable Value flag preserved on at least one affix');
+  // Check that Unscalable Value text was stripped from all names
+  for (const um of unscalableMods) {
+    assert(!um.name.includes('Unscalable Value'), `Unscalable Value stripped from: ${um.name}`);
+  }
 
   // No spurious implicit classification
   assert(!allTypes.includes('implicit'), 'no spurious implicit classification on unique mods');

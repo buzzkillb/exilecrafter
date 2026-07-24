@@ -77,6 +77,10 @@ export interface ParsedAffix {
   range: { min: number; max: number } | null;
   /** The numeric value rolled, when applicable. */
   rolled: number | null;
+  /** True when the wiki header or body text marks this mod as "Unscalable Value".
+   *  These mods still reroll via Divine Orb — the range is just hidden from the paste text.
+   *  The emulator reads the known variant set from the mod DB when available. */
+  unscalable?: boolean;
 }
 
 export interface ParsedRune {
