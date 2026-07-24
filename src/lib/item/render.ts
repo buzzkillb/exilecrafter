@@ -82,6 +82,7 @@ export function renderItemCardHTML(item: {
   slot?: string;
   corrupted?: boolean;
   corruptionLevel?: 0 | 1 | 2;
+  qualityParsed?: { text: string; category: string | null; value: number } | null;
 }): string {
   const prefixes = item.affixes.filter((a) => a.type === 'prefix');
   const suffixes = item.affixes.filter((a) => a.type === 'suffix');
@@ -102,6 +103,13 @@ export function renderItemCardHTML(item: {
         : '';
 
   const bodyHtml = `
+    ${item.qualityParsed ? `
+            <div class="item-quality">
+              <span class="quality-label">Quality${item.qualityParsed.category ? ` (${escapeHtml(item.qualityParsed.category)})` : ''}:</span>
+              <span class="quality-value">+${item.qualityParsed.value}%</span>
+            </div>
+            ${separatorHTML(true)}
+          ` : ''}
     ${item.implicit ? `
             <div class="item-section">
               <div class="item-row">

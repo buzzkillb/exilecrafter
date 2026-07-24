@@ -405,6 +405,22 @@ table.poe-table tr:hover td { background: var(--color-bg-hover); }
   font-style: italic;
 }
 
+/* Quality line (in-game style) */
+.item-quality {
+  text-align: center;
+  font-size: 0.8125rem;
+  padding: 0.25rem 0;
+  color: var(--color-fg-dim);
+  line-height: 1.5;
+}
+.quality-label {
+  color: var(--color-fg-mute);
+}
+.quality-value {
+  color: #4fc3f7;
+  font-weight: 600;
+}
+
 .item-footer {
   text-align: center;
   font-size: 0.7rem;

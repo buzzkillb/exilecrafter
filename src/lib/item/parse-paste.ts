@@ -151,6 +151,7 @@ export function parsePaste(
     baseName: '',
     itemLevel: 80,
     quality: null,
+    qualityParsed: null,
     implicit: null,
     affixes: [],
     runes: [],
@@ -196,6 +197,18 @@ export function parsePaste(
   // Skip a Quality: line if present (some sources include it)
   if (line && /^quality:/i.test(line)) {
     out.quality = line;
+    // Parse structured quality info
+    const qMatch = line.match(/^Quality\s*(?:\(([^)]*)\))?:\s*\+?(\d+)%/i);
+    if (qMatch) {
+      const cat = (qMatch[1] || '').trim();
+      out.qualityParsed = {
+        text: (qMatch[1] || qMatch[0]).trim(),
+        category: cat || null,
+        value: parseInt(qMatch[2], 10),
+      };
+    } else {
+      out.qualityParsed = { text: line, category: null, value: 0 };
+    }
     line = nextLine();
     if (!line) return out;
   }

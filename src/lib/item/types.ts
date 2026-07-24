@@ -77,8 +77,10 @@ export interface ParsedPaste {
   /** The base item name. e.g. "Ancestral Tiara". */
   baseName: string;
   itemLevel: number;
-  /** Quality line if present, e.g. "+20%". */
+  /** Quality line if present, e.g. "+20%". Raw text from clipboard. */
   quality: string | null;
+  /** Structured quality info (parsed from quality line). null if no quality line. */
+  qualityParsed: { text: string; category: string | null; value: number } | null;
   /** Implicit mod text if a separate implicit modifier block existed. */
   implicit: string | null;
   affixes: ParsedAffix[];

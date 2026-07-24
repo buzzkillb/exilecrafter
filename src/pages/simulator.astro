@@ -345,6 +345,8 @@ function openPasteModal() {
         // New fields surfaced for the activity log + future UI use:
         itemClass: parsed.itemClass,
         baseName: parsed.baseName,
+        quality: parsed.quality,
+        qualityParsed: parsed.qualityParsed,
         corruptionLevel: parsed.corruptionLevel,
         runes: parsed.runes,
         enchantments: parsed.enchantments,
@@ -369,6 +371,7 @@ function openPasteModal() {
         <div class="flex items-center gap-2"><span class="text-dim">Item Level:</span> <span class="text-fg">${itemLevel}</span></div>
         <div class="flex items-center gap-2"><span class="text-dim">Mods:</span> <span class="text-fg">${affixes.length}${implicit ? ' + 1 implicit' : ''}</span></div>
         <div class="flex items-center gap-2"><span class="text-dim">Corruption:</span> <span class="text-fg">${parsed.corruptionLevel === 2 ? 'Twice' : parsed.corruptionLevel === 1 ? 'Yes' : 'No'}</span></div>
+        <div class="flex items-center gap-2"><span class="text-dim">Quality:</span> <span class="text-fg">${parsed.qualityParsed ? '+' + parsed.qualityParsed.value + '%' + (parsed.qualityParsed.category ? ' (' + escapeHtml(parsed.qualityParsed.category) + ')' : '') : 'None'}</span></div>
         <div class="flex items-center gap-2"><span class="text-dim">Runes:</span> <span class="text-fg">${parsed.runes.length}</span></div>
         <div class="flex items-center gap-2"><span class="text-dim">Match:</span> <span class="${foundBase ? 'text-green-400' : 'text-corrupted'}">${found}</span></div>
       `;
@@ -398,6 +401,9 @@ function openPasteModal() {
       currentItem.corruptionLevel = parsedPaste.corruptionLevel || 0;
       currentItem.corrupted = currentItem.corruptionLevel > 0;
       currentItem.enchantments = parsedPaste.enchantments || [];
+      // Quality — store parsed quality so item card can display it
+      (currentItem as any).qualityParsed = parsedPaste.qualityParsed || null;
+      (currentItem as any).quality = parsedPaste.quality || null;
       const affixes: any[] = (parsedPaste.affixes || []).map((a: any) => ({
         modId: `imported_${a.type}_${a.name.slice(0, 20).replace(/\W+/g, '_').toLowerCase()}`,
         type: a.type, tier: a.tier || 1, name: a.name,
@@ -510,6 +516,7 @@ function openPasteModal() {
         corruptionLevel: currentItem.corruptionLevel,
         implicit: currentBase.implicit || currentItem.implicit,
         enchantments: currentItem.enchantments || [],
+        qualityParsed: (currentItem as any).qualityParsed || null,
       };
       itemDisplay.innerHTML = renderItemCardHTML(currentBase, item);
     }
@@ -545,6 +552,13 @@ function openPasteModal() {
             <div class="item-base">${escapeHtml(base.name)}</div>
             <div class="item-type">${slotTypeLabel}</div>
           </div>
+          ${item.qualityParsed ? `
+            <div class="item-quality">
+              <span class="quality-label">Quality${item.qualityParsed.category ? ` (${escapeHtml(item.qualityParsed.category)})` : ''}:</span>
+              <span class="quality-value">+${item.qualityParsed.value}%</span>
+            </div>
+            ${separatorHTML(true)}
+          ` : ''}
           ${item.implicit ? `
             <div class="item-section">
               <div class="item-row">
