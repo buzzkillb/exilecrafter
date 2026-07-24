@@ -588,13 +588,13 @@ function openPasteModal() {
       const MOD_TEXT_COLORS: Record<string, string> = {
         normal: '#ffffff',
         magic: '#8888ff',
-        rare: '#d4c84a',
+        rare: '#c8c8c8',
         unique: '#d0c8b0',
       };
       const CRAFTED_MOD_COLORS: Record<string, string> = {
         normal: '#cccccc',
         magic: '#a0a0ff',
-        rare: '#e8d8a0',
+        rare: '#cccccc',
         unique: '#e0d8c0',
       };
       const rowHTML = (a: any) => {
@@ -612,11 +612,17 @@ function openPasteModal() {
         ? `<div class="separator"><span class="separator-line"></span><span class="separator-icon">+</span><span class="separator-line"></span></div>`
         : `<div class="separator plain"><span class="separator-line full"></span></div>`;
 
-      const rarityBorder = RARITY_COLORS[item.rarity] || '#7a7a7a';
+      const BORDER_COLORS: Record<string, string> = {
+        normal: '#7a7a7a',
+        magic: '#6666cc',
+        rare: '#a08030',
+        unique: '#af6025',
+      };
+      const rarityBorder = BORDER_COLORS[item.rarity] || '#7a7a7a';
       const rarityBg = ({
         normal: 'rgba(200,200,200,0.08)',
         magic: 'rgba(136,136,255,0.12)',
-        rare: 'rgba(255,255,119,0.12)',
+        rare: 'rgba(200,200,200,0.10)',
         unique: 'rgba(175,96,37,0.20)',
       } as Record<string, string>)[item.rarity] || 'transparent';
 
