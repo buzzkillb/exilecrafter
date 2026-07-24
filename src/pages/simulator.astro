@@ -536,8 +536,9 @@ function openPasteModal() {
 
       return `
         <div class="item-tooltip">
-          <div class="item-header">
-            <div class="item-name" style="color: ${RARITY_COLORS[item.rarity] || RARITY_COLORS.normal}">${escapeHtml(base.name)}</div>
+          <div class="item-header" style="color: ${RARITY_COLORS[item.rarity] || RARITY_COLORS.normal}">
+            ${item.itemName && item.itemName !== base.name ? `<div class="item-name">${escapeHtml(item.itemName)}</div>` : ''}
+            <div class="item-base">${escapeHtml(base.name)}</div>
             <div class="item-type">${slotTypeLabel}</div>
           </div>
           ${item.implicit ? `
