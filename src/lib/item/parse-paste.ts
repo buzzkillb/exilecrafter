@@ -191,7 +191,8 @@ function parseRequirementsLine(line: string): { level: number | null; str: numbe
   for (const part of parts) {
     const lvl = part.match(/^Level\s+(\d+)$/i);
     if (lvl) { out.level = parseInt(lvl[1], 10); continue; }
-    const attr = part.match(/^(\d+)\s+(Str|Dex|Int)/i);
+    // Handle "109 (unmet) Str", "71 (augmented) Int", "115 Int" etc.
+    const attr = part.match(/^(\d+)(?:\s*\([^)]*\))?\s+(Str|Dex|Int)/i);
     if (attr) {
       const val = parseInt(attr[1], 10);
       const key = attr[2].toLowerCase() as 'str' | 'dex' | 'int';

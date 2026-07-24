@@ -703,6 +703,11 @@ function openPasteModal() {
               <span class="item-stat-value">Level ${item.requirements.level}${item.requirements.str ? `, ${item.requirements.str} Str` : ''}${item.requirements.dex ? `, ${item.requirements.dex} Dex` : ''}${item.requirements.int ? `, ${item.requirements.int} Int` : ''}</span>
             </div>
           ` : ''}
+          ${item.sockets ? `
+            <div class="item-sockets-row">
+              ${item.sockets.split(/\s+/).filter(Boolean).map((s: string) => `<span class="socket-gem">${s}</span>`).join(' ')}
+            </div>
+          ` : ''}
           ${separatorHTML(true)}
           ${item.runeEffects && item.runeEffects.length > 0 ? `
             <div class="item-section">
