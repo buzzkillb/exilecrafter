@@ -1,7 +1,7 @@
 ---
-// ChanceSimulation.astro — Monte Carlo Orb of Chance simulation
-// Each "craft" = chance repeatedly until the TARGET unique hits (not just any unique).
-// Stats are per-successful-craft: how many orbs, POOFs, and trash uniques on average.
+// ChanceSimulation.astro — single-run Orb of Chance simulation
+// Simulates chancing a white belt until the target unique hits.
+// Shows: orbs used, POOFs, trash uniques created.
 ---
 
 <div class="simulate-widget parchment p-6 mb-6" id="chance-sim-widget">
@@ -13,80 +13,51 @@
   </div>
 
   <p class="text-xs text-dim mb-4">
-    Simulates Orb of Chance on Normal white belts until the target unique hits.
+    Simulates using Orb of Chance on a Normal white belt until the target unique drops.
     Each Orb of Chance: ~1% chance to upgrade to a random unique, ~99% chance to destroy (POOF).
-    This simulation keeps chancing until the target unique drops — counting every POOF and
-    trash unique along the way. Pick your belt base below.
+    This simulation keeps chancing until the target unique hits — counting every POOF and
+    trash unique along the way.
   </p>
 
   <div class="mb-4">
     <div class="text-xs text-dim mb-2 font-semibold">Belt Base</div>
     <select id="chance-base" class="bg-bg border border-border rounded px-2 py-1.5 text-xs w-full max-w-xs">
-      <option value="heavy_belt" selected>Heavy Belt → Headhunter (target)</option>
-      <option value="utility_belt">Utility Belt → Mageblood (target)</option>
+      <option value="heavy_belt" selected>Heavy Belt → Headhunter</option>
+      <option value="utility_belt">Utility Belt → Mageblood</option>
     </select>
-  </div>
-
-  <div class="flex gap-3 mb-3">
-    <label class="text-xs text-dim">Successful crafts to simulate:
-      <select id="chance-crafts" class="bg-bg border border-border rounded px-2 py-1 text-xs ml-1">
-        <option value="100">100 (fast)</option>
-        <option value="500" selected>500</option>
-        <option value="1000">1000</option>
-        <option value="5000">5000 (accurate)</option>
-      </select>
-    </label>
-    <span class="text-xs text-dim self-end">Orb of Chance: ~0.01 div each</span>
+    <span class="text-xs text-dim ml-2">Orb of Chance: ~0.01 div each</span>
   </div>
 
   <div id="chance-results" class="hidden">
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-3">
       <div class="parchment p-3 text-center">
-        <div class="text-xs text-dim">Avg Orbs Per Success</div>
-        <div class="text-xl font-bold text-gold" id="chance-avg-orbs">-</div>
+        <div class="text-xs text-dim">Orbs of Chance Used</div>
+        <div class="text-2xl font-bold text-gold" id="chance-orbs">-</div>
       </div>
       <div class="parchment p-3 text-center">
-        <div class="text-xs text-dim">Avg POOFs Per Success</div>
-        <div class="text-xl font-bold text-red-400" id="chance-avg-poofs">-</div>
+        <div class="text-xs text-dim">POOF (Destroyed)</div>
+        <div class="text-2xl font-bold text-red-400" id="chance-poofs">-</div>
       </div>
       <div class="parchment p-3 text-center">
-        <div class="text-xs text-dim">Avg Trash Per Success</div>
-        <div class="text-xl font-bold text-yellow-400" id="chance-avg-trash">-</div>
+        <div class="text-xs text-dim">Trash Uniques Created</div>
+        <div class="text-2xl font-bold text-yellow-400" id="chance-trash">-</div>
       </div>
       <div class="parchment p-3 text-center">
-        <div class="text-xs text-dim">Avg Cost Per Success</div>
-        <div class="text-xl font-bold text-gold" id="chance-cost">-</div>
+        <div class="text-xs text-dim">Total Cost</div>
+        <div class="text-2xl font-bold text-gold" id="chance-cost">-</div>
       </div>
     </div>
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-3">
-      <div class="parchment p-3 text-center">
-        <div class="text-xs text-dim">Best Luck (P10)</div>
-        <div class="text-lg font-bold text-green-400" id="chance-p10">-</div>
-      </div>
-      <div class="parchment p-3 text-center">
-        <div class="text-xs text-dim">Median Orbs</div>
-        <div class="text-lg font-bold text-gold" id="chance-median">-</div>
-      </div>
-      <div class="parchment p-3 text-center">
-        <div class="text-xs text-dim">Worst Luck (P90)</div>
-        <div class="text-lg font-bold text-red-400" id="chance-p90">-</div>
-      </div>
-      <div class="parchment p-3 text-center">
-        <div class="text-xs text-dim">Theoretical Avg</div>
-        <div class="text-lg font-bold text-dim" id="chance-theory">-</div>
-      </div>
-    </div>
-    <div class="parchment p-3 text-xs font-mono text-dim min-h-[64px] whitespace-pre-wrap" id="chance-log"></div>
+    <div class="parchment p-3 text-sm text-center text-gold font-semibold" id="chance-target-line"></div>
+    <div class="parchment p-3 text-xs font-mono text-dim min-h-[48px] whitespace-pre-wrap" id="chance-log"></div>
+    <div class="text-xs text-dim mt-2">Click <b>▶ Run Simulation</b> again for another attempt.</div>
   </div>
 </div>
 
 <script>
   (function() {
     var BASE = document.getElementById('chance-base');
-    var CRAFTS = document.getElementById('chance-crafts');
     var RUN = document.getElementById('chance-sim-run-btn');
     var RESULTS = document.getElementById('chance-results');
-    var LOG = document.getElementById('chance-log');
 
     // Unique pools + target (must match src/lib/orb-of-chance-pools.ts)
     var POOLS = {
@@ -99,60 +70,45 @@
     var running = false;
     RUN.addEventListener('click', function() {
       if (running) return;
-      var baseKey = BASE.value;
-      var poolEntry = POOLS[baseKey];
+      var poolEntry = POOLS[BASE.value];
       var pool = poolEntry.pool;
       var targetName = poolEntry.target;
-      var craftCount = parseInt(CRAFTS.value, 10);
-      var pool = POOLS[baseKey];
-      if (!pool || pool.length === 0) return;
 
       running = true;
-      RUN.textContent = 'Simulating...';
+      RUN.textContent = '⏳ Simulating...';
       RUN.disabled = true;
-      var baseLabel = baseKey === 'heavy_belt' ? 'Heavy Belt' : 'Utility Belt';
-      LOG.innerHTML = '<div>Chancing ' + baseLabel + ' until ' + craftCount + '× ' + targetName + ' hit...</div>';
       RESULTS.classList.remove('hidden');
 
-      // Each successful craft: [totalOrbs, totalPoofs, totalTrash]
-      var craftStats = [];
-      var currentOrbs = 0, currentPoofs = 0, currentTrash = 0;
-      var completedCrafts = 0;
-      var start = performance.now();
+      var logEl = document.getElementById('chance-log');
+      logEl.innerHTML = 'Chancing ' + (BASE.value === 'heavy_belt' ? 'Heavy Belt' : 'Utility Belt') + ' until ' + targetName + ' hits...';
+
+      var orbs = 0;
+      var poofs = 0;
+      var trash = 0;
+      var hit = false;
 
       function runBatch() {
-        // Process ~200 orb rolls per animation frame to keep UI responsive
-        var batchOrbs = 0;
-        var MAX_BATCH_ORBS = 500;
-
-        while (batchOrbs < MAX_BATCH_ORBS && completedCrafts < craftCount) {
-          batchOrbs++;
-          currentOrbs++;
+        var batchMax = 500;
+        var batch = 0;
+        while (batch < batchMax && !hit) {
+          batch++;
+          orbs++;
           var roll = Math.random();
           if (roll < 0.01) {
-            // Hit unique — is it our target?
+            // Hit unique
             var idx = Math.floor(Math.random() * pool.length);
             if (pool[idx] === targetName) {
-              // SUCCESS! Record this craft's stats
-              craftStats.push([currentOrbs, currentPoofs, currentTrash]);
-              completedCrafts++;
-              // Reset for next craft
-              currentOrbs = 0;
-              currentPoofs = 0;
-              currentTrash = 0;
+              hit = true;
             } else {
-              // Trash unique — need new base
-              currentTrash++;
+              trash++;
             }
           } else {
-            // POOF — destroyed, need new base
-            currentPoofs++;
+            poofs++;
           }
         }
 
-        if (completedCrafts < craftCount) {
-          var pct = Math.round((completedCrafts / craftCount) * 100);
-          LOG.innerHTML = '<div>Progress: ' + pct + '% (' + completedCrafts + '/' + craftCount + ' ' + targetName + ' hit)</div>';
+        if (!hit) {
+          logEl.innerHTML = 'Still chancing... ' + orbs.toLocaleString() + ' orbs used so far...';
           setTimeout(runBatch, 0);
         } else {
           finish();
@@ -160,60 +116,23 @@
       }
 
       function finish() {
-        var elapsed = ((performance.now() - start) / 1000).toFixed(1);
+        var cost = (orbs * ORB_PRICE).toFixed(1);
 
-        // Sort for percentile calculations
-        var orbCounts = craftStats.map(function(s) { return s[0]; }).sort(function(a, b) { return a - b; });
-        var poofCounts = craftStats.map(function(s) { return s[1]; });
-        var trashCounts = craftStats.map(function(s) { return s[2]; });
+        document.getElementById('chance-orbs').textContent = orbs.toLocaleString();
+        document.getElementById('chance-poofs').textContent = poofs.toLocaleString();
+        document.getElementById('chance-trash').textContent = trash.toLocaleString();
+        document.getElementById('chance-cost').textContent = cost + ' div';
+        document.getElementById('chance-target-line').textContent = '🎯 Hit ' + targetName + '!';
 
-        // Sums
-        var totalOrbs = orbCounts.reduce(function(a, b) { return a + b; }, 0);
-        var totalPoofs = poofCounts.reduce(function(a, b) { return a + b; }, 0);
-        var totalTrash = trashCounts.reduce(function(a, b) { return a + b; }, 0);
-        var n = craftCount;
-
-        // Averages
-        var avgOrbs = totalOrbs / n;
-        var avgPoofs = totalPoofs / n;
-        var avgTrash = totalTrash / n;
-        var avgCost = avgOrbs * ORB_PRICE;
-
-        // Percentiles
-        var p10 = orbCounts[Math.floor(n * 0.10)];
-        var median = orbCounts[Math.floor(n * 0.50)];
-        var p90 = orbCounts[Math.floor(n * 0.90)];
-
-        // Theoretical: 1% unique rate, 1/3 for target
-        var theoryOrbs = pool.length * 100; // 1/(0.01 × 1/pool.length) = pool.length × 100
-
-        // Update display
-        document.getElementById('chance-avg-orbs').textContent = Math.round(avgOrbs).toLocaleString();
-        document.getElementById('chance-avg-poofs').textContent = Math.round(avgPoofs).toLocaleString();
-        document.getElementById('chance-avg-trash').textContent = avgTrash.toFixed(1);
-        document.getElementById('chance-cost').textContent = avgCost.toFixed(1) + ' div';
-        document.getElementById('chance-p10').textContent = p10.toLocaleString() + ' orbs';
-        document.getElementById('chance-median').textContent = median.toLocaleString() + ' orbs';
-        document.getElementById('chance-p90').textContent = p90.toLocaleString() + ' orbs';
-        document.getElementById('chance-theory').textContent = theoryOrbs + ' orbs';
-
-        LOG.innerHTML += '<div class="text-gold mt-1">✅ ' + n + ' successful ' + targetName + ' crafts in ' + elapsed + 's</div>';
-        LOG.innerHTML += '<div class="text-dim text-xs mt-1">' +
-          'Total: ' + totalOrbs.toLocaleString() + ' orbs · ' +
-          totalPoofs.toLocaleString() + ' POOF · ' +
-          totalTrash + ' trash uniques' +
-          '</div>';
-        LOG.innerHTML += '<div class="text-dim text-xs">' +
-          'Per ' + targetName + ': ~' + Math.round(avgOrbs).toLocaleString() + ' orbs · ' +
-          '~' + Math.round(avgPoofs).toLocaleString() + ' POOF · ' +
-          '~' + avgTrash.toFixed(1) + ' trash uniques</div>';
+        logEl.innerHTML = '✅ Found ' + targetName + ' after ' + orbs.toLocaleString() + ' orbs' +
+          '\n   POOF: ' + poofs.toLocaleString() + '  Trash: ' + trash.toLocaleString() +
+          '  Cost: ~' + cost + ' div';
 
         running = false;
         RUN.textContent = '▶ Run Simulation';
         RUN.disabled = false;
       }
 
-      // Start
       runBatch();
     });
   })();
