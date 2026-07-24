@@ -443,6 +443,35 @@ console.log('\n[quality: tag matching + value boost]');
   assertEq(boosted.affixes[3].name, '+36% to Lightning Resistance', 'lightning mod NOT boosted by Fire Modifiers');
 }
 
+
+
+// ──────────────── parse-paste: Spear Magic (combat stats) ────────────────
+
+console.log('\n[parse-paste: Spear Magic (combat stats)]');
+{
+  const text = await loadFixture('spear_magic.txt');
+  const p = itemsMod.parsePaste(text, BASES);
+  assert(p.rarity === "Magic", "rarity Magic");
+  assert(p.combatStats.length === 4, "4 combat stats");
+  const phy = p.combatStats.find(c => c.label === "Physical Damage");
+  assert(!!phy, "Physical Damage found");
+  assert(phy.text === "47-79", "Physical Damage text 47-79");
+  const lt = p.combatStats.find(c => c.label === "Lightning Damage");
+  assert(!!lt, "Lightning Damage found");
+  assert(lt.text === "8-135", "Lightning Damage text 8-135");
+  assert(lt.element === "lightning", "Lightning Damage element lightning");
+  const crit = p.combatStats.find(c => c.label === "Critical Hit Chance");
+  assert(!!crit, "Critical Hit Chance found");
+  assert(crit.text === "5.00%", "Critical Hit Chance text 5.00%");
+  const aps = p.combatStats.find(c => c.label === "Attacks per Second");
+  assert(!!aps, "Attacks per Second found");
+  assert(aps.text === "1.55", "Attacks per Second text 1.55");
+  assert(p.affixes.length === 2, "2 affixes (1P+1S)");
+  const prefix = p.affixes.find(a=>a.type==="prefix");
+  assert(!!prefix, "prefix found");
+  assert(prefix.tier === 3, "prefix tier 3");
+}
+
 // ──────────────── SUMMARY ────────────────
 
 console.log('\n────────────────────────────────────────────');

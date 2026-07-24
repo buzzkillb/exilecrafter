@@ -83,6 +83,7 @@ export function renderItemCardHTML(item: {
   corrupted?: boolean;
   corruptionLevel?: 0 | 1 | 2;
   qualityParsed?: { text: string; category: string | null; value: number } | null;
+  combatStats?: { label: string; text: string; element?: string }[] | null;
 }): string {
   const prefixes = item.affixes.filter((a) => a.type === 'prefix');
   const suffixes = item.affixes.filter((a) => a.type === 'suffix');

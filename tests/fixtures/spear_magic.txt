@@ -1,0 +1,22 @@
+Item Class: Spears
+Rarity: Magic
+Discharging Stalking Spear of Nourishment
+--------
+Physical Damage: 47-79
+Lightning Damage: 8-135 (lightning)
+Critical Hit Chance: 5.00%
+Attacks per Second: 1.55
+--------
+Requires: Level 77, 50 Str, 127 Dex
+--------
+Item Level: 81
+--------
+{ Implicit Modifier — Attack }
+25(15-25)% chance to Maim on Hit
+--------
+Grants Skill: Spear Throw
+--------
+{ Prefix Modifier "Discharging" (Tier: 3) — Damage, Elemental, Lightning, Attack }
+Adds 8(1-8) to 135(111-152) Lightning Damage
+{ Suffix Modifier "of Nourishment" (Tier: 1) — Life, Attack }
+Grants 5 Life per Enemy Hit

@@ -138,6 +138,13 @@ const DEFENSE_NAMES = new Set([
  * Parse a line like "Energy Shield: 305 (augmented)" or "Evasion Rating: 91 (augmented)".
  * Returns the DefenseStat or null if the line doesn't match.
  */
+function parseCombatStatLine(line: string): import('./types.ts').CombatStat | null {
+  const m = line.match(/^(Physical Damage|Lightning Damage|Fire Damage|Cold Damage|Chaos Damage|Critical Hit Chance|Attacks per Second):\s*([\d.,]+(?:[%-][\d.]*)?(?:\s*-\s*[\d.,]+(?:[%-][\d.]*)?)?)\s*(?:\((\w+)\))?\s*$/i);
+  if (!m) return null;
+  const element = m[3] ? m[3].toLowerCase() : undefined;
+  return { label: m[1], text: m[2], element };
+}
+
 function parseDefenseLine(line: string): { name: string; value: number; augmented: boolean } | null {
   const m = line.match(/^(Energy Shield|Evasion Rating|Armour|Runic Ward|Ward):\s*(\d+)\s*(?:\((\w+)\))?\s*$/i);
   if (!m) return null;
@@ -192,6 +199,13 @@ function scanItemProperties(
       continue;
     }
 
+    // Combat stats (weapon damage, attack speed, crit)
+    const combat = parseCombatStatLine(l);
+    if (combat) {
+      out.combatStats.push(combat);
+      continue;
+    }
+
     // Requirements
     if (/^Requires:/i.test(l)) {
       out.requirements = parseRequirementsLine(l);
@@ -237,6 +251,7 @@ export function parsePaste(
     itemName: '',
     baseName: '',
     itemLevel: 80,
+    combatStats: [],
     defenses: [],
     requirements: { level: null, str: null, dex: null, int: null },
     sockets: null,

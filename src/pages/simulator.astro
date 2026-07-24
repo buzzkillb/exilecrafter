@@ -480,6 +480,7 @@ function openPasteModal() {
       (currentItem as any).flavorText = parsedPaste.flavorText || '';
       // Item properties — defenses, requirements, sockets, rune effects
       (currentItem as any).defenses = parsedPaste.defenses || [];
+      (currentItem as any).combatStats = parsedPaste.combatStats || [];
       (currentItem as any).requirements = parsedPaste.requirements || { level: null, str: null, dex: null, int: null };
       (currentItem as any).sockets = parsedPaste.sockets || null;
       (currentItem as any).runeEffects = parsedPaste.runeEffects || [];
@@ -604,6 +605,7 @@ function openPasteModal() {
         imageUrl: uniqueImage || currentBase.imageUrl || '',
         // Item property fields
         defenses: (currentItem as any).defenses || [],
+        combatStats: (currentItem as any).combatStats || [],
         requirements: (currentItem as any).requirements || { level: null, str: null, dex: null, int: null },
         sockets: (currentItem as any).sockets || null,
         runeEffects: (currentItem as any).runeEffects || [],
@@ -674,6 +676,12 @@ function openPasteModal() {
             <div class="item-level-row">
               <span class="item-stat-label">${escapeHtml(d.name)}:</span>
               <span class="item-stat-value">${d.value}</span>
+            </div>
+          `).join('') : ''}
+                    ${item.combatStats && item.combatStats.length > 0 ? item.combatStats.map((cs: any) => `
+            <div class="item-level-row">
+              <span class="item-stat-label">${escapeHtml(cs.label)}:</span>
+              <span class="item-stat-value" style="color:${{ lightning: '#d4c84a', cold: '#4a8fc4', fire: '#c44a2a', chaos: '#a04ac4' }[cs.element || ''] || '#c8c8c8'}">${escapeHtml(cs.text)}</span>
             </div>
           `).join('') : ''}
           ${item.requirements && item.requirements.level ? `

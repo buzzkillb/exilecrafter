@@ -28,6 +28,13 @@ export interface DefenseStat {
   augmented: boolean; // true if line has "(augmented)" suffix
 }
 
+/** Weapon-specific combat stats (damage, attack speed, crit, granted skills). */
+export interface CombatStat {
+  label: string;        // e.g. "Physical Damage", "Lightning Damage", "Attacks per Second"
+  text: string;         // display text, e.g. "47-79", "8-135", "1.55", "5.00%"
+  element?: string;     // e.g. "lightning" from the parenthetical "(lightning)"
+}
+
 export interface Requirements {
   level: number | null;
   str: number | null;
@@ -92,6 +99,8 @@ export interface ParsedPaste {
   /** The base item name. e.g. "Ancestral Tiara". */
   baseName: string;
   itemLevel: number;
+  /** Weapon-specific combat stats (physical damage, lightning damage, crit, attack speed). */
+  combatStats: CombatStat[];
   /** Defense stats parsed from the item header block. */
   defenses: DefenseStat[];
   /** Requirements parsed from the item (level + attributes). */
