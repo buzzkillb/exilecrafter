@@ -4,6 +4,10 @@ import { bases } from '~/lib/data';
 import { useT } from '~/lib/i18n';
 import { getCraftingExamples } from '~/lib/simulator/examples';
 
+// Unique item images — maps unique name -> { imageUrl, baseType }
+import uniqueImagesData from '~/../data/processed/unique-images.json' assert { type: 'json' };
+const uniqueImagesMap = uniqueImagesData as Record<string, { imageUrl: string; baseType: string }>;
+
 const locale: 'en' | 'pt' = 'en';
 const t = useT(locale);
 
@@ -59,6 +63,9 @@ import OmenModal from '~/components/simulator/OmenModal.astro';
   <!-- Base options data (small, rendered for dropdown) -->
   <script type="application/json" id="base-data" set:html={JSON.stringify(baseOptions)} />
 
+  <!-- Unique item images (maps unique name -> image URL for item card display) -->
+  <script type="application/json" id="unique-images-data" set:html={JSON.stringify(uniqueImagesMap)} />
+
   <script>
     import { applyOperation, emptyItem, getCurrencyAvailability, OPERATIONS } from '~/lib/emulator';
     import { costTracker } from '~/lib/cost-tracker';
@@ -98,6 +105,9 @@ import OmenModal from '~/components/simulator/OmenModal.astro';
 
 
     const basesData = JSON.parse(document.getElementById('base-data')!.textContent || '[]');
+
+    // Unique item images — lookup by unique name (e.g. "The Taming")
+    const uniqueImagesData = JSON.parse(document.getElementById('unique-images-data')?.textContent || '{}');
 
     // Pure helpers (RARITY_COLORS, SLOT_LABELS, tagColor, capitalize,
     // escapeHtml, findBaseByName, parsePaste, renderItemCardHTML,
@@ -525,6 +535,9 @@ function openPasteModal() {
 
     function renderItem() {
       if (!currentBase || !currentItem) return;
+      const uniqueImage = currentItem.rarity === 'unique' && currentItem.itemName
+        ? uniqueImagesData[currentItem.itemName]?.imageUrl
+        : null;
       const item = {
         rarity: currentItem.rarity,
         itemName: currentItem.itemName || '',
@@ -536,7 +549,7 @@ function openPasteModal() {
         enchantments: currentItem.enchantments || [],
         qualityParsed: (currentItem as any).qualityParsed || null,
         flavorText: (currentItem as any).flavorText || '',
-        imageUrl: currentBase.imageUrl || '',
+        imageUrl: uniqueImage || currentBase.imageUrl || '',
       };
       itemDisplay.innerHTML = renderItemCardHTML(currentBase, item);
     }
