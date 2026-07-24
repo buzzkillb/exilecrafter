@@ -75,6 +75,7 @@ export const SLOT_FROM_LABEL: Record<string, string> = {
   wands: 'weapon_1h',
   waystones: 'waystone',
   tablets: 'tablet',
+  talismans: 'talisman',
   relics: 'relic',
   'one handed weapons': 'weapon_1h',
   'two handed weapons': 'weapon_2h',

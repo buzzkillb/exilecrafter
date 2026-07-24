@@ -67,6 +67,7 @@ export const SLOT_LABELS: Record<string, string> = {
   weapon_2h: 'Weapon (2H)',
   waystone: 'Waystone',
   tablet: 'Tablet',
+  talisman: 'Talisman',
   relic: 'Relic',
 };
 
