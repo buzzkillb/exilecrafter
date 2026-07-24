@@ -22,6 +22,9 @@ export let weightsData: any[] = [];
 
 // ── Setters ──
 
+export function setCurrentBase(b: any) { currentBase = b; }
+export function setCurrentItem(item: any) { currentItem = item; }
+
 export function setCurrencyData(d: any[]) { currencyData = d; }
 export function setOmensData(d: any[]) { omensData = d; }
 export function setModsData(d: any[]) { modsData = d; }

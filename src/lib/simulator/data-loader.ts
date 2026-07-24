@@ -53,6 +53,8 @@ export async function loadData(deps: DataLoaderDeps) {
 export function finishLoad(deps: DataLoaderDeps) {
   // Don't show empty state if a base was auto-selected via ?base= URL param
   if (currentBase) return;
+  // Double-check DOM — selectBase may have shown the main UI already
+  if (deps.emptyState.classList.contains('hidden')) return;
   deps.loadingState.classList.add('hidden');
   deps.emptyState.classList.remove('hidden');
 }

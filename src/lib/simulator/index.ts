@@ -21,6 +21,7 @@ export type { OmenOpt } from './omens';
 export {
   currentBase, currentItem, history, activeOmens, activityLog,
   currencyData, omensData, modsData, weightsData,
+  setCurrentBase, setCurrentItem,
   setCurrencyData, setOmensData, setModsData, setWeightsData,
   usedCount, tierGroup, TIER_PREFIX_RE, TIER_ORDER,
 } from './store';
