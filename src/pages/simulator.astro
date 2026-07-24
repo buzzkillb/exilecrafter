@@ -644,12 +644,22 @@ function openPasteModal() {
       const suffixes = item.affixes.filter((a: any) => a.type === 'suffix');
       const slotTypeLabel = SLOT_LABELS[base.slot] || base.slot;
 
-      const rowHTML = (a: any) => `
-        <div class="item-row">
-          <span class="mod-tier">T${a.tier}</span>
-          <span class="mod-text" style="color: ${tagColor(a.tags || [])}">${escapeHtml(a.name)}</span>
-        </div>
-      `;
+      const rowHTML = (a: any) => {
+        let color = '#7fb5ff'; // PoE2 standard affix blue
+        let deco = 'none';
+        if (a.crafted) {
+          color = '#b0d8ff'; // paler whitish-blue for crafted mods
+        } else if (a.desecrated) {
+          color = '#667788'; // dimmed for desecrated/bonded
+          deco = 'line-through';
+        }
+        return `
+          <div class="item-row">
+            <span class="mod-tier">T${a.tier}</span>
+            <span class="mod-text" style="color: ${color}; text-decoration: ${deco}">${escapeHtml(a.name)}</span>
+          </div>
+        `;
+      };
 
       const separatorHTML = (withIcon = true) => withIcon
         ? `<div class="separator"><span class="separator-line"></span><span class="separator-icon">+</span><span class="separator-line"></span></div>`

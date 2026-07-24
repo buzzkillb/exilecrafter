@@ -30,17 +30,29 @@ const PREVIEW_SLOT_LABELS: Record<string, string> = {
   relic: 'Relic',
 };
 
-/** Row HTML for a single affix line — tier pill + name (in colored span). */
+/** Row HTML for a single affix line — tier pill + name (in colored span).
+ *  Uses PoE2 in-game tooltip coloring:
+ *    - normal affixes → bright blue (#7fb5ff)
+ *    - crafted affixes → paler whitish-blue (#b0d8ff)
+ *    - desecrated/bonded → dimmed grey (#667788) + strikethrough
+ */
 export function rowHTML(affix: ParsedAffix): string {
   const tier = affix.tier != null ? `T${affix.tier}` : '-';
-  const color = tagColor(affix.descriptiveTags ?? []);
+  let color = '#7fb5ff';
+  let deco = 'none';
+  if (affix.crafted) {
+    color = '#b0d8ff';
+  } else if (affix.desecrated) {
+    color = '#667788';
+    deco = 'line-through';
+  }
   const label =
     affix.descriptiveName && affix.descriptiveName.length > 0
       ? `${affix.descriptiveName}: ${affix.name}`
       : affix.name;
   return `<div class="item-row"><span class="mod-tier">${escapeHtml(
     tier,
-  )}</span><span class="mod-text" style="color:${color}">${escapeHtml(
+  )}</span><span class="mod-text" style="color:${color};text-decoration:${deco}">${escapeHtml(
     label,
   )}</span></div>`;
 }
