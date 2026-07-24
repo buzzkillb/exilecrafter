@@ -6,6 +6,22 @@ import type { CraftingMethod } from './types';
 
 export const METHODS: CraftingMethod[] = [
   {
+    id: 'mageblood_legacy_fishing',
+    name: 'Mageblood — Legacy Variant Divine Fishing',
+    description:
+      'How many Divine Orbs does it take to hit your dream Mageblood? Pick your 4 target Legacy flask-type variants and your desired % effect range, then run the Monte Carlo to see how many Divines you\'ll need on average. Each Divine Orb independently rerolls all 4 Legacy types (from 15 possible) AND the "All Legacies have X% increased effect" numeric mod (25–50). Warning: hitting specific variants is extremely rare — expect thousands of Divine Orbs.',
+    steps: [
+      'Acquire a Mageblood (Utility Belt, ilvl 55+).',
+      'Open the simulation below and select your 4 target Legacy flask-type variants.',
+      'Set your target range for the "All Mage\'s Legacies have X% increased effect" modifier (25–50).',
+      'Click ▶ Run Simulation to run Monte Carlo trials.',
+      'Each trial simulates Divine Orb usage until all 4 Legacies match your targets AND the % falls in your desired range.',
+      'The results show average Divine Orbs needed, median, P10/P90 range, and total divine cost.',
+    ],
+    bestFor: ['Mageblood legacy hunting', 'Divine Orb budget planning', 'mirror-tier flask builds', 'Pathfinder ascendancy'],
+    difficulty: 'expert',
+  },
+  {
     id: 'boot_crafting_t1',
     name: 'T1 Triple-Suffix Boots (ES Recharge variant)',
     description:

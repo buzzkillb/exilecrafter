@@ -1,0 +1,251 @@
+---
+// MagebloodSimulation.astro — Monte Carlo Divine Orb simulation for Mageblood
+// User picks target legacies and % range, runs trials to see how many divines needed
+---
+<div class="simulate-widget parchment p-6 mb-6" id="mb-sim-widget">
+  <div class="flex items-center justify-between mb-4">
+    <h3 class="!m-0 text-lg font-display">🎯 Mageblood Legacy Fishing</h3>
+    <button id="mb-sim-run-btn" class="btn btn-danger text-sm px-4 py-1.5">
+      ▶ Run Simulation
+    </button>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+    <!-- Target legacies -->
+    <div>
+      <div class="text-xs text-dim mb-2 font-semibold">Target Legacies (pick 4)</div>
+      <div class="grid grid-cols-2 gap-2">
+        <select id="mb-legacy-1" class="bg-bg border border-border rounded px-2 py-1.5 text-xs w-full">
+          <option value="">— Pick Legacy #1 —</option>
+        </select>
+        <select id="mb-legacy-2" class="bg-bg border border-border rounded px-2 py-1.5 text-xs w-full">
+          <option value="">— Pick Legacy #2 —</option>
+        </select>
+        <select id="mb-legacy-3" class="bg-bg border border-border rounded px-2 py-1.5 text-xs w-full">
+          <option value="">— Pick Legacy #3 —</option>
+        </select>
+        <select id="mb-legacy-4" class="bg-bg border border-border rounded px-2 py-1.5 text-xs w-full">
+          <option value="">— Pick Legacy #4 —</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Target % range -->
+    <div>
+      <div class="text-xs text-dim mb-2 font-semibold">Target % Effect Range (25–50)</div>
+      <div class="flex items-center gap-2 text-xs">
+        <span class="text-dim">Min</span>
+        <select id="mb-pct-min" class="bg-bg border border-border rounded px-2 py-1 flex-1">
+          {Array.from({ length: 26 }, (_, i) => {
+            const v = String(25 + i);
+            return <option value={v} selected={i === 20}>{v}%</option>;
+          })}
+        </select>
+        <span class="text-dim">Max</span>
+        <select id="mb-pct-max" class="bg-bg border border-border rounded px-2 py-1 flex-1">
+          {Array.from({ length: 26 }, (_, i) => {
+            const v = String(25 + i);
+            return <option value={v} selected={i === 25}>{v}%</option>;
+          })}
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex gap-3 mb-3">
+    <label class="text-xs text-dim">Trials:
+      <select id="mb-trials" class="bg-bg border border-border rounded px-2 py-1 text-xs ml-1">
+        <option value="100">100 (fast)</option>
+        <option value="500" selected>500</option>
+        <option value="1000">1000</option>
+        <option value="5000">5000 (accurate)</option>
+      </select>
+    </label>
+    <span class="text-xs text-dim self-end">Divine Orb: ~1.0 div each</span>
+  </div>
+
+  <div id="mb-results" class="hidden">
+    <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-3">
+      <div class="parchment p-3 text-center">
+        <div class="text-xs text-dim">Avg Divines</div>
+        <div class="text-xl font-bold text-gold" id="mb-avg">-</div>
+      </div>
+      <div class="parchment p-3 text-center">
+        <div class="text-xs text-dim">Median</div>
+        <div class="text-xl font-bold text-gold" id="mb-median">-</div>
+      </div>
+      <div class="parchment p-3 text-center">
+        <div class="text-xs text-dim">P10</div>
+        <div class="text-lg font-bold text-gold" id="mb-p10">-</div>
+      </div>
+      <div class="parchment p-3 text-center">
+        <div class="text-xs text-dim">P90</div>
+        <div class="text-lg font-bold text-gold" id="mb-p90">-</div>
+      </div>
+      <div class="parchment p-3 text-center">
+        <div class="text-xs text-dim">Total Cost</div>
+        <div class="text-xl font-bold text-corrupted" id="mb-cost">-</div>
+      </div>
+    </div>
+    <div class="parchment p-3 mb-3 text-xs text-dim">
+      <span>Odds per Divine: 4 correct legacies =</span>
+      <span class="text-gold font-mono" id="mb-odds">-</span>
+    </div>
+    <div id="mb-log" class="text-xs text-dim font-mono max-h-32 overflow-y-auto"></div>
+  </div>
+</div>
+
+<script>
+  const LEGACY_POOL = [
+    'Legacy of Diamond', 'Legacy of Gold', 'Legacy of Jade',
+    'Legacy of Quicksilver', 'Legacy of Ruby', 'Legacy of Sapphire',
+    'Legacy of Silver', 'Legacy of Stibnite', 'Legacy of Sulphur',
+    'Legacy of Topaz', 'Legacy of Amethyst',
+  ];
+
+  // Populate dropdowns
+  function fillSelect(el: HTMLSelectElement) {
+    LEGACY_POOL.forEach(l => {
+      const opt = document.createElement('option');
+      opt.value = l;
+      opt.textContent = l;
+      el.appendChild(opt);
+    });
+  }
+
+  fillSelect(document.getElementById('mb-legacy-1') as HTMLSelectElement);
+  fillSelect(document.getElementById('mb-legacy-2') as HTMLSelectElement);
+  fillSelect(document.getElementById('mb-legacy-3') as HTMLSelectElement);
+  fillSelect(document.getElementById('mb-legacy-4') as HTMLSelectElement);
+
+  const runBtn = document.getElementById('mb-sim-run-btn') as HTMLButtonElement;
+  const trialsSelect = document.getElementById('mb-trials') as HTMLSelectElement;
+  const resultsDiv = document.getElementById('mb-results')!;
+  const avgEl = document.getElementById('mb-avg')!;
+  const medianEl = document.getElementById('mb-median')!;
+  const p10El = document.getElementById('mb-p10')!;
+  const p90El = document.getElementById('mb-p90')!;
+  const costEl = document.getElementById('mb-cost')!;
+  const oddsEl = document.getElementById('mb-odds')!;
+  const logEl = document.getElementById('mb-log')!;
+
+  // Prevent invalid % range
+  const pctMin = document.getElementById('mb-pct-min') as HTMLSelectElement;
+  const pctMax = document.getElementById('mb-pct-max') as HTMLSelectElement;
+  pctMin.addEventListener('change', () => {
+    if (parseInt(pctMin.value) > parseInt(pctMax.value)) {
+      pctMax.value = pctMin.value;
+    }
+  });
+  pctMax.addEventListener('change', () => {
+    if (parseInt(pctMax.value) < parseInt(pctMin.value)) {
+      pctMin.value = pctMax.value;
+    }
+  });
+
+  let running = false;
+
+  runBtn.addEventListener('click', async () => {
+    if (running) return;
+
+    // Gather targets
+    const targetLegacies = [
+      (document.getElementById('mb-legacy-1') as HTMLSelectElement).value,
+      (document.getElementById('mb-legacy-2') as HTMLSelectElement).value,
+      (document.getElementById('mb-legacy-3') as HTMLSelectElement).value,
+      (document.getElementById('mb-legacy-4') as HTMLSelectElement).value,
+    ];
+
+    if (targetLegacies.some(v => !v)) {
+      logEl.innerHTML = '<div class="text-corrupted">⚠️ Please select all 4 target legacies.</div>';
+      resultsDiv.classList.remove('hidden');
+      return;
+    }
+
+    // Check for duplicates
+    const unique = new Set(targetLegacies);
+    if (unique.size !== 4) {
+      logEl.innerHTML = '<div class="text-corrupted">⚠️ All 4 target legacies must be different.</div>';
+      resultsDiv.classList.remove('hidden');
+      return;
+    }
+
+    const minPct = parseInt(pctMin.value);
+    const maxPct = parseInt(pctMax.value);
+
+    if (minPct > maxPct) {
+      logEl.innerHTML = '<div class="text-corrupted">⚠️ Min % must be ≤ Max %.</div>';
+      resultsDiv.classList.remove('hidden');
+      return;
+    }
+
+    const trials = parseInt(trialsSelect.value);
+    const DIVINE_COST = 1.0;
+
+    running = true;
+    runBtn.textContent = '⏳ Running...';
+    runBtn.disabled = true;
+    resultsDiv.classList.remove('hidden');
+    logEl.innerHTML = '<div>Running ' + trials + ' trials...</div>';
+
+    // Calculate theoretical odds
+    // Each legacy: 1/15 chance to hit target. All 4 independent: (1/15)^4 = 1/50625
+    const legacyOdds = Math.pow(1 / LEGACY_POOL.length, 4);
+    const pctValues = 26; // 25-50 inclusive = 26 values
+    const pctInRange = (maxPct - minPct + 1) / pctValues;
+    const oddsPerDivine = legacyOdds * pctInRange;
+    oddsEl.textContent = `1 in ${(1 / oddsPerDivine).toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
+
+    // Defer to avoid blocking UI
+    await new Promise(r => setTimeout(r, 10));
+
+    const start = performance.now();
+    const results: number[] = [];
+
+    for (let t = 0; t < trials; t++) {
+      let divineCount = 0;
+      // Start with random values (not matching targets)
+      let currentLegacies = LEGACY_POOL.map(() => LEGACY_POOL[Math.floor(Math.random() * LEGACY_POOL.length)]);
+      let currentPct = 25 + Math.floor(Math.random() * 26);
+
+      while (true) {
+        // Check if we've hit all targets
+        const allMatch = targetLegacies.every((target, i) => currentLegacies[i] === target);
+        const pctMatch = currentPct >= minPct && currentPct <= maxPct;
+
+        if (allMatch && pctMatch) break;
+
+        // Divine Orb: reroll all 4 legacies + %
+        currentLegacies = currentLegacies.map(() => LEGACY_POOL[Math.floor(Math.random() * LEGACY_POOL.length)]);
+        currentPct = 25 + Math.floor(Math.random() * 26);
+        divineCount++;
+      }
+
+      results.push(divineCount);
+
+      if (trials >= 200 && t % Math.ceil(trials / 20) === 0) {
+        logEl.innerHTML = '<div>Progress: ' + Math.round((t / trials) * 100) + '% (' + t + '/' + trials + ')</div>';
+        await new Promise(r => setTimeout(r, 0));
+      }
+    }
+
+    const elapsed = ((performance.now() - start) / 1000).toFixed(1);
+    const sorted = [...results].sort((a, b) => a - b);
+    const avg = sorted.reduce((s, v) => s + v, 0) / sorted.length;
+    const median = sorted[Math.floor(sorted.length / 2)];
+    const p10 = sorted[Math.floor(sorted.length * 0.1)];
+    const p90 = sorted[Math.min(Math.floor(sorted.length * 0.9), sorted.length - 1)];
+
+    avgEl.textContent = avg.toLocaleString(undefined, { maximumFractionDigits: 0 });
+    medianEl.textContent = median.toLocaleString(undefined, { maximumFractionDigits: 0 });
+    p10El.textContent = p10.toLocaleString(undefined, { maximumFractionDigits: 0 });
+    p90El.textContent = p90.toLocaleString(undefined, { maximumFractionDigits: 0 });
+    costEl.textContent = (avg * DIVINE_COST).toLocaleString(undefined, { maximumFractionDigits: 0 }) + ' div';
+
+    logEl.innerHTML += '<div class="text-gold mt-1">✅ ' + trials + ' trials in ' + elapsed + 's — Avg ' + avg.toFixed(0) + ' divines (median ' + median + ', P10=' + p10 + ', P90=' + p90 + ')</div>';
+
+    running = false;
+    runBtn.textContent = '▶ Run Simulation';
+    runBtn.disabled = false;
+  });
+</script>
