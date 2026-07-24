@@ -2,6 +2,7 @@
 import Base from '~/layouts/Base.astro';
 import { METHODS, getMethod } from '~/lib/methods';
 import { useT } from '~/lib/i18n';
+import SimulateWidget from '~/components/craft/SimulateWidget.astro';
 import type { GetStaticPathsResult } from 'astro';
 
 export function getStaticPaths(): GetStaticPathsResult {
@@ -75,6 +76,16 @@ const pageUrl = `${siteUrl}/guides/${method.id}`;
       ))}
     </ul>
   </div>
+
+  <!-- Monte Carlo simulation widget -->
+  {method.id === 'boot_crafting_t1' || method.id === 'jewel_crafting' ? (
+    <div>
+      <script is:inline define:vars={{ methodId: method.id }}>
+        window.__SIM_METHOD__ = methodId === 'jewel_crafting' ? 'jewel' : 'boot';
+      </script>
+      <SimulateWidget />
+    </div>
+  ) : null}
 
   <!-- Action links -->
   <div class="flex gap-3 flex-wrap">
