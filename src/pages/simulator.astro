@@ -1226,13 +1226,7 @@ function openPasteModal() {
     // Initial URL param
     const params = new URLSearchParams(location.search);
     const initialBase = params.get('base');
-    // Restore persisted craft from localStorage (24h expiry)
-    const restored = restoreState();
-    if (restored) {
-      emptyState.classList.add("hidden"); mainUi.classList.remove("hidden");
-      renderAll(); logActivity("Previous craft restored from browser storage.", "info");
-    }
-    if (initialBase && !restored) {
+    if (initialBase) {
       basePicker.value = initialBase;
       selectBase(initialBase);
     }
