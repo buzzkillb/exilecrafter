@@ -106,6 +106,28 @@ export const METHODS: CraftingMethod[] = [
     difficulty: 'intermediate',
   },
   {
+    id: 'boot_crafting_t1',
+    name: 'T1 Triple-Suffix Boots (ES Recharge variant)',
+    description:
+      'Full deterministic path to craft ilvl 82 exceptional boots with T1 MS, triple T1 ES suffixes (double res + ES recharge rate), and T1 ES prefixes. Uses fracturing, chaos spam, Dextral + Greater exaltations, Perfect Exalt, Preserved Rib, and Omen of Light Jail. Real expected cost: ~30–50 div per successful craft.',
+    steps: [
+      'Buy an exceptional base with 35% MS and ilvl 82 (Sekhema Sandals or equivalent).',
+      'Fracture Orb the Movement Speed — locks T1 MS as a permanent prefix.',
+      'Annulment + Chaos spam until you hit T1 Cold or Fire resistance (use Flux Omens to target the element you need).',
+      'Activate Omen of Dextral Crystallisation → forces next exalt to add a prefix.',
+      'Activate Omen of Greater Exaltation → next exalt adds 2 affixes.',
+      'Use Dextral Exaltation + Perfect Exalted Orb → adds 2 T1 prefixes (guaranteed tier-1 rolls).',
+      'If it hits triple resist (two T1 res + any third prefix), great! Otherwise repeat step 3+.',
+      'Apply Preserved Rib (armour prefix) → adds a desecrated prefix (hybrid ES + stun threshold or ES mod).',
+      'Use Perfect Exalted Orb for the 3rd prefix → forces flat ES +% ES combination.',
+      'Activate Omen of Light Jail → desecrated prefix becomes permanent.',
+      'Finish with a 2nd Perfect Exalted Orb for the remaining ES prefix.',
+      'Result: T1 MS, T1 ES%, T1 flat ES / triple T1 suffix (cold res, fire res, ES recharge rate).',
+    ],
+    bestFor: ['T1 triple-res ES boots', 'endgame ES stackers', '30–50 div budget', 'ES recharge rate suffix seekers'],
+    difficulty: 'expert',
+  },
+  {
     id: 'jewel_crafting',
     name: 'Endgame Jewel Crafting (5-mod target)',
     description:
