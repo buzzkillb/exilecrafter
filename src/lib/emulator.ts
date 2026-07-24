@@ -550,7 +550,6 @@ export function ancientOrb(ctx: EmulatorContext): CraftResult {
   for (let i = 0; i < maxS; i++) {
     const a = pickAffix(poolS, 'suffix', blocked, ctx.weights, base);
     if (!a) break;
-    newAffixes.push(a);
     blocked.add(a.modId);
   }
 
@@ -558,17 +557,14 @@ export function ancientOrb(ctx: EmulatorContext): CraftResult {
     ...item,
     rarity: 'unique' as const,
     affixes: newAffixes,
-    history: [...item.history, { action: 'Ancient Orb', detail: 'Rerolled into new Rare' }],
+    history: [...item.history, { action: 'Ancient Orb', detail: 'Rerolled into another Unique of the same class' }],
   };
-  return { ok: true, message: 'Re-rolled into a new Rare.', item: next };
+  return { ok: true, message: 'Rerolled into a different Unique item.', item: next };
+
 
 }
 
 export function mirrorOfKalandra(ctx: EmulatorContext): CraftResult {
-  // Mirror of Kalandra: creates a Mirrored copy of a Rare item.
-  // The simulator doesn't have a side-by-side compare view, so we model
-  // it as "the source becomes mirrored" â€” locks the item so no further
-  // crafting is possible (matches PoE2 behavior).
   const { item } = ctx;
   if (item.rarity !== 'rare' && item.rarity !== 'unique') {
     return { ok: false, message: 'Mirror of Kalandra only works on Rare or Unique items.', item };
@@ -1048,6 +1044,52 @@ export function emptyItem(base, itemLevel) {
 
 
 
+/* ============================================================
+   Quality utility operations
+   ============================================================ */
+
+export function armourersScrap(ctx: EmulatorContext): CraftResult {
+  const { item } = ctx;
+  // Armourer's Scrap: adds +20% quality to armour items
+  // Valid on: helmet, body_armour, gloves, boots, shield
+  const validSlots = ['helmet', 'body_armour', 'gloves', 'boots', 'shield'];
+  if (!validSlots.includes(item.slot)) {
+    return { ok: false, message: "Armourer's Scrap only works on armour items (helmet, body, gloves, boots, shield).", item };
+  }
+  return {
+    ok: true,
+    message: "Applied Armourer's Scrap (+20% quality).",
+    item: { ...item, history: [...item.history, { action: "Armourer's Scrap", detail: '+20% quality' }] },
+  };
+}
+
+export function blacksmithsWhetstone(ctx: EmulatorContext): CraftResult {
+  const { item } = ctx;
+  // Blacksmith's Whetstone: adds +20% quality to weapons
+  const validSlots = ['weapon_1h', 'weapon_2h', 'quiver'];
+  if (!validSlots.includes(item.slot)) {
+    return { ok: false, message: "Blacksmith's Whetstone only works on weapons.", item };
+  }
+  return {
+    ok: true,
+    message: "Applied Blacksmith's Whetstone (+20% quality).",
+    item: { ...item, history: [...item.history, { action: "Blacksmith's Whetstone", detail: '+20% quality' }] },
+  };
+}
+
+export function glassblowersBauble(ctx: EmulatorContext): CraftResult {
+  const { item } = ctx;
+  // Glassblower's Bauble: adds +20% quality to flasks
+  if (item.slot !== 'flask') {
+    return { ok: false, message: "Glassblower's Bauble only works on flasks.", item };
+  }
+  return {
+    ok: true,
+    message: "Applied Glassblower's Bauble (+20% quality).",
+    item: { ...item, history: [...item.history, { action: "Glassblower's Bauble", detail: '+20% quality' }] },
+  };
+}
+
 export const OPERATIONS: Record<string, (c: any) => any> = {
   orb_of_transmutation: orbOfTransmutation,
   orb_of_augmentation: orbOfAugmentation,
@@ -1069,10 +1111,12 @@ export const OPERATIONS: Record<string, (c: any) => any> = {
   catalyst: catalystOrb,
   alloy: essenceOrb,
   hinekoras_lock: hinekoraLock,
+  armourers_scrap: armourersScrap,
+  blacksmiths_whetstone: blacksmithsWhetstone,
+  glassblowers_bauble: glassblowersBauble,
 };
 
 function orbOfChance(ctx: EmulatorContext): CraftResult {
-  // Orb of Chance: gambles a Normal item. PoE2 outcomes: ~1% Unique, ~10% Rare, ~15% Magic, ~74% nothing.
   const { item } = ctx;
   if (item.rarity !== 'normal') return { ok: false, message: 'Chance only works on Normal items.', item };
 

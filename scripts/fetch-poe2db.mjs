@@ -68,6 +68,7 @@ const GUIDE_PAGES = ['Crafting', 'Modifiers', 'Desecrated_Modifiers', 'Keywords'
 const EXTRA_CURRENCY_PAGES = [
   'Preserved_Cranium',  // Abyssal Depths — desecrates a Rare Jewel
   'Ancient_Orb',        // Reforges a unique item — not on Currency listing SVG tab
+  'Corrupted',          // Corrupted implicit mods for Vaal Orb outcome
   // Desecration Bones — targeted desecration for different equipment slots
   'Ancient_Collarbone', 'Preserved_Collarbone', 'Gnawed_Collarbone',  // amulets/rings/belts (Ulaman)
   'Ancient_Jawbone', 'Preserved_Jawbone', 'Gnawed_Jawbone',           // weapons/quivers (Amanamu)
