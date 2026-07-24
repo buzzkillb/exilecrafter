@@ -569,16 +569,26 @@ function openPasteModal() {
       const uniques = item.affixes.filter((a: any) => a.type === 'unique');
       const slotTypeLabel = SLOT_LABELS[base.slot] || base.slot;
 
+      // Mod text color by rarity — matches in-game PoE2 tooltip style
+      const MOD_TEXT_COLORS: Record<string, string> = {
+        normal: '#ffffff',
+        magic: '#8888ff',
+        rare: '#d4c84a',
+        unique: '#d0c8b0',
+      };
+      const CRAFTED_MOD_COLORS: Record<string, string> = {
+        normal: '#cccccc',
+        magic: '#a0a0ff',
+        rare: '#e8d8a0',
+        unique: '#e0d8c0',
+      };
       const rowHTML = (a: any) => {
-        let color = '#7fb5ff'; // PoE2 standard affix blue
-        let deco = 'none';
-        if (a.crafted) {
-          color = '#b0d8ff'; // paler whitish-blue for crafted mods
-        }
+        const baseColor = MOD_TEXT_COLORS[item.rarity] || '#a89a7d';
+        const color = a.crafted ? (CRAFTED_MOD_COLORS[item.rarity] || baseColor) : baseColor;
         return `
           <div class="item-row">
             <span class="mod-tier">T${a.tier}</span>
-            <span class="mod-text" style="color: ${color}; text-decoration: ${deco}">${escapeHtml(a.name)}</span>
+            <span class="mod-text" style="color: ${color}">${escapeHtml(a.name)}</span>
           </div>
         `;
       };
@@ -662,7 +672,7 @@ function openPasteModal() {
           ` : ''}
           ${separatorHTML(false)}
           <div class="item-footer">
-            <div class="item-rarity">${capitalize(item.rarity)} · Item Level: ${item.itemLevel}</div>
+            <div class="item-rarity">${capitalize(item.rarity)}</div>
             ${item.corruptionLevel === 2 ? `<div class="corrupted-indicator">Twice Corrupted</div>` : item.corrupted ? `<div class="corrupted-indicator">Corrupted</div>` : ''}
           </div>
           ${item.imageUrl ? `
