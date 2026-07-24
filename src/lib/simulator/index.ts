@@ -17,3 +17,21 @@ export {
 } from './omens';
 
 export type { OmenOpt } from './omens';
+
+export {
+  currentBase, currentItem, history, activeOmens, activityLog,
+  currencyData, omensData, modsData, weightsData,
+  setCurrentBase, setCurrentItem, setHistory, pushHistory, resetHistory,
+  addActivityLogEntry, clearActivityLog,
+  setCurrencyData, setOmensData, setModsData, setWeightsData,
+  usedCount, tierGroup, TIER_PREFIX_RE, TIER_ORDER,
+} from './store';
+
+export { loadData, finishLoad } from './data-loader';
+export type { DataLoaderDeps } from './data-loader';
+
+export { setupKeyboardShortcuts } from './keyboard';
+export type { KeyboardDeps } from './keyboard';
+
+export { getCraftingExamples } from './examples';
+export type { CraftingExample } from './examples';
