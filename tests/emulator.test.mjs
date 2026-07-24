@@ -339,6 +339,47 @@ console.log('\n[9] Divine Orb');
   assertFail(res2, 'Divine on corrupted should fail');
 }
 
+// 9b. Divine Orb on unscalable unique mods (variant reroll)
+console.log('\n[9b] Divine Orb — unscalable variant reroll');
+{
+  // Simulate a Mageblood-like item with unscalable Legacy mods
+  const item = makeItem(helmetBase, {
+    rarity: 'unique',
+    corrupted: false,
+    affixes: [
+      { modId: 'u1', type: 'unique', tier: 1, name: 'Legacy of Diamond(Amethyst-Topaz)', tags: [], unscalable: true, descriptiveName: '' },
+      { modId: 'u2', type: 'unique', tier: 1, name: 'Legacy of Jade(Amethyst-Topaz)', tags: [], unscalable: true, descriptiveName: '' },
+      { modId: 'u3', type: 'unique', tier: 1, name: 'All Legacies have 39(25-50)% increased effect', tags: [], unscalable: false, descriptiveName: '' },
+    ],
+  });
+  const res = emu.divineOrb(ctx(item));
+  assertOk(res, 'Divine on unique with unscalable mods');
+  assert(res.item.affixes.length === 3, 'still 3 affixes');
+
+  // The numeric mod should have been rerolled
+  const numeric = res.item.affixes.find(a => a.modId === 'u3');
+  assert(numeric, 'numeric mod still present');
+  // After divine, 39(25-50)% should change (25-50 range, not always 39)
+  // We'll skip checking if it actually changed since it's random; just check it's valid
+  const changed = !numeric.name.includes('39(25-50)');
+  assert(changed, `numeric mod rerolled (was "39(25-50)%", now "${numeric.name}")`);
+
+  // At least one Legacy variant should have changed
+  const v1 = res.item.affixes.find(a => a.modId === 'u1');
+  const v2 = res.item.affixes.find(a => a.modId === 'u2');
+  const anyVariantChanged =
+    (v1 && !v1.name.includes('(Amethyst-Topaz)')) ||
+    (v2 && !v2.name.includes('(Amethyst-Topaz)'));
+  // Note: it's possible (though unlikely) that both stay same if random picks same variant
+  // We'll just verify they're valid variant names
+  assert(v1 && /\([^)]+\)$/.test(v1.name), `variant1 has annotation: ${v1?.name}`);
+  assert(v2 && /\([^)]+\)$/.test(v2.name), `variant2 has annotation: ${v2?.name}`);
+  // With 15 variants and 4 being rerolled, at least ONE should change most of the time
+  // But to avoid flaky tests, we just check format is still valid
+  // The important thing: unscalable mods didn't break anything
+  console.log(`  variant1: ${v1?.name}  variant2: ${v2?.name}  numeric: ${numeric?.name}`);
+}
+
 // ==================== 10. Perfect Exalted Orb ====================
 console.log('\n[10] Perfect Exalted Orb');
 {

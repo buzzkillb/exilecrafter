@@ -494,6 +494,8 @@ function openPasteModal() {
         modId: `imported_${a.type}_${a.name.slice(0, 20).replace(/\W+/g, '_').toLowerCase()}`,
         type: a.type, tier: a.tier || 1, name: a.name,
         tags: [], crafted: !!a.crafted, desecrated: !!a.desecrated,
+                unscalable: a.unscalable || false,
+                descriptiveName: a.descriptiveName || '',
       }));
       currentItem.affixes = affixes;
       currentItem.bonusPrefixSlots = affixes.filter((a: any) => (a.desecrated || a.crafted) && a.type === 'prefix').length;

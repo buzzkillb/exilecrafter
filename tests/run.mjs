@@ -649,6 +649,40 @@ console.log('\n[parse-paste: Guardian Spear (combat + granted skill)]');
   assert(p.grantedSkills[0] === 'Spear Throw', `granted skill '${p.grantedSkills[0]}' === 'Spear Throw'`);
 }
 
+// ──────────────── parse-paste: Mageblood (unique, unscalable variant mods) ────────────────
+
+console.log('\n[parse-paste: Mageblood (unscalable variant mods)]');
+{
+  const text = await loadFixture('mageblood.txt');
+  const p = itemsMod.parsePaste(text, BASES);
+  assert(p.rarity === 'Unique', 'rarity Unique');
+  assertEq(p.baseName, 'Utility Belt', 'base Utility Belt');
+  assertEq(p.itemName, 'Mageblood', 'itemName Mageblood');
+  assertEq(p.itemLevel, 80, 'ilvl 80');
+
+  // 5 unique modifiers: 4 Legacy variants + 1 numeric
+  assertEq(p.affixes.length, 5, '5 unique affixes');
+
+  // All 4 Legacy mods should have unscalable flag
+  const legacyMods = p.affixes.filter(a => a.unscalable === true);
+  assertEq(legacyMods.length, 4, '4 unscalable Legacy mods');
+
+  // Verify unscalable stripping: names should NOT contain "Unscalable Value"
+  for (const a of legacyMods) {
+    assert(!a.name.includes('Unscalable Value'), `${a.name} stripped unscalable`);
+  }
+
+  // Verify variant annotation preserved: names should have (X-Y) pattern
+  assert(legacyMods.some(a => a.name.includes('(Amethyst-Topaz)')), 'variant preserved');
+
+  // Numeric mod (the 5th one) should NOT be unscalable
+  const numericMod = p.affixes.find(a => a.name.includes('increased effect'));
+  assert(numericMod && numericMod.unscalable !== true, 'numeric mod not unscalable');
+
+  // Flavor text
+  assert(p.flavorText && p.flavorText.includes('Rivers of power'), 'flavor text captured');
+}
+
 // ──────────────── SUMMARY ────────────────
 
 console.log('\n────────────────────────────────────────────');
