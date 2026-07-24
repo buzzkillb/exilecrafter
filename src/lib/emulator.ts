@@ -5,6 +5,7 @@
 import type { Mod, BaseItem, Currency, Omen, WeightEntry } from './types.ts';
 import { CORRUPTED_IMPLICITS } from './corrupted-implicits.ts';
 import { buildPool, pickN, type PoolResult } from './weights.ts';
+import { divineAffixName } from './divine-affix.ts';
 
 export type ItemRarity = 'normal' | 'magic' | 'rare' | 'unique';
 
@@ -448,20 +449,30 @@ export function divineOrb(ctx: EmulatorContext): CraftResult {
   const implicitOnly = omenOf(ctx.activeOmens, 'divine_implicit_only');   // Omen of the Blessed
   const upgrade = omenOf(ctx.activeOmens, 'divine_upgrade');              // Omen of Sanctification
 
-  let detail = 'Rerolled numeric values';
-  if (implicitOnly) {
-    detail = 'Rerolled implicit values only (Omen of the Blessed)';
-  }
-  if (upgrade) {
-    detail = 'Upgraded affix tiers (Omen of Sanctification)';
-  }
+  let rerolled = 0;
+const divined = item.affixes.map((a) => {
+  const { name, changed } = divineAffixName(a.name);
+  if (changed) rerolled++;
+  return { ...a, name };
+});
 
-  const next: ItemState = {
-    ...item,
-    affixes: item.affixes.map((a) => ({ ...a })),
-    history: [...item.history, { action: 'Divine Orb', detail }],
-  };
-  return { ok: true, message: detail, item: next };
+let detail;
+if (implicitOnly) {
+  detail = 'Rerolled implicit values only (Omen of the Blessed)';
+} else if (upgrade) {
+  detail = 'Upgraded affix tiers (Omen of Sanctification)';
+} else if (rerolled > 0) {
+  detail = 'Rerolled ' + rerolled + ' numeric affix value' + (rerolled !== 1 ? 's' : '');
+} else {
+  detail = 'No numeric ranges to reroll';
+}
+
+const next: ItemState = {
+  ...item,
+  affixes: divined,
+  history: [...item.history, { action: 'Divine Orb', detail }],
+};
+return { ok: true, message: detail, item: next };
 }
 
 export function vaalOrb(ctx: EmulatorContext): CraftResult {
