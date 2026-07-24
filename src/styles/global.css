@@ -154,16 +154,25 @@ a:hover { color: var(--color-gold-bright); }
   background: linear-gradient(180deg, #5c1a1a, #2a0a0a);
   border-color: var(--color-gold-dim);
   border-width: 1px;
-  color: #f0e6d2;
+  color: var(--color-gold);
   text-shadow: 0 1px 3px rgba(0,0,0,0.8);
   font-weight: 500;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.03em;
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  clip-path: polygon(
+    5px 0%, calc(100% - 5px) 0%,
+    100% 5px, 100% calc(100% - 5px),
+    calc(100% - 5px) 100%,
+    5px 100%,
+    0% calc(100% - 5px), 0% 5px
+  );
 }
 .btn-danger:hover {
   background: linear-gradient(180deg, #7a2222, #3e0e0e);
   border-color: var(--color-gold);
-  color: #ffffff;
-  box-shadow: 0 0 8px rgba(201,161,74,0.2);
+  color: var(--color-gold-bright);
+  box-shadow: 0 0 10px rgba(201,161,74,0.3);
 }
 .btn-danger:active {
   background: linear-gradient(180deg, #3e0e0e, #1a0606);
