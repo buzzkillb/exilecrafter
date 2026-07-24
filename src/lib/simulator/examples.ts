@@ -103,5 +103,29 @@ export function getCraftingExamples(bases: BaseItem[]): CraftingExample[] {
       goal: '2P/2S damage quiver at ilvl 1',
       difficulty: 'beginner',
     },
+    {
+      id: bases.find((b) => b.name === 'Utility Belt')?.id || '',
+      name: 'Utility Belt',
+      tag: '🧪 Unique',
+      description: 'Mageblood base. Divine Orb rerolls Legacy variants — craft and test Divine mechanics.',
+      goal: 'Test Divine Orb on unscalable unique mods — variant rerolls',
+      difficulty: 'expert',
+    },
+    {
+      id: bases.find((b) => b.name === 'Jade Talisman')?.id || '',
+      name: 'Jade Talisman',
+      tag: '🔮 Talisman',
+      description: 'Multi-elemental damage weapon. Roll fire, cold, lightning flat damage and crit.',
+      goal: '3P/2S elemental talisman at ilvl 82',
+      difficulty: 'advanced',
+    },
+    {
+      id: bases.find((b) => b.name === 'Guardian Spear')?.id || '',
+      name: 'Guardian Spear',
+      tag: '🗡️ Spear',
+      description: 'One-handed spear with implicit deflection. Roll lightning damage, mana, stun.',
+      goal: '1P/3S spear at ilvl 82 with granted skill',
+      difficulty: 'intermediate',
+    },
   ];
 }
