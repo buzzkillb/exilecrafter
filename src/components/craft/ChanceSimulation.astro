@@ -43,7 +43,7 @@
         <div class="text-2xl font-bold text-yellow-400" id="chance-trash">-</div>
       </div>
       <div class="parchment p-3 text-center">
-        <div class="text-xs text-dim">Total Cost</div>
+        <div class="text-xs text-dim">Orbs of Chance</div>
         <div class="text-2xl font-bold text-gold" id="chance-cost">-</div>
       </div>
     </div>
@@ -116,17 +116,17 @@
       }
 
       function finish() {
-        var cost = (orbs * ORB_PRICE).toFixed(1);
+        var costDiv = (orbs * ORB_PRICE).toFixed(1);
 
         document.getElementById('chance-orbs').textContent = orbs.toLocaleString();
         document.getElementById('chance-poofs').textContent = poofs.toLocaleString();
         document.getElementById('chance-trash').textContent = trash.toLocaleString();
-        document.getElementById('chance-cost').textContent = cost + ' div';
+        document.getElementById('chance-cost').textContent = orbs.toLocaleString();
         document.getElementById('chance-target-line').textContent = '🎯 Hit ' + targetName + '!';
 
         logEl.innerHTML = '✅ Found ' + targetName + ' after ' + orbs.toLocaleString() + ' orbs' +
           '\n   POOF: ' + poofs.toLocaleString() + '  Trash: ' + trash.toLocaleString() +
-          '  Cost: ~' + cost + ' div';
+          '  (~' + costDiv + ' div)';
 
         running = false;
         RUN.textContent = '▶ Run Simulation';
