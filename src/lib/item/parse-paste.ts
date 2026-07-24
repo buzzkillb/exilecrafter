@@ -139,7 +139,30 @@ const DEFENSE_NAMES = new Set([
  * Returns the DefenseStat or null if the line doesn't match.
  */
 function parseCombatStatLine(line: string): import('./types.ts').CombatStat | null {
-  const m = line.match(/^(Physical Damage|Lightning Damage|Fire Damage|Cold Damage|Chaos Damage|Critical Hit Chance|Attacks per Second):\s*([\d.,]+(?:[%-][\d.]*)?(?:\s*-\s*[\d.,]+(?:[%-][\d.]*)?)?)\s*(?:\((\w+)\))?\s*$/i);
+  // First try the multi-element "Elemental Damage" format:
+  //   Elemental Damage: 51-71 (fire), 69-111 (cold), 9-210 (lightning)
+  const multiEl = line.match(/^(Elemental Damage):\s*(.+)$/i);
+  if (multiEl) {
+    const segments: import('./types.ts').CombatStatSegment[] = [];
+    const rest = multiEl[2];
+    // Match each "<range> (<element>)" pair separated by commas
+    const segRe = /([\d.,]+\s*-\s*[\d.,]+)\s*\((\w+)\)/g;
+    let sm: RegExpExecArray | null;
+    while ((sm = segRe.exec(rest)) !== null) {
+      segments.push({ text: sm[1], element: sm[2].toLowerCase() });
+    }
+    if (segments.length > 0) {
+      const text = segments.map(s => s.text).join(', ');
+      return { label: multiEl[1], text, segments };
+    }
+    // fallthrough — treat as uncoloured single text
+    return { label: multiEl[1], text: rest.trim() };
+  }
+
+  // Single-element format (plus physical, crit, attack speed):
+  //   Physical Damage: 47-79
+  //   Lightning Damage: 8-135 (lightning)
+  const m = line.match(/^(Physical Damage|Lightning Damage|Fire Damage|Cold Damage|Chaos Damage|Elemental Damage|Critical Hit Chance|Attacks per Second):\s*([\d.,]+(?:[%-][\d.]*)?(?:\s*-\s*[\d.,]+(?:[%-][\d.]*)?)?)\s*(?:\((\w+)\))?\s*$/i);
   if (!m) return null;
   const element = m[3] ? m[3].toLowerCase() : undefined;
   return { label: m[1], text: m[2], element };

@@ -28,11 +28,20 @@ export interface DefenseStat {
   augmented: boolean; // true if line has "(augmented)" suffix
 }
 
+/** A single colored segment within a combat stat line (used for multi-element displays). */
+export interface CombatStatSegment {
+  text: string;
+  element: string;       // e.g. "fire", "cold", "lightning" — determines display color
+}
+
 /** Weapon-specific combat stats (damage, attack speed, crit, granted skills). */
 export interface CombatStat {
   label: string;        // e.g. "Physical Damage", "Lightning Damage", "Attacks per Second"
   text: string;         // display text, e.g. "47-79", "8-135", "1.55", "5.00%"
   element?: string;     // e.g. "lightning" from the parenthetical "(lightning)"
+  /** When a single line carries multiple elements (e.g. Elemental Damage: 51-71 (fire), 69-111 (cold)).
+   *  The renderer uses these segments in order, colouring each by its element. */
+  segments?: CombatStatSegment[];
 }
 
 export interface Requirements {

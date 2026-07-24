@@ -678,12 +678,24 @@ function openPasteModal() {
               <span class="item-stat-value">${d.value}</span>
             </div>
           `).join('') : ''}
-                    ${item.combatStats && item.combatStats.length > 0 ? item.combatStats.map((cs: any) => `
+                    ${item.combatStats && item.combatStats.length > 0 ? item.combatStats.map((cs: any) => {
+            const COLOR = { lightning: '#d4c84a', cold: '#4a8fc4', fire: '#c44a2a', chaos: '#a04ac4' };
+            if (cs.segments && cs.segments.length > 0) {
+              const parts = cs.segments.map((seg, idx) =>
+                `<span style="color:${COLOR[seg.element] || '#c8c8c8'}">${escapeHtml(seg.text)}${idx < cs.segments.length - 1 ? ', ' : ''}</span>`
+              ).join('');
+              return `
             <div class="item-level-row">
               <span class="item-stat-label">${escapeHtml(cs.label)}:</span>
-              <span class="item-stat-value" style="color:${{ lightning: '#d4c84a', cold: '#4a8fc4', fire: '#c44a2a', chaos: '#a04ac4' }[cs.element || ''] || '#c8c8c8'}">${escapeHtml(cs.text)}</span>
-            </div>
-          `).join('') : ''}
+              <span class="item-stat-value">${parts}</span>
+            </div>`;
+            }
+            return `
+            <div class="item-level-row">
+              <span class="item-stat-label">${escapeHtml(cs.label)}:</span>
+              <span class="item-stat-value" style="color:${COLOR[cs.element || ''] || '#c8c8c8'}">${escapeHtml(cs.text)}</span>
+            </div>`;
+          }).join('') : ''}
           ${item.requirements && item.requirements.level ? `
             <div class="item-requirements-row">
               <span class="item-stat-label">Requires:</span>
