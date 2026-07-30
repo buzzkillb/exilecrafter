@@ -247,12 +247,14 @@
 
       // Hybrid mod chart. All 3 factions roll the same hybrid template, the
       // only difference is the secondary stat (ES / Armour / Evasion).
-      const hybridId = 'mod_prefix_desecrated_abyssjewelmod_48increasedspelldamage510increasedmaximumenergys1a52';
-      const hybridIdArmour = 'mod_prefix_desecrated_abyssjewelmod_48increasedspelldamage510increasedarmourc9d4';
-      const hybridIdEvasion = 'mod_prefix_desecrated_abyssjewelmod_48increasedspelldamage510increasedevasionrating08c7';
-      const hybridIds = [hybridId, hybridIdArmour, hybridIdEvasion];
-      const allPrefixes = (s: any) => s.affixes.filter((a: any) => a.type === 'prefix');
-      const isHybridPrefix = (s: any) => allPrefixes(s).some((a: any) => hybridIds.includes(a.modId));
+      const hybridIds = (
+        target === 'any'
+          ? ['mod_prefix_desecrated_abyssjewelmod_48increasedspelldamage510increasedmaximumenergys1a52',
+             'mod_prefix_desecrated_abyssjewelmod_48increasedspelldamage510increasedarmourc9d4',
+             'mod_prefix_desecrated_abyssjewelmod_48increasedspelldamage510increasedevasionrating08c7']
+          : ['mod_prefix_desecrated_abyssjewelmod_48increasedspelldamage510increasedmaximumenergys1a52']
+      );
+      const isHybridPrefix = (s: any) => s.affixes.some((a: any) => hybridIds.includes(a.modId));
 
       let state: any = emu.emptyItem(sapphire, 82);
       state.rarity = 'rare';
