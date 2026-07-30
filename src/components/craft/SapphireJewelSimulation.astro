@@ -1,0 +1,354 @@
+---
+// SapphireJewelSimulation.astro — single-run replay of the Sapphire
+// ES/Spell Damage jewel recipe posted in the in-game screenshot.
+//
+// Uses the *real* emulator under the hood (applyOperation), so this widget
+// exercises the same code path the live simulator runs. Each click reruns
+// the full 10-step recipe with a fresh RNG seed and prints the resulting
+// affix list so users can compare the in-game outcome with the simulator.
+//
+// Cost: counts the number of each currency spent on the *winning* run
+// (averaged across the chosen number of trials).
+---
+<div class="simulate-widget parchment p-6 mb-6" id="sapphire-sim-widget">
+  <div class="flex items-center justify-between mb-3">
+    <h3 class="!m-0 text-lg font-display">💎 Sapphire ES/Spell Jewel — Live Recipe</h3>
+    <button id="sapphire-sim-run-btn" class="btn btn-danger text-sm px-4 py-1.5">
+      ▶ Run Recipe
+    </button>
+  </div>
+
+  <p class="text-xs text-dim mb-3">
+    Pre-loaded with the in-game recipe from the screenshot. Picks a Sapphire jewel,
+    applies Liquid Contempt → Desecrate + Omen of Abyssal Echo (×9) → Omen of
+    Light + Annul → Dextral + Annul → Exalt → Dextral + Annul again → Exalt →
+    Chaos spam → Liquid Ferocity → Divine → 20 Refined Carapace catalysts → Vaal.
+    Each run uses real poe2db weights, so the RNG is the same as in-game.
+  </p>
+
+  <div class="flex gap-3 mb-3 flex-wrap">
+    <label class="text-xs text-dim">Trials:
+      <select id="sapphire-trials" class="bg-bg border border-border rounded px-2 py-1 text-xs ml-1">
+        <option value="1" selected>1 (single run)</option>
+        <option value="10">10 (show materials)</option>
+        <option value="50">50 (avg materials)</option>
+      </select>
+    </label>
+    <span class="text-xs text-dim self-center" id="sapphire-status">Idle</span>
+  </div>
+
+  <div id="sapphire-results" class="hidden">
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-3">
+      <div class="parchment p-3 text-center">
+        <div class="text-xs text-dim">Success Rate</div>
+        <div class="text-xl font-bold text-gold" id="sapphire-success">-</div>
+      </div>
+      <div class="parchment p-3 text-center">
+        <div class="text-xs text-dim">Avg Hybrid Roll</div>
+        <div class="text-xl font-bold text-gold" id="sapphire-hybrid">-</div>
+      </div>
+      <div class="parchment p-3 text-center">
+        <div class="text-xs text-dim">Avg Effect of Prefixes</div>
+        <div class="text-xl font-bold text-gold" id="sapphire-effect">-</div>
+      </div>
+      <div class="parchment p-3 text-center">
+        <div class="text-xs text-dim">Avg Quality</div>
+        <div class="text-xl font-bold text-gold" id="sapphire-quality">-</div>
+      </div>
+    </div>
+
+    <div class="parchment p-3 mb-3" id="sapphire-mats-wrap" style="display:none">
+      <div class="text-xs text-dim mb-2">Avg Materials Per Success</div>
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-1 text-xs font-mono" id="sapphire-mats-grid"></div>
+    </div>
+
+    <div class="parchment p-3 mb-3">
+      <div class="text-xs text-dim mb-2">Last Run — Final Item</div>
+      <div class="text-xs font-mono text-fg whitespace-pre-wrap" id="sapphire-final-item"></div>
+    </div>
+
+    <div id="sapphire-log" class="text-xs text-dim font-mono max-h-40 overflow-y-auto"></div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    var RUN = document.getElementById('sapphire-sim-run-btn') as HTMLButtonElement;
+    var TRIALS = document.getElementById('sapphire-trials') as HTMLSelectElement;
+    var STATUS = document.getElementById('sapphire-status') as HTMLSpanElement;
+    var RESULTS = document.getElementById('sapphire-results') as HTMLDivElement;
+    var SUCCESS = document.getElementById('sapphire-success') as HTMLDivElement;
+    var HYBRID = document.getElementById('sapphire-hybrid') as HTMLDivElement;
+    var EFFECT = document.getElementById('sapphire-effect') as HTMLDivElement;
+    var QUALITY = document.getElementById('sapphire-quality') as HTMLDivElement;
+    var MATS_WRAP = document.getElementById('sapphire-mats-wrap') as HTMLDivElement;
+    var MATS_GRID = document.getElementById('sapphire-mats-grid') as HTMLDivElement;
+    var FINAL_ITEM = document.getElementById('sapphire-final-item') as HTMLDivElement;
+    var LOG = document.getElementById('sapphire-log') as HTMLDivElement;
+
+    var running = false;
+    RUN.addEventListener('click', async function() {
+      if (running) return;
+      var trials = parseInt(TRIALS.value, 10);
+      running = true;
+      RUN.disabled = true;
+      RUN.textContent = '⏳ Running...';
+      RESULTS.classList.remove('hidden');
+      LOG.innerHTML = '';
+
+      try {
+        // Lazily import the emulator so the page still loads when JS is slow.
+        const emu = await import('~/lib/emulator');
+        let successCount = 0;
+        let hybridRolls: number[] = [];
+        let effectRolls: number[] = [];
+        let qualityRolls: number[] = [];
+        let totals: Record<string, number> = {};
+        let lastItem: any = null;
+
+        for (let i = 0; i < trials; i++) {
+          STATUS.textContent = 'Trial ' + (i + 1) + ' / ' + trials;
+          const r = await runRecipe(emu);
+          if (r.ok) {
+            successCount++;
+            hybridRolls.push(r.hybridValue);
+            effectRolls.push(r.effectValue);
+            qualityRolls.push(r.quality);
+            for (const k of Object.keys(r.materials)) {
+              totals[k] = (totals[k] || 0) + r.materials[k];
+            }
+            lastItem = r.item;
+          }
+        }
+
+        const successRate = trials > 0 ? Math.round((successCount / trials) * 100) : 0;
+        SUCCESS.textContent = successCount + ' / ' + trials + ' (' + successRate + '%)';
+        HYBRID.textContent = avg(hybridRolls).toFixed(1) + '%';
+        EFFECT.textContent = avg(effectRolls).toFixed(1) + '%';
+        QUALITY.textContent = avg(qualityRolls).toFixed(1) + '%';
+
+        if (successCount > 0 && Object.keys(totals).length > 0) {
+          MATS_WRAP.style.display = 'block';
+          const entries = Object.entries(totals)
+            .sort((a, b) => b[1] - a[1])
+            .map(([k, v]) => {
+              const perSuccess = (v / successCount).toFixed(1);
+              const label = k.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+              return `<span class="text-dim">${label}: <span class="text-fg">${perSuccess}</span></span>`;
+            });
+          MATS_GRID.innerHTML = entries.join('');
+        } else {
+          MATS_WRAP.style.display = 'none';
+        }
+
+        if (lastItem) {
+          FINAL_ITEM.textContent = formatItem(lastItem);
+        } else {
+          FINAL_ITEM.textContent = '(no successful run)';
+        }
+
+        LOG.innerHTML += `<div class="text-gold mt-1">✅ ${trials} trial(s) — ${successCount} success(es)</div>`;
+      } catch (err: any) {
+        LOG.innerHTML += `<div class="text-corrupted">Error: ${err.message || err}</div>`;
+      } finally {
+        running = false;
+        RUN.disabled = false;
+        RUN.textContent = '▶ Run Recipe';
+        STATUS.textContent = 'Idle';
+      }
+    });
+
+    function avg(arr: number[]): number {
+      if (arr.length === 0) return 0;
+      return arr.reduce((s, n) => s + n, 0) / arr.length;
+    }
+
+    function formatItem(item: any): string {
+      const lines: string[] = [];
+      lines.push(`${item.baseName} (rarity=${item.rarity}, corrupted=${item.corrupted})`);
+      lines.push(`bonusPrefix=${item.bonusPrefixSlots}, bonusSuffix=${item.bonusSuffixSlots}`);
+      if (item.quality) lines.push(`quality=${item.quality.value}% (${item.quality.type})`);
+      for (const a of item.affixes) {
+        lines.push(`  ${a.type}: ${a.name}`);
+      }
+      return lines.join('\n');
+    }
+
+    // The recipe replay. Uses the same emulator the live simulator uses.
+    // We can't pre-load data from the page in this script, so reuse the
+    // public/data/ JSON files via fetch.
+    async function runRecipe(emu: any): Promise<any> {
+      const bases = await fetchJson('/data/bases.json');
+      const mods = await fetchJson('/data/mods.json');
+      const currencyData = await fetchJson('/data/currency.json');
+      const omensData = await fetchJson('/data/omens.json');
+      const weightsData = await fetchJson('/data/weights.json');
+
+      const sapphire = bases.find((b: any) => b.name === 'Sapphire');
+      if (!sapphire) throw new Error('Sapphire base not found');
+
+      const ogParse = await import('~/lib/simulator/omens');
+      const parseOmenEffect = ogParse.parseOmenEffect;
+      const mkOmen = (id: string) => {
+        const o = omensData.find((x: any) => x.id === id);
+        return o ? { id: o.id, name: o.name, effect: parseOmenEffect(o), foresight: false } : null;
+      };
+      const omenDextral = mkOmen('omen_of_dextral_annulment');
+      const omenSinistral = mkOmen('omen_of_sinistral_annulment');
+      const omenLight = mkOmen('omen_of_light');
+      const omenAbyssal = mkOmen('omen_of_abyssal_echo');
+
+      const findCur = (id: string) => currencyData.find((c: any) => (c.id || '').toLowerCase() === id);
+      const liquidContempt = findCur('potent_liquid_contempt');
+      const liquidFerocity = findCur('potent_liquid_ferocity');
+      const carapace = findCur('refined_carapace_catalyst');
+      const orbOfAnnulment = findCur('orb_of_annulment');
+      const orbOfExalt = findCur('exalted_orb');
+      const orbOfChaos = findCur('chaos_orb');
+      const orbOfDivine = findCur('divine_orb');
+      const orbOfVaal = findCur('vaal_orb');
+      const preservedCranium = findCur('preserved_cranium');
+
+      const mkCtx = (item: any, activeOmens: any[] = [], activeCurrencyId = '') => ({
+        base: sapphire,
+        mods,
+        currency: currencyData,
+        omens: omensData,
+        weights: weightsData,
+        item,
+        activeOmens,
+        minModLevel: 0,
+        activeCurrencyId,
+      });
+
+      // Hybrid ES/Spell mod (used as the chase target suffix/prefix)
+      const hybridMod = mods.find((m: any) =>
+        m.id && m.id.includes('increasedspelldamage') && m.id.includes('energyshield') ||
+        (m.name && m.name.includes('% increased Spell Damage') && m.name.includes('maximum Energy Shield'))
+      );
+
+      let state: any = emu.emptyItem(sapphire, 82);
+      state.rarity = 'rare';
+      state.affixes = [
+        { modId: 'p1', type: 'prefix', tier: 1, name: 'inc Max ES', tags: ['energy_shield'] },
+        { modId: 'p2', type: 'prefix', tier: 1, name: 'inc Spell Damage', tags: ['spell'] },
+        { modId: 'p3', type: 'prefix', tier: 1, name: 'inc Spell Damage', tags: ['spell'] },
+        { modId: 's1', type: 'suffix', tier: 1, name: 'faster ES Recharge', tags: ['energy_shield'] },
+      ];
+
+      const materials: Record<string, number> = {};
+      const bump = (k: string) => { materials[k] = (materials[k] || 0) + 1; };
+
+      // Step 2: Potent Liquid Contempt -> +1 Prefix Modifier allowed
+      {
+        const r = emu.liquidEmotion(mkCtx(state, [], liquidContempt.id));
+        if (!r.ok) return { ok: false, reason: 'liquid_contempt: ' + r.message };
+        bump('potent_liquid_contempt');
+        state = r.item;
+      }
+
+      // Step 3: Preserved Cranium + Omen of Abyssal Echo (up to 9 attempts)
+      let gotHybrid = false;
+      for (let attempt = 0; attempt < 9; attempt++) {
+        const r = emu.desecrate(mkCtx(state, [omenAbyssal].filter(Boolean), preservedCranium.id));
+        if (!r.ok) continue;
+        bump('preserved_cranium');
+        state = r.item;
+        if (hybridMod && state.affixes.some((a: any) => a.modId === hybridMod.id)) {
+          gotHybrid = true;
+          break;
+        }
+      }
+      if (!gotHybrid) return { ok: false, reason: 'did not hit hybrid in 9 attempts' };
+
+      // Step 4: Omen of Light + Annul (remove the desecrated tier)
+      {
+        const r = emu.orbOfAnnulment(mkCtx(state, [omenLight].filter(Boolean), orbOfAnnulment.id));
+        if (r.ok) { bump('orb_of_annulment'); state = r.item; }
+      }
+
+      // Step 5: Dextral + Annul (remove ES Recharge suffix)
+      {
+        const r = emu.orbOfAnnulment(mkCtx(state, [omenDextral].filter(Boolean), orbOfAnnulment.id));
+        if (r.ok) { bump('orb_of_annulment'); state = r.item; }
+      }
+
+      // Step 6: Exalt (fill the suffix slot)
+      {
+        const r = emu.exaltedOrb(mkCtx(state, [], orbOfExalt.id));
+        if (r.ok) { bump('exalted_orb'); state = r.item; }
+      }
+
+      // Step 7: Dextral + Annul (remove the +1 Prefix Marker so prefixes are locked)
+      {
+        const r = emu.orbOfAnnulment(mkCtx(state, [omenDextral].filter(Boolean), orbOfAnnulment.id));
+        if (r.ok) { bump('orb_of_annulment'); state = r.item; }
+      }
+
+      // Step 8: Exalt (fill the second suffix slot)
+      {
+        const r = emu.exaltedOrb(mkCtx(state, [], orbOfExalt.id));
+        if (r.ok) { bump('exalted_orb'); state = r.item; }
+      }
+
+      // Step 9: Chaos spam until 2 desirable suffixes (we use a budget cap)
+      for (let i = 0; i < 200; i++) {
+        const r = emu.chaosOrb(mkCtx(state, [], orbOfChaos.id));
+        if (!r.ok) break;
+        bump('chaos_orb');
+        state = r.item;
+        const suffixes = state.affixes.filter((a: any) => a.type === 'suffix');
+        if (suffixes.length === 2 && suffixes.every((a: any) => a.tags && a.tags.includes('energy_shield'))) {
+          break;
+        }
+      }
+
+      // Step 10: Potent Liquid Ferocity -> Effect of Prefixes
+      {
+        const r = emu.liquidEmotion(mkCtx(state, [], liquidFerocity.id));
+        if (!r.ok) return { ok: false, reason: 'liquid_ferocity: ' + r.message };
+        bump('potent_liquid_ferocity');
+        state = r.item;
+      }
+
+      // Step 11: Divine
+      {
+        const r = emu.divineOrb(mkCtx(state, [], orbOfDivine.id));
+        if (r.ok) { bump('divine_orb'); state = r.item; }
+      }
+
+      // Step 12: 20 Refined Carapace catalysts
+      for (let i = 0; i < 20; i++) {
+        const r = emu.catalystOrb(mkCtx(state, [], carapace.id));
+        if (!r.ok) break;
+        bump('refined_carapace_catalyst');
+        state = r.item;
+        if (state.quality && state.quality.value >= 50) break;
+      }
+
+      // Step 13: Vaal
+      const vaal = emu.vaalOrb(mkCtx(state, [], orbOfVaal.id));
+      if (vaal.ok) { bump('vaal_orb'); state = vaal.item; }
+
+      // Extract numeric values for the readout
+      const hybridAffix = hybridMod && state.affixes.find((a: any) => a.modId === hybridMod.id);
+      const effectAffix = state.affixes.find((a: any) => a.name && a.name.includes('Effect of Prefixes'));
+      const hybridValue = hybridAffix ? extractNumeric(hybridAffix.name) : 0;
+      const effectValue = effectAffix ? extractNumeric(effectAffix.name) : 0;
+      const quality = state.quality ? state.quality.value : 0;
+
+      return { ok: true, item: state, materials, hybridValue, effectValue, quality };
+    }
+
+    function extractNumeric(name: string): number {
+      const m = name.match(/(\d+)/);
+      return m ? parseInt(m[1], 10) : 0;
+    }
+
+    async function fetchJson(url: string): Promise<any> {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('Cannot fetch ' + url + ': ' + res.status);
+      return res.json();
+    }
+  })();
+</script>

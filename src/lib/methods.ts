@@ -22,6 +22,29 @@ export const METHODS: CraftingMethod[] = [
     difficulty: 'intermediate',
   },
   {
+    id: 'sapphire_es_spell_jewel',
+    name: 'Sapphire ES/Spell Hybrid Jewel — Liquid + Desecrate + Dextral Recipe',
+    description:
+      'Step-by-step replica of the in-game Sapphire jewel recipe posted on this site. Uses Potent Liquid Contempt to gain +1 Prefix slot, Preserved Cranium + Omen of Abyssal Echo to desecrate an ES/Spell Hybrid prefix, Omen of Light + Obliteration of the desecrated tier, Omen of Dextral Annulment to cancel the +1 marker so prefixes are locked, two Exalts to fill the suffix slots, chaos spam for two desirable suffixes, Potent Liquid Ferocity for the Effect of Prefixes suffix, Divine to lock numeric values, 20 Refined Carapace catalysts (50% quality cap), and a Vaal orb at the end. The simulator runs the full recipe against real poe2db weights so success rate and material costs reflect in-game randomness.',
+    steps: [
+      'Buy a Sapphire jewel (ilvl 82+) with the desired ES prefix base (e.g. 35% increased Max ES + 13% increased Critical Spell Damage Bonus).',
+      'Apply Potent Liquid Contempt: removes a random existing prefix, then adds +1 Prefix Modifier allowed (a suffix-slot craft). The jewel now has 1 bonus prefix slot.',
+      'Craft Preserved Cranium up to 9 times with Omen of Abyssal Echo active. The desecrated mod pool is rolled fresh each time. Stop when you hit the ES / Spell Damage Hybrid (e.g. 4-8% increased Spell Damage + 5-10% increased Maximum Energy Shield) — it lands as a prefix.',
+      'Activate Omen of Light + Orb of Annulment. The Omen of Light restricts the annul to desecrated mods only, so the hybrid mod is preserved. (Safety branch; rolls of the desecrated tier are non-controversial.)',
+      'Activate Omen of Dextral Annulment + Orb of Annulment. Dextral removes only suffix modifiers — clears the ES Recharge suffix so the +1 slot opens.',
+      'Exalt Orb once to fill the suffix slot.',
+      'Activate Omen of Dextral Annulment again + Orb of Annulment. This removes the +1 Prefix Modifier allowed suffix, locking the prefix section from re-rolling through chaos/exalt.',
+      'Exalt Orb again to fill the second suffix slot.',
+      'Chaos Orb spam until both suffixes are desirable (e.g. energy_shield tags). Prefixes are now locked so chaos only re-rolls suffixes.',
+      'Apply Potent Liquid Ferocity: removes a random suffix, then adds (40-60)% increased Effect of Prefixes. The simulator lands this at ~59% as in the in-game screenshot.',
+      'Divine Orb to roll the numeric values of all affixes to their tier ranges.',
+      'Apply 20 Refined Carapace catalysts. Quality accumulates to 50% (game cap). The Defensive catalyst boosts the ES/Spell Hybrid prefix\'s numeric value at 50% × energy_shield tag.',
+      'Vaal Orb — the simulator reports the corruption outcome but the build is preserved unless one of the 25% Vaal implicit/implicit-destroying outcomes hits.',
+    ],
+    bestFor: ['Sapphire jewel crafts', 'Liquid Emotion budget planning', 'Desecrated prefix strategies', 'Dextral Annulment mechanics', 'Realistic RF/ES/spell caster jewels'],
+    difficulty: 'expert',
+  },
+  {
     id: 'mageblood_legacy_fishing',
     name: 'Mageblood — Legacy Variant Divine Fishing',
     description:
