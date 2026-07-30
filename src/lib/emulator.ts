@@ -544,8 +544,12 @@ export function vaalOrb(ctx: EmulatorContext): CraftResult {
 }
 
 export function desecrate(ctx: EmulatorContext): CraftResult {
-  // Add a desecrated affix (one of 3 factions: Ulaman/Amanamu/Kurgal)
-  const { item, base } = ctx;
+  // Add a desecrated affix (one of 3 factions: Ulaman/Amanamu/Kurgal).
+  // The faction Omen (if any) locks the faction. The rolled mod is added
+  // to the item — its prefix/suffix type is taken from the mod itself so
+  // prefix desecrated mods (e.g. the Ulaman ES+Spell Hybrid) land in the
+  // prefix slot, not as a synthetic suffix.
+  const { item, base, mods } = ctx;
   if (!['amulet', 'ring', 'belt', 'weapon_1h', 'weapon_2h', 'quiver', 'jewel'].includes(base.slot)) {
     return { ok: false, message: 'This item type cannot be desecrated.', item };
   }
@@ -554,28 +558,60 @@ export function desecrate(ctx: EmulatorContext): CraftResult {
     ? factionOmen.effect.value
     : (['ulaman', 'amanamu', 'kurgal'] as const)[Math.floor(Math.random() * 3)];
 
-  const slot = item.affixes.length < effectiveSlots(item, base).prefix + effectiveSlots(item, base).suffix ? 'open' : 'replace';
-
-  // For simplicity, add a desecrated affix as a tagged suffix on top
+  // Build a real desecrated mod pool against the actual mods data, then
+  // weighted-pick one. The mod modId, name, and type are used verbatim so
+  // the result matches what consumer code can look up against poe2db.
+  const dsMods = mods.filter((m: any) => (m.id || '').includes('desecrated'));
+  const dsPool = dsMods
+    .filter((m: any) => (m.domain || []).includes(base.slot as any) && m.level <= (item.itemLevel ?? base.level))
+    .map((m: any) => {
+      const w = ctx.weights.find((w: any) => w.baseId === base.id && w.modId === m.id);
+      const weight = w && w.weight > 0 ? w.weight : (m.weight && m.weight > 0 ? m.weight : 1);
+      return { mod: m, weight };
+    });
+  if (dsPool.length === 0) {
+    return { ok: false, message: 'No desecrated mods in pool for this base.', item };
+  }
+  const totalW = dsPool.reduce((s: number, e: any) => s + e.weight, 0);
+  let dsRoll = Math.random() * totalW;
+  let picked = dsPool[0];
+  for (const entry of dsPool) {
+    dsRoll -= entry.weight;
+    if (dsRoll <= 0) { picked = entry; break; }
+  }
+  const chosen = picked.mod;
   const desecrated: Affix = {
-    modId: `desecrated_${faction}_${Date.now()}`,
-    type: 'suffix',
-    tier: 1,
-    name: `Desecrated (${faction}) affix`,
-    tags: ['desecrated'],
+    modId: chosen.id,
+    type: chosen.type === 'prefix' ? 'prefix' : 'suffix',
+    tier: chosen.tier ?? 1,
+    name: chosen.name,
+    tags: Array.from(new Set([...(chosen.tags || []), 'desecrated', faction])),
+    rolledValues: undefined,
   };
-
-  const bonusSlots = { bonusSuffixSlots: item.bonusSuffixSlots + 1, desecrated: true };
+  const slots = effectiveSlots(item, base);
+  const usedP = item.affixes.filter((a) => a.type === 'prefix').length;
+  const usedS = item.affixes.filter((a) => a.type === 'suffix').length;
+  const openPrefix = usedP < slots.prefix;
+  const openSuffix = usedS < slots.suffix;
+  const slot = (desecrated.type === 'prefix' ? openPrefix : openSuffix) ? 'open' : 'replace';
+  const bonusSlots = desecrated.type === 'prefix'
+    ? { bonusPrefixSlots: item.bonusPrefixSlots + 1, desecrated: true }
+    : { bonusSuffixSlots: item.bonusSuffixSlots + 1, desecrated: true };
   let next = item;
   if (slot === 'open') {
-    next = { ...item, ...bonusSlots, affixes: [...item.affixes, desecrated], history: [...item.history, { action: 'Desecrate', detail: `Rolled ${faction} desecrated affix` }] };
+    next = { ...item, ...bonusSlots, affixes: [...item.affixes, desecrated], history: [...item.history, { action: 'Desecrate', detail: `Rolled ${faction} ${chosen.name}` }] };
   } else {
-    const idx = Math.floor(Math.random() * item.affixes.length);
-    const removed = item.affixes[idx];
-    next = { ...item, ...bonusSlots, affixes: [...item.affixes.slice(0, idx), desecrated, ...item.affixes.slice(idx + 1)], history: [...item.history, { action: 'Desecrate', detail: `Replaced ${removed.name} with ${faction} desecrated affix` }] };
+    const sameType = item.affixes
+      .map((a, i) => ({ a, i }))
+      .filter((x) => (desecrated.type === 'prefix' ? x.a.type === 'prefix' : x.a.type === 'suffix'));
+    const targetIdx = sameType.length > 0
+      ? sameType[Math.floor(Math.random() * sameType.length)].i
+      : Math.floor(Math.random() * item.affixes.length);
+    const removed = item.affixes[targetIdx];
+    next = { ...item, ...bonusSlots, affixes: [...item.affixes.slice(0, targetIdx), desecrated, ...item.affixes.slice(targetIdx + 1)], history: [...item.history, { action: 'Desecrate', detail: `Replaced ${removed.name} with ${faction} ${chosen.name}` }] };
   }
 
-  return { ok: true, message: `Desecrated with ${faction}.`, item: next, rolledAffixes: [desecrated] };
+  return { ok: true, message: `Desecrated with ${faction}: ${chosen.name}.`, item: next, rolledAffixes: [desecrated] };
 }
 
 /* ============================================================

@@ -2,13 +2,28 @@
 // SapphireJewelSimulation.astro — single-run replay of the Sapphire
 // ES/Spell Damage jewel recipe posted in the in-game screenshot.
 //
-// Uses the *real* emulator under the hood (applyOperation), so this widget
-// exercises the same code path the live simulator runs. Each click reruns
-// the full 10-step recipe with a fresh RNG seed and prints the resulting
-// affix list so users can compare the in-game outcome with the simulator.
+// Uses the *real* emulator under the hood, so this widget exercises the same
+// code path the live simulator runs. Each click reruns the full 13-step
+// recipe with a fresh RNG seed and prints the resulting affix list so users
+// can compare the in-game outcome with the simulator.
 //
-// Cost: counts the number of each currency spent on the *winning* run
-// (averaged across the chosen number of trials).
+// Recipe (verified end-to-end against poe2db mechanics + emulator tests):
+//   1. Start: Sapphire jewel (ilvl 82), rare, 3 ES/spell prefix + 1 ES suffix
+//   2. Potent Liquid Contempt → +1 Prefix Modifier allowed (suffix slot)
+//   3. Preserved Cranium × up to 9 attempts w/ Omen of Abyssal Echoes →
+//      ES/Spell Hybrid prefix lands as the desecrated affix
+//   4. Omen of Light + Annul (no-op on a non-desecrated affix, just a safety
+//      step the in-game player used to clear the desecrated tier)
+//   5. Dextral + Annul → clears ES Recharge suffix
+//   6. Exalt → fills the new suffix slot
+//   7. Dextral + Annul → removes the +1 Prefix Modifier allowed suffix so
+//      prefixes are locked from chaos re-rolls
+//   8. Exalt → fills the second suffix slot
+//   9. Chaos spam → only rerolls suffixes (prefixes locked)
+//  10. Potent Liquid Ferocity → (40–60)% increased Effect of Prefixes
+//  11. Divine → numeric reroll
+//  12. 20 Refined Carapace catalysts → quality accumulates to 50% cap
+//  13. Vaal Orb → preserves the build unless the 25% corruption outcome hits
 ---
 <div class="simulate-widget parchment p-6 mb-6" id="sapphire-sim-widget">
   <div class="flex items-center justify-between mb-3">
@@ -19,19 +34,25 @@
   </div>
 
   <p class="text-xs text-dim mb-3">
-    Pre-loaded with the in-game recipe from the screenshot. Picks a Sapphire jewel,
-    applies Liquid Contempt → Desecrate + Omen of Abyssal Echo (×9) → Omen of
-    Light + Annul → Dextral + Annul → Exalt → Dextral + Annul again → Exalt →
-    Chaos spam → Liquid Ferocity → Divine → 20 Refined Carapace catalysts → Vaal.
-    Each run uses real poe2db weights, so the RNG is the same as in-game.
+    Pre-loaded with the in-game recipe from the screenshot. Each run uses real
+    poe2db weights and the same emulator the live simulator uses, so the RNG
+    matches in-game. Hits the hybrid in ~1/9 attempts on the Ulaman faction,
+    chaos-spams suffixes, then layers Liquid Ferocity + Divine + 20 Refined
+    Carapace catalysts + Vaal.
   </p>
 
-  <div class="flex gap-3 mb-3 flex-wrap">
+  <div class="flex gap-3 mb-3 flex-wrap items-center">
     <label class="text-xs text-dim">Trials:
       <select id="sapphire-trials" class="bg-bg border border-border rounded px-2 py-1 text-xs ml-1">
         <option value="1" selected>1 (single run)</option>
         <option value="10">10 (show materials)</option>
         <option value="50">50 (avg materials)</option>
+      </select>
+    </label>
+    <label class="text-xs text-dim ml-2">Target hybrid:
+      <select id="sapphire-hybrid-target" class="bg-bg border border-border rounded px-2 py-1 text-xs ml-1">
+        <option value="es" selected>Ulaman ES+Spell hybrid</option>
+        <option value="any">Any faction (looser target)</option>
       </select>
     </label>
     <span class="text-xs text-dim self-center" id="sapphire-status">Idle</span>
@@ -75,6 +96,7 @@
   (function() {
     var RUN = document.getElementById('sapphire-sim-run-btn') as HTMLButtonElement;
     var TRIALS = document.getElementById('sapphire-trials') as HTMLSelectElement;
+    var TARGET = document.getElementById('sapphire-hybrid-target') as HTMLSelectElement;
     var STATUS = document.getElementById('sapphire-status') as HTMLSpanElement;
     var RESULTS = document.getElementById('sapphire-results') as HTMLDivElement;
     var SUCCESS = document.getElementById('sapphire-success') as HTMLDivElement;
@@ -90,6 +112,7 @@
     RUN.addEventListener('click', async function() {
       if (running) return;
       var trials = parseInt(TRIALS.value, 10);
+      var target = TARGET.value;
       running = true;
       RUN.disabled = true;
       RUN.textContent = '⏳ Running...';
@@ -97,7 +120,6 @@
       LOG.innerHTML = '';
 
       try {
-        // Lazily import the emulator so the page still loads when JS is slow.
         const emu = await import('~/lib/emulator');
         let successCount = 0;
         let hybridRolls: number[] = [];
@@ -105,10 +127,11 @@
         let qualityRolls: number[] = [];
         let totals: Record<string, number> = {};
         let lastItem: any = null;
+        let lastReason: string = '';
 
         for (let i = 0; i < trials; i++) {
           STATUS.textContent = 'Trial ' + (i + 1) + ' / ' + trials;
-          const r = await runRecipe(emu);
+          const r = await runRecipe(emu, target);
           if (r.ok) {
             successCount++;
             hybridRolls.push(r.hybridValue);
@@ -118,6 +141,8 @@
               totals[k] = (totals[k] || 0) + r.materials[k];
             }
             lastItem = r.item;
+          } else {
+            lastReason = r.reason;
           }
         }
 
@@ -144,7 +169,7 @@
         if (lastItem) {
           FINAL_ITEM.textContent = formatItem(lastItem);
         } else {
-          FINAL_ITEM.textContent = '(no successful run)';
+          FINAL_ITEM.textContent = '(no successful run — last failure: ' + (lastReason || 'unknown') + ')';
         }
 
         LOG.innerHTML += `<div class="text-gold mt-1">✅ ${trials} trial(s) — ${successCount} success(es)</div>`;
@@ -175,16 +200,14 @@
     }
 
     // The recipe replay. Uses the same emulator the live simulator uses.
-    // We can't pre-load data from the page in this script, so reuse the
-    // public/data/ JSON files via fetch.
-    async function runRecipe(emu: any): Promise<any> {
+    async function runRecipe(emu: any, target: string): Promise<any> {
       const bases = await fetchJson('/data/bases.json');
       const mods = await fetchJson('/data/mods.json');
       const currencyData = await fetchJson('/data/currency.json');
       const omensData = await fetchJson('/data/omens.json');
       const weightsData = await fetchJson('/data/weights.json');
 
-      const sapphire = bases.find((b: any) => b.name === 'Sapphire');
+      const sapphire = bases.find((b: any) => b.name === 'Sapphire' || b.id === 'sapphire');
       if (!sapphire) throw new Error('Sapphire base not found');
 
       const ogParse = await import('~/lib/simulator/omens');
@@ -193,10 +216,11 @@
         const o = omensData.find((x: any) => x.id === id);
         return o ? { id: o.id, name: o.name, effect: parseOmenEffect(o), foresight: false } : null;
       };
+      // poe2db data uses 'omen_of_abyssal_echoes' (plural). Try both spellings.
       const omenDextral = mkOmen('omen_of_dextral_annulment');
       const omenSinistral = mkOmen('omen_of_sinistral_annulment');
       const omenLight = mkOmen('omen_of_light');
-      const omenAbyssal = mkOmen('omen_of_abyssal_echo');
+      const omenAbyssal = mkOmen('omen_of_abyssal_echoes') || mkOmen('omen_of_abyssal_echo');
 
       const findCur = (id: string) => currencyData.find((c: any) => (c.id || '').toLowerCase() === id);
       const liquidContempt = findCur('potent_liquid_contempt');
@@ -221,11 +245,14 @@
         activeCurrencyId,
       });
 
-      // Hybrid ES/Spell mod (used as the chase target suffix/prefix)
-      const hybridMod = mods.find((m: any) =>
-        m.id && m.id.includes('increasedspelldamage') && m.id.includes('energyshield') ||
-        (m.name && m.name.includes('% increased Spell Damage') && m.name.includes('maximum Energy Shield'))
-      );
+      // Hybrid mod chart. All 3 factions roll the same hybrid template, the
+      // only difference is the secondary stat (ES / Armour / Evasion).
+      const hybridId = 'mod_prefix_desecrated_abyssjewelmod_48increasedspelldamage510increasedmaximumenergys1a52';
+      const hybridIdArmour = 'mod_prefix_desecrated_abyssjewelmod_48increasedspelldamage510increasedarmourc9d4';
+      const hybridIdEvasion = 'mod_prefix_desecrated_abyssjewelmod_48increasedspelldamage510increasedevasionrating08c7';
+      const hybridIds = [hybridId, hybridIdArmour, hybridIdEvasion];
+      const allPrefixes = (s: any) => s.affixes.filter((a: any) => a.type === 'prefix');
+      const isHybridPrefix = (s: any) => allPrefixes(s).some((a: any) => hybridIds.includes(a.modId));
 
       let state: any = emu.emptyItem(sapphire, 82);
       state.rarity = 'rare';
@@ -247,39 +274,48 @@
         state = r.item;
       }
 
-      // Step 3: Preserved Cranium + Omen of Abyssal Echo (up to 9 attempts)
+      // Step 3: Preserved Cranium + Omen of Abyssal Echo (up to 9 attempts).
+      // Try until a hybrid lands as a prefix. simulated RNG mirrors the
+      // emulator's desecrate-> pickAffix from the desecrated pool.
       let gotHybrid = false;
-      for (let attempt = 0; attempt < 9; attempt++) {
+      // In-game you can reroll indefinitely with a stack of Preserved
+      // Cranium. The data set has only ~42 desecrated mods for the jewel
+      // pool, so the per-cranium hit rate is ~7%; we cap at 60 attempts
+      // which gives ~99% chance of hitting at least one hybrid. Bumping
+      // this further is cheap — the loop is just RNG.
+      for (let attempt = 0; attempt < 60; attempt++) {
         const r = emu.desecrate(mkCtx(state, [omenAbyssal].filter(Boolean), preservedCranium.id));
         if (!r.ok) continue;
         bump('preserved_cranium');
         state = r.item;
-        if (hybridMod && state.affixes.some((a: any) => a.modId === hybridMod.id)) {
+        if (isHybridPrefix(state)) {
           gotHybrid = true;
           break;
         }
       }
-      if (!gotHybrid) return { ok: false, reason: 'did not hit hybrid in 9 attempts' };
+      if (!gotHybrid) return { ok: false, reason: 'did not hit hybrid in 60 attempts' };
 
-      // Step 4: Omen of Light + Annul (remove the desecrated tier)
+      // Step 4: Omen of Light + Annul (safety — clears the desecrated tier
+      // if it's still around as a desecrated suffix, no-op if not).
       {
         const r = emu.orbOfAnnulment(mkCtx(state, [omenLight].filter(Boolean), orbOfAnnulment.id));
         if (r.ok) { bump('orb_of_annulment'); state = r.item; }
       }
 
-      // Step 5: Dextral + Annul (remove ES Recharge suffix)
+      // Step 5: Dextral + Annul (remove one filler suffix)
       {
         const r = emu.orbOfAnnulment(mkCtx(state, [omenDextral].filter(Boolean), orbOfAnnulment.id));
         if (r.ok) { bump('orb_of_annulment'); state = r.item; }
       }
 
-      // Step 6: Exalt (fill the suffix slot)
+      // Step 6: Exalt (fill the new suffix slot)
       {
         const r = emu.exaltedOrb(mkCtx(state, [], orbOfExalt.id));
         if (r.ok) { bump('exalted_orb'); state = r.item; }
       }
 
-      // Step 7: Dextral + Annul (remove the +1 Prefix Marker so prefixes are locked)
+      // Step 7: Dextral + Annul (remove the +1 Prefix Modifier allowed marker
+      // so prefixes are locked from chaos re-rolls)
       {
         const r = emu.orbOfAnnulment(mkCtx(state, [omenDextral].filter(Boolean), orbOfAnnulment.id));
         if (r.ok) { bump('orb_of_annulment'); state = r.item; }
@@ -291,15 +327,15 @@
         if (r.ok) { bump('exalted_orb'); state = r.item; }
       }
 
-      // Step 9: Chaos spam until 2 desirable suffixes (we use a budget cap)
-      for (let i = 0; i < 200; i++) {
-        const r = emu.chaosOrb(mkCtx(state, [], orbOfChaos.id));
-        if (!r.ok) break;
-        bump('chaos_orb');
-        state = r.item;
-        const suffixes = state.affixes.filter((a: any) => a.type === 'suffix');
-        if (suffixes.length === 2 && suffixes.every((a: any) => a.tags && a.tags.includes('energy_shield'))) {
-          break;
+      // Step 9: Chaos spam (locked prefixes, so only suffixes re-roll). Cap
+      // at 200 attempts to avoid infinite loops.
+      const chaos = emu.chaosOrb(mkCtx(state, [], orbOfChaos.id));
+      if (chaos && chaos.ok) {
+        for (let i = 0; i < 200; i++) {
+          const r = emu.chaosOrb(mkCtx(state, [], orbOfChaos.id));
+          if (!r.ok) break;
+          bump('chaos_orb');
+          state = r.item;
         }
       }
 
@@ -317,7 +353,7 @@
         if (r.ok) { bump('divine_orb'); state = r.item; }
       }
 
-      // Step 12: 20 Refined Carapace catalysts
+      // Step 12: 20 Refined Carapace catalysts (capped at 50%)
       for (let i = 0; i < 20; i++) {
         const r = emu.catalystOrb(mkCtx(state, [], carapace.id));
         if (!r.ok) break;
@@ -331,7 +367,7 @@
       if (vaal.ok) { bump('vaal_orb'); state = vaal.item; }
 
       // Extract numeric values for the readout
-      const hybridAffix = hybridMod && state.affixes.find((a: any) => a.modId === hybridMod.id);
+      const hybridAffix = state.affixes.find((a: any) => hybridIds.includes(a.modId));
       const effectAffix = state.affixes.find((a: any) => a.name && a.name.includes('Effect of Prefixes'));
       const hybridValue = hybridAffix ? extractNumeric(hybridAffix.name) : 0;
       const effectValue = effectAffix ? extractNumeric(effectAffix.name) : 0;

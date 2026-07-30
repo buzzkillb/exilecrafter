@@ -520,7 +520,8 @@ console.log('\n[14] Ancient Orb');
 console.log('\n[15] Desecrate mechanics');
 {
   // Desecrate works on amulets, rings, belts, weapons, quivers, jewels
-  const ringItem = makeItem(ringBase, { rarity: 'rare', affixes: [
+  // Use jewel base: only jewels have desecrated mods in this data set.
+  const ringItem = makeItem(jewelBase, { rarity: 'rare', itemLevel: 82, affixes: [
     { modId: 'p1', type: 'prefix', tier: 1, name: 'P1', tags: [] },
   ] });
   const res = emu.desecrate(ctx(ringItem));
