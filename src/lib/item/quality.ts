@@ -138,3 +138,67 @@ export function applyQualityToPaste(paste: {
 
   return { affixes: boostedAffixes };
 }
+
+/**
+ * Maps the internal catalyst category (as produced by emulator.catalystOrb) to
+ * the descriptive-tags it should boost.
+ *
+ *   'life mana'  -> life, mana
+ *   'caster'     -> spell, caster
+ *   'attack'     -> attack
+ *   'elemental'  -> fire, cold, lightning, elemental
+ *   'chaos'      -> chaos
+ *   'physical'   -> physical
+ *   'defence'    -> armour, evasion, energy_shield, ward, rune
+ *   'generic'    -> (no boost)
+ */
+export const CATALYST_TAG_MAP: Record<string, string[]> = {
+  'life mana':  ['life', 'mana'],
+  'caster':     ['spell', 'caster'],
+  attack:       ['attack'],
+  elemental:    ['fire', 'cold', 'lightning', 'elemental'],
+  chaos:        ['chaos'],
+  physical:     ['physical'],
+  defence:      ['armour', 'evasion', 'energy_shield', 'ward', 'defence', 'defences', 'shield'],
+  generic:      [],
+};
+
+/**
+ * Check whether an emulator-style Affix (which carries its own tags array) is
+ * boosted by a given catalyst category. Returns true if any of the affix's
+ * tags intersect the catalyst's tag list.
+ */
+export function catalystBoostsAffix(
+  affixTags: string[] | null | undefined,
+  catalystType: string,
+): boolean {
+  if (!affixTags || affixTags.length === 0) return false;
+  const boostTags = CATALYST_TAG_MAP[catalystType];
+  if (!boostTags || boostTags.length === 0) return false;
+  const lower = affixTags.map((t) => t.toLowerCase());
+  return lower.some((t) => boostTags.includes(t));
+}
+
+/**
+ * Apply catalyst quality to a list of emulator-style Affix objects.
+ * Returns a new array; affixes whose tags match the catalyst's tag list have
+ * their first numeric value in `name` boosted by the quality multiplier.
+ *
+ * @param affixes  Array of Affix objects (see src/lib/emulator.ts)
+ * @param quality  { type, value } or null
+ * @returns        New array of affixes (unchanged refs for non-matching ones)
+ */
+export function applyCatalystQuality<
+  T extends { name: string; tags: string[] },
+>(
+  affixes: readonly T[],
+  quality: { type: string; value: number } | null,
+): T[] {
+  if (!quality || quality.value <= 0) return [...affixes];
+  const multiplier = 1 + quality.value / 100;
+  return affixes.map((a) => {
+    if (multiplier === 1.0) return a;
+    if (!catalystBoostsAffix(a.tags, quality.type)) return a;
+    return { ...a, name: boostFirstValue(a.name, multiplier) };
+  });
+}

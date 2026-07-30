@@ -38,6 +38,14 @@ export interface ItemState {
   appliedLiquids: string[];
   /** Hinekora's Lock â€” foresight active: next currency previews without consuming */
   foresight: boolean;
+  /**
+   * Catalyst quality on this item. Each catalyst application either accumulates
+   * onto the existing entry (matching type) or replaces it (different type).
+   * A standard catalyst gives +5%, a Refined catalyst gives +10%.
+   * In-game this caps at 50% total quality.
+   */
+  quality: { value: number; type: string } | null;
+
   history: Array<{ action: string; detail?: string; result?: string }>;
 }
 
@@ -519,6 +527,7 @@ export function vaalOrb(ctx: EmulatorContext): CraftResult {
       implicit: item.implicit, corrupted: true, desecrated: false,
       fractured: [], bonusPrefixSlots: 0, bonusSuffixSlots: 0,
       appliedLiquids: [], foresight: false, mirrored: false,
+      quality: null,
       history: [...item.history, { action: 'Vaal Orb', detail: 'Destroyed' }],
     };
     return { ok: true, message: 'POOF! Vaal Orb destroyed the item \u2014 all affixes lost.', item: next };
@@ -793,7 +802,9 @@ export function preservedCranium(ctx: EmulatorContext): CraftResult {
   const mod = pool[Math.floor(Math.random() * pool.length)];
   const affix: Affix = {
     modId: mod.id,
-    type: 'suffix',
+    // Use the mod's actual type so e.g. the desecrated ES/Spell Hybrid prefix
+    // doesn't accidentally eat a suffix slot.
+    type: mod.type === 'prefix' ? 'prefix' : 'suffix',
     tier: 1,
     name: mod.name,
     tags: mod.tags,
@@ -1033,43 +1044,46 @@ export function catalystOrb(ctx: EmulatorContext): CraftResult {
   if (item.rarity !== 'magic' && item.rarity !== 'rare') {
     return { ok: false, message: `Catalysts require a Magic or Rare item.`, item };
   }
-  // Check if catalyst already applied (simple cap: one catalyst)
-  const existing = item.affixes.find((a) => a.tags.includes('catalyst'));
-  if (existing) {
-    return { ok: false, message: `Item already has a catalyst applied.`, item };
-  }
   // Resolve the catalyst's tag affinity from its description
   const activeId = (ctx.activeCurrencyId || '').toLowerCase();
   const activeCurrency = ctx.currency.find((c) => (c.id || '').toLowerCase() === activeId);
   const desc = (activeCurrency?.description || activeCurrency?.mechanics || '').toLowerCase();
   let tagAffinity = '';
-  if (desc.includes('life') || desc.includes('mana')) tagAffinity = 'life mana';
-  else if (desc.includes('cast speed') || desc.includes('spell')) tagAffinity = 'caster';
-  else if (desc.includes('attack')) tagAffinity = 'attack';
-  else if (desc.includes('elemental') || desc.includes('fire') || desc.includes('cold') || desc.includes('lightning')) tagAffinity = 'elemental';
-  else if (desc.includes('chaos')) tagAffinity = 'chaos';
-  else if (desc.includes('physical')) tagAffinity = 'physical';
-  else if (desc.includes('defence') || desc.includes('armour') || desc.includes('evasion') || desc.includes('shield')) tagAffinity = 'defence';
-  else tagAffinity = 'generic';
+  let tagCategory = ''; // Display label (e.g. "Defence Modifiers", "Fire Modifiers")
+  if (desc.includes('life') || desc.includes('mana')) { tagAffinity = 'life mana'; tagCategory = 'Life/Mana'; }
+  else if (desc.includes('cast speed') || desc.includes('spell')) { tagAffinity = 'caster'; tagCategory = 'Caster'; }
+  else if (desc.includes('attack')) { tagAffinity = 'attack'; tagCategory = 'Attack'; }
+  else if (desc.includes('elemental') || desc.includes('fire') || desc.includes('cold') || desc.includes('lightning')) {
+    tagAffinity = 'elemental'; tagCategory = 'Elemental';
+  } else if (desc.includes('chaos')) { tagAffinity = 'chaos'; tagCategory = 'Chaos'; }
+  else if (desc.includes('physical')) { tagAffinity = 'physical'; tagCategory = 'Physical'; }
+  else if (desc.includes('defence') || desc.includes('armour') || desc.includes('evasion') || desc.includes('shield')) {
+    tagAffinity = 'defence'; tagCategory = 'Defence';
+  } else {
+    tagAffinity = 'generic'; tagCategory = 'Generic';
+  }
 
   const isRefined = activeId.includes('refined');
   const qualityGained = isRefined ? 10 : 5;
+  // In-game cap on total quality is 50%. We model this.
+  const MAX_QUALITY = 50;
+  const previousValue = item.quality && item.quality.type === tagAffinity ? item.quality.value : 0;
+  // Different category replaces (e.g. a Fire Catalyst wipes a Defence Catalyst),
+  // matching the in-game "Replaces other quality types" behaviour.
+  const newValue = Math.min(previousValue + qualityGained, MAX_QUALITY);
+  const replaced = !item.quality || item.quality.type !== tagAffinity;
+  const actualGain = newValue - previousValue;
+  const detail = replaced
+    ? `${isRefined ? 'Refined ' : ''}${tagCategory} Catalyst applied (replaced previous quality): +${actualGain}% (now ${newValue}%).`
+    : `${isRefined ? 'Refined ' : ''}${tagCategory} Catalyst applied: +${actualGain}% (now ${newValue}%).`;
 
-  const catalystAffix: Affix = {
-    modId: `catalyst_${activeId}_${Date.now()}`,
-    type: 'prefix',
-    tier: 1,
-    name: `${qualityGained}% ${tagAffinity} Quality`,
-    tags: ['catalyst', tagAffinity],
-    };
-  // Apply the catalyst to the item
   return {
     ok: true,
-    message: 'Applied catalyst: ' + catalystAffix.name + '.',
+    message: detail,
     item: {
       ...item,
-      affixes: [...item.affixes, catalystAffix],
-      history: [...item.history, { action: 'Catalyst', detail: 'Applied catalyst: ' + catalystAffix.name }],
+      quality: { type: tagAffinity, value: newValue },
+      history: [...item.history, { action: 'Catalyst', detail }],
     },
   };
 }
@@ -1091,6 +1105,7 @@ export function emptyItem(base, itemLevel) {
     bonusSuffixSlots: 0,
     appliedLiquids: [],
     foresight: false,
+    quality: null,
     history: [],
   };
 }

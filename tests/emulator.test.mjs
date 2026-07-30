@@ -20,6 +20,7 @@ const weightsData = JSON.parse(readFileSync(join(root, 'data/processed/weights.j
 
 // Dynamically import the emulator (TypeScript)
 const emu = await import('../src/lib/emulator.ts');
+const { parseOmenEffect: parseOmenEffectLocal } = await import('../src/lib/simulator/omens.ts');
 
 // ==================== Test helpers ====================
 let passed = 0;
@@ -70,6 +71,7 @@ function makeItem(base, overrides = {}) {
     appliedLiquids: [],
     foresight: false,
     mirrored: false,
+    quality: null,
     history: [],
     ...overrides,
   };
@@ -559,6 +561,56 @@ console.log('\n[16] Quality operations');
   assertFail(res4, 'Scrap on weapon should fail');
 }
 
+// ==================== 16b. Catalyst accumulation + type replacement ====================
+console.log('\n[16b] Catalyst accumulation + type replacement');
+{
+  if (!jewelBase) {
+    console.log('  SKIPPED: no jewel base available');
+  } else {
+    const jewel = makeItem(jewelBase, { rarity: 'rare', affixes: [
+      { modId: 'jp1', type: 'prefix', tier: 1, name: 'P1 (life)', tags: ['life'] },
+    ] });
+    const carapace = currencyData.find((c) => (c.id || '').toLowerCase() === 'refined_carapace_catalyst');
+    if (!carapace) {
+      console.log('  SKIPPED: refined_carapace_catalyst not in currency.json');
+    } else {
+      const cctx = (item) => ({
+        base: jewelBase,
+        mods,
+        currency: currencyData,
+        omens: omensData,
+        weights: weightsData,
+        item,
+        activeOmens: [],
+        minModLevel: 0,
+        activeCurrencyId: carapace.id,
+      });
+      let cur = jewel;
+      for (let i = 0; i < 20; i++) {
+        const r = emu.catalystOrb(cctx(cur));
+        assertOk(r, `Catalyst #${i + 1} should succeed`);
+        cur = r.item;
+        assert(cur.quality !== null, `quality field is set after catalyst #${i + 1}`);
+        assertEq(cur.quality.type, 'defence', `catalyst category is defence`);
+        assert(cur.quality.value <= 50, `quality capped at 50% (got ${cur.quality.value})`);
+      }
+      assertEq(cur.quality.value, 50, '20x Refined Carapace caps at 50%');
+      const catalystAffixes = cur.affixes.filter((a) => (a.tags || []).includes('catalyst'));
+      assertEq(catalystAffixes.length, 0, 'no catalyst affixes added (was the old bug)');
+      const fireCat = currencyData.find((c) => (c.id || '').toLowerCase() === 'refined_xophs_catalyst');
+      if (fireCat) {
+        const r2 = emu.catalystOrb({ ...cctx(cur), activeCurrencyId: fireCat.id });
+        assertOk(r2, 'Xophs catalyst applies');
+        assertEq(r2.item.quality.type, 'elemental', 'replaced with elemental type');
+        assertEq(r2.item.quality.value, 10, 'replacement starts at +10%');
+        const r3 = emu.catalystOrb({ ...cctx(r2.item), activeCurrencyId: fireCat.id });
+        assertOk(r3, 'Second fire catalyst stacks');
+        assertEq(r3.item.quality.value, 20, 'stacked to 20%');
+      }
+    }
+  }
+}
+
 // ==================== 17. Preserved Rib / Cranium ====================
 console.log('\n[17] Preserved Rib / Cranium');
 {
@@ -735,6 +787,146 @@ console.log('\n[Socket Crafting — Artificer\'s Orb]');
     assertEq(s8.item.sockets, 1, 'talisman has 1 socket');
   } else {
     console.log('  SKIP: talisman base has unexpected slot:', talismanBase.slot);
+  }
+}
+
+// ==================== N. Omen of Dextral/Sinistral Annulment ====================
+// poe2db wording:
+//   Omen of Dextral Annulment       → "next Orb of Annulment will remove only suffix modifiers"
+//   Omen of Sinistral Annulment     → "next Orb of Annulment will remove only prefix modifiers"
+// Bug fix: these omens were being parsed as `force_type` (which is what
+// exalt/regal/coronation use), so the Orb of Annulment code never saw them
+// and removed a random affix. Now they correctly parse to `remove_type`.
+console.log('\n[N] Omen of Dextral/Sinistral Annulment');
+{
+  // Resolve the real omen entries from the processed data so we are testing
+  // against the actual poe2db-sourced strings, not a hand-written stub.
+  const findOmen = (id) => omensData.find((o) => o.id === id);
+  const dextralAnnul = findOmen('omen_of_dextral_annulment');
+  const sinistralAnnul = findOmen('omen_of_sinistral_annulment');
+
+  assert(dextralAnnul, 'dextral annulment omen present in omens.json');
+  assert(sinistralAnnul, 'sinistral annulment omen present in omens.json');
+  assert(
+    dextralAnnul?.effect.toLowerCase().includes('remove only suffix modifiers'),
+    'dextral annulment effect text matches poe2db'
+  );
+  assert(
+    sinistralAnnul?.effect.toLowerCase().includes('remove only prefix modifiers'),
+    'sinistral annulment effect text matches poe2db'
+  );
+
+  // ── Build a rare item with a known affix mix so we can assert deterministically.
+  // Use real mod objects from mods.json so the affix types are valid.
+  const prefixMod = mods.find((m) => m.type === 'prefix' && m.domain?.includes('jewel'));
+  const suffixMod = mods.find((m) => m.type === 'suffix' && m.domain?.includes('jewel'));
+  assert(prefixMod && suffixMod, 'found at least one jewel prefix and one jewel suffix');
+
+  const testItem = makeItem(jewelBase, {
+    rarity: 'rare',
+    itemLevel: 82,
+    affixes: [
+      { modId: 'p1', type: 'prefix', tier: 1, name: 'Test Prefix 1', tags: [] },
+      { modId: 'p2', type: 'prefix', tier: 1, name: 'Test Prefix 2', tags: [] },
+      { modId: 's1', type: 'suffix', tier: 1, name: 'Test Suffix 1', tags: [] },
+      { modId: 's2', type: 'suffix', tier: 1, name: 'Test Suffix 2', tags: [] },
+    ],
+  });
+
+  // ── N.1: Dextral Annulment must remove a suffix, never a prefix.
+  // Use the *real* parser (parseOmenEffect) so the test exercises the
+  // production code path end-to-end (name → effect.kind → annulment).
+  {
+    const c = ctx(testItem, { activeCurrencyId: 'orb_of_annulment' });
+    c.activeOmens = [{
+      id: dextralAnnul.id,
+      effect: parseOmenEffectLocal(dextralAnnul),
+    }];
+    const res = emu.orbOfAnnulment(c);
+    assertOk(res, 'Dextral Annulment succeeds');
+    assert(res.item.affixes.length === 3, 'one affix removed');
+    const removed = testItem.affixes.filter((a) => !res.item.affixes.some((b) => b.modId === a.modId));
+    assertEq(removed.length, 1, 'exactly one removed');
+    assertEq(removed[0].type, 'suffix', 'removed affix is a SUFFIX (per poe2db)');
+    // Both original prefixes must still be present after the annulment.
+    const prefixesRemaining = res.item.affixes.filter((a) => a.type === 'prefix').length;
+    assertEq(prefixesRemaining, 2, 'both prefixes survive the dextral annulment');
+  }
+
+  // ── N.2: Sinistral Annulment must remove a prefix, never a suffix.
+  {
+    const item2 = makeItem(jewelBase, {
+      rarity: 'rare', itemLevel: 82,
+      affixes: [
+        { modId: 'p1', type: 'prefix', tier: 1, name: 'Test Prefix 1', tags: [] },
+        { modId: 'p2', type: 'prefix', tier: 1, name: 'Test Prefix 2', tags: [] },
+        { modId: 's1', type: 'suffix', tier: 1, name: 'Test Suffix 1', tags: [] },
+        { modId: 's2', type: 'suffix', tier: 1, name: 'Test Suffix 2', tags: [] },
+      ],
+    });
+    const c = ctx(item2, { activeCurrencyId: 'orb_of_annulment' });
+    c.activeOmens = [{
+      id: sinistralAnnul.id,
+      effect: parseOmenEffectLocal(sinistralAnnul),
+    }];
+    const res = emu.orbOfAnnulment(c);
+    assertOk(res, 'Sinistral Annulment succeeds');
+    const removed = item2.affixes.filter((a) => !res.item.affixes.some((b) => b.modId === a.modId));
+    assertEq(removed.length, 1, 'exactly one removed');
+    assertEq(removed[0].type, 'prefix', 'removed affix is a PREFIX (per poe2db)');
+    // Both original suffixes must still be present after the annulment.
+    const suffixesRemaining = res.item.affixes.filter((a) => a.type === 'suffix').length;
+    assertEq(suffixesRemaining, 2, 'both suffixes survive the sinistral annulment');
+  }
+
+  // ── N.3: Stress test — run 50 dextral annuls and confirm 0 prefix removals.
+  // This is the key invariant the bug was breaking: prefix safety.
+  {
+    let prefixLosses = 0;
+    let suffixLosses = 0;
+    for (let trial = 0; trial < 50; trial++) {
+      const item3 = makeItem(jewelBase, {
+        rarity: 'rare', itemLevel: 82,
+        affixes: [
+          { modId: 'p1', type: 'prefix', tier: 1, name: 'Test Prefix 1', tags: [] },
+          { modId: 'p2', type: 'prefix', tier: 1, name: 'Test Prefix 2', tags: [] },
+          { modId: 's1', type: 'suffix', tier: 1, name: 'Test Suffix 1', tags: [] },
+          { modId: 's2', type: 'suffix', tier: 1, name: 'Test Suffix 2', tags: [] },
+        ],
+      });
+      const c = ctx(item3, { activeCurrencyId: 'orb_of_annulment' });
+      c.activeOmens = [{
+        id: dextralAnnul.id,
+        effect: parseOmenEffectLocal(dextralAnnul),
+      }];
+      const res = emu.orbOfAnnulment(c);
+      if (!res.ok) continue; // Skip trials that would have failed anyway (e.g. only suffix left)
+      const removed = item3.affixes.filter((a) => !res.item.affixes.some((b) => b.modId === a.modId));
+      if (removed.length === 0) continue;
+      if (removed[0].type === 'prefix') prefixLosses++;
+      else suffixLosses++;
+    }
+    assertEq(prefixLosses, 0, '50 dextral annul trials: ZERO prefixes removed (the bug would cause >0)');
+    assert(suffixLosses >= 40, `50 dextral annul trials: at least 40 suffixes removed (got ${suffixLosses})`);
+  }
+
+  // ── N.4: Regression — make sure the *generic* dextral/sinistral omens
+  // (force-add variants) still parse as force_type, not remove_type.
+  // e.g. Omen of Dextral Coronation, Omen of Sinistral Exaltation.
+  // These must NOT be misclassified as the annulment variants.
+  {
+    const dexExalt = findOmen('omen_of_dextral_exaltation');
+    const sinExalt = findOmen('omen_of_sinistral_exaltation');
+    if (dexExalt) {
+      const eff = parseOmenEffectLocal(dexExalt);
+      assertEq(eff.kind, 'force_type', 'Dextral Exaltation still = force_type');
+      assertEq(eff.value, 'suffix', 'Dextral Exaltation still = suffix');
+    }
+    if (sinExalt) {
+      const eff = parseOmenEffectLocal(sinExalt);
+      assertEq(eff.kind, 'force_type', 'Sinistral Exaltation still = force_type');
+      assertEq(eff.value, 'prefix', 'Sinistral Exaltation still = prefix');
+    }
   }
 }
 

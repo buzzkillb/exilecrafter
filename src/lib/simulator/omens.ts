@@ -14,6 +14,22 @@ export interface OmenOpt {
 export const OMEN_EFFECT_RULES: Array<[RegExp, () => any]> = [
   // Greater Exaltation (double add) must be checked before generic dextral/sinistral patterns
   [/greater.*exaltation/, () => ({ kind: 'double_add' })],
+  // Annulment-specific directional omens. poe2db effect wording:
+  //   Omen of Dextral Annulment   → "...will remove only suffix modifiers"
+  //   Omen of Sinistral Annulment → "...will remove only prefix modifiers"
+  // The omens' *name* contains dextral/sinistral, but the *effect text* only
+  // mentions "remove only prefix/suffix modifiers" + "Orb of Annulment".
+  // Match on the effect text (this is what parseOmenEffect receives) so we
+  // cover both the name and the description.
+  [/annulment.*remove only suffix modifiers|remove only suffix modifiers.*annulment/, () => ({ kind: 'remove_type', value: 'suffix' })],
+  [/annulment.*remove only prefix modifiers|remove only prefix modifiers.*annulment/, () => ({ kind: 'remove_type', value: 'prefix' })],
+  // Omen of Greater Annulment → "next Orb of Annulment will remove two modifiers"
+  // (poe2db id: omen_of_greater_annulment). Must precede the generic annulment
+  // rules above so it captures the count instead of the type.
+  [/annulment.*remove two modifiers|remove two modifiers.*annulment/, () => ({ kind: 'remove_count', value: 2 })],
+  // Omen of Light → "next Orb of Annulment will remove only Desecrated modifiers"
+  // (poe2db id: omen_of_light). The annulment code already handles this kind.
+  [/annulment.*remove only desecrated|remove only desecrated.*annulment/, () => ({ kind: 'remove_only_desecrated' })],
   [/sinistral/, () => ({ kind: 'force_type', value: 'prefix' })],
   [/dextral/, () => ({ kind: 'force_type', value: 'suffix' })],
   [/whittling/, () => ({ kind: 'force_annul' })],
@@ -42,9 +58,13 @@ export const OMEN_EFFECT_DEFAULT = { kind: 'force_type', value: 'prefix' };
 
 export function parseOmenEffect(o: OmenOpt | undefined): any {
   if (!o) return OMEN_EFFECT_DEFAULT;
-  const e = (o.effect || '').toLowerCase();
+  // Match on BOTH the omen name and the effect text. poe2db places the
+  // directional word ("dextral" / "sinistral") in the *name* but the action
+  // description ("remove only suffix modifiers", "add only prefix modifiers")
+  // in the *effect* text. Either source alone is incomplete.
+  const haystack = `${o.name || ''} ${o.effect || ''}`.toLowerCase();
   for (const [re, build] of OMEN_EFFECT_RULES) {
-    if (re.test(e)) return build();
+    if (re.test(haystack)) return build();
   }
   return OMEN_EFFECT_DEFAULT;
 }
